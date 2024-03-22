@@ -1,0 +1,56 @@
+.container-ms
+{
+    margin: 0 auto;
+    padding: 0px;
+    overflow: hidden;
+    position: static;
+}
+
+.main-content
+{
+    display: flex;
+}
+
+.center-content
+{
+    width: 100%;
+    padding:0 20px;
+}
+
+@media (max-width: 768px)
+{
+    .center-content
+    {
+        width: 100%;
+    }
+}
+
+/* Header */
+#header
+{
+    min-height:50px;
+    background-color:hsl(0, 60%, 50%);
+    margin: 5px;
+    font-size: 28px;
+}
+
+.center
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-spacing: 30px;
+    margin: 5px;
+}
+
+#Tool_Setting
+{
+    width: 100%;
+    overflow-y: auto;
+    text-align: left;
+    font-size: 16px;
+    clear: both;
+    display: table;
+    display: grid;
+    float: center;
+}
