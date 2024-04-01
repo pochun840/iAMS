@@ -1,0 +1,717 @@
+.container-ms
+{
+    margin: 0 auto;
+    padding: 0px;
+    overflow: hidden;
+    width: calc(100%);
+    position: static;
+    padding-left: 68px;
+}
+
+header, footer, .center-content
+{
+    width: 100%;
+}
+
+header
+{
+    background-color: red;
+    font-size: 24px;
+    width: 100%;
+    color: white;
+    height:50px;
+    margin-bottom: 0px;
+    align-items: center;
+}
+
+.operation
+{
+    float: left;
+    margin-left: 10px;
+    margin: 3px;
+    font-size: 26px;
+    vertical-align: middle;
+}
+
+#header-img
+{
+    width: auto;
+    height:37px;
+    margin: 2px;
+    padding-right: 5px;
+    margin-left: 10px;
+    float: left;
+    color:white;
+}
+
+.personnel
+{
+    float: right;
+    margin: 3px 15px;
+    margin-top: 5px;
+    font-size: 24px;
+    vertical-align: middle;
+}
+
+.notification
+{
+    float: right;
+    font-size: 24px;
+    margin: 0px 0px;
+    margin-top: 5px;
+    margin-right: 20px;
+    vertical-align: middle;
+}
+
+.topnav-message
+{
+    width: 100%;
+    overflow: hidden;
+    background-color:#fff;
+    border: 1px solid #BBBBBB;
+    border-radius: 5px;
+    padding: 0px;
+}
+
+.messageBox
+{
+    display: none;
+    position: absolute; /* Thay vi position: fixed */
+    border-radius: 10px;
+    right: 10px;
+    top: 45px;
+    float: right;
+    width: 400px;
+    box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.2);
+    background-color: #fff;
+    border: 0px solid #000;
+    padding: 0px;
+    z-index: 1000;
+}
+
+.notification .badge
+{
+    position: absolute;
+    height: auto;
+    width: auto;
+    text-align: center;
+    top: -3px;
+    right: 8px;
+    padding: 2px 8px;
+    border-radius: 50%;
+    color: white;
+}
+
+**
+* Checkbox Four
+*/
+.checkboxFour
+{
+    width: 0px;
+    height: 0px;
+    background: #ddd;
+    margin: 0px 0px;
+    border-radius: 100%;
+    position: relative;
+}
+
+/**
+* Create the online and offline button
+*/
+.checkboxFour label
+{
+    display: block;
+    position: fixed;
+    width: 11px;
+    height: 11px;
+    border-radius: 100px;
+    transition: all .5s ease;
+    cursor: pointer;
+    position: absolute;
+    right: 8px;
+    z-index: 1;
+    background: #CFCFCF;
+}
+
+/**
+* Create the checked state
+*/
+.checkboxFour input[type=checkbox]:checked + label
+{
+    background: #0083FF;
+}
+
+/* scrollbar Notification Mess */
+.scrollbar-message
+{
+    float: left;
+    height: calc(100vh - 300px);
+    width: 100%;
+    overflow-y: scroll;
+}
+
+.force-overflow-message
+{
+    min-height: 60vh;
+}
+
+/**  STYLE Communication log */
+#style-message::-webkit-scrollbar
+{
+    display: none;
+    width: 12px;
+    background-color: #F5F5F5;
+}
+
+#style-message::-webkit-scrollbar-thumb
+{
+    border-radius: 10px;
+    background: linear-gradient(left, #96A6BF, #63738C);
+    box-shadow: inset 0 0 1px 1px #5C6670;
+}
+
+#style-message::-webkit-scrollbar-track
+{
+    border-radius: 10px;
+    background: #eee;
+    box-shadow: 0 0 1px 1px #bbb, inset 0 0 7px rgba(0,0,0,0.3)
+}
+
+#style-message::-webkit-scrollbar-thumb:hover
+{
+    background: linear-gradient(left, #8391A6, #536175);
+}
+
+#messageCount
+{
+    text-align: center;
+}
+
+.topnav
+{
+    width: 100%;
+    height: 50px;
+    overflow: hidden;
+    margin: 0 auto;
+    padding: 0px;
+    top: 0;
+    color: #000;
+    border: 1px solid #000;
+    background-color: #D9D9D9;
+    vertical-align: middle;
+}
+
+.virtual-message
+{
+    display: none;
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 350px;
+    box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.2);
+    background-color: #F2F1F1;
+    border: 1px solid #000;
+    padding: 0px;
+    z-index: 1000;
+}
+
+#Message_text
+{
+    padding: 10px 5px;
+}
+
+.identity-verify
+{
+    display: none;
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 310px;
+    height: calc(100vh - 500px);
+    box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.2);
+    background-color: #F2F1F1;
+    border: 1px solid #000;
+    padding: 0px;
+    z-index: 1000;
+}
+
+.close
+{
+    color: #4F576D;
+    float: right;
+    margin: 0 auto;
+    padding: 0px;
+    top: 0;
+    margin-right: 10px;
+    font-size: 30px;
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+.close:hover,
+.close:focus
+{
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.identity-input
+{
+    padding: 10px 30px;
+}
+
+.identity-input input
+{
+    width: 100%;
+    margin: 10px 0;
+    padding: 5px;
+}
+
+
+.VerifyButton
+{
+    background-color: #4F576D;
+    border: 0px solid #444E66;
+    border-radius: 5px;
+    color: white;
+    font-size: 18px;
+    position: absolute;
+    bottom: 15px;
+    right: 10px;
+    margin: 10px;
+    height: 35px;
+    width: auto;
+}
+
+
+/* scrollbar style */
+.scrollbar-Message_text
+{
+    float: left;
+    height: calc(100vh - 380px);
+    width: 100%;
+    overflow-y: scroll;
+}
+
+.force-overflow-Message_text
+{
+    min-height: 40vh;
+}
+
+/**  STYLE Message Text */
+#style-Message_text::-webkit-scrollbar
+{
+    display: none;
+    width: 12px;
+    background-color: #F5F5F5;
+}
+
+#style-Message_text::-webkit-scrollbar-thumb
+{
+    border-radius: 10px;
+    background: linear-gradient(left, #96A6BF, #63738C);
+    box-shadow: inset 0 0 1px 1px #5C6670;
+}
+
+#style-Message_text::-webkit-scrollbar-track
+{
+    border-radius: 10px;
+    background: #eee;
+    box-shadow: 0 0 1px 1px #bbb, inset 0 0 7px rgba(0,0,0,0.3)
+}
+
+#style-Message_text::-webkit-scrollbar-thumb:hover
+{
+    background: linear-gradient(left, #8391A6, #536175);
+}
+
+/* Clearfix to clear the float */
+header::after
+{
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.main-content
+{
+    display: flex;
+    padding: 0px 5px;
+}
+
+.center-content
+{
+   width: 100%;
+}
+
+.center-content img
+{
+   width: 100%;
+   max-height: 50vh;
+}
+
+@media (max-width: 768px)
+{
+    .center-content
+    {
+        width: 100%;
+    }
+}
+
+.left, .center, .right
+{
+    width: 100%;
+    border: 1px solid #ddd;
+    padding: 0px 5px;
+    box-sizing: border-box;
+    background: #FFFFFF;
+}
+
+/* Create two columns/boxes that floats next to each other */
+.left
+{
+    float: left;
+    width: 20%;
+    padding: 0px;
+    height: 73vh;
+}
+
+.center
+{
+    float: left;
+    padding: 0px;
+    width: 56%;
+    position: relative;
+    height: 73vh;
+}
+
+.right
+{
+    float: right;
+    width: 24%;
+    padding: 0px;
+    height: 73vh;
+}
+
+/* underlined */
+.highlight
+{
+    text-decoration: underline black;
+    text-align: center;
+}
+
+/* Style left */
+
+#tigtening
+{
+    font-size: 18px;
+    margin-top: 0%;
+}
+
+.custom-border
+{
+    border-bottom: 2px solid #00572B; /* Change to your desired border color */
+    padding-bottom: 5px; /* Adjust as needed */
+}
+
+.center-text
+{
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    font-size: 4.5vmin;
+    margin-bottom: 2%;
+    background-color: #CCFFCC;
+    height: 60px;
+}
+
+#Torque
+{
+    align-items: center;
+    height: 50px;
+    float: left;
+    align-content: center;
+    line-height: 1.6;
+    margin-bottom: 3%;
+    text-align: center;
+    background-color: #F2F1F1;
+}
+
+#Thread
+{
+    align-items: center;
+    height: 50px;
+    float: left;
+    align-content: center;
+    line-height: 1.6;
+    margin-bottom: 3%;
+    text-align: center;
+    background-color: #F2F1F1;
+}
+
+/* Style center */
+.btn-menu
+{
+    bottom: 0;
+    right: 0;
+    position: absolute;
+}
+
+.btn-menu button
+{
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    background-color:#AAA;
+    font-size: 20px;
+    opacity: 0.8;
+    height: 50px;
+    width: 50px;
+    border: none;
+    color: #000;
+    box-shadow: 0 3px 7px 1px #AAA;
+}
+
+/* The Modal (background) */
+.modal
+{
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0%;
+    top: 0%;
+    overflow: auto; /* Enable scroll if needed */
+    padding-top: 0px;
+}
+
+.modal-header
+{
+    border-radius: 0;
+    padding: 0;
+    height: 50px;
+    background-color: #DDDDDD;
+}
+
+/* Modal Content/Box */
+.modal-content
+{
+    background-color: #fff;
+    margin: 0% auto 0% auto; /* 5% from the top, 15% from the bottom and centered */
+    border: 1px solid #888;
+}
+
+.modal-footer
+{
+    border-radius: 0;
+    height: 55px;
+    padding: 0;
+    background-color: #DDDDDD;
+}
+
+.modal-footer button
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+/* Clear floats */
+.clearfix::after
+{
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.center
+{
+    justify-content: center;
+    align-items: center;
+    border-spacing: 40px;
+}
+
+#SeqName
+{
+    width: 260px;
+    height: 200px;
+    font-size: 16px;
+    float: center;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: Opx;
+    background-color: #fff;
+    border: none;
+    border: 1px solid;
+    border-radius: 2px;
+    color: #000;
+    appearance: none;
+    padding: 0px 0px 0px 0px;
+    transition: color 0.s ease, background-color 0.3s ease, border-bottom-color 0.3s ease;
+}
+
+/* Style right */
+#task-setting
+{
+    display: inline-block;
+    align-items: center;
+    justify-content: space-around;
+}
+
+ol
+{
+    counter-reset: li;
+    list-style: none;
+    align-items: center;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);
+}
+
+ol a
+{
+    float: left;
+    width: 88%;
+    border-radius: 15px;
+    padding-left: 0px;
+    font-size: 16px;
+    position: relative;
+    display: block;
+    padding: .2em .4em .4em .8em;
+    margin: .1em 0 .5em 2em;
+    background: #fff;
+    border: 2px solid #44d0ff;
+    text-align: left;
+    color: #444;
+    text-decoration: none;
+    transition: all .3s ease-out;
+}
+
+ol a:before
+{
+    content: counter(li);
+    counter-increment: li;
+    position: absolute;
+    left: -2.8em;
+    top: 50%;
+    margin-top: -1.1em;
+    background: #444;
+    color: #fff;
+    height: 2.2em;
+    width: 2.2em;
+    line-height: 2em;
+    text-align: center;
+    font-weight: bold;
+}
+
+ol a:after
+{
+    position: absolute;
+    content: "";
+    border: 0.7em solid transparent;
+    left: -1.0em;
+    top: 50%;
+    margin-top: -.7em;
+    transition: all .3s ease-out;
+}
+
+ol a:hover:after
+{
+    left: -.5em;
+    border-left-color: #444;
+}
+
+#step1 a
+{
+    color: #000;
+}
+
+.dropdown-content
+{
+    display: none;
+    margin-left: 37px;
+    padding-left: 3%;
+    font-size: 14px;
+    width: 79%;
+    border-radius: 10px;
+    z-index: 10; /* Sit on top */
+    text-align: left;
+    background-color: #F2F1F1;
+    box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.2);
+}
+
+/* Style the footer */
+.footer
+{
+    width: 100%;
+    height:14vh;
+    display: flex;
+    background-color:#F2F1F1;
+    padding: 0px 0px;
+    text-align: center;
+}
+
+/* Style the footer */
+/* Float four columns side by side */
+.column
+{
+    float: left;
+    width: 25%;
+    padding: 0 5px;
+    margin-top: 5px;
+}
+
+.row {margin: 0 -5px;}
+
+/* Clear floats after the columns */
+.row:after
+{
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Responsive columns */
+@media screen and (max-width: 600px)
+{
+    .column
+    {
+        width: 100%;
+        display: block;
+        padding: 0px;
+    }
+}
+
+/* Style the counter cards */
+.zoom
+{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    height:12vh;
+    padding: 0px;
+    text-align: left;
+    padding-left: 5%;
+    background-color: #CFCFCF;
+    color: black;
+    border-radius: 5px;
+}
+
+.zoom-border
+{
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+}
+
+.column img
+{
+    height: 20px;
+    width: 30px;
+    padding-right: 10px;
+    margin-top: 4px;
+}
+
+
+
+
+
