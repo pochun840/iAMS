@@ -6,7 +6,6 @@ class Monitors extends Controller
     private $NavsController;
 
 
-
     // 在建構子中將 Post 物件（Model）實例化
     public function __construct()
     {
@@ -19,26 +18,41 @@ class Monitors extends Controller
     // 取得所有Jobs
     public function index($page){
 
+        if(isset($_POST['value'])){
+            $receivedValue = $_POST['value'];
+            if( $receivedValue =="nopage"){
+                $offset = 0;
+                $limit  = 100000000;
+                $nopage = True;
 
-        //每頁顯示的筆數
-        $limit = 30;
+            }
+        }else{
+        //執行分頁
+            //當前的頁數，默認為第1頁
+            $page = isset($_GET['p']) ? $_GET['p'] : 1;
 
-        //當前的頁數，默認為第1頁
-        $page = isset($_GET['p']) ? $_GET['p'] : 1;
-  
-        //計算數量
-        $offset = ($page - 1) * $limit;
+            //每頁顯示的筆數
+            $limit = 30;
 
-        //取得總筆數
-        $totalItems  = "";
-        $totalItems  = $this->Monitors_newModel->getTotalItemCount();
+            //計算數量
+            $offset = ($page - 1) * $limit;
 
-        //計算總頁數
-        if(!empty($totalItems)){
-            $totalPages = ""; 
-            $totalPages = ceil($totalItems / $limit);
+            //取得總筆數
+            $totalItems  = "";
+            $totalItems  = $this->Monitors_newModel->getTotalItemCount();
+
+            //計算總頁數
+            if(!empty($totalItems)){
+                $totalPages = ""; 
+                $totalPages = ceil($totalItems / $limit);
+                $totalPages = 0;
+            }
+
+            $nopage = False;
         }
+       
         
+
         #取得預設的鎖附資料前50筆
         $info_arr = "";
         $info = $this->Monitors_newModel->monitors_info($info_arr,$offset, $limit);
@@ -50,9 +64,7 @@ class Monitors extends Controller
         #人員權限列表
         $all_roles = $this->UserModel->GetAllRole();
         $all_roles = array_slice($all_roles,0,3);
-        //$all_roles = array('GTCS','TCG');
-
-        //var_dump($all_roles);die();
+    
 
         #鎖附結果
         $res_status_arr = array('ALL','OK','OKALL','NG');
@@ -64,6 +76,18 @@ class Monitors extends Controller
         #program 分類
         $res_program = array('P1','P2','P3','P4');
 
+        #扭力轉換
+        $torque_arr = $this->Monitors_newModel->torque_change();
+
+
+        #取得還存在的job_id 
+        $job_arr    = $this->Monitors_newModel->get_job_id();
+
+
+
+        #STATUS轉換
+        $status_arr = $this->Monitors_newModel->status_code_change();
+
         $data = [
             'isMobile' => $isMobile,
             'nav' => $nav,
@@ -73,7 +97,12 @@ class Monitors extends Controller
             'res_program' => $res_program,
             'info' => $info,
             'totalPages' => $totalPages,
+            'nopage' =>$nopage,
             'page' => $page,
+            'torque_arr' => $torque_arr,
+            'status_arr' => $status_arr,
+            'job_arr' =>$job_arr
+
             
         ];
             
@@ -105,14 +134,16 @@ class Monitors extends Controller
         #按照POST的資訊 取得資料庫搜尋的結果
         $info = $this->Monitors_newModel->monitors_info($info_arr);
 
+        #扭力轉換
+        $torque_arr = $this->Monitors_newModel->torque_change();
+
+        #STATUS轉換
+        $status_arr = $this->Monitors_newModel->status_code_change();
 
 
         if(!empty($info)){
             $info_data ="";
             foreach($info as $k =>$v){
-
-
-
                 $info_data  = "<tr>";
                 $info_data .= '<td style="text-align: center;"><input class="form-check-input" type="checkbox" name="test1" id="test1"  value="'.$v['system_sn'].'" style="zoom:1.2;vertical-align: middle;"></td>';
                 $info_data .= "<td>".$v['system_sn']."</td>";
@@ -120,78 +151,143 @@ class Monitors extends Controller
                 $info_data .= "<td>".$v['cc_barcodesn']."</td>";
                 $info_data .= "<td>".$v['job_name']."</td>";
                 $info_data .= "<td>".$v['sequence_name']."</td>";
-                $info_data .= "<td>task-1</td>";
+                $info_data .= "<td>".$v['cc_task_name']."</td>";
                 $info_data .= "<td>GTCS</td>";
-                $info_data .= "<td>".$v['fasten_torque']." N.m </td>";
+                $info_data .= "<td>".$v['fasten_torque']. $torque_arr[$v['torque_unit']]."</td>";
                 $info_data .= "<td>".$v['fasten_angle']." deg  </td>";
-                $info_data .= "<td>".$this->Monitors_newModel->status_code_change($v['fasten_status'])."</td>";
+                $info_data .= "<td>". $status_arr[$v['fasten_status']]."</td>";
                 $info_data .= "<td>".$v['fasten_time']." ms </td>";
                 $info_data .= "<td>".$v['fasten_time']." ms </td>";
-                $info_data .= "<td>error</td>";
+                $info_data .= "<td>".$v['error_message']."</td>";
                 $info_data .= "<td>p1</td>";
                 $info_data .= '<td><img src="./img/info-30.png" alt="" style="height: 28px; vertical-align: middle;" onclick="NextToInfo()"></td>';
         
                 $info_data .="</tr>";
                 echo $info_data;
             }  
-        }else{
-
+        }else{  
+            # 查無資料
+            $response = '';
+            echo $response;
+            
         }
-
-
-        
-
     
     }
 
+    public function downland_csv(){
+
+        $body = $_POST['csvData'];
+
+        if(!empty($body)){
+
+            $csv_header = array('Index','Time','BarcodeSN','Job Name','Seq Name','task','Controller','Torque','Total.A','Status','Job time','Task time','Error','Pset');
+           
+            $body = preg_replace('/<[\/]*tr[^>]*>/i', '', $body);   
+            $body = preg_replace('/<[\/]*input[^>]*>/i', '', $body);  
+            $body = preg_replace('/<[\/]*img[^>]*>/i', '', $body);
+            $body = preg_replace('/<td(\s+style="[^"]*")?\s*>/i', '', $body);
+            $body = str_replace("</td></td>","</td>",$body);
 
 
-    public function  download_csv(){
+            $body_arr = array();
+            $body_arr  = explode("</td>", $body);
+
+            $new_arr = array();
+            $new_arr = array(
+                            $body_arr[1],
+                            $body_arr[2],
+                            $body_arr[3],
+                            $body_arr[4],
+                            $body_arr[5],
+                            $body_arr[6],
+                            $body_arr[7],
+                            $body_arr[8],
+                            $body_arr[9],
+                            $body_arr[10],
+                            $body_arr[11],
+                            $body_arr[12],
+                            $body_arr[13],
+                            $body_arr[14],
+                        );
+            
+            //打開輸出流
+            $output = fopen('php://output', 'w');
+
+            fputcsv($output, $csv_header);
+            fputcsv($output, $new_arr);
+
+            //直接輸出 CSV 字符串
+            echo $output;
 
 
-        //開始準備一組匯出陣列
-        $csv_arr = array();
-
-        //先放置 CSV 檔案的標頭資料
-        $csv_arr[] = array('得票數', '系統編號', '報名人', '身分證字號', '信箱', '聯絡電話', '聯絡手機', '聯絡地址', '性別', '年齡', '作品名稱', '作品分類', '拍攝日期', '拍攝地點', '拍攝相機', '拍攝鏡頭', '相片原始檔案', '投稿日期', '審查狀態');
-       
-        //設定檔案輸出名稱
-        $filename = "contest-data-export-" . date("Y-m-d-H-i-s") . ".csv";
-        
-        //設定瀏覽器讀取此份資料為不快取，與解讀行為是下載 CSV 檔案
-        header('Pragma: no-cache');
-        header('Expires: 0');
-        header('Content-Disposition: attachment;filename="' . $filename . '";');
-        header('Content-Type: application/csv; charset=UTF-8');
-
-        for ($i = 0; $i < count($photo_data); $i++) {
-            $p = $photo_data[$i];
-            $csv_arr[] = array(
-                //開始根據資料變數組裝後面的陣列資料
-            );
         }
-        //確保輸出內容符合 CSV 格式，定義下列方法來處理
-        function csvstr(array $fields): string{
-            $f = fopen('php://memory', 'r+');
-            if (fputcsv($f, $fields) === false) {
-                return false;
-            }
-            rewind($f);
-            $csv_line = stream_get_contents($f);
-            return rtrim($csv_line);
-        }
-        //正式循環輸出陣列內容
-        for ($j = 0; $j < count($csv_arr); $j++) {
-            if ($j == 0) {
-                //檔案標頭如果沒補上 UTF-8 BOM 資訊的話，Excel 會解讀錯誤，偏向輸出給程式觀看的檔案
-                echo "\xEF\xBB\xBF";
-            }
-            //輸出符合規範的 CSV 字串以及斷行
-            echo csvstr($csv_arr[$j]) . PHP_EOL;
-        }
-
-
     }
+
+
+    public function nextinfo($index){
+        //透過index 取得相關的資料
+
+        $no ="4129";
+        $csvdata = $this->Monitors_newModel->connected_ftp($no);
+  
+        if(!empty($index)){
+            $data = $this->Monitors_newModel->get_info_data($index);
+            $this->view('monitor/index_info', $data);
+        }
+        
+    }
+
+    public function get_correspond_val(){
+
+        $val  = array();
+
+        #取得對應的seq_id
+        if(!empty($_POST['job_id'][0])  && empty($_POST['seq_id'][0])){
+            $job_id = $_POST['job_id'][0];
+            $info_seq = $this->Monitors_newModel->get_seq_id($job_id);
+
+            #組checkbox的html_code(seq)
+            if(!empty($info_seq)){
+                $info_seq_detailed = ''; 
+                foreach($info_seq  as $k_seq =>$v_seq){
+                    $info_seq_detailed  = '<div class="row t1">';
+                    $info_seq_detailed .= '<div class="col t5 form-check form-check-inline">';
+                    $info_seq_detailed .= '<input class="form-check-input" type="checkbox" name="seqid" id="seqid" value='.$v_seq['sequence_id'].'   onclick="JobCheckbox_seq()"  style="zoom:1.0; vertical-align: middle;">&nbsp;';
+                    $info_seq_detailed .= '<label class="form-check-label" for="">'.$v_seq['sequence_name'].'</label>';
+                    $info_seq_detailed .= '</div>';
+                    $info_seq_detailed .= '</div>';
+                    echo $info_seq_detailed;
+                }   
+
+            }
+        }
+
+        #透過job_id 及 seq_id 取得對應的task_id
+        if(!empty($_POST['seq_id'][0]) && !empty($_POST['job_id'][0])){
+            $job_id = $_POST['job_id'][0];
+            $seq_id = $_POST['seq_id'][0];
+            $info_task = $this->Monitors_newModel->get_task_id($job_id,$seq_id);
+
+            #組checkbox的html_code(task)
+            if(!empty($info_task)){
+                $info_task_detailed = ''; 
+                foreach($info_task  as $k_task => $v_task){
+                    $info_task_detailed  = '<div class="row t1">';
+                    $info_task_detailed .= '<div class="col t5">';
+                    $info_task_detailed .= '<input class="form-check-input" type="checkbox" name="taskid" id="taskid" value='.$v_task['cc_task_id'].'   onclick="JobCheckbox_task()"  style="zoom:1.0; vertical-align: middle;">&nbsp;';
+                    $info_task_detailed .= '<label class="form-check-label" for="">'.$v_task['cc_task_name'].'</label>';
+                    $info_task_detailed .= '</div>';
+                    $info_task_detailed .= '</div>';
+                    echo $info_task_detailed;
+                }
+            }
+
+        }
+
+      
+  
+    }
+
 
 
     

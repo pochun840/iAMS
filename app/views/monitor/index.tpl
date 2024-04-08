@@ -1,7 +1,4 @@
-<?php require APPROOT . 'views/inc/header.tpl'; 
-//var_dump($search_data);
-?>
-
+<?php require APPROOT . 'views/inc/header.tpl'; ?>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/w3.css" type="text/css">
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/nav.css" type="text/css">
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/datatables.min.css">
@@ -9,9 +6,15 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/historical.css" type="text/css">
 
 <script src="<?php echo URLROOT; ?>js/flatpickr.js"></script>
-<?php echo $data['nav']; ?>
+<?php if(isset($data['nav'])){
+    echo $data['nav'];
 
+}
+//var_dump($data);
+?>
 <style>
+
+
 .t1{font-size: 17px; margin: 3px 0px; display: flex; align-items: center;}
 .t2{font-size: 17px; margin: 3px 0px;}
 .t3{font-size: 17px; margin: 3px 0px; height: 29px;border-radius: 5px;}
@@ -19,6 +22,27 @@
 .t5{margin-left: 10px; text-align: center;}
 .t6{width: 116px;margin-right:10%}
 
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+}
+.pagination li {
+    margin-right: 5px;
+}
+.pagination li a,
+.pagination li span {
+    padding: 5px 10px;
+    text-decoration: none;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+.current-page {
+    font-weight: bold;
+}
+                                    
 </style>
 
 <div class="container-ms">
@@ -192,7 +216,8 @@
                             <button id="Export-CSV" type="button" class="ExportButton" onclick="download_csv()">Export CSV</button>
                             <button id="Export-Report" type="button" class="ExportButton">Export Report</button>
                             <button id="Combine-btn" type="button" onclick="NextToCombineData()">Combine Data</button>
-                            <button id="Clear" type="button">Clear</button>
+                            <button id="Clear" type="button"   onclick="clear_button() ">Clear</button>
+                            <button id="nopage" type="button"  onclick="nopage('nopage')">Nopage</button>
                         </div>
 
                     </div>
@@ -223,7 +248,12 @@
 
                                 <tbody id="tbody1" style="background-color: #F2F1F1; font-size: 1.8vmin;text-align: center; vertical-align: middle;">
                                     
-                                    <?php foreach($data['info'] as $k_info =>$v_info){?>
+                                    <?php foreach($data['info'] as $k_info =>$v_info){
+                                    
+                                        $link ='?url=Monitors/nextinfo/'.$v_info['system_sn'];
+                                        ?>
+
+
                                         <tr>
                                             <td style="text-align: center;">
                                                 <input class="form-check-input" type="checkbox" name="test1" id="test1"  value="<?php echo $v_info['system_sn'];?>" style="zoom:1.2;vertical-align: middle;">
@@ -233,41 +263,46 @@
                                             <td><?php echo $v_info['cc_barcodesn'];?></td>
                                             <td><?php echo $v_info['job_name'];?></td>
                                             <td><?php echo $v_info['sequence_name'];?></td>
-                                            <td><?php echo "task-1";?></td>
+                                            <td><?php echo $v_info['cc_task_name'];?></td>
                                             <td><?php echo "GTCS";?></td>
-                                            <td><?php echo $v_info['fasten_torque']. " N.m";?></td>
+                                            <td><?php echo $v_info['fasten_torque']. $data['torque_arr'][$v_info['torque_unit']];?></td>
                                             <td><?php echo $v_info['fasten_angle']. " deg";?></td>
-                                            <td>ok</td>
+                                            <td><?php echo $data['status_arr'][$v_info['fasten_status']];?></td>
                                             <td><?php echo $v_info['fasten_time']."ms";?></td>
                                             <td><?php echo $v_info['fasten_time']."ms";?></td>
-                                            <td>error</td>
+                                            <td><?php echo $v_info['error_message'];?></td>
                                             <td>p1</td>
                                             <td>
-                                                <img src="./img/info-30.png" alt="" style="height: 28px; vertical-align: middle;" onclick="NextToInfo()">
+                                                <a href=" <?php echo $link;?> " >
+                                                    <img src="./img/info-30.png" alt="" style="height: 28px; vertical-align: middle;" >
+                                                </a>
                                             </td>
                                         </tr>
                                     <?php }?>
                                 </tbody>
                             </table>
 
+
+                            <?php if($data['nopage'] == False){?>
                             <div class="pagination" align="center">
                                 <?php if ($data['page'] > 1): ?>
-                                    <a href="?url=Monitors&p=<?php echo ($data['page'] - 1); ?>"> Previous </a>
+                                    <a href="?url=Monitors&p=<?php echo ($data['page'] - 1); ?>"> Pre  &nbsp;&nbsp;</a>
                                 <?php endif; ?>
                                 
                                 <?php for ($i = 1; $i <= $data['totalPages']; $i++): ?>
                                     <?php if ($i == $data['page']): ?>
                                         <span class="current-page"><?php echo $i; ?></span>
                                     <?php else: ?>
-                                        <a href="?url=Monitors&p=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                        <a href="?url=Monitors&p=<?php echo $i; ?>"><?php echo "&nbsp;&nbsp$i&nbsp;&nbsp"; ?>&nbsp;&nbsp;</a>
                                     <?php endif; ?>
                                 <?php endfor; ?>
                                 
                                 <?php if ($data['page'] < $data['totalPages']): ?>
-                                    <a href="?url=Monitors&p=<?php echo ($data['page'] + 1); ?>"> Next </a>
+                                    <a href="?url=Monitors&p=<?php echo ($data['page'] + 1); ?>"> Next  &nbsp;&nbsp;</a>
                                 <?php endif; ?>
 
                             </div>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
@@ -599,7 +634,7 @@
                         <img src="./img/pick-A-screw.svg" style=" height: 40vh; width: 70vw" alt="Nature" class="w3-margin-bottom">
                     </div>
 
-                    <button class="Save-button" id="saveButton">Save</button>
+                    <button class="Save-button" id="saveButton" onclick="Save_job()">Save</button>
                 </div>
             </div>
 
@@ -683,66 +718,16 @@
                     <h4>Job</h4>
                     <div class="scrollbar-jobselect" id="style-jobselect">
                         <div class="force-overflow-jobselect">
-                            <div class="row t1">
-                                <div class="col t5 form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="Job-1" id="Job-1" value="" onclick="JobCheckbox()" style="zoom:1.0; vertical-align: middle;">&nbsp;
-                                    <label class="form-check-label" for="Job-1">Job 1</label>
-                                </div>
-                            </div>
-                            <div class="row t1">
-                                <div class="col t5 form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="Job-2" id="Job-2" value=""  style="zoom:1.0; vertical-align: middle;">&nbsp;
-                                    <label class="form-check-label" for="Job-2">Job 2</label>
-                                </div>
-                            </div>
-                            <div class="row t1">
-                                <div class="col t5 form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="Job-3" id="Job-3" value=""  style="zoom:1.0; vertical-align: middle;">&nbsp;
-                                    <label class="form-check-label" for="Job-3">Job 3</label>
-                                </div>
-                            </div>
-                            <div class="row t1">
-                                <div class="col t5 form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="Job-4" id="Job-4" value=""  style="zoom:1.0; vertical-align: middle;">&nbsp;
-                                    <label class="form-check-label" for="Job-4">Job 4</label>
-                                </div>
-                            </div>
-                            <div class="row t1">
-                                <div class="col t5 form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="Job-5" id="Job-5" value=""  style="zoom:1.0; vertical-align: middle;">&nbsp;
-                                    <label class="form-check-label" for="Job-5">Job 5</label>
-                                </div>
-                            </div>
-                            <div class="row t1">
-                                <div class="col t5 form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="Job-6" id="Job-6" value=""  style="zoom:1.0; vertical-align: middle;">&nbsp;
-                                    <label class="form-check-label" for="Job-6">Job 6</label>
-                                </div>
-                            </div>
-                            <div class="row t1">
-                                <div class="col t5 form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="Job-7" id="Job-7" value=""  style="zoom:1.0; vertical-align: middle;">&nbsp;
-                                    <label class="form-check-label" for="Job-7">Job 7</label>
-                                </div>
-                            </div>
-                            <div class="row t1">
-                                <div class="col t5 form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="Job-8" id="Job-8" value=""  style="zoom:1.0; vertical-align: middle;">&nbsp;
-                                    <label class="form-check-label" for="Job-8">Job 8</label>
-                                </div>
-                            </div>
-                            <div class="row t1">
-                                <div class="col t5 form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="Job-9" id="Job-9" value=""  style="zoom:1.0; vertical-align: middle;">&nbsp;
-                                    <label class="form-check-label" for="Job-9">Job 9</label>
-                                </div>
-                            </div>
-                            <div class="row t1">
-                                <div class="col t5 form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="Job-10" id="Job-10" value="" style="zoom:1.0; vertical-align: middle;">&nbsp;
-                                    <label class="form-check-label" for="Job-10">Job 10</label>
-                                </div>
-                            </div>
+
+                            <?php foreach($data['job_arr'] as $k_job =>$v_job){?>
+                                    <div class="row t1">
+                                        <div class="col t5 form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" name="jobid" id="jobid" value="<?php echo $v_job['job_id'];?>" onclick="JobCheckbox()" style="zoom:1.0; vertical-align: middle;">&nbsp;
+                                            <label class="form-check-label" for="Job-1"><?php echo $v_job['job_name'];?></label>
+                                        </div>
+                                    </div>
+
+                            <?php }?>
                         </div>
                     </div>
                 </div>
@@ -751,12 +736,6 @@
                     <div class="scrollbar-jobselect" id="style-jobselect">
                         <div class="force-overflow-jobselect">
                             <div id="Seq-list" style="display: none">
-                                <div class="row t1">
-                                    <div class="col t5 form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" name="Seq-1" id="Seq-1" value="" onclick="JobCheckbox()" style="zoom:1.0; vertical-align: middle;">&nbsp;
-                                        <label class="form-check-label" for="Seq-1">Seq 1</label>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -766,17 +745,13 @@
                     <div class="scrollbar-jobselect" id="style-jobselect">
                         <div class="force-overflow-jobselect">
                             <div id="Task-list" style="display: none">
-                                <div class="row t1">
-                                    <div class="col t5">
-                                        <label class="form-check-label" for="Task-1">Task 1</label>
-                                    </div>
-                                </div>
+                              
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <span class="Save-button" >Save</span>
+                <span class="Save-button" onclick='Save_job()'>Save</span>
             </div>
         </div>
     </div>
@@ -835,13 +810,47 @@ function handleButtonClick(button, content)
 
     function JobCheckbox()
     {
-        var checkBox1 = document.getElementById("Job-1");
-        var text1 = document.getElementById("Seq-list");
 
-        var checkBox2 = document.getElementById("Seq-1");
-        var text2 = document.getElementById("Task-list");
+        //取得 job被checked的值
+        var checked_jobid = document.querySelectorAll('input[type="checkbox"][name="jobid"]:checked');
+        var checkedjobidarr = [];
+        checked_jobid.forEach(function(checkbox) {
+            checkedjobidarr.push(checkbox.value);
+        });
 
-        if (checkBox1.checked == true) {
+        //checkedjobidarr 不等於空值 要取得對應的seq_id
+        if(checkedjobidarr != '' ) {
+            $.ajax({
+                type: "POST",
+                data: {job_id: checkedjobidarr},
+                url: '?url=Monitors/get_correspond_val',
+                success: function(response) {
+                    if (response.trim() === '') {
+                        alert('查無資料');
+                        window.location.href = '?url=Monitors';
+
+                    } else {
+                        var seqListElement = document.getElementById('Seq-list');
+                        seqListElement.style.display = 'block';
+                        document.getElementById("Seq-list").innerHTML = response;
+                    }
+                },
+                error: function(error) {
+                    // console.error('Error:', error); 
+                }
+            }).fail(function () {
+                // history.go(0);
+            });
+
+        }
+
+        //var checkBox1 = document.getElementById("Job-1");
+        //var text1 = document.getElementById("Seq-list");
+
+        //var checkBox2 = document.getElementById("Seq-1");
+        //var text2 = document.getElementById("Task-list");
+
+        /*if (checkBox1.checked == true) {
             text1.style.display = "block";
         } else {
             text1.style.display = "none";
@@ -851,6 +860,51 @@ function handleButtonClick(button, content)
             text2.style.display = "block";
         } else {
             text2.style.display = "none";
+        }*/
+    }
+
+    function JobCheckbox_seq(){
+
+        //取得 job被checked的值
+        var checked_jobid = document.querySelectorAll('input[type="checkbox"][name="jobid"]:checked');
+        var checkedjobidarr = [];
+        checked_jobid.forEach(function(checkbox) {
+            checkedjobidarr.push(checkbox.value);
+        });
+
+        //取得 seq被checked的值
+        var checked_seqid = document.querySelectorAll('input[type="checkbox"][name="seqid"]:checked');
+        var checkedseqidarr = [];
+        checked_seqid.forEach(function(checkbox) {
+            checkedseqidarr.push(checkbox.value);
+        });
+
+        //checkedjobidarr &&  checkedseqidarr  不等於空值 要取得對應的task_id
+        if(checkedjobidarr != '' && checkedseqidarr  != ''){
+             $.ajax({
+                type: "POST",
+                data: {job_id: checkedjobidarr,seq_id: checkedseqidarr},
+                url: '?url=Monitors/get_correspond_val',
+                success: function(response) {
+                    if (response.trim() === '') {
+                        alert('查無資料');
+                        window.location.href = '?url=Monitors';
+
+                    } else {
+                        //alert(response);
+                        var taskListElement = document.getElementById('Task-list');
+                        taskListElement.style.display = 'block';
+                        document.getElementById("Task-list").innerHTML = response;
+                    }
+                },
+                error: function(error) {
+                    // console.error('Error:', error); 
+                }
+            }).fail(function () {
+                // history.go(0);
+            });
+
+
         }
     }
 
@@ -861,13 +915,20 @@ function handleButtonClick(button, content)
         }
     });
 
+
+// Save_job
+function Save_job(){
+
+    //alert('eewqert');
+
+}
+
 // Next To Info
 function NextToInfo()
 {
     // Show DetailInfo
-    document.getElementById('DetailInfoDisplay').style.display = 'block';
-
     // Hide FasteningDisplay
+    document.getElementById('DetailInfoDisplay').style.display = 'block';
     document.getElementById('FasteningDisplay').style.display = 'none';
 }
 
@@ -1021,13 +1082,12 @@ function delete_historyinfo() {
                 url: '?url=Monitors/del_info',
                 success: function(response) {
                     // 成功回調函數，處理伺服器的回應
-                    //console.log(response); // 在控制台輸出伺服器的回應
+                    //console.log(response);
                     //alert(response);
                     history.go(0);
                 },
                 error: function(error) {
-                    // 失敗回調函數，處理錯誤情況
-                    // console.error('Error:', error); // 在控制台輸出錯誤訊息
+                    // console.error('Error:', error); 
                 }
             }).fail(function () {
                 // history.go(0);//失敗就重新整理
@@ -1062,15 +1122,20 @@ function search_info(){
               sname: sname},
         url: '?url=Monitors/search_info_list',
         success: function(response) {
+            if (response.trim() === '') {
+               alert('查無資料');
+               window.location.href = '?url=Monitors';
 
-            document.getElementById("tbody1").innerHTML = response;
+            } else {
+                queryresult = response;
+                document.getElementById("tbody1").innerHTML = response;
+            }
         },
         error: function(error) {
-            //失敗回調函數，處理錯誤情況
-            // console.error('Error:', error); // 在控制台輸出錯誤訊息
+            // console.error('Error:', error); 
         }
     }).fail(function () {
-        // history.go(0);//失敗就重新整理
+        // history.go(0);
     });
 
 
@@ -1079,42 +1144,134 @@ function search_info(){
 
 // Next To Combine data(最多只能選2筆)
 function NextToCombineData()
-{
+{    
+    var checkboxes = document.querySelectorAll('input[type="checkbox"][name="test1"]:checked');
+    var checkedValues = [];
+
+    checkboxes.forEach(function(checkbox) {
+        checkedValues.push(checkbox.value);
+    });
+  
+
+    if(checkedValues.length > 2){
+        alert('最多只能選取2筆鎖附記錄的資料');    
+    }
+
+    if(checkedValues.length < 2){
+        alert('請選擇2筆鎖附記錄的資料');  
+    }
+
+
     // Show Combine data
-    document.getElementById('CombineDataDisplay').style.display = 'block';
+    //document.getElementById('CombineDataDisplay').style.display = 'block';
 
     // Hide FasteningDisplay
-    document.getElementById('FasteningDisplay').style.display = 'none';
+    //document.getElementById('FasteningDisplay').style.display = 'none';
 }
 
 function download_csv(){
 
-    alert('eeeew');
+    if(queryresult === null) {
+        alert("請先執行查詢結果");
+        return;
+    }
+
+    // 將查詢結果傳遞給downland_csv
+    var csvData = queryresult;
+
+    var url ="?url=Monitors/downland_csv";
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', url, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.responseType = 'blob';
+
+    xhr.onload = function() {
+
+    if (this.status === 200) {
+        var url = window.URL.createObjectURL(this.response);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'results.csv';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+    }
+    };
+
+    xhr.send('csvData=' + encodeURIComponent(csvData));
 }
 
+function nopage(value){
+      $.ajax({
+        url: '?url=Monitors/index', 
+        method: 'POST',
+        data: {value: value}, 
+        success: function(response){
+            console.log(response);
+            alert(response);
+        },
+        error: function(xhr, status, error){
+            console.error(error);
+        }
+    });
+
+}
+
+function clear_button(){
+
+    //預設status: ALL
+    var status_val= '0';
+
+    //取得這個月的第一天日期&& 最後一天的日期 
+    var currentDate = new Date();
+
+    var firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    var firstDayDate    = firstDayOfMonth.getDate();
+
+    var lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+    var lastDayDate    = lastDayOfMonth.getDate();
+
+
+    var firstDayYear = firstDayOfMonth.getFullYear();
+    var firstDayMonth = firstDayOfMonth.getMonth() + 1; 
+
+    var lastDayYear = lastDayOfMonth.getFullYear();
+    var lastDayMonth = lastDayOfMonth.getMonth() + 1;
+
+
+    //格式化日期 
+    var fromdate = firstDayYear  + (firstDayMonth < 10 ? '0' : '') + firstDayMonth  + (firstDayDate < 10 ? '0' : '') + firstDayDate;
+    var todate   = lastDayYear   + (lastDayMonth < 10 ? '0' : '')  + lastDayMonth   + (lastDayDate < 10 ? '0' : '')  + lastDayDate;
+
+
+    $.ajax({
+        type: "POST",
+        data: {
+              fromdate: fromdate,
+              todate: todate,
+              status_val: status_val
+              },
+        url: '?url=Monitors/search_info_list',
+        success: function(response) {
+            if (response.trim() === '') {
+               alert('查無資料');
+               window.location.href = '?url=Monitors';
+
+            } else {
+                queryresult = response;
+                document.getElementById("tbody1").innerHTML = response;
+            }
+        },
+        error: function(error) {
+            //失敗回調函數，處理錯誤情況
+            // console.error('Error:', error); 
+        }
+    }).fail(function () {
+        // history.go(0);
+    });
+
+
+}
+
+
 </script>
-
-
-<!------分頁頁碼CSS--->
-<style>
-    .pagination {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        list-style: none;
-        padding: 0;
-    }
-    .pagination li {
-        margin-right: 5px;
-    }
-    .pagination li a,
-    .pagination li span {
-        padding: 5px 10px;
-        text-decoration: none;
-        border: 1px solid #ccc;
-        border-radius: 3px;
-    }
-    .current-page {
-        font-weight: bold;
-    }
-</style>
