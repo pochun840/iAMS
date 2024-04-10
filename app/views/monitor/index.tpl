@@ -6,11 +6,10 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/historical.css" type="text/css">
 
 <script src="<?php echo URLROOT; ?>js/flatpickr.js"></script>
+<script src="<?php echo URLROOT; ?>js/historical.js"></script>
 <?php if(isset($data['nav'])){
     echo $data['nav'];
-
 }
-//var_dump($data);
 ?>
 <style>
 
@@ -149,11 +148,11 @@
                             <div for="Operator" class="col-1 t1">Operator</div>
                             <div class="col-2 t2">
                                <!--<input type="text" class="t3 form-control input-ms" id="Operator" maxlength="" value="" style="width: 190px;">-->
-                               <select>
-                                    <?php foreach($data['all_roles'] as $key =>$val){ ?>
-                                            <option value='<?php echo $val['ID'];?>'> <?php echo $val['Title'];?> </option>
-                                    <?php } ?>
-                               </select>
+                               <!--<select>
+                                    <?//php foreach($data['all_roles'] as $key =>$val){ ?>
+                                            <!--<option value='<?//php echo $val['ID'];?>'> <?//php echo $val['Title'];?> </option>
+                                    <?//php } ?>
+                               </select>-->
                             </div>
 
                             <div for="SelectJob" class="col-1 t1">Select Job</div>
@@ -217,7 +216,7 @@
                             <button id="Export-Report" type="button" class="ExportButton">Export Report</button>
                             <button id="Combine-btn" type="button" onclick="NextToCombineData()">Combine Data</button>
                             <button id="Clear" type="button"   onclick="clear_button() ">Clear</button>
-                            <button id="nopage" type="button"  onclick="nopage('nopage')">Nopage</button>
+                            <button  id="nopage" type="button"  onclick="nopage('nopage')">Nopage</button>
                         </div>
 
                     </div>
@@ -283,7 +282,7 @@
                             </table>
 
 
-                            <?php if($data['nopage'] == False){?>
+                            <?php if($data['nopage'] == "False"){?>
                             <div class="pagination" align="center">
                                 <?php if ($data['page'] > 1): ?>
                                     <a href="?url=Monitors&p=<?php echo ($data['page'] - 1); ?>"> Pre  &nbsp;&nbsp;</a>
@@ -751,7 +750,7 @@
                     </div>
                 </div>
 
-                <span class="Save-button" onclick='Save_job()'>Save</span>
+                <!--<span class="Save-button" onclick='Save_job()'>Save</span>-->
             </div>
         </div>
     </div>
@@ -808,105 +807,7 @@ function handleButtonClick(button, content)
         }
     });
 
-    function JobCheckbox()
-    {
 
-        //取得 job被checked的值
-        var checked_jobid = document.querySelectorAll('input[type="checkbox"][name="jobid"]:checked');
-        var checkedjobidarr = [];
-        checked_jobid.forEach(function(checkbox) {
-            checkedjobidarr.push(checkbox.value);
-        });
-
-        //checkedjobidarr 不等於空值 要取得對應的seq_id
-        if(checkedjobidarr != '' ) {
-            $.ajax({
-                type: "POST",
-                data: {job_id: checkedjobidarr},
-                url: '?url=Monitors/get_correspond_val',
-                success: function(response) {
-                    if (response.trim() === '') {
-                        alert('查無資料');
-                        window.location.href = '?url=Monitors';
-
-                    } else {
-                        var seqListElement = document.getElementById('Seq-list');
-                        seqListElement.style.display = 'block';
-                        document.getElementById("Seq-list").innerHTML = response;
-                    }
-                },
-                error: function(error) {
-                    // console.error('Error:', error); 
-                }
-            }).fail(function () {
-                // history.go(0);
-            });
-
-        }
-
-        //var checkBox1 = document.getElementById("Job-1");
-        //var text1 = document.getElementById("Seq-list");
-
-        //var checkBox2 = document.getElementById("Seq-1");
-        //var text2 = document.getElementById("Task-list");
-
-        /*if (checkBox1.checked == true) {
-            text1.style.display = "block";
-        } else {
-            text1.style.display = "none";
-        }
-
-        if (checkBox2.checked == true) {
-            text2.style.display = "block";
-        } else {
-            text2.style.display = "none";
-        }*/
-    }
-
-    function JobCheckbox_seq(){
-
-        //取得 job被checked的值
-        var checked_jobid = document.querySelectorAll('input[type="checkbox"][name="jobid"]:checked');
-        var checkedjobidarr = [];
-        checked_jobid.forEach(function(checkbox) {
-            checkedjobidarr.push(checkbox.value);
-        });
-
-        //取得 seq被checked的值
-        var checked_seqid = document.querySelectorAll('input[type="checkbox"][name="seqid"]:checked');
-        var checkedseqidarr = [];
-        checked_seqid.forEach(function(checkbox) {
-            checkedseqidarr.push(checkbox.value);
-        });
-
-        //checkedjobidarr &&  checkedseqidarr  不等於空值 要取得對應的task_id
-        if(checkedjobidarr != '' && checkedseqidarr  != ''){
-             $.ajax({
-                type: "POST",
-                data: {job_id: checkedjobidarr,seq_id: checkedseqidarr},
-                url: '?url=Monitors/get_correspond_val',
-                success: function(response) {
-                    if (response.trim() === '') {
-                        alert('查無資料');
-                        window.location.href = '?url=Monitors';
-
-                    } else {
-                        //alert(response);
-                        var taskListElement = document.getElementById('Task-list');
-                        taskListElement.style.display = 'block';
-                        document.getElementById("Task-list").innerHTML = response;
-                    }
-                },
-                error: function(error) {
-                    // console.error('Error:', error); 
-                }
-            }).fail(function () {
-                // history.go(0);
-            });
-
-
-        }
-    }
 
     // Close the modal when clicking outside the modal content
     window.addEventListener('click', function(event) {
@@ -982,15 +883,6 @@ function printChart() {
 
 }
 
-function downloadPng() {
-
-}
-
-function downloadJpeg() {
-
-}
-
-
 /// Onclick event for row background color
 $(document).ready(function () {
     // Call highlight_row function with table id
@@ -1050,228 +942,5 @@ addMessage();
 {
     background-color: #9AC0CD !important;
 }
-
-./*selected :hover{
-    background-color: #9AC0CD;
-}*/
 </style>
 <?php require APPROOT . 'views/inc/footer.tpl'; ?>
-
-
-<script>
-//紀錄 要刪除的system_sn
-
-
-</script>
-
-<script>
-//刪除(可支援複選)
-function delete_historyinfo() {
-    var checkboxes = document.querySelectorAll('input[type="checkbox"][name="test1"]:checked');
-    var checkedValues = [];
-
-    checkboxes.forEach(function(checkbox) {
-        checkedValues.push(checkbox.value);
-    });
-
-    var yes = confirm('你確定嗎？');
-    if (yes) {
-         $.ajax({
-                type: "POST",
-                data: {values: checkedValues},
-                url: '?url=Monitors/del_info',
-                success: function(response) {
-                    // 成功回調函數，處理伺服器的回應
-                    //console.log(response);
-                    //alert(response);
-                    history.go(0);
-                },
-                error: function(error) {
-                    // console.error('Error:', error); 
-                }
-            }).fail(function () {
-                // history.go(0);//失敗就重新整理
-            });
-    }else{
-
-    }
-}
-
-
-function search_info(){
-
-    var barcodesn    = document.getElementById('barcodesn').value;
-    var fromdate     = document.getElementById('FromDate').value;
-    var todate       = document.getElementById('ToDate').value;
-    var sname        = document.getElementById('search_name').value; //search bar
-    
-
-    var fromdate     = fromdate.replace("T", " ");
-    var todate       = todate.replace("T", " ");
-
-
-    var selectElement = document.getElementById("status");
-    var status_val    = selectElement.value;
-
-    $.ajax({
-        type: "POST",
-        data: {barcodesn: barcodesn,
-              fromdate: fromdate,
-              todate: todate,
-              status_val: status_val,
-              sname: sname},
-        url: '?url=Monitors/search_info_list',
-        success: function(response) {
-            if (response.trim() === '') {
-               alert('查無資料');
-               window.location.href = '?url=Monitors';
-
-            } else {
-                queryresult = response;
-                document.getElementById("tbody1").innerHTML = response;
-            }
-        },
-        error: function(error) {
-            // console.error('Error:', error); 
-        }
-    }).fail(function () {
-        // history.go(0);
-    });
-
-
-}
-
-
-// Next To Combine data(最多只能選2筆)
-function NextToCombineData()
-{    
-    var checkboxes = document.querySelectorAll('input[type="checkbox"][name="test1"]:checked');
-    var checkedValues = [];
-
-    checkboxes.forEach(function(checkbox) {
-        checkedValues.push(checkbox.value);
-    });
-  
-
-    if(checkedValues.length > 2){
-        alert('最多只能選取2筆鎖附記錄的資料');    
-    }
-
-    if(checkedValues.length < 2){
-        alert('請選擇2筆鎖附記錄的資料');  
-    }
-
-
-    // Show Combine data
-    //document.getElementById('CombineDataDisplay').style.display = 'block';
-
-    // Hide FasteningDisplay
-    //document.getElementById('FasteningDisplay').style.display = 'none';
-}
-
-function download_csv(){
-
-    if(queryresult === null) {
-        alert("請先執行查詢結果");
-        return;
-    }
-
-    // 將查詢結果傳遞給downland_csv
-    var csvData = queryresult;
-
-    var url ="?url=Monitors/downland_csv";
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', url, true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.responseType = 'blob';
-
-    xhr.onload = function() {
-
-    if (this.status === 200) {
-        var url = window.URL.createObjectURL(this.response);
-        var a = document.createElement('a');
-        a.href = url;
-        a.download = 'results.csv';
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-    }
-    };
-
-    xhr.send('csvData=' + encodeURIComponent(csvData));
-}
-
-function nopage(value){
-      $.ajax({
-        url: '?url=Monitors/index', 
-        method: 'POST',
-        data: {value: value}, 
-        success: function(response){
-            console.log(response);
-            alert(response);
-        },
-        error: function(xhr, status, error){
-            console.error(error);
-        }
-    });
-
-}
-
-function clear_button(){
-
-    //預設status: ALL
-    var status_val= '0';
-
-    //取得這個月的第一天日期&& 最後一天的日期 
-    var currentDate = new Date();
-
-    var firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-    var firstDayDate    = firstDayOfMonth.getDate();
-
-    var lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-    var lastDayDate    = lastDayOfMonth.getDate();
-
-
-    var firstDayYear = firstDayOfMonth.getFullYear();
-    var firstDayMonth = firstDayOfMonth.getMonth() + 1; 
-
-    var lastDayYear = lastDayOfMonth.getFullYear();
-    var lastDayMonth = lastDayOfMonth.getMonth() + 1;
-
-
-    //格式化日期 
-    var fromdate = firstDayYear  + (firstDayMonth < 10 ? '0' : '') + firstDayMonth  + (firstDayDate < 10 ? '0' : '') + firstDayDate;
-    var todate   = lastDayYear   + (lastDayMonth < 10 ? '0' : '')  + lastDayMonth   + (lastDayDate < 10 ? '0' : '')  + lastDayDate;
-
-
-    $.ajax({
-        type: "POST",
-        data: {
-              fromdate: fromdate,
-              todate: todate,
-              status_val: status_val
-              },
-        url: '?url=Monitors/search_info_list',
-        success: function(response) {
-            if (response.trim() === '') {
-               alert('查無資料');
-               window.location.href = '?url=Monitors';
-
-            } else {
-                queryresult = response;
-                document.getElementById("tbody1").innerHTML = response;
-            }
-        },
-        error: function(error) {
-            //失敗回調函數，處理錯誤情況
-            // console.error('Error:', error); 
-        }
-    }).fail(function () {
-        // history.go(0);
-    });
-
-
-}
-
-
-</script>

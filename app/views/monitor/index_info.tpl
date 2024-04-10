@@ -4,11 +4,16 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/nav.css" type="text/css">
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/datatables.min.css">
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/3.1.1/svg.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
 
+
+<!---擷取畫面JS-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
 
+<!-- 引入 Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<script src="<?php echo URLROOT; ?>js/historical.js"></script>
 
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/historical.css" type="text/css">
 
@@ -136,24 +141,24 @@
 
                     <table class="table" style="font-size: 15px; border-collapse: collapse;">
                         <tr>
-                            <td>Index : <?php echo $data[0]['system_sn'];?></td>
-                            <td>BarcodeSN : <?php echo $data[0]['cc_barcodesn'];?></td>
-                            <td>Time : <?php echo $data[0]['data_time'];?></td>
+                            <td>Index : <?php echo $data['job_info'][0]['system_sn'];?></td>
+                            <td>BarcodeSN : <?php echo $data['job_info'][0]['cc_barcodesn'];?></td>
+                            <td>Time : <?php echo $data['job_info'][0]['data_time'];?></td>
                             <td>Operator : Esther</td>
                             <td>Equipment : GTCS</td>
                             <td></td>
                         </tr>
                         <tr>
-                            <td>Final Torque : <?php echo $data[0]['fasten_torque'];?> kgf.cm</td>
-                            <td>Torque range : <?php echo $data[0]['step_lowtorque'];?> ~ <?php echo $data[0]['step_hightorque'];?></td>
-                            <td>Final Angle : <?php echo $data[0]['fasten_angle'];?></td>
-                            <td>Angle range : <?php echo $data[0]['step_lowangle'];?> ~ <?php echo $data[0]['step_highangle'];?></td>
-                            <td>Direction : CCW</td>
-                            <td>Error code : error</td>
+                            <td>Final Torque : <?php echo $data['job_info'][0]['fasten_torque'];?> kgf.cm</td>
+                            <td>Torque range : <?php echo $data['job_info'][0]['step_lowtorque'];?> ~ <?php echo $data['job_info'][0]['step_hightorque'];?></td>
+                            <td>Final Angle :  <?php echo  $data['job_info'][0]['fasten_angle'];?></td>
+                            <td>Angle range :  <?php echo  $data['job_info'][0]['step_lowangle'];?> ~ <?php echo $data['job_info'][0]['step_highangle'];?></td>
+                            <td>Direction :    <?php echo $data['job_info'][0]['count_direction'];?></td>
+                            <td>Error code : <?php echo $data['job_info'][0]['error_message'];?></td>
                         </tr>
                         <tr style="vertical-align: middle;">
-                            <td>Job : <?php echo $data[0]['job_name'];?></td>
-                            <td>Seq/task :<?php echo $data[0]['sequence_name']. "/". $data[0]['cc_task_name'];?></td>
+                            <td>Job : <?php echo $data['job_info'][0]['job_name'];?></td>
+                            <td>Seq/task :<?php echo $data['job_info'][0]['sequence_name']. "/". $data['job_info'][0]['cc_task_name'];?></td>
                             <td>Program : p1</td>
                             <td>Note : arm(559,583)[200]</td>
                             <td>Status : <a style="background-color: #99CC66; padding: 0 10px">OK</a></td>
@@ -164,37 +169,36 @@
 
                         <tr style="vertical-align: middle">
                             <td>
-                                Chart :  <select id="Chart-seting" class="t6 Select-All" style="float: none">
-                                                    <option value="1">Torque/Time</option>
-                                                    <option value="2">Angle/Time</option>
-                                                    <option value="3">RPM/Time</option>
-                                                    <option value="4">Power/Time</option>
-                                                    <option value="5">Torque/Angle</option>
+                                Chart : <select id="Chart-seting" class="t6 Select-All" style="float: none"  onchange="chat_mode(this)">
+                                            <?php foreach($data['chat_mode_arr'] as $k_chat => $v_chat){?>
+                                                <option  value="<?php echo $k_chat;?>"  <?php if($_COOKIE['chat_mode']==$k_chat){echo "selected";}else{echo "";}?>  > <?php echo $v_chat;?> </option>
+                                            <?php } ?>
+                                                             
+                                        </select>
+                            </td>
+                            <td>
+                                Torque Unit:    <select id="Torque-Unit" class="Select-All" style="float: none; width: 100px" onchange="unit_change(this)">
+                                                    <?php foreach($data['torque_mode_arr'] as $k_torque => $v_torque){?>
+                                                            <option  value="<?php echo $k_torque;?>"  <?php if($_COOKIE['unit_mode']== $k_torque){echo "selected";}else{echo "";}?>  > <?php echo $v_torque;?> </option>
+                                                    <?php } ?>
                                                 </select>
                             </td>
                             <td>
-                                Torque Unit:    <select id="Torque-Unit" class="Select-All" style="float: none; width: 100px">
-                                                    <option value="2">N.m</option>
-                                                    <option value="1">Kgf.m</option>
-                                                    <option value="2">Kgf.cm</option>
-                                                    <option value="2">In.lbs</option>
-                                                </select>
-                            </td>
-                            <td>
-                                Angle:  <select id="Angle" class="t6 Select-All" style="float: none; width: 100px">
+                                Angle:  <select id="Angle" class="t6 Select-All" style="float: none; width: 100px" onchange="angle_change(this)">
                                             <option value="1">Total angle</option>
                                             <option value="2">Task angle</option>
                                         </select>
                             </td>
-                            <td>
-                                Sampling:  <select id="SelectOutputSampling" class="t6 Select-All" style="float: none; width: 100px">
+                            <!--<td>
+                                Sampling:  <select id="SelectOutputSampling" class="t6 Select-All" style="float: none; width: 100px" onchange="ms_change(this)">
                                             <option value="1">1(ms)</option>
                                             <option value="2">0.5(ms)</option>
+                                            <option value="3">2(ms)</option>
                                         </select>
-                            </td>
+                            </td>-->
                             <td>
                                 <button id="Export-Excel" type="button" class="ExportButton" style="margin-top: 0">Export Excel</button>
-                                <button id="Save-info" type="button" style="margin-top: 0">Save</button>
+                                <!--<button id="Save-info" type="button" style="margin-top: 0" onclick='save_option()'>Save</button>-->
                             </td>
                             <td></td>
                         </tr>
@@ -203,59 +207,23 @@
                     <div>
                         <div style="text-align: center">
                             <label style="float: left"><b>Diagram Display</b></label>
-                            <label>Torque / Time</label>
+                            <label><?php echo $data['chat']['chat_name'];?></label>
                         </div>
                         <div id="chart-setting">
                             <div class="chart-container">
                                 <div class="menu-chart" onclick="toggleMenu()">
                                     <i class="fa fa-bars" style="font-size: 26px"></i>
                                     <div class="menu-content" id="myMenu">
-                                        <a href="#" onclick="viewFullScreen()" class="view-fullscreen">View in full screen</a>
-                                        <a href="#" onclick="closeFullScreen()" style="display: none">Close full screen</a>
-                                    <!--<a href="#" onclick="printChart()">Print chart</a>-->
-                                    <!--<a href="#" onclick="downloadPng()">Download PNG</a>-->
-                                        <a  onclick="takeScreenshot()">Download JEPG</a>
+                                        <a  onclick="viewFullScreen()" class="view-fullscreen">View in full screen</a>
+                                        <a  onclick="closeFullScreen()" style="display: none">Close full screen</a>
+                                        <a  href="#" onclick="printChart()">Print chart</a>
+                                        <a  onclick="takeScreenshot('png')">Download PNG</a>
+                                        <a  onclick="takeScreenshot('jpg')">Download JEPG</a>
                                     </div>
                                 </div>
-
-                                <svg viewBox="0 0 500 300">
-                                    <!-- Draw X and Y axes -->
-                                    <line class="axis-x" x1="50" y1="215" x2="550" y2="215" />
-                                    <line class="axis-y" x1="50" y1="215" x2="50" y2="40" />
-
-                                    <!-- Draw grid lines on Y-axis -->
-                                    <line class="grid-line" x1="50" y1="190" x2="500" y2="190" />
-                                    <line class="grid-line" x1="50" y1="160" x2="500" y2="160" />
-                                    <line class="grid-line" x1="50" y1="130" x2="500" y2="130" />
-                                    <line class="grid-line" x1="50" y1="100" x2="500" y2="100" />
-                                    <line class="grid-line" x1="50" y1="70" x2="500" y2="70" />
-                                    <line class="grid-line" x1="50" y1="40" x2="500" y2="40" />
-
-                                    <!-- Draw Torque values -->
-                                    <text x="0" y="15" text-anchor="end">Torques</text>
-
-                                    <text x="40" y="40" text-anchor="end">0.7</text>
-                                    <text x="40" y="70" text-anchor="end">0.6</text>
-                                    <text x="40" y="100" text-anchor="end">0.5</text>
-                                    <text x="40" y="130" text-anchor="end">0.3</text>
-                                    <text x="40" y="160" text-anchor="end">0.3</text>
-                                    <text x="40" y="190" text-anchor="end">0.3</text>
-
-                                    <!-- Draw Count values -->
-
-                                    <text x="50" y="233" text-anchor="middle">0</text>
-                                    <text x="115" y="233" text-anchor="middle">100</text>
-                                    <text x="185" y="233" text-anchor="middle">200</text>
-                                    <text x="245" y="233" text-anchor="middle">300</text>
-                                    <text x="305" y="233" text-anchor="middle">400</text>
-                                    <text x="365" y="233" text-anchor="middle">500</text>
-                                    <text x="435" y="233" text-anchor="middle">600</text>
-                                    <text x="495" y="233" text-anchor="middle">700</text>
-
-                                    <text x="540" y="245" text-anchor="middle">Time</text>
-                                    <!-- Draw the line chart -->
-                                    <path class="line" d="M50 190 L150 180 L240 130 L350 158 L420 100 L530 60">
-                                </svg>
+                                 <br>
+                                 <!---曲線圖資料---->
+                                 <canvas id="myChart" width="200" height="50"></canvas>
                             </div>
                         </div>
                     </div>
@@ -917,13 +885,14 @@ addMessage();
 
 
 //擷取曲線圖 
-function takeScreenshot() {
-    var content = document.getElementById('chart-setting');
+function takeScreenshot(param) {
+    var img_name = 'screenshot.'+ param;
+    var content = document.getElementById('myChart');
     domtoimage.toPng(content, { bgcolor: '#ffffff' }) //背景設成白色
         .then(function(dataUrl) {
             var link = document.createElement('a');
             link.href = dataUrl;
-            link.download = 'screenshot.jpg';
+            link.download = img_name;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -932,4 +901,117 @@ function takeScreenshot() {
             console.error('Error while taking screenshot:', error);
         });
 }
+
+
+
+//處理曲線圖
+var ctx = document.getElementById('myChart').getContext('2d');
+
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [<?php echo $data['x_nodal_point'];?>],
+        datasets: [{
+            label: '<?php echo $data['chat']['yaxis_title'];?>',
+            data: [<?php echo $data['total_range'];?>],
+            borderColor: 'rgba(0, 0, 255, 1)',
+            borderWidth: 3
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                suggestedMin: <?php echo $data['y_minvalue'];?>, 
+                suggestedMax: <?php echo $data['y_maxvalue'];?>, 
+                title: {
+                    display: true,
+                    text: '<?php echo $data['chat']['yaxis_title'];?>',
+                }
+            },
+            x:{
+                title: {
+                    display: true,
+                    text: '<?php echo $data['chat']['xaxis_title'];?>',
+                    align: 'end'
+                    
+                } 
+            }
+        },
+
+        interaction: {
+            mode: 'index',
+            intersect: false
+        },
+
+        plugins: {
+            zoom: {
+                zoom: {
+                    wheel: {
+                        enabled: true,
+                    },
+                    pinch: {
+                        enabled: true
+                    },
+                    mode: 'xy'
+                }
+            }
+        }
+
+
+    }
+});
+
+
+//曲線圖模式選擇
+function chat_mode(selectOS) {
+ 
+    var selectElement = document.getElementById('Chart-seting');
+    var selectedOptions = [];
+    // 獲取所有被選中的選項
+    for (var i = 0; i < selectElement.options.length; i++) {
+        var option = selectElement.options[i];
+        if (option.selected) {
+            selectedOptions.push(option.value);
+        }
+    }
+
+    document.cookie = "chat_mode=" + selectedOptions + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+    history.go(0);
+
+}
+
+
+//單位選擇 
+function  unit_change(selectOS){
+
+    var selectElement = document.getElementById('Torque-Unit');
+    var selectedOptions = [];
+    // 獲取所有被選中的選項
+    for (var i = 0; i < selectElement.options.length; i++) {
+        var option = selectElement.options[i];
+        if (option.selected) {
+            selectedOptions.push(option.value);
+        }
+    }
+    document.cookie = "unit_mode=" + selectedOptions + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+    history.go(0);
+}
+
+
+//角度切換
+function  angle_change(selectOS){
+    var selectElement = document.getElementById('Angle');
+    var selectedOptions = [];
+    // 獲取所有被選中的選項
+    for (var i = 0; i < selectElement.options.length; i++) {
+        var option = selectElement.options[i];
+        if (option.selected) {
+            selectedOptions.push(option.value);
+        }
+    }
+    document.cookie = "angle_mode=" + selectedOptions + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+    history.go(0);
+}
+
 </script>
+

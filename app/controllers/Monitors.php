@@ -188,10 +188,6 @@ class Monitors extends Controller
             $body = preg_replace('/<td(\s+style="[^"]*")?\s*>/i', '', $body);
             $body = str_replace("</td></td>","</td>",$body);
 
-
-            $body_arr = array();
-            $body_arr  = explode("</td>", $body);
-
             $new_arr = array();
             $new_arr = array(
                             $body_arr[1],
@@ -226,15 +222,105 @@ class Monitors extends Controller
 
     public function nextinfo($index){
         //透過index 取得相關的資料
-
-        $no ="4129";
-        $csvdata = $this->Monitors_newModel->connected_ftp($no);
-  
+        
         if(!empty($index)){
-            $data = $this->Monitors_newModel->get_info_data($index);
+            $info = $this->Monitors_newModel->get_info_data($index);
+
+
+            $no ="4174";
+            $data = array();
+            $csvdata = $this->Monitors_newModel->connected_ftp($no);
+
+            #取得完整的CSV資料 
+            if(!empty($csvdata)){
+
+                #計算X軸 
+                $x_count   = count($csvdata)-1;
+                $arr       = range(0, $x_count);
+                $arr_count = count($arr);
+
+                #取整數
+                $interval = ceil($arr_count / 9);
+                $final[] = $csvdata[0];
+                #計算中間的 x 軸點的值
+                for ($i = 1; $i < 10; $i++) {
+                    $val = $i * $interval - $i;
+                    $final[$i * $interval - $i] = $csvdata[$val];
+                }
+                $at_last[$x_count] = $csvdata[$x_count];
+                $final = $final + $at_last;
+
+                #曲線圖X軸的節點 
+                $x_nodal_point = implode("','", array_keys($final)); 
+                $data['x_nodal_point'] = "'".$x_nodal_point."'";
+                $data['final'] = $final;
+
+                #判斷 有無cookie chat_mode 
+                if (isset($_COOKIE['chat_mode'])) {
+                    $chat_mode = $_COOKIE['chat_mode'];
+                }else{
+                    $chat_mode = "1";
+                }
+
+             
+                #取得曲線圖的模式
+                $chat_arr = $this->Monitors_newModel->chat_change($chat_mode);
+                $data['chat'] = $chat_arr;
+
+                #設置Y軸的最大及最小值
+                #要比對的位置
+                //$position = 1;
+
+                //如果 position = ''  Y=>扭力 ,X=>角度                
+                $values = array();
+                foreach ($csvdata as $subarray) {                    
+                    $values[] = $subarray[$chat_arr['position']];
+                } 
+
+                $total_range = '';
+                foreach($final as $kk =>$vv){
+                    $total_range .= $vv[$chat_arr['position']].',';
+                }
+        
+                #曲線圖的資料
+                $data['total_range'] = $total_range;
+    
+                #取得指定位置的值的最大值和最小值
+                $y_maxvalue = max($values);
+                $y_minvalue = min($values);
+
+                $data['y_maxvalue'] = $y_maxvalue;
+                $data['y_minvalue'] = $y_minvalue;
+
+            }
+
+            
+            $data['job_info'] = $info;
+
+            $chat_mode_arr = array(
+                1=>'Torque/Time',
+                2=>'Angle/Time',
+                3=>'RPM/Time',
+                4=>'Power/Time',
+                5=>'Torque/Angle'
+            );
+
+
+
+            $torque_mode_arr = array(
+                1=>'N.m',
+                2=>'Kgf.m',
+                3=>'Kgf.cm',
+                4=>'In.lbs',
+
+            );    
+            $data['chat_mode_arr'] = $chat_mode_arr;
+            $data['torque_mode_arr'] = $torque_mode_arr;
+
+    
             $this->view('monitor/index_info', $data);
         }
-        
+
     }
 
     public function get_correspond_val(){
@@ -273,7 +359,7 @@ class Monitors extends Controller
                 $info_task_detailed = ''; 
                 foreach($info_task  as $k_task => $v_task){
                     $info_task_detailed  = '<div class="row t1">';
-                    $info_task_detailed .= '<div class="col t5">';
+                    $info_task_detailed .= '<div class="col t5 form-check form-check-inline">';
                     $info_task_detailed .= '<input class="form-check-input" type="checkbox" name="taskid" id="taskid" value='.$v_task['cc_task_id'].'   onclick="JobCheckbox_task()"  style="zoom:1.0; vertical-align: middle;">&nbsp;';
                     $info_task_detailed .= '<label class="form-check-label" for="">'.$v_task['cc_task_name'].'</label>';
                     $info_task_detailed .= '</div>';
@@ -283,12 +369,6 @@ class Monitors extends Controller
             }
 
         }
-
-      
-  
     }
 
-
-
-    
 }

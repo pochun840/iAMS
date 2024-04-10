@@ -20,12 +20,12 @@ class Monitors_new{
 
         $sql = "SELECT * FROM `fasten_data` WHERE    on_flag ='0' ";
 
-        //barcodesn 
+        #barcodesn 
         if(!empty($info_arr['barcodesn'])){
             $sql.=" AND  cc_barcodesn = '".$info_arr['barcodesn']."'";
         }
 
-        // 日期
+        #日期
         if(!empty($info_arr['fromdate']) && !empty($info_arr['todate'])){
 
             $info_arr['fromdate'] = str_replace("-","",$info_arr['fromdate'])." 00:00:00";
@@ -34,7 +34,7 @@ class Monitors_new{
             $sql.=" AND data_time BETWEEN  '".$info_arr['fromdate']."' AND  '".$info_arr['todate']."'  ";
         }
 
-        //鎖附狀態(ALL & OK & OKALL & NG)
+        #鎖附狀態(ALL & OK & OKALL & NG)
         if(!empty($info_arr['status_val'])){
 
             if($info_arr['status_val'] == "0"){//ALL 
@@ -50,16 +50,36 @@ class Monitors_new{
                 $sql .=" AND fasten_status = '7' or fasten_status = '8'  ";
 
             }
+
+          
         }
 
-        //search_name (預設 搜尋 job_name && seq_name)
+        #search_name(模糊搜尋)
         if(!empty($info_arr['sname'])){
             $sql.=" AND job_name  LIKE '%{$info_arr['sname']}%'  OR sequence_name LIKE '%{$info_arr['sname']}%' OR  cc_task_name LIKE '%{$info_arr['sname']}%' OR cc_barcodesn LIKE '%{$info_arr['sname']}%'";
         }
+      
+
+        #job_id && seq_id && task_id 
+        if(!empty($info_arr['job_id'][0]) && empty($info_arr['sequence_id'][0]) && empty($info_arr['cc_task_id'][0])) {
+
+            $sql .=" AND job_id = '".$info_arr['job_id'][0]."' ";
+        }
+
+        if(!empty($info_arr['job_id'][0]) && !empty($info_arr['sequence_id'][0]) && empty($info_arr['cc_task_id'][0])) {
+
+            $sql .=" AND job_id = '".$info_arr['job_id'][0]."' AND sequence_id = '".$info_arr['sequence_id'][0]."' ";
+        }
+
+        if(!empty($info_arr['job_id'][0]) && !empty($info_arr['sequence_id'][0]) && !empty($info_arr['cc_task_id'][0])) {
+
+            $sql .=" AND job_id = '".$info_arr['job_id'][0]."' AND sequence_id = '".$info_arr['sequence_id'][0]."' AND  cc_task_id = '".$info_arr['cc_task_id'][0]."' ";
+        }
+
+
+
         $sql.=" order by data_time desc limit '".$offset."','".$limit."' ";
-
-
-        //echo $sql;
+        //echo   $sql;
 
         $statement = $this->db->prepare($sql);
         $statement->execute();
@@ -75,7 +95,6 @@ class Monitors_new{
 
 
         #20240401 修改成 update on_flag的資料(0:顯示 1:隱藏)
-
         $sql= "UPDATE fasten_data SET on_flag = '1' WHERE system_sn = ' ".$del_info_sn."' ";
         
         $statement = $this->db->prepare($sql);
@@ -109,7 +128,7 @@ class Monitors_new{
         $status_arr[4] = 'OK';
         $status_arr[5] = 'OK-SEQ';
         $status_arr[6] = 'OK-JOB';
-        $status_arr[4] = 'NG';
+        $status_arr[7] = 'NG';
         $status_arr[8] = 'NS';
         $status_arr[9] = 'SETTING';
         $status_arr[10] = 'EOC';
@@ -148,15 +167,12 @@ class Monitors_new{
 
     public function get_info_data($index){
         
-
         $sql = "SELECT * FROM `fasten_data` WHERE    system_sn ='".$index."' ";
         $statement = $this->db->prepare($sql);
         $statement->execute();
         $res = $statement->fetchall(PDO::FETCH_ASSOC);
 
         return  $res;
-
-
     }
 
     public function get_job_id(){
@@ -169,7 +185,7 @@ class Monitors_new{
         return $result;
 
     }
-
+    
     public function get_seq_id($job_id){
 
         $sql = "SELECT * FROM `fasten_data` WHERE job_id = '".$job_id."' AND on_flag = '0' ";
@@ -190,8 +206,6 @@ class Monitors_new{
         return $result;
     }
 
-
-
     public function connected_ftp($no){
 
         #FTP連線相關資訊
@@ -201,21 +215,22 @@ class Monitors_new{
         $ftp_dir = "/mnt/ramdisk/FTP/";
 
         #FTP曲線圖路徑
-        $csv_file = "DATALOG_000000".$no."_1p0.csv";
 
-   
+        if(empty($no)){
+            $no ="4157";
+        }
+        $csv_file = "DATALOG_000000".$no."_1p0.csv";
         #連接到FTP
         $conn_id = ftp_connect($ftp_server);
 
         #登錄FTP
-        $login_result = ftp_login($conn_id, $ftp_user, $ftp_pass);
+        $login_result = ftp_login($conn_id, $ftp_user, $ftp_pass);;
 
-        if ($conn_id && $login_result) {
-            #切换到存放曲線圖路徑
-            if (ftp_chdir($conn_id, $ftp_dir)) {
+        if ($conn_id && $login_result){
+            #切換到存放曲線圖路徑
+            if (ftp_chdir($conn_id, $ftp_dir)){
                 #取得.CSV 文件列表
                 $files = ftp_nlist($conn_id, ".");
-
                 if($files[0]!= ""){
                     $filename =  $ftp_dir.$csv_file;
                     if (in_array($csv_file, $files)){
@@ -224,22 +239,18 @@ class Monitors_new{
                         $tempFile = tempnam(sys_get_temp_dir(), 'ftp_');
                         $ftp_get = ftp_get($conn_id, $tempFile, $filename, FTP_BINARY);
                         if ($ftp_get) {
-                            //echo "open";
                             $csvdata = array_map('str_getcsv', file($tempFile));
                             unlink($tempFile);
-
-
                         }else{
-                            //echo "nono";
+                            //echo "nono"; 
                         }
 
                     } else {
                         echo "File".$ftp_file."does not exist";
                     }
-                  
                 }
             }else{
-                //echo "Failed to change directory to $ftp_dir"; 
+                echo "Failed to change directory to".$ftp_dir; 
             }
 
             #關閉FTP連線
@@ -250,5 +261,54 @@ class Monitors_new{
 
         return $csvdata;
 
+    }
+
+
+    public function chat_change($chat_mode){
+
+        /*
+        $position = 1 (扭力欄位)
+        $position = 2 (角度欄位)
+        $position = 3 (轉速欄位)
+        $position = 4 (功率欄位)
+        */ 
+        $chat_arr = array();
+        if($chat_mode =="1"){
+            $chat_name = "Torque/Time";
+            $position = 1;  
+            $yaxis_title = "Torque";
+            $xaxis_title = "Time(MS)";
+        }else if($chat_mode =="2"){
+            $chat_name = "Angle/Time";
+            $position = 2;  
+            $yaxis_title = "Angle";
+            $xaxis_title = "Time(MS)";
+        }else if($chat_mode =="3"){
+            $chat_name = "RPM/Time";
+            $position = 3;  
+            $yaxis_title = "RPM";
+            $xaxis_title = "Time(MS)";
+        }else if($chat_mode =="4"){
+            $chat_name = "Power/Time";
+            $position = 4;  
+            $yaxis_title = "Power";
+            $xaxis_title = "Time(MS)";
+        }else{
+            $chat_name = "Torque/Angle";
+            $position = '1';  
+            $yaxis_title = "Torque";
+            $xaxis_title = "Angle";
+
+        }
+
+        if(!empty($chat_name)){
+            $chat_arr['chat_name'] = $chat_name;
+            $chat_arr['position']  = $position;
+            $chat_arr['yaxis_title']  = $yaxis_title;
+            $chat_arr['xaxis_title'] = $xaxis_title;
+
+        }
+
+        return $chat_arr;
     }
 }
