@@ -879,10 +879,6 @@ addMessage();
 </style>
 <?php require APPROOT . 'views/inc/footer.tpl'; ?>
 <script>
-
-
-
-
  var maxWidth = 1500; // 最大寬度
     var chartCanvas = document.getElementById('myChart'); // 取得Canvas元素
     var chartWidth = chartCanvas.offsetWidth; // 取得Canvas元素的寬度
@@ -896,14 +892,10 @@ addMessage();
 
     // 生成隨機數據
     var data = [];
-    for (var i = 0; i < 1000; i++) {
-        var xVal = i;
-        var yVal = Math.random() * 100;
-        data.push({x: xVal, y: yVal});
-    }
+
 
     // 設置 x 軸的步長
-    var stepSize = 10; // 設置每個節點之間的距離
+    var stepSize = 1; // 設置每個節點之間的距離
     var xAxisConfig = {
             type: 'linear',
             position: 'bottom',

@@ -165,9 +165,7 @@ class Monitors extends Controller
                 $info_data .= "<td>".$v['cc_task_name']."</td>";
                 $info_data .= "<td></td>";
                 $info_data .= "<td>".$v['step_lowtorque']." ~ ".$v['step_hightorque']."</td>";
-                //$info_data .= "<td>".$v['fasten_torque']. $torque_arr[$v['torque_unit']]."</td>";
                 $info_data .= "<td>".$v['step_lowangle']." ~ ".$v['step_highangle']."</td>";
-                //$info_data .= "<td>". $status_arr[$v['fasten_status']]."</td>";
                 $info_data .= "<td>".$v['fasten_torque'] .$torque_arr[$v['torque_unit']]."</td>";
                 $info_data .= "<td>".$v['fasten_angle']." deg </td>";
                 $info_data .= "<td style='".$style."'>". $status_arr['status_type'][$v['fasten_status']]."</td>";
@@ -196,8 +194,6 @@ class Monitors extends Controller
             $no ="4176";
             $data = array();
             $csvdata = $this->Monitors_newModel->connected_ftp($no);
-
-
 
             $status_arr = $this->Monitors_newModel->status_code_change();
 
@@ -228,18 +224,24 @@ class Monitors extends Controller
 
                 #設置Y軸的最大及最小值
                 #要比對的位置
-                //$position = 1;
 
-                //如果 position = ''  Y=>扭力 ,X=>角度                
-                $values = array();
-                foreach ($csvdata as $subarray) {                    
-                    $values[] = $subarray[$chat_arr['position']];
-                } 
+                //如果 position = '5'  Y=>扭力 ,X=>角度
+                
+                if($position =="5"){
 
-                $total_range = '';
-                foreach($csvdata as $kk =>$vv){
-                    $total_range .= $vv[$chat_arr['position']].',';
+                }else{
+                    $values = array();
+                    foreach ($csvdata as $subarray) {                    
+                        $values[] = $subarray[$chat_arr['position']];
+                    } 
+
+                    $total_range = '';
+                    foreach($csvdata as $kk =>$vv){
+                        $total_range .= $vv[$chat_arr['position']].',';
+                    }
+
                 }
+             
         
                 #曲線圖的資料
                 $data['total_range'] = $total_range;
@@ -280,10 +282,11 @@ class Monitors extends Controller
 
     }
 
+
+    #利用job_id 及 seq_id 找到對應的task_id 
+    #並組成 html的checkbox 格式
     public function get_correspond_val(){
-
         $val  = array();
-
         #取得對應的seq_id
         if(!empty($_POST['job_id'][0])  && empty($_POST['seq_id'][0])){
             $job_id = $_POST['job_id'][0];
@@ -330,11 +333,13 @@ class Monitors extends Controller
 
     
 
-    //chat.js 
 
     public function ddd(){
         $this->view('monitor/index_new');
     }
+
+
+    #chat.js 測試 
     public function test_string1(){
         /*$html = "<tr><td style=\"text-align: center;\"><input class=\"form-check-input\" type=\"checkbox\" name=\"test1\" id=\"test1\"  value=\"287\" style=\"zoom:1.2;vertical-align: middle;\"></td><td id='system_sn'>287</td><td>20240403 08:47:22</td><td>200</td><td>JOB-102</td><td>SEQ-123</td><td>task-1</td><td>GTCS</td><td>1.005N.m</td><td>427 deg  </td><td>NS</td><td>6.504 ms </td><td>6.504 ms </td><td>0</td><td>p1</td><td><img src=\"./img/info-30.png\" alt=\"\" style=\"height: 28px; vertical-align: middle;\" onclick=\"NextToInfo()\"></td></tr><tr><td style=\"text-align: center;\"><input class=\"form-check-input\" type=\"checkbox\" name=\"test1\" id=\"test1\"  value=\"258\" style=\"zoom:1.2;vertical-align: middle;\"></td><td id='system_sn'>258</td><td>20240118 08:47:22</td><td>258</td><td>JOB-101</td><td>SEQ-1</td><td>task-20</td><td>GTCS</td><td>1.005N.m</td><td>427 deg  </td><td>NG</td><td>6.504 ms </td><td>6.504 ms </td><td>0</td><td>p1</td><td><img src=\"./img/info-30.png\" alt=\"\" style=\"height: 28px; vertical-align: middle;\" onclick=\"NextToInfo()\"></td></tr>";
         preg_match_all('/<td id=\'system_sn\'>(.*?)<\/td>/', $html, $matches);
@@ -351,9 +356,11 @@ class Monitors extends Controller
 
     }
 
-    public function csv_downland()
-    {
-        
+
+    #產生CSV的文件 
+    #利用system_sn 取得完整的鎖附資料
+    public function csv_downland(){
+ 
         if(!empty($_COOKIE['systemSnval'])){
             $system_sn = $_COOKIE['systemSnval'];
             $pos = strpos($system_sn, ',');
@@ -388,9 +395,7 @@ class Monitors extends Controller
             echo $filename;
             unlink($filename);
 
-        }
-
-       
+        }     
     }
 
 }

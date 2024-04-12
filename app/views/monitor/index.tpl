@@ -268,7 +268,7 @@
                                             <td></td>
                                             <td><?php echo $v_info['step_lowtorque']." ~ ".$v_info['step_hightorque'];?></td>
                                             <td><?php echo $v_info['step_lowangle']." ~ ".$v_info['step_highangle'];?></td>
-                                            <td><?php echo $v_info['fasten_torque'];?></td>
+                                            <td><?php echo $v_info['fasten_torque'].$data['torque_arr'][$v_info['torque_unit']] ;?></td>
                                             <td><?php echo $v_info['fasten_angle'] . " deg";?></td>
                                             <td style="background-color:<?php echo $data['status_arr']['status_color'][$v_info['fasten_status']];?> font-size: 20px"><?php echo $data['status_arr']['status_type'][$v_info['fasten_status']];?></td>
                                             <td><?php echo $data['status_arr']['error_msg'][$v_info['error_message']];?></td>
