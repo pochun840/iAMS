@@ -3,10 +3,10 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/nav.css" type="text/css">
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/datatables.min.css">
 
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/historical.css" type="text/css">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>css/historical.css?v=202404111200" type="text/css">
 
 <script src="<?php echo URLROOT; ?>js/flatpickr.js"></script>
-<script src="<?php echo URLROOT; ?>js/historical.js"></script>
+<script src="<?php echo URLROOT; ?>js/historical.js?v=202404111000"></script>
 <?php if(isset($data['nav'])){
     echo $data['nav'];
 }
@@ -212,7 +212,7 @@
 
 
                         <div class="topnav-right">
-                            <button id="Export-CSV" type="button" class="ExportButton" onclick="download_csv()">Export CSV</button>
+                            <button id="Export-CSV" type="button" class="ExportButton" onclick="csv_download()">Export CSV</button>
                             <button id="Export-Report" type="button" class="ExportButton">Export Report</button>
                             <button id="Combine-btn" type="button" onclick="NextToCombineData()">Combine Data</button>
                             <button id="Clear" type="button"   onclick="clear_button() ">Clear</button>
@@ -229,16 +229,17 @@
                                         <th><i class="fa fa-trash-o" style="font-size:26px;color:black" onclick="delete_historyinfo()"></i></th>
                                         <th>Index</th>
                                         <th>Time</th>
+                                        <th>Station</th>
                                         <th>BarcodeSN</th>
                                         <th>Job Name</th>
                                         <th>Seq Name</th>
                                         <th>task</th>
-                                        <th>Controller</th>
-                                        <th>Torque</th>
-                                        <th>Total.A</th>
+                                        <th>Equipment</th>
+                                        <th>Torque range</th>
+                                        <th>Angle range</th>
+                                        <th>Final Torque</th>
+                                        <th>Final Angle</th>
                                         <th>Status</th>
-                                        <th>Job time</th>
-                                        <th>Task time</th>
                                         <th>Error</th>
                                         <th>Pset</th>
                                         <th>Action</th>
@@ -259,18 +260,19 @@
                                             </td>
                                             <td><?php echo $v_info['system_sn'];?></td>
                                             <td><?php echo $v_info['data_time'];?></td>
+                                            <td></td>
                                             <td><?php echo $v_info['cc_barcodesn'];?></td>
                                             <td><?php echo $v_info['job_name'];?></td>
                                             <td><?php echo $v_info['sequence_name'];?></td>
                                             <td><?php echo $v_info['cc_task_name'];?></td>
-                                            <td><?php echo "GTCS";?></td>
-                                            <td><?php echo $v_info['fasten_torque']. $data['torque_arr'][$v_info['torque_unit']];?></td>
-                                            <td><?php echo $v_info['fasten_angle']. " deg";?></td>
-                                            <td><?php echo $data['status_arr'][$v_info['fasten_status']];?></td>
-                                            <td><?php echo $v_info['fasten_time']."ms";?></td>
-                                            <td><?php echo $v_info['fasten_time']."ms";?></td>
-                                            <td><?php echo $v_info['error_message'];?></td>
-                                            <td>p1</td>
+                                            <td></td>
+                                            <td><?php echo $v_info['step_lowtorque']." ~ ".$v_info['step_hightorque'];?></td>
+                                            <td><?php echo $v_info['step_lowangle']." ~ ".$v_info['step_highangle'];?></td>
+                                            <td><?php echo $v_info['fasten_torque'];?></td>
+                                            <td><?php echo $v_info['fasten_angle'] . " deg";?></td>
+                                            <td style="background-color:<?php echo $data['status_arr']['status_color'][$v_info['fasten_status']];?> font-size: 20px"><?php echo $data['status_arr']['status_type'][$v_info['fasten_status']];?></td>
+                                            <td><?php echo $data['status_arr']['error_msg'][$v_info['error_message']];?></td>
+                                            <td></td>
                                             <td>
                                                 <a href=" <?php echo $link;?> " >
                                                     <img src="./img/info-30.png" alt="" style="height: 28px; vertical-align: middle;" >
@@ -943,4 +945,23 @@ addMessage();
     background-color: #9AC0CD !important;
 }
 </style>
+
 <?php require APPROOT . 'views/inc/footer.tpl'; ?>
+
+<script>
+var clickCount = 0;
+//選擇是否要分頁
+function nopage(){
+
+    clickCount++;
+    if (clickCount % 2 === 1) {
+        var nopage  = 1;
+        document.cookie = "nopage=" + nopage + "; max-age=" + 60 * 60 * 24 * 7;
+    } else {
+       //清除cookie 
+        document.cookie = "nopage=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    }
+    history.go(0);
+
+}
+</script>

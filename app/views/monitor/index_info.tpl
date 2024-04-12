@@ -9,13 +9,11 @@
 <!---擷取畫面JS-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
 
-<!-- 引入 Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="<?php echo URLROOT; ?>js/chat.js"></script>
 
+<script src="<?php echo URLROOT; ?>js/historical.js?v=202404111700"></script>
 
-<script src="<?php echo URLROOT; ?>js/historical.js"></script>
-
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/historical.css" type="text/css">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>css/historical.css?v=202404111200" type="text/css">
 
 <script src="<?php echo URLROOT; ?>js/flatpickr.js"></script>
 
@@ -144,8 +142,8 @@
                             <td>Index : <?php echo $data['job_info'][0]['system_sn'];?></td>
                             <td>BarcodeSN : <?php echo $data['job_info'][0]['cc_barcodesn'];?></td>
                             <td>Time : <?php echo $data['job_info'][0]['data_time'];?></td>
-                            <td>Operator : Esther</td>
-                            <td>Equipment : GTCS</td>
+                            <td>Operator :  </td>
+                            <td>Equipment : </td>
                             <td></td>
                         </tr>
                         <tr>
@@ -154,14 +152,14 @@
                             <td>Final Angle :  <?php echo  $data['job_info'][0]['fasten_angle'];?></td>
                             <td>Angle range :  <?php echo  $data['job_info'][0]['step_lowangle'];?> ~ <?php echo $data['job_info'][0]['step_highangle'];?></td>
                             <td>Direction :    <?php echo $data['job_info'][0]['count_direction'];?></td>
-                            <td>Error code : <?php echo $data['job_info'][0]['error_message'];?></td>
+                            <td>Error code :   <?php echo $data['status_arr']['error_msg'][$data['job_info'][0]['error_message']];?></td>
                         </tr>
                         <tr style="vertical-align: middle;">
                             <td>Job : <?php echo $data['job_info'][0]['job_name'];?></td>
                             <td>Seq/task :<?php echo $data['job_info'][0]['sequence_name']. "/". $data['job_info'][0]['cc_task_name'];?></td>
-                            <td>Program : p1</td>
-                            <td>Note : arm(559,583)[200]</td>
-                            <td>Status : <a style="background-color: #99CC66; padding: 0 10px">OK</a></td>
+                            <td>Program : </td>
+                            <td>Note : </td>
+                            <td>Status : <a style="background-color: #99CC66; padding: 0 10px"><?php echo $data['status_arr']['status_type'][$data['job_info'][0]['fasten_status']];?></a></td>
                             <td>
                                 <input class="form-check-input" type="checkbox" name="" id="" value="0" style="zoom:1.2; float: left">&nbsp; display the high/low auxiliary lines.
                             </td>
@@ -223,7 +221,7 @@
                                 </div>
                                  <br>
                                  <!---曲線圖資料---->
-                                 <canvas id="myChart" width="200" height="50"></canvas>
+                                 <canvas id="myChart" width="300" height="60"></canvas>
                             </div>
                         </div>
                     </div>
@@ -884,134 +882,79 @@ addMessage();
 
 
 
-//擷取曲線圖 
-function takeScreenshot(param) {
-    var img_name = 'screenshot.'+ param;
-    var content = document.getElementById('myChart');
-    domtoimage.toPng(content, { bgcolor: '#ffffff' }) //背景設成白色
-        .then(function(dataUrl) {
-            var link = document.createElement('a');
-            link.href = dataUrl;
-            link.download = img_name;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        })
-        .catch(function(error) {
-            console.error('Error while taking screenshot:', error);
-        });
-}
 
+ var maxWidth = 1500; // 最大寬度
+    var chartCanvas = document.getElementById('myChart'); // 取得Canvas元素
+    var chartWidth = chartCanvas.offsetWidth; // 取得Canvas元素的寬度
 
+    // 如果圖表寬度超過最大寬度，將寬度設置為最大寬度
+    if (chartWidth > maxWidth) {
+        chartCanvas.style.width = maxWidth + 'px';
+    }
 
-//處理曲線圖
-var ctx = document.getElementById('myChart').getContext('2d');
+    var ctx = document.getElementById('myChart').getContext('2d');
 
-var myChart = new Chart(ctx, {
-    type: 'line',
-    data: {
+    // 生成隨機數據
+    var data = [];
+    for (var i = 0; i < 1000; i++) {
+        var xVal = i;
+        var yVal = Math.random() * 100;
+        data.push({x: xVal, y: yVal});
+    }
+
+    // 設置 x 軸的步長
+    var stepSize = 10; // 設置每個節點之間的距離
+    var xAxisConfig = {
+            type: 'linear',
+            position: 'bottom',
+            min: 0,
+            ticks: {
+                stepSize: stepSize, // 設置 x 軸的步長
+                maxRotation: 0, // 最大旋轉角度
+                minRotation: 0 // 最小旋轉角度
+            },
+            title: {
+                display: true,
+                text: '<?php echo $data['chat']['xaxis_title'];?>',
+                align: 'end',
+            }
+        };
+
+    var yAxosConfig = {
+        min: 0,
+        suggestedMin: <?php echo $data['y_minvalue'];?>, 
+        suggestedMax: <?php echo $data['y_maxvalue'];?>, 
+
+        title: {
+            display: true,
+            text: '<?php echo $data['chat']['yaxis_title'];?>',
+        }
+    }    
+
+    var myChart = new Chart(ctx, {
+        type: 'line',
+          data: {
         labels: [<?php echo $data['x_nodal_point'];?>],
         datasets: [{
             label: '<?php echo $data['chat']['yaxis_title'];?>',
             data: [<?php echo $data['total_range'];?>],
             borderColor: 'rgba(0, 0, 255, 1)',
-            borderWidth: 3
+            borderWidth: 2,
         }]
     },
-    options: {
-        scales: {
-            y: {
-                suggestedMin: <?php echo $data['y_minvalue'];?>, 
-                suggestedMax: <?php echo $data['y_maxvalue'];?>, 
-                title: {
-                    display: true,
-                    text: '<?php echo $data['chat']['yaxis_title'];?>',
-                }
+        options: {
+            scales: {
+                x: xAxisConfig,
+                y: yAxosConfig, 
             },
-            x:{
-                title: {
-                    display: true,
-                    text: '<?php echo $data['chat']['xaxis_title'];?>',
-                    align: 'end'
-                    
-                } 
-            }
-        },
-
-        interaction: {
-            mode: 'index',
-            intersect: false
-        },
-
-        plugins: {
-            zoom: {
-                zoom: {
-                    wheel: {
-                        enabled: true,
-                    },
-                    pinch: {
-                        enabled: true
-                    },
-                    mode: 'xy'
+            plugins: {
+                tooltip: {
+                    enabled: true,
                 }
             }
         }
+    });
 
-
-    }
-});
-
-
-//曲線圖模式選擇
-function chat_mode(selectOS) {
- 
-    var selectElement = document.getElementById('Chart-seting');
-    var selectedOptions = [];
-    // 獲取所有被選中的選項
-    for (var i = 0; i < selectElement.options.length; i++) {
-        var option = selectElement.options[i];
-        if (option.selected) {
-            selectedOptions.push(option.value);
-        }
-    }
-
-    document.cookie = "chat_mode=" + selectedOptions + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
-    history.go(0);
-
-}
-
-
-//單位選擇 
-function  unit_change(selectOS){
-
-    var selectElement = document.getElementById('Torque-Unit');
-    var selectedOptions = [];
-    // 獲取所有被選中的選項
-    for (var i = 0; i < selectElement.options.length; i++) {
-        var option = selectElement.options[i];
-        if (option.selected) {
-            selectedOptions.push(option.value);
-        }
-    }
-    document.cookie = "unit_mode=" + selectedOptions + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
-    history.go(0);
-}
-
-
-//角度切換
-function  angle_change(selectOS){
-    var selectElement = document.getElementById('Angle');
-    var selectedOptions = [];
-    // 獲取所有被選中的選項
-    for (var i = 0; i < selectElement.options.length; i++) {
-        var option = selectElement.options[i];
-        if (option.selected) {
-            selectedOptions.push(option.value);
-        }
-    }
-    document.cookie = "angle_mode=" + selectedOptions + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
-    history.go(0);
-}
 
 </script>
 

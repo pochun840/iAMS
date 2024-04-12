@@ -18,42 +18,47 @@ class Monitors extends Controller
     // 取得所有Jobs
     public function index($page){
 
-        if(isset($_POST['value'])){
-            $receivedValue = $_POST['value'];
-            if( $receivedValue =="nopage"){
-                $offset = 0;
-                $limit  = 100000000;
-                $nopage = True;
 
-            }
-        }else{
-        //執行分頁
-            //當前的頁數，默認為第1頁
+        //檢查有無判斷分頁的cookie 
+        if (isset($_COOKIE['nopage'])) {
+            //echo "Cookie 存在！";
+            //echo "<br>";
+            //不要分頁
+            $offset = 0;
+            $limit  = 100000000;
+            $nopage ='False';
+            $totalPages = 0;
+
+        } else {
+            //要分頁
+            //echo "Cookie 不存在！";
+            //echo "<br>";
+            $nopage ='True';
+             
+            #當前的頁數，默認為第1頁
             $page = isset($_GET['p']) ? $_GET['p'] : 1;
 
-            //每頁顯示的筆數
+            #每頁顯示的筆數
             $limit = 30;
 
-            //計算數量
+            #計算數量
             $offset = ($page - 1) * $limit;
 
-            //取得總筆數
+            #取得總筆數
             $totalItems  = "";
             $totalItems  = $this->Monitors_newModel->getTotalItemCount();
 
-            //計算總頁數
+            #計算總頁數
             if(!empty($totalItems)){
                 $totalPages = ""; 
                 $totalPages = ceil($totalItems / $limit);
-                $totalPages = 0;
+                //$totalPages = 0;
             }
 
-            $nopage = False;
         }
-       
-        
 
-        #取得預設的鎖附資料前50筆
+       
+        #取得預設的鎖附資料
         $info_arr = "";
         $info = $this->Monitors_newModel->monitors_info($info_arr,$offset, $limit);
         
@@ -144,22 +149,30 @@ class Monitors extends Controller
         if(!empty($info)){
             $info_data ="";
             foreach($info as $k =>$v){
+
+                //
+                $color = $status_arr['status_color'][$v['fasten_status']];
+                $style = 'background-color:'.$color.';font-size: 20px';
+
                 $info_data  = "<tr>";
                 $info_data .= '<td style="text-align: center;"><input class="form-check-input" type="checkbox" name="test1" id="test1"  value="'.$v['system_sn'].'" style="zoom:1.2;vertical-align: middle;"></td>';
-                $info_data .= "<td>".$v['system_sn']."</td>";
+                $info_data .= "<td id='system_sn'>".$v['system_sn']."</td>";
                 $info_data .= "<td>".$v['data_time']."</td>";
+                $info_data .= "<td></td>";
                 $info_data .= "<td>".$v['cc_barcodesn']."</td>";
                 $info_data .= "<td>".$v['job_name']."</td>";
                 $info_data .= "<td>".$v['sequence_name']."</td>";
                 $info_data .= "<td>".$v['cc_task_name']."</td>";
-                $info_data .= "<td>GTCS</td>";
-                $info_data .= "<td>".$v['fasten_torque']. $torque_arr[$v['torque_unit']]."</td>";
-                $info_data .= "<td>".$v['fasten_angle']." deg  </td>";
-                $info_data .= "<td>". $status_arr[$v['fasten_status']]."</td>";
-                $info_data .= "<td>".$v['fasten_time']." ms </td>";
-                $info_data .= "<td>".$v['fasten_time']." ms </td>";
-                $info_data .= "<td>".$v['error_message']."</td>";
-                $info_data .= "<td>p1</td>";
+                $info_data .= "<td></td>";
+                $info_data .= "<td>".$v['step_lowtorque']." ~ ".$v['step_hightorque']."</td>";
+                //$info_data .= "<td>".$v['fasten_torque']. $torque_arr[$v['torque_unit']]."</td>";
+                $info_data .= "<td>".$v['step_lowangle']." ~ ".$v['step_highangle']."</td>";
+                //$info_data .= "<td>". $status_arr[$v['fasten_status']]."</td>";
+                $info_data .= "<td>".$v['fasten_torque'] .$torque_arr[$v['torque_unit']]."</td>";
+                $info_data .= "<td>".$v['fasten_angle']." deg </td>";
+                $info_data .= "<td style='".$style."'>". $status_arr['status_type'][$v['fasten_status']]."</td>";
+                $info_data .= "<td>".$status_arr['error_msg'][$v['error_message']]."</td>";
+                $info_data .= "<td></td>";
                 $info_data .= '<td><img src="./img/info-30.png" alt="" style="height: 28px; vertical-align: middle;" onclick="NextToInfo()"></td>';
         
                 $info_data .="</tr>";
@@ -174,62 +187,19 @@ class Monitors extends Controller
     
     }
 
-    public function downland_csv(){
-
-        $body = $_POST['csvData'];
-
-        if(!empty($body)){
-
-            $csv_header = array('Index','Time','BarcodeSN','Job Name','Seq Name','task','Controller','Torque','Total.A','Status','Job time','Task time','Error','Pset');
-           
-            $body = preg_replace('/<[\/]*tr[^>]*>/i', '', $body);   
-            $body = preg_replace('/<[\/]*input[^>]*>/i', '', $body);  
-            $body = preg_replace('/<[\/]*img[^>]*>/i', '', $body);
-            $body = preg_replace('/<td(\s+style="[^"]*")?\s*>/i', '', $body);
-            $body = str_replace("</td></td>","</td>",$body);
-
-            $new_arr = array();
-            $new_arr = array(
-                            $body_arr[1],
-                            $body_arr[2],
-                            $body_arr[3],
-                            $body_arr[4],
-                            $body_arr[5],
-                            $body_arr[6],
-                            $body_arr[7],
-                            $body_arr[8],
-                            $body_arr[9],
-                            $body_arr[10],
-                            $body_arr[11],
-                            $body_arr[12],
-                            $body_arr[13],
-                            $body_arr[14],
-                        );
-            
-            //打開輸出流
-            $output = fopen('php://output', 'w');
-
-            fputcsv($output, $csv_header);
-            fputcsv($output, $new_arr);
-
-            //直接輸出 CSV 字符串
-            echo $output;
-
-
-        }
-    }
-
-
     public function nextinfo($index){
         //透過index 取得相關的資料
         
         if(!empty($index)){
             $info = $this->Monitors_newModel->get_info_data($index);
 
-
-            $no ="4174";
+            $no ="4176";
             $data = array();
             $csvdata = $this->Monitors_newModel->connected_ftp($no);
+
+
+
+            $status_arr = $this->Monitors_newModel->status_code_change();
 
             #取得完整的CSV資料 
             if(!empty($csvdata)){
@@ -239,21 +209,10 @@ class Monitors extends Controller
                 $arr       = range(0, $x_count);
                 $arr_count = count($arr);
 
-                #取整數
-                $interval = ceil($arr_count / 9);
-                $final[] = $csvdata[0];
-                #計算中間的 x 軸點的值
-                for ($i = 1; $i < 10; $i++) {
-                    $val = $i * $interval - $i;
-                    $final[$i * $interval - $i] = $csvdata[$val];
-                }
-                $at_last[$x_count] = $csvdata[$x_count];
-                $final = $final + $at_last;
-
+             
                 #曲線圖X軸的節點 
-                $x_nodal_point = implode("','", array_keys($final)); 
+                $x_nodal_point = implode("','", array_keys($csvdata)); 
                 $data['x_nodal_point'] = "'".$x_nodal_point."'";
-                $data['final'] = $final;
 
                 #判斷 有無cookie chat_mode 
                 if (isset($_COOKIE['chat_mode'])) {
@@ -278,7 +237,7 @@ class Monitors extends Controller
                 } 
 
                 $total_range = '';
-                foreach($final as $kk =>$vv){
+                foreach($csvdata as $kk =>$vv){
                     $total_range .= $vv[$chat_arr['position']].',';
                 }
         
@@ -305,8 +264,6 @@ class Monitors extends Controller
                 5=>'Torque/Angle'
             );
 
-
-
             $torque_mode_arr = array(
                 1=>'N.m',
                 2=>'Kgf.m',
@@ -316,7 +273,7 @@ class Monitors extends Controller
             );    
             $data['chat_mode_arr'] = $chat_mode_arr;
             $data['torque_mode_arr'] = $torque_mode_arr;
-
+            $data['status_arr'] = $status_arr;
     
             $this->view('monitor/index_info', $data);
         }
@@ -369,6 +326,71 @@ class Monitors extends Controller
             }
 
         }
+    }
+
+    
+
+    //chat.js 
+
+    public function ddd(){
+        $this->view('monitor/index_new');
+    }
+    public function test_string1(){
+        /*$html = "<tr><td style=\"text-align: center;\"><input class=\"form-check-input\" type=\"checkbox\" name=\"test1\" id=\"test1\"  value=\"287\" style=\"zoom:1.2;vertical-align: middle;\"></td><td id='system_sn'>287</td><td>20240403 08:47:22</td><td>200</td><td>JOB-102</td><td>SEQ-123</td><td>task-1</td><td>GTCS</td><td>1.005N.m</td><td>427 deg  </td><td>NS</td><td>6.504 ms </td><td>6.504 ms </td><td>0</td><td>p1</td><td><img src=\"./img/info-30.png\" alt=\"\" style=\"height: 28px; vertical-align: middle;\" onclick=\"NextToInfo()\"></td></tr><tr><td style=\"text-align: center;\"><input class=\"form-check-input\" type=\"checkbox\" name=\"test1\" id=\"test1\"  value=\"258\" style=\"zoom:1.2;vertical-align: middle;\"></td><td id='system_sn'>258</td><td>20240118 08:47:22</td><td>258</td><td>JOB-101</td><td>SEQ-1</td><td>task-20</td><td>GTCS</td><td>1.005N.m</td><td>427 deg  </td><td>NG</td><td>6.504 ms </td><td>6.504 ms </td><td>0</td><td>p1</td><td><img src=\"./img/info-30.png\" alt=\"\" style=\"height: 28px; vertical-align: middle;\" onclick=\"NextToInfo()\"></td></tr>";
+        preg_match_all('/<td id=\'system_sn\'>(.*?)<\/td>/', $html, $matches);
+        $system_sns = $matches[1];
+        foreach ($system_sns as $system_sn) {
+
+            $system_sn_total .= $system_sn.",";
+            echo "系統編號:".$system_sn."<br>";
+        }
+        $system_sn_total = rtrim($system_sn_total, ',');*/
+        //echo $system_sn_total;
+
+        $this->view('monitor/index_test1');
+
+    }
+
+    public function csv_downland()
+    {
+        
+        if(!empty($_COOKIE['systemSnval'])){
+            $system_sn = $_COOKIE['systemSnval'];
+            $pos = strpos($system_sn, ',');
+
+            if ($pos !== false) {
+                $system_sn_array = explode(",", $system_sn);
+                $system_sn_in = implode("','", $system_sn_array);
+            
+            }else{
+                $system_sn_in = $system_sn;
+            }
+        
+            #取得該筆的所有完整詳細資料
+            $info_final = $this->Monitors_newModel->csv_info($system_sn_in);
+            $newKeys = range(0, 48); 
+
+            foreach ($info_final as &$val) {
+                $val = array_combine($newKeys, $val); // 使用 array_combine() 函数将新键名数组与原数组合并
+            }
+
+            $filename = 'data.csv';
+            $file = fopen($filename, 'w');
+            fputcsv($file,  array('cc_barcodesn','cc_station','cc_job_id','cc_seq_id','cc_task_id','cc_equipment','cc_operator','system_sn','data_time','device_type','device_id','device_sn','tool_type','tool_sn','tool_status','job_id','job_name','sequence_id','sequence_name','step_id','fasten_torque','torque_unit','fasten_time','fasten_angle','count_direction','last_screw_count','max_screw_count','fasten_status','error_message','step_targettype','step_tooldirection','step_rpm','step_targettorque','step_hightorque','step_lowtorque','step_targetangle','step_highangle','step_lowangle','step_delayttime','threshold_torque','step_threshold_angle','downshift_torque','downshift_speed','step_prr_rpm','step_prr_angle','barcode','total_angle','on_flag','cc_task_name'));
+            foreach ($info_final as $row) {
+                fputcsv($file, $row);
+            }
+            fclose($file);
+            header('Content-Type: text/csv');
+            header('Content-Disposition: attachment; filename="' . $filename . '"');
+            readfile($filename);
+
+            echo $filename;
+            unlink($filename);
+
+        }
+
+       
     }
 
 }

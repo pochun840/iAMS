@@ -775,7 +775,8 @@ svg
     height: calc(100vh - 368px);
 }
 
-.full-screen {
+.full-screen
+{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -788,7 +789,8 @@ svg
     background-color: white;
 }
 
-.full-screen svg {
+.full-screen svg
+{
     max-width: 200%;
     max-height: 200%;
 }
@@ -1108,5 +1110,7 @@ svg
 {
     text-decoration: none;
 }
+
+
 
 

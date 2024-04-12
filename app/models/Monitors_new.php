@@ -14,6 +14,17 @@ class Monitors_new{
 
     }
 
+    #取得CSV
+    public function csv_info($system_sn){
+        $sql = "SELECT * FROM `fasten_data` WHERE    on_flag ='0' AND system_sn in('".$system_sn."') order by data_time desc";
+        //echo $sql;
+        $statement = $this->db->prepare($sql);
+        $statement->execute();
+        $rows = $statement->fetchall(PDO::FETCH_ASSOC);
+        return $rows;
+  
+    }
+
     #取得鎖附的資料
     public function monitors_info($info_arr,$offset=0, $limit=300){
 
@@ -23,6 +34,12 @@ class Monitors_new{
         #barcodesn 
         if(!empty($info_arr['barcodesn'])){
             $sql.=" AND  cc_barcodesn = '".$info_arr['barcodesn']."'";
+        }
+
+
+        #systemsn 
+        if(!empty($info_arr['system_sn'])){
+            $sql.=" AND  system_sn = '".$info_arr['system_sn']."'";
         }
 
         #日期
@@ -75,12 +92,7 @@ class Monitors_new{
 
             $sql .=" AND job_id = '".$info_arr['job_id'][0]."' AND sequence_id = '".$info_arr['sequence_id'][0]."' AND  cc_task_id = '".$info_arr['cc_task_id'][0]."' ";
         }
-
-
-
         $sql.=" order by data_time desc limit '".$offset."','".$limit."' ";
-        //echo   $sql;
-
         $statement = $this->db->prepare($sql);
         $statement->execute();
         $rows = $statement->fetchall(PDO::FETCH_ASSOC);
@@ -88,6 +100,8 @@ class Monitors_new{
         return $rows;
 
     }
+
+    #查詢table 的所有欄位
 
 
     #刪除鎖附資料
@@ -141,7 +155,67 @@ class Monitors_new{
         $status_arr[17] = 'C5';
         $status_arr[18] = 'C5_ERR';
         $status_arr[19] = 'BS';
-        return $status_arr;
+
+        $status_arr_color = array();
+        $status_arr_color[0]= '';
+        $status_arr_color[1]= '';
+        $status_arr_color[2]= '';
+        $status_arr_color[3]= '#007AB8;';
+        $status_arr_color[4]= '#99CC66;'; 
+        $status_arr_color[5]= '#FFCC00;';
+        $status_arr_color[6]= '#FFCC00;';
+        $status_arr_color[7]= 'red;';
+        $status_arr_color[8]= 'red;';
+        $status_arr_color[9]= '';
+        $status_arr_color[10] = '';
+        $status_arr_color[11] = '';
+        $status_arr_color[12] = '';
+        $status_arr_color[13] = '';
+        $status_arr_color[14] = '';
+        $status_arr_color[15] = '';
+        $status_arr_color[16] = '';
+        $status_arr_color[17] = '';
+        $status_arr_color[18] = '';
+        $status_arr_color[19] = '';
+
+
+        $error_msg = array();
+        $error_msg[0] =  '';
+        $error_msg[1] = 'ERR-CONT-TEMP';
+        $error_msg[2] = 'ERR-MOT-TEMP';
+        $error_msg[3] = 'ERR-MOT-CURR';
+        $error_msg[4] = 'ERR-MOT-PEAK-CURR';
+        $error_msg[5] = 'ERR-HIGH-TORQUE';
+        $error_msg[6] = 'ERR-DEADLOCK';
+        $error_msg[7] = 'ERR-PROC-MINTIME';
+        $error_msg[8] = 'ERR-PROC-MAXTIME';
+        $error_msg[9] = 'ERR-ENCODER';
+        $error_msg[10] = 'ERR-HALL';
+        $error_msg[11] = 'ERR-BUSVOLT-HIGH';
+        $error_msg[12] = 'ERR-BUSVOLT-LOW';
+        $error_msg[13] = 'ERR-PROC-NA';
+        $error_msg[14] = 'ERR-STEP-NA';
+        $error_msg[15] = 'ERR-DMS-COMM';
+        $error_msg[16] = 'ERR-FLASH';
+        $error_msg[17] = 'ERR-FRAM';
+        $error_msg[18] = 'ERR-HIGH-ANGLE';
+        $error_msg[19] = 'ERR-PROTECT-CIRCUIT';
+        $error_msg[20] = 'ERR-SWITCH-CONFIG';
+        $error_msg[21] = 'ERR-STEP-NOT-REC';
+        $error_msg[22] = 'ERR-TMD-FRAM';
+        $error_msg[23] = 'ERR-LOW-TORQUE';
+        $error_msg[24] = 'ERR-LOW-ANGLE';
+        $error_msg[25] = 'ERR-PROC-NOT-FINISH';
+        $error_msg[26] = 'SEQ-COMPLETED';
+        $error_msg[27] = 'JOB-COMPLETED';
+        $error_msg[28] = 'WORKPIECE-RECOVERY';
+          
+        $status_final = array();
+        $status_final['status_type'] = $status_arr;
+        $status_final['status_color'] = $status_arr_color;
+        $status_final['error_msg'] = $error_msg;
+        
+        return $status_final;
 
     }
 
@@ -174,6 +248,7 @@ class Monitors_new{
 
         return  $res;
     }
+
 
     public function get_job_id(){
         
@@ -242,7 +317,7 @@ class Monitors_new{
                             $csvdata = array_map('str_getcsv', file($tempFile));
                             unlink($tempFile);
                         }else{
-                            //echo "nono"; 
+                           
                         }
 
                     } else {
@@ -256,7 +331,7 @@ class Monitors_new{
             #關閉FTP連線
             ftp_close($conn_id);
         }else{
-            //echo "Failed to connect to FTP server";
+     
         }
 
         return $csvdata;

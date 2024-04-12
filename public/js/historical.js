@@ -13,18 +13,22 @@ function clear_button(){
             if (response.trim() === '') {
                alert('查無資料');
                window.location.href = '?url=Monitors';
+               history.go(0);
 
             } else {
                 queryresult = response;
                 document.getElementById("tbody1").innerHTML = response;
+                history.go(0);
+                
             }
         },
         error: function(error) {
-            // console.error('Error:', error); 
+        
         }
     }).fail(function () {
-        // history.go(0);
-    }); 
+
+    });
+    history.go(0); 
 }
 
 
@@ -37,7 +41,7 @@ function delete_historyinfo() {
         checkedValues.push(checkbox.value);
     });
 
-    var yes = confirm('你確定嗎？');
+    var yes = confirm('確定是否要刪除選定的資料？');
     if (yes) {
          $.ajax({
                 type: "POST",
@@ -47,7 +51,7 @@ function delete_historyinfo() {
                     history.go(0);
                 },
                 error: function(error) {
-                    // console.error('Error:', error); 
+ 
                 }
             }).fail(function () {
                 // history.go(0);//失敗就重新整理
@@ -86,36 +90,41 @@ function NextToCombineData()
 
 
 // 下載CSV
-function download_csv(){
+function csv_download(){
 
     if(queryresult === null) {
         alert("請先執行查詢結果");
         return;
+    }else{
+        var data_csv = queryresult;
+
     }
 
-    // 將查詢結果傳遞給downland_csv
-    var csvData = queryresult;
 
-    var url ="?url=Monitors/downland_csv";
+
+    //正則表達式
+    var regex = /<td id='system_sn'>(.*?)<\/td>/g;
+    var systemSns = [];
+    var match;
+    while ((match = regex.exec(data_csv)) !== null) {
+        systemSns.push(match[1]);
+    }
+    var systemSnval = systemSns.join(',');
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', url, true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.responseType = 'blob';
-
+    document.cookie = "systemSnval=" + systemSnval + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+    xhr.open('POST', '?url=Monitors/csv_downland', true);
+    xhr.responseType = 'blob'; 
     xhr.onload = function() {
-
-    if (this.status === 200) {
-        var url = window.URL.createObjectURL(this.response);
-        var a = document.createElement('a');
-        a.href = url;
-        a.download = 'results.csv';
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-    }
+        if (xhr.status === 200) {
+            // 創建下載連結
+            var blob = new Blob([xhr.response],{ type:'text/csv' });
+            var link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = 'data.csv';
+            link.click();
+        }
     };
-
-    xhr.send('csvData=' + encodeURIComponent(csvData));
+    xhr.send();
 }
 
 //搜尋
@@ -179,10 +188,8 @@ function search_info(){
             }
         },
         error: function(error) {
-            // console.error('Error:', error); 
         }
     }).fail(function () {
-        // history.go(0);
     });
 
 
@@ -217,17 +224,14 @@ function JobCheckbox_seq(){
                     window.location.href = '?url=Monitors';
 
                 } else {
-                    //alert(response);
                     var taskListElement = document.getElementById('Task-list');
                     taskListElement.style.display = 'block';
                     document.getElementById("Task-list").innerHTML = response;
                 }
             },
             error: function(error) {
-                // console.error('Error:', error); 
             }
         }).fail(function () {
-            // history.go(0);
         });
 
 
@@ -272,11 +276,76 @@ function JobCheckbox()
 
 }
 
-//選擇是否要分頁
-function nopage(){
-    
-    var nopage = 'False';
-    document.cookie = "nopage=" + nopage + "; max-age=" + 60 * 60 * 24 * 7;
+
+//曲線圖模式選擇
+function chat_mode(selectOS) {
+ 
+    var selectElement = document.getElementById('Chart-seting');
+    var selectedOptions = [];
+    // 獲取所有被選中的選項
+    for (var i = 0; i < selectElement.options.length; i++) {
+        var option = selectElement.options[i];
+        if (option.selected) {
+            selectedOptions.push(option.value);
+        }
+    }
+
+    document.cookie = "chat_mode=" + selectedOptions + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+    history.go(0);
 
 }
+
+//單位選擇 
+function  unit_change(selectOS){
+
+    var selectElement = document.getElementById('Torque-Unit');
+    var selectedOptions = [];
+    // 獲取所有被選中的選項
+    for (var i = 0; i < selectElement.options.length; i++) {
+        var option = selectElement.options[i];
+        if (option.selected) {
+            selectedOptions.push(option.value);
+        }
+    }
+    document.cookie = "unit_mode=" + selectedOptions + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+    history.go(0);
+}
+
+
+//角度切換
+function  angle_change(selectOS){
+    var selectElement = document.getElementById('Angle');
+    var selectedOptions = [];
+    // 獲取所有被選中的選項
+    for (var i = 0; i < selectElement.options.length; i++) {
+        var option = selectElement.options[i];
+        if (option.selected) {
+            selectedOptions.push(option.value);
+        }
+    }
+    document.cookie = "angle_mode=" + selectedOptions + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+    history.go(0);
+}
+
+//擷取曲線圖 
+function takeScreenshot(param) {
+    var img_name = 'screenshot.'+ param;
+
+    var content = document.getElementById('myChart');
+    domtoimage.toPng(content, { bgcolor: '#ffffff' }) //背景設成白色
+        .then(function(dataUrl) {
+            var link = document.createElement('a');
+            link.href = dataUrl;
+            link.download = img_name;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        })
+        .catch(function(error) {
+            console.error('Error while taking screenshot:', error);
+        });
+}
+
+
+
 
