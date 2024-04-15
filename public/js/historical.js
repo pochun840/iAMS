@@ -1,3 +1,6 @@
+
+var element = document.getElementById('DetailInfoDisplay');
+
 //清除 資料  回到最原始的紀錄
 function clear_button(){
 
@@ -80,9 +83,15 @@ function NextToCombineData()
         alert('請選擇2筆鎖附記錄的資料');  
     }
 
+    console.log(checkedValues.length);
+    /*if(checkedValues.length == 2){
+        alert('220');
+        document.getElementById('CombineDataDisplay').style.display = 'block';
+    }*/
+
 
     // Show Combine data
-    //document.getElementById('CombineDataDisplay').style.display = 'block';
+    document.getElementById('CombineDataDisplay').style.display = 'block';
 
     // Hide FasteningDisplay
     //document.getElementById('FasteningDisplay').style.display = 'none';
@@ -266,7 +275,6 @@ function JobCheckbox()
                 }
             },
             error: function(error) {
-                // console.error('Error:', error); 
             }
         }).fail(function () {
             // history.go(0);
@@ -330,8 +338,9 @@ function  angle_change(selectOS){
 //擷取曲線圖 
 function takeScreenshot(param) {
     var img_name = 'screenshot.'+ param;
-
-    var content = document.getElementById('myChart');
+  
+    //設定要擷取的範圍
+    var content = document.getElementById('DetailInfoDisplay');
     domtoimage.toPng(content, { bgcolor: '#ffffff' }) //背景設成白色
         .then(function(dataUrl) {
             var link = document.createElement('a');
@@ -341,11 +350,23 @@ function takeScreenshot(param) {
             link.click();
             document.body.removeChild(link);
         })
+
         .catch(function(error) {
             console.error('Error while taking screenshot:', error);
         });
 }
 
+//讀取cookie 
+function getCookie(cookieName) {
+    var cookies = document.cookie.split(';');
+    
+    for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].trim(); 
+        if (cookie.startsWith(cookieName + '=')) {
+            return cookie.substring(cookieName.length + 1); 
+        }
+    }
+    return '';
+}
 
-
-
+var lineCookieValue = getCookie('line_style');

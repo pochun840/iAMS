@@ -209,11 +209,17 @@ class Monitors_new{
         $error_msg[26] = 'SEQ-COMPLETED';
         $error_msg[27] = 'JOB-COMPLETED';
         $error_msg[28] = 'WORKPIECE-RECOVERY';
+
+
+        $direction_arr = array();
+        $direction_arr[0] = "CW";
+        $direction_arr[1] = "CCW";
           
         $status_final = array();
         $status_final['status_type'] = $status_arr;
         $status_final['status_color'] = $status_arr_color;
         $status_final['error_msg'] = $error_msg;
+        $status_final['direction'] = $direction_arr;
         
         return $status_final;
 
@@ -342,11 +348,13 @@ class Monitors_new{
     public function chat_change($chat_mode){
 
         /*
-        $position = 1 (扭力欄位)
-        $position = 2 (角度欄位)
-        $position = 3 (轉速欄位)
-        $position = 4 (功率欄位)
+        $position = 1 (扭力)
+        $position = 2 (角度)
+        $position = 3 (轉速)
+        $position = 4 (功率)
+        $position = 5 (扭力) 
         */ 
+        
         $chat_arr = array();
         if($chat_mode =="1"){
             $chat_name = "Torque/Time";
@@ -370,7 +378,7 @@ class Monitors_new{
             $xaxis_title = "Time(MS)";
         }else{
             $chat_name = "Torque/Angle";
-            $position = '1';  
+            $position = '5';  
             $yaxis_title = "Torque";
             $xaxis_title = "Angle";
 

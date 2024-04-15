@@ -132,7 +132,7 @@
                 <div id="DetailInfoDisplay" style="display: block">
                     <div class="topnav">
                         <label type="text" style="font-size: 18px; padding-left: 1%; margin: 4px">Fastenig record &#62; Info</label>
-                        <button id="back-setting" type="button" onclick="cancelSetting()">
+                        <button id="back-setting" type="button" onclick="window.history.back()">
                             <img id="img-back" src="./img/back.svg" alt=""  onclick="window.history.back()">Back
                         </button>
                     </div>
@@ -151,17 +151,17 @@
                             <td>Torque range : <?php echo $data['job_info'][0]['step_lowtorque'];?> ~ <?php echo $data['job_info'][0]['step_hightorque'];?></td>
                             <td>Final Angle :  <?php echo  $data['job_info'][0]['fasten_angle'];?></td>
                             <td>Angle range :  <?php echo  $data['job_info'][0]['step_lowangle'];?> ~ <?php echo $data['job_info'][0]['step_highangle'];?></td>
-                            <td>Direction :    <?php echo $data['job_info'][0]['count_direction'];?></td>
-                            <td>Error code :   <?php echo $data['status_arr']['error_msg'][$data['job_info'][0]['error_message']];?></td>
+                            <td>Direction :    <?php echo  $data['status_arr']['direction'][$data['job_info'][0]['count_direction']];?></td>
+                            <td>Error code :   <?php echo  $data['status_arr']['error_msg'][$data['job_info'][0]['error_message']];?></td>
                         </tr>
                         <tr style="vertical-align: middle;">
                             <td>Job : <?php echo $data['job_info'][0]['job_name'];?></td>
                             <td>Seq/task :<?php echo $data['job_info'][0]['sequence_name']. "/". $data['job_info'][0]['cc_task_name'];?></td>
                             <td>Program : </td>
                             <td>Note : </td>
-                            <td>Status : <a style="background-color: #99CC66; padding: 0 10px"><?php echo $data['status_arr']['status_type'][$data['job_info'][0]['fasten_status']];?></a></td>
+                            <td>Status : <a style="background-color: <?php echo $data['status_arr']['status_color'][$data['job_info'][0]['fasten_status']];?>; padding: 0 10px"><?php echo $data['status_arr']['status_type'][$data['job_info'][0]['fasten_status']];?></a></td>
                             <td>
-                                <input class="form-check-input" type="checkbox" name="" id="" value="0" style="zoom:1.2; float: left">&nbsp; display the high/low auxiliary lines.
+                                <input class="form-check-input" type="checkbox" name="" id="myCheckbox"    style="zoom:1.2; float: left" value="0"   <?php if($_COOKIE['line_style'] =="1"){ echo "checked";} ?> >&nbsp; display the high/low auxiliary lines.
                             </td>
                         </tr>
 
@@ -879,20 +879,26 @@ addMessage();
 </style>
 <?php require APPROOT . 'views/inc/footer.tpl'; ?>
 <script>
- var maxWidth = 1500; // 最大寬度
+
+    var checkbox = document.getElementById('myCheckbox');
+    checkbox.addEventListener('change', function() {
+        displayValue = this.checked;
+        if (displayValue) {
+            var line_style = '1';
+        } else {
+            var line_style = '0';
+        }
+        document.cookie = "line_style=" + line_style + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+        history.go(0);
+    });
+    
+    var maxWidth = 1500; // 最大寬度
     var chartCanvas = document.getElementById('myChart'); // 取得Canvas元素
     var chartWidth = chartCanvas.offsetWidth; // 取得Canvas元素的寬度
-
-    // 如果圖表寬度超過最大寬度，將寬度設置為最大寬度
-    if (chartWidth > maxWidth) {
-        chartCanvas.style.width = maxWidth + 'px';
-    }
-
     var ctx = document.getElementById('myChart').getContext('2d');
 
     // 生成隨機數據
     var data = [];
-
 
     // 設置 x 軸的步長
     var stepSize = 1; // 設置每個節點之間的距離
@@ -909,29 +915,49 @@ addMessage();
                 display: true,
                 text: '<?php echo $data['chat']['xaxis_title'];?>',
                 align: 'end',
-            }
+            },
         };
 
     var yAxosConfig = {
         min: 0,
         suggestedMin: <?php echo $data['y_minvalue'];?>, 
         suggestedMax: <?php echo $data['y_maxvalue'];?>, 
-
+    
         title: {
-            display: true,
+            //display: true,
             text: '<?php echo $data['chat']['yaxis_title'];?>',
+        },
+
+       grid: {
+            color: function(context) {
+              
+                    if (lineCookieValue === "1") {
+                        return context.tick.value === 0 ? 'orange' : 'rgba(0, 0, 0, 0.1)'; //最小值
+                        return context.tick.value === <?php echo $data['y_maxvalue'];?> ? 'green' : 'blue'; //最大值 
+                    }  
+            }
         }
     }    
+   
+    var ctx = document.getElementById('myChart').getContext('2d');
+    if(lineCookieValue === "1"){
+        var img_title = '<?php echo $data['chat']['yaxis_title'];?> ' + ' High Torque   Low Torque';
+    }else{
+        var img_title  = '<?php echo $data['chat']['yaxis_title'];?>';
+
+    }
+
 
     var myChart = new Chart(ctx, {
         type: 'line',
-          data: {
+        data: {
         labels: [<?php echo $data['x_nodal_point'];?>],
         datasets: [{
-            label: '<?php echo $data['chat']['yaxis_title'];?>',
+            label: img_title,
             data: [<?php echo $data['total_range'];?>],
-            borderColor: 'rgba(0, 0, 255, 1)',
+            borderColor: 'rgba(0, 0, 255, 1)',  
             borderWidth: 2,
+            pointRadius: 1,
         }]
     },
         options: {
@@ -947,6 +973,10 @@ addMessage();
         }
     });
 
+    var chartInstance = myChart;
 
+    // 获取Y轴配置信息
+    var yAxisOptions = chartInstance.options.scales.y;
+    consoloe.log(yAxisOptions);
 </script>
 

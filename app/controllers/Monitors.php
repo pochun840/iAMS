@@ -191,7 +191,7 @@ class Monitors extends Controller
         if(!empty($index)){
             $info = $this->Monitors_newModel->get_info_data($index);
 
-            $no ="4176";
+            $no ="4177";
             $data = array();
             $csvdata = $this->Monitors_newModel->connected_ftp($no);
 
@@ -222,37 +222,50 @@ class Monitors extends Controller
                 $chat_arr = $this->Monitors_newModel->chat_change($chat_mode);
                 $data['chat'] = $chat_arr;
 
+
                 #設置Y軸的最大及最小值
                 #要比對的位置
 
                 //如果 position = '5'  Y=>扭力 ,X=>角度
-                
-                if($position =="5"){
 
-                }else{
-                    $values = array();
-                    foreach ($csvdata as $subarray) {                    
-                        $values[] = $subarray[$chat_arr['position']];
-                    } 
+                if(!empty($chat_mode)){
+                    if($chat_mode == "5"){
+                        $position = 1;
+                        foreach ($csvdata as $subarray) {                    
+                            $values[] = $subarray[$position];
+                        } 
+                        $total_range = '';
+                        foreach($csvdata as $kk =>$vv){
+                            $total_range .= $vv[$position].',';
+                        }
+                    }else{
+                        $values = array();
+                        foreach ($csvdata as $subarray) {                    
+                            $values[] = $subarray[$chat_arr['position']];
+                        } 
 
-                    $total_range = '';
-                    foreach($csvdata as $kk =>$vv){
-                        $total_range .= $vv[$chat_arr['position']].',';
+                        $total_range = '';
+                        foreach($csvdata as $kk =>$vv){
+                            $total_range .= $vv[$chat_arr['position']].',';
+                        }
                     }
 
-                }
-             
+
+
+                     #曲線圖的資料
+                     $data['total_range'] = $total_range;
         
-                #曲線圖的資料
-                $data['total_range'] = $total_range;
-    
-                #取得指定位置的值的最大值和最小值
-                $y_maxvalue = max($values);
-                $y_minvalue = min($values);
+                     #取得指定位置的值的最大值和最小值
+                     $y_maxvalue = max($values);
+                     $y_minvalue = min($values);
 
-                $data['y_maxvalue'] = $y_maxvalue;
-                $data['y_minvalue'] = $y_minvalue;
 
+ 
+                     $data['y_maxvalue'] = $y_maxvalue;
+                     $data['y_minvalue'] = $y_minvalue;
+
+                }
+                
             }
 
             
@@ -276,8 +289,10 @@ class Monitors extends Controller
             $data['chat_mode_arr'] = $chat_mode_arr;
             $data['torque_mode_arr'] = $torque_mode_arr;
             $data['status_arr'] = $status_arr;
-    
+        
             $this->view('monitor/index_info', $data);
+
+
         }
 
     }
@@ -331,31 +346,10 @@ class Monitors extends Controller
         }
     }
 
-    
-
 
     public function ddd(){
-        $this->view('monitor/index_new');
+        $this->view('monitor/index_test');
     }
-
-
-    #chat.js 測試 
-    public function test_string1(){
-        /*$html = "<tr><td style=\"text-align: center;\"><input class=\"form-check-input\" type=\"checkbox\" name=\"test1\" id=\"test1\"  value=\"287\" style=\"zoom:1.2;vertical-align: middle;\"></td><td id='system_sn'>287</td><td>20240403 08:47:22</td><td>200</td><td>JOB-102</td><td>SEQ-123</td><td>task-1</td><td>GTCS</td><td>1.005N.m</td><td>427 deg  </td><td>NS</td><td>6.504 ms </td><td>6.504 ms </td><td>0</td><td>p1</td><td><img src=\"./img/info-30.png\" alt=\"\" style=\"height: 28px; vertical-align: middle;\" onclick=\"NextToInfo()\"></td></tr><tr><td style=\"text-align: center;\"><input class=\"form-check-input\" type=\"checkbox\" name=\"test1\" id=\"test1\"  value=\"258\" style=\"zoom:1.2;vertical-align: middle;\"></td><td id='system_sn'>258</td><td>20240118 08:47:22</td><td>258</td><td>JOB-101</td><td>SEQ-1</td><td>task-20</td><td>GTCS</td><td>1.005N.m</td><td>427 deg  </td><td>NG</td><td>6.504 ms </td><td>6.504 ms </td><td>0</td><td>p1</td><td><img src=\"./img/info-30.png\" alt=\"\" style=\"height: 28px; vertical-align: middle;\" onclick=\"NextToInfo()\"></td></tr>";
-        preg_match_all('/<td id=\'system_sn\'>(.*?)<\/td>/', $html, $matches);
-        $system_sns = $matches[1];
-        foreach ($system_sns as $system_sn) {
-
-            $system_sn_total .= $system_sn.",";
-            echo "系統編號:".$system_sn."<br>";
-        }
-        $system_sn_total = rtrim($system_sn_total, ',');*/
-        //echo $system_sn_total;
-
-        $this->view('monitor/index_test1');
-
-    }
-
 
     #產生CSV的文件 
     #利用system_sn 取得完整的鎖附資料
@@ -377,10 +371,23 @@ class Monitors extends Controller
             $info_final = $this->Monitors_newModel->csv_info($system_sn_in);
             $newKeys = range(0, 48); 
 
+            #扭力轉換 
+            $torque_change = $this->Monitors_newModel->torque_change();
+
+            #狀態轉換 
+            $status_arr = $this->Monitors_newModel->status_code_change();
+
+            //整理陣列 
+            foreach($info_final as $kk =>$vv){
+                $info_final[$kk]['torque_unit']  = $torque_change[$vv['torque_unit']];
+                $info_final[$kk]['fasten_status']  = $status_arr['status_type'][$vv['fasten_status']];
+            }
+
             foreach ($info_final as &$val) {
                 $val = array_combine($newKeys, $val); // 使用 array_combine() 函数将新键名数组与原数组合并
             }
 
+            #CSV檔名
             $filename = 'data.csv';
             $file = fopen($filename, 'w');
             fputcsv($file,  array('cc_barcodesn','cc_station','cc_job_id','cc_seq_id','cc_task_id','cc_equipment','cc_operator','system_sn','data_time','device_type','device_id','device_sn','tool_type','tool_sn','tool_status','job_id','job_name','sequence_id','sequence_name','step_id','fasten_torque','torque_unit','fasten_time','fasten_angle','count_direction','last_screw_count','max_screw_count','fasten_status','error_message','step_targettype','step_tooldirection','step_rpm','step_targettorque','step_hightorque','step_lowtorque','step_targetangle','step_highangle','step_lowangle','step_delayttime','threshold_torque','step_threshold_angle','downshift_torque','downshift_speed','step_prr_rpm','step_prr_angle','barcode','total_angle','on_flag','cc_task_name'));
@@ -392,7 +399,6 @@ class Monitors extends Controller
             header('Content-Disposition: attachment; filename="' . $filename . '"');
             readfile($filename);
 
-            echo $filename;
             unlink($filename);
 
         }     

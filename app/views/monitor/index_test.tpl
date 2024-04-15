@@ -3,42 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Line Chart with D3.js</title>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <title>Chart Title with Styled Box</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div id="chart-container"></div>
+    <canvas id="myChart" width="400" height="400"></canvas>
 
     <script>
-        var maxWidth = 1500; // 最大寬度
-        var chartWidth = 2000; // 圖表寬度
+        var ctx = document.getElementById('myChart').getContext('2d');
 
-        // 如果圖表寬度超過最大寬度，將寬度設置為最大寬度
-        if (chartWidth > maxWidth) {
-            chartWidth = maxWidth;
-        }
-
-        var svg = d3.select("#chart-container")
-            .append("svg")
-            .attr("width", chartWidth)
-            .attr("height", 400); // 假設高度為400像素
-
-        // 生成隨機數據
-        var data = d3.range(1050).map(function(d, i) {
-            return { x: i, y: Math.random() * 100 };
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                datasets: [{
+                    label: 'Dataset 1',
+                    data: [10, 20, 30, 40, 50, 60, 70],
+                    borderColor: 'blue',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Chart Title',
+                        font: {
+                            size: 14
+                        },
+                        color: 'transparent', // 隐藏默认标题颜色
+                        position: 'top',
+                        align: 'start', // 左对齐标题
+                        padding: {
+                            top: 5,
+                            bottom: 5,
+                            left: 10,
+                            right: 10
+                        },
+                        // 使用回调函数自定义标题内容
+                        formatter: function(context) {
+                            return '<div style="background-color: yellow; display: inline-block; padding: 5px; border-radius: 5px;">' + context.text + '</div>';
+                        }
+                    }
+                },
+                // 其他图表配置...
+            }
         });
-
-        // 使用d3.js繪製折線圖
-        var line = d3.line()
-            .x(function(d) { return d.x; })
-            .y(function(d) { return d.y; });
-
-        svg.append("path")
-            .datum(data)
-            .attr("fill", "none")
-            .attr("stroke", "steelblue")
-            .attr("stroke-width", 2)
-            .attr("d", line);
     </script>
 </body>
 </html>
