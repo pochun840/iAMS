@@ -21,6 +21,7 @@
 <?php if(isset($data['nav'])){
     echo $data['nav'];
 }
+
 ?>
 
 <style>
@@ -129,7 +130,7 @@
                
 
                 <!-- Click Detail Fastening Record Info -->
-                <div id="DetailInfoDisplay" style="display: block">
+                <div id="DetailInfoDisplay"  name="DetailInfoDisplay" style="display: block">
                     <div class="topnav">
                         <label type="text" style="font-size: 18px; padding-left: 1%; margin: 4px">Fastenig record &#62; Info</label>
                         <button id="back-setting" type="button" onclick="window.history.back()">
@@ -698,7 +699,7 @@ function handleButtonClick(button, content)
 function NextToInfo()
 {
     // Show DetailInfo
-    document.getElementById('DetailInfoDisplay').style.display = 'block';
+    //document.getElementById('DetailInfoDisplay').style.display = 'block';
 
     // Hide FasteningDisplay
     document.getElementById('FasteningDisplay').style.display = 'none';
@@ -872,14 +873,32 @@ addMessage();
     background-color: #9AC0CD !important;
 }
 
-./*selected :hover{
-    background-color: #9AC0CD;
-}*/
-
 </style>
 <?php require APPROOT . 'views/inc/footer.tpl'; ?>
 <script>
+    
 
+    //整理曲線圖的數據 
+    var datasets = [{
+        label: '<?php echo $data['chat']['yaxis_title'];?>',
+        data: [<?php echo $data['total_range'];?>],
+        borderColor: 'rgba(0, 0, 255, 1)',  
+        borderWidth: 2,
+        pointRadius: 1,
+    }];
+
+    var dataset2Variable = {
+        label: 'High Torque',
+        borderColor: 'green',
+    };
+
+    var dataset3Variable = {
+        label: 'Low Torque',
+        borderColor: 'orange',
+    };
+
+
+    //折線圖
     var checkbox = document.getElementById('myCheckbox');
     checkbox.addEventListener('change', function() {
         displayValue = this.checked;
@@ -895,7 +914,6 @@ addMessage();
     var maxWidth = 1500; // 最大寬度
     var chartCanvas = document.getElementById('myChart'); // 取得Canvas元素
     var chartWidth = chartCanvas.offsetWidth; // 取得Canvas元素的寬度
-    var ctx = document.getElementById('myChart').getContext('2d');
 
     // 生成隨機數據
     var data = [];
@@ -930,36 +948,32 @@ addMessage();
 
        grid: {
             color: function(context) {
-              
-                    if (lineCookieValue === "1") {
-                        return context.tick.value === 0 ? 'orange' : 'rgba(0, 0, 0, 0.1)'; //最小值
-                        return context.tick.value === <?php echo $data['y_maxvalue'];?> ? 'green' : 'blue'; //最大值 
-                    }  
+                if (lineCookieValue == "1") {
+                    if (context.tick.value == low_val) {
+                        return 'orange';
+                    } else if (context.tick.value == high_val) {
+                        return 'green';
+                    }
+                }
+
             }
         }
     }    
-   
-    var ctx = document.getElementById('myChart').getContext('2d');
-    if(lineCookieValue === "1"){
-        var img_title = '<?php echo $data['chat']['yaxis_title'];?> ' + ' High Torque   Low Torque';
-    }else{
-        var img_title  = '<?php echo $data['chat']['yaxis_title'];?>';
 
+    
+    if (lineCookieValue === "1") {
+        datasets.push(dataset2Variable, dataset3Variable);
     }
 
+    var ctx = document.getElementById('myChart').getContext('2d');
 
     var myChart = new Chart(ctx, {
         type: 'line',
         data: {
         labels: [<?php echo $data['x_nodal_point'];?>],
-        datasets: [{
-            label: img_title,
-            data: [<?php echo $data['total_range'];?>],
-            borderColor: 'rgba(0, 0, 255, 1)',  
-            borderWidth: 2,
-            pointRadius: 1,
-        }]
+        datasets:datasets,
     },
+
         options: {
             scales: {
                 x: xAxisConfig,
@@ -972,11 +986,5 @@ addMessage();
             }
         }
     });
-
-    var chartInstance = myChart;
-
-    // 获取Y轴配置信息
-    var yAxisOptions = chartInstance.options.scales.y;
-    consoloe.log(yAxisOptions);
 </script>
 

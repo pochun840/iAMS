@@ -72,8 +72,8 @@ function NextToCombineData()
 
     checkboxes.forEach(function(checkbox) {
         checkedValues.push(checkbox.value);
+        
     });
-  
 
     if(checkedValues.length > 2){
         alert('最多只能選取2筆鎖附記錄的資料');    
@@ -83,18 +83,11 @@ function NextToCombineData()
         alert('請選擇2筆鎖附記錄的資料');  
     }
 
-    console.log(checkedValues.length);
-    /*if(checkedValues.length == 2){
-        alert('220');
-        document.getElementById('CombineDataDisplay').style.display = 'block';
-    }*/
-
-
-    // Show Combine data
-    document.getElementById('CombineDataDisplay').style.display = 'block';
-
-    // Hide FasteningDisplay
-    //document.getElementById('FasteningDisplay').style.display = 'none';
+    if(checkedValues.length == 2){
+        var checkedsn = checkedValues.join(', ');
+        document.cookie = "checkedsn=" + checkedsn + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+        window.location.href = '?url=Monitors/combinedata';    
+    }
 }
 
 
@@ -106,11 +99,7 @@ function csv_download(){
         return;
     }else{
         var data_csv = queryresult;
-
     }
-
-
-
     //正則表達式
     var regex = /<td id='system_sn'>(.*?)<\/td>/g;
     var systemSns = [];
@@ -126,7 +115,7 @@ function csv_download(){
     xhr.onload = function() {
         if (xhr.status === 200) {
             // 創建下載連結
-            var blob = new Blob([xhr.response],{ type:'text/csv' });
+            var blob = new Blob([xhr.response],{ type:'text/csv'});
             var link = document.createElement('a');
             link.href = window.URL.createObjectURL(blob);
             link.download = 'data.csv';
@@ -143,12 +132,9 @@ function search_info(){
     var fromdate     = document.getElementById('FromDate').value;
     var todate       = document.getElementById('ToDate').value;
     var sname        = document.getElementById('search_name').value; //search bar
-    
 
     var fromdate     = fromdate.replace("T", " ");
     var todate       = todate.replace("T", " ");
-
-
     var selectElement = document.getElementById("status");
     var status_val    = selectElement.value;
 
@@ -201,9 +187,7 @@ function search_info(){
     }).fail(function () {
     });
 
-
 }
-
 
 function JobCheckbox_seq(){
 
@@ -247,7 +231,6 @@ function JobCheckbox_seq(){
     }
 }
 
-
 function JobCheckbox()
 {
     //取得 job被checked的值
@@ -277,7 +260,6 @@ function JobCheckbox()
             error: function(error) {
             }
         }).fail(function () {
-            // history.go(0);
         });
 
     }
@@ -340,7 +322,7 @@ function takeScreenshot(param) {
     var img_name = 'screenshot.'+ param;
   
     //設定要擷取的範圍
-    var content = document.getElementById('DetailInfoDisplay');
+    var content = document.getElementById('myChart');
     domtoimage.toPng(content, { bgcolor: '#ffffff' }) //背景設成白色
         .then(function(dataUrl) {
             var link = document.createElement('a');
@@ -356,6 +338,7 @@ function takeScreenshot(param) {
         });
 }
 
+
 //讀取cookie 
 function getCookie(cookieName) {
     var cookies = document.cookie.split(';');
@@ -370,3 +353,40 @@ function getCookie(cookieName) {
 }
 
 var lineCookieValue = getCookie('line_style');
+var low_val  = getCookie('lowval');
+var high_val = getCookie('highval');
+
+var clickCount = 0;
+//選擇是否要分頁
+function nopage(){
+
+    clickCount++;
+    if (clickCount % 2 === 1) {
+        var nopage  = 1;
+        document.cookie = "nopage=" + nopage + "; max-age=" + 60 * 60 * 24 * 7;
+    } else {
+       //清除cookie 
+        document.cookie = "nopage=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    }
+    history.go(0);
+
+}
+
+//有勾選上下線 
+//alert(lineCookieValue);
+//console.log(lineCookieValue);
+if(lineCookieValue == "1"){
+    var data_other = {
+        label: 'High Torque',
+        borderColor: 'orange'
+    };
+    var data_other_1 = {
+        label: 'Low Torque',
+        borderColor: 'orange'
+    };
+
+}else{
+    var data_other = '';
+}
+
+

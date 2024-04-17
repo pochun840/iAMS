@@ -18,28 +18,29 @@ class Monitors extends Controller
     // 取得所有Jobs
     public function index($page){
 
+        if (isset($_COOKIE["nopage"])){
+            $nopage = $_COOKIE["nopage"];
+        }
 
+        //0 =>不分頁 1=>分頁
         //檢查有無判斷分頁的cookie 
-        if (isset($_COOKIE['nopage'])) {
-            //echo "Cookie 存在！";
-            //echo "<br>";
+        if ($nopage =="0") {
             //不要分頁
             $offset = 0;
             $limit  = 100000000;
-            $nopage ='False';
+            $nopage ='0';
             $totalPages = 0;
 
         } else {
+           
             //要分頁
-            //echo "Cookie 不存在！";
-            //echo "<br>";
-            $nopage ='True';
+            $nopage ='1';
              
             #當前的頁數，默認為第1頁
             $page = isset($_GET['p']) ? $_GET['p'] : 1;
 
             #每頁顯示的筆數
-            $limit = 30;
+            $limit = 2;
 
             #計算數量
             $offset = ($page - 1) * $limit;
@@ -50,9 +51,7 @@ class Monitors extends Controller
 
             #計算總頁數
             if(!empty($totalItems)){
-                $totalPages = ""; 
                 $totalPages = ceil($totalItems / $limit);
-                //$totalPages = 0;
             }
 
         }
@@ -61,7 +60,7 @@ class Monitors extends Controller
         #取得預設的鎖附資料
         $info_arr = "";
         $info = $this->Monitors_newModel->monitors_info($info_arr,$offset, $limit);
-        
+
         $isMobile = $this->isMobileCheck();
         $nav = $this->NavsController->get_nav();
 
@@ -135,9 +134,10 @@ class Monitors extends Controller
         $info_arr = array();
         $info_arr = $_POST;
 
-
+        $offset = 0;
+        $limit  = 10000;
         #按照POST的資訊 取得資料庫搜尋的結果
-        $info = $this->Monitors_newModel->monitors_info($info_arr);
+        $info = $this->Monitors_newModel->monitors_info($info_arr,$offset,$limit);
 
         #扭力轉換
         $torque_arr = $this->Monitors_newModel->torque_change();
@@ -191,7 +191,7 @@ class Monitors extends Controller
         if(!empty($index)){
             $info = $this->Monitors_newModel->get_info_data($index);
 
-            $no ="4177";
+            $no ="4178";
             $data = array();
             $csvdata = $this->Monitors_newModel->connected_ftp($no);
 
@@ -250,19 +250,16 @@ class Monitors extends Controller
                         }
                     }
 
-
-
-                     #曲線圖的資料
-                     $data['total_range'] = $total_range;
+                    #曲線圖的資料
+                    $data['total_range'] = $total_range;
         
-                     #取得指定位置的值的最大值和最小值
-                     $y_maxvalue = max($values);
-                     $y_minvalue = min($values);
+                    #取得指定位置的值的最大值和最小值
+                    $y_maxvalue = max($values);
+                    $y_minvalue = min($values);
 
-
- 
-                     $data['y_maxvalue'] = $y_maxvalue;
-                     $data['y_minvalue'] = $y_minvalue;
+                     
+                    $data['y_maxvalue'] = $y_maxvalue;
+                    $data['y_minvalue'] = $y_minvalue;
 
                 }
                 
@@ -289,7 +286,16 @@ class Monitors extends Controller
             $data['chat_mode_arr'] = $chat_mode_arr;
             $data['torque_mode_arr'] = $torque_mode_arr;
             $data['status_arr'] = $status_arr;
-        
+
+    
+            if(!empty($info[0]['step_lowtorque'])){
+                setcookie("lowval", $info[0]['step_lowtorque'], time() + (86400 * 30), "/"); 
+                setcookie("highval", $info[0]['step_hightorque'], time() + (86400 * 30), "/");
+            }
+
+            $data['line_low'] = $info[0]['step_lowtorque'];
+            $data['line_high'] = $info[0]['step_hightorque'];
+    
             $this->view('monitor/index_info', $data);
 
 
@@ -348,7 +354,42 @@ class Monitors extends Controller
 
 
     public function ddd(){
-        $this->view('monitor/index_test');
+        $this->view('monitor/index_new');
+    }
+
+
+    public function combinedata(){
+        #取得 id 
+        #透過 id 取得完整的鎖附資料
+        if(!empty($_COOKIE['checkedsn'])){
+            $checkedsn = $_COOKIE['checkedsn'];
+            $pos = strpos($checkedsn, ',');
+
+            if ($pos !== false) {
+                $checkedsn_array = explode(",",$checkedsn);
+                $checked_sn_in = implode("','", $checkedsn_array);
+                
+            
+            }else{
+                $checked_sn_in =  $checkedsn;
+            }
+
+            #取得該筆的所有完整詳細資料
+            $info_final = $this->Monitors_newModel->csv_info($checked_sn_in);
+            $data['info_final'] = $info_final;
+
+
+            #針對 
+
+
+            #$csvdata = $this->Monitors_newModel->connected_ftp($no);
+            #$csvdata = $this->Monitors_newModel->connected_ftp($no);
+
+        }else{
+            //
+        }
+
+        $this->view('monitor/index',$data);
     }
 
     #產生CSV的文件 

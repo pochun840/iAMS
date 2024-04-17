@@ -10,7 +10,30 @@
 <?php if(isset($data['nav'])){
     echo $data['nav'];
 }
+
+//
+//取得URL 
+$path  = $_SERVER['REQUEST_URI'];
+$path  = str_replace('/imas/public/index.php?url=Monitors/','',$path);
+if ($path == "combinedata") {
+    echo "
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var element = document.getElementById('CombineDataDisplay');
+            if (element) {
+                element.style.display = 'block';
+            }
+        
+            var otherElement = document.getElementById('FasteningDisplay');
+            if (otherElement) {
+                otherElement.style.display = 'none';
+            }
+        });
+    </script>
+    ";
+}
 ?>
+
 <style>
 
 
@@ -284,7 +307,7 @@
                             </table>
 
 
-                            <?php if($data['nopage'] == "False"){?>
+                            <?php if( $data['nopage'] ==  "1"){ ?>
                             <div class="pagination" align="center">
                                 <?php if ($data['page'] > 1): ?>
                                     <a href="?url=Monitors&p=<?php echo ($data['page'] - 1); ?>"> Pre  &nbsp;&nbsp;</a>
@@ -436,6 +459,14 @@
                 </div>
 
                 <!-- Click Combine Data -->
+
+                <?php 
+                //echo "<pre>";
+                //print_r($data['info_final']);
+                //echo "</pre>";
+
+                
+                ?>
                 <div id="CombineDataDisplay" style="display: none">
                     <div class="topnav">
                         <label type="text" style="font-size: 20px; padding-left: 1%; margin: 6px">Fastenig record &#62; Combine data</label>
@@ -479,49 +510,32 @@
                             <div class="w3-row-padding">
                                 <div class="scrollbar-Combine" id="style-Combine">
                                     <div class="force-overflow-Combine">
-                                        <div class="w3-half">
-                                            <div class="row t1">
-                                                <div class="col"> Index : 1</div>
-                                                <div class="col"> Job info : job-1</div>
-                                                <div class="col"> Pset : p1</div>
-                                            </div>
-                                            <div class="row t1">
-                                                <div class="col"> Time : 13:00</div>
-                                                <div class="col"> Task Time : 100sec</div>
-                                                <div class="col"> Status : ok</div>
-                                            </div>
-                                            <div class="row t1">
-                                                <div class="col"> barcodeSN : 12345</div>
-                                                <div class="col"> Error Code : </div>
-                                                <div class="col"> Actual Torque : 0.6N.m</div>
-                                            </div>
-                                            <div class="row t1">
-                                                <div class="col"> Equipment : Note:arm(444,215)(200)</div>
-                                            </div>
-                                            <img src="./img/chart-img.svg" style="width:90%" alt="Northern Lights" class="w3-margin-bottom">
-                                        </div>
-
-                                        <div class="w3-half">
-                                            <div class="row t1">
-                                                <div class="col"> Index : 2</div>
-                                                <div class="col"> Job info : job-2</div>
-                                                <div class="col"> Pset : p1</div>
-                                            </div>
-                                            <div class="row t1">
-                                                <div class="col"> Time : 13:00</div>
-                                                <div class="col"> Task Time : 100sec</div>
-                                                <div class="col"> Status : ok</div>
-                                            </div>
-                                            <div class="row t1">
-                                                <div class="col"> barcodeSN : 12345</div>
-                                                <div class="col"> Error Code : </div>
-                                                <div class="col"> Actual Torque : 0.6N.m</div>
-                                            </div>
-                                            <div class="row t1">
-                                                <div class="col"> Equipment : Note:arm(444,215)(200)</div>
-                                            </div>
-                                            <img src="./img/chart-img.svg" style="width:90%" alt="Nature" class="w3-margin-bottom">
-                                        </div>
+                                    <?php foreach( $data['info_final'] as $key =>$val){?>
+                                            <div class="w3-half">
+                                                <div class="row t1">
+                                                    <div class="col"> Index : <?php echo $val['system_sn'];?></div>
+                                                    <div class="col"> Job info : <?php echo $val['job_name'];?></div>
+                                                    <div class="col"> Pset : </div>
+                                                </div>
+                                                <div class="row t1">
+                                                    <div class="col"> Time : <?php echo $val['data_time'];?></div>
+                                                    <div class="col"> Task Time : </div>
+                                                    <div class="col"> Status : </div>
+                                                </div>
+                                                <div class="row t1">
+                                                    <div class="col"> barcodeSN : <?php echo $val['cc_barcodesn'];?></div>
+                                                    <div class="col"> Error Code : </div>
+                                                    <div class="col"> Actual Torque : <?php echo $val['fasten_torque'];?> N.m</div>
+                                                </div>
+                                                <div class="row t1">
+                                                    <div class="col"> Equipment : </div>
+                                                </div>
+                                                <!----塞入第1筆的曲線圖-->
+                                                <img src="./img/chart-img.svg" style="width:90%" alt="Northern Lights" class="w3-margin-bottom">
+                                             </div>
+                                 
+                                    
+                                    <?php }?>
                                     </div>
                                 </div>
                             </div>
@@ -845,7 +859,7 @@ function WorkFlowLogInfo()
     document.getElementById('WorkFlowLogDisplay').style.display = 'none';
 }
 
-function cancelSetting()
+/*function cancelSetting()
 {
     var FasteningDisplay = document.getElementById('FasteningDisplay');
     var detailInfo = document.getElementById('DetailInfoDisplay');
@@ -874,7 +888,7 @@ function cancelSetting()
     {
         // If FasteningDisplay is currently displayed or both are hidden, do nothing or handle it as needed
     }
-}
+}*/
 
 function toggleMenu() {
     var menuContent = document.getElementById("myMenu");
@@ -947,21 +961,3 @@ addMessage();
 </style>
 
 <?php require APPROOT . 'views/inc/footer.tpl'; ?>
-
-<script>
-var clickCount = 0;
-//選擇是否要分頁
-function nopage(){
-
-    clickCount++;
-    if (clickCount % 2 === 1) {
-        var nopage  = 1;
-        document.cookie = "nopage=" + nopage + "; max-age=" + 60 * 60 * 24 * 7;
-    } else {
-       //清除cookie 
-        document.cookie = "nopage=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    }
-    history.go(0);
-
-}
-</script>

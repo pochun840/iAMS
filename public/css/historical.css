@@ -1112,5 +1112,15 @@ svg
 }
 
 
+/**/
+.titleBox {
+    display: inline-block;
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: yellow;
+    margin-right: 10px;
+}
+
 
 

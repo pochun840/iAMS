@@ -17,7 +17,6 @@ class Monitors_new{
     #取得CSV
     public function csv_info($system_sn){
         $sql = "SELECT * FROM `fasten_data` WHERE    on_flag ='0' AND system_sn in('".$system_sn."') order by data_time desc";
-        //echo $sql;
         $statement = $this->db->prepare($sql);
         $statement->execute();
         $rows = $statement->fetchall(PDO::FETCH_ASSOC);
@@ -26,7 +25,7 @@ class Monitors_new{
     }
 
     #取得鎖附的資料
-    public function monitors_info($info_arr,$offset=0, $limit=300){
+    public function monitors_info($info_arr,$offset=0, $limit){
 
 
         $sql = "SELECT * FROM `fasten_data` WHERE    on_flag ='0' ";
