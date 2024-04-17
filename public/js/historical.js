@@ -362,9 +362,21 @@ function nopage(){
     var currentValue = document.cookie.replace(/(?:(?:^|.*;\s*)nopage\s*\=\s*([^;]*).*$)|^.*$/, "$1");
     var newValue = (currentValue === "1") ? "0" : "1";
     document.cookie = "nopage=" + newValue; 
+
+    if(newValue == "0"){
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.delete('p');
+        const newUrl = window.location.pathname + '?' + urlParams.toString();
+        window.history.replaceState({}, '', newUrl);
+        
+    }
     history.go(0);
 }
 
+//回到上一頁
+function goBack() {
+    window.history.back();
+  }
 
 
 
