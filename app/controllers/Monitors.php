@@ -20,8 +20,10 @@ class Monitors extends Controller
 
         if (isset($_COOKIE["nopage"])){
             $nopage = $_COOKIE["nopage"];
-        }
+        }else{
+            $nopage ="0";
 
+        }
         //0 =>不分頁 1=>分頁
         //檢查有無判斷分頁的cookie 
         if ($nopage =="0") {
@@ -149,8 +151,6 @@ class Monitors extends Controller
         if(!empty($info)){
             $info_data ="";
             foreach($info as $k =>$v){
-
-                //
                 $color = $status_arr['status_color'][$v['fasten_status']];
                 $style = 'background-color:'.$color.';font-size: 20px';
 
@@ -354,7 +354,12 @@ class Monitors extends Controller
 
 
     public function ddd(){
-        $this->view('monitor/index_new');
+        $this->view('monitor/index_test');
+    }
+
+    
+    public function eee(){
+        $this->view('monitor/index_test1');
     }
 
 
