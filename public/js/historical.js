@@ -356,37 +356,15 @@ var lineCookieValue = getCookie('line_style');
 var low_val  = getCookie('lowval');
 var high_val = getCookie('highval');
 
-var clickCount = 0;
-//選擇是否要分頁
 function nopage(){
 
-    clickCount++;
-    if (clickCount % 2 === 1) {
-        var nopage  = 1;
-        document.cookie = "nopage=" + nopage + "; max-age=" + 60 * 60 * 24 * 7;
-    } else {
-       //清除cookie 
-        document.cookie = "nopage=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    }
+    //0 =>不分頁 1=>分頁
+    var currentValue = document.cookie.replace(/(?:(?:^|.*;\s*)nopage\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+    var newValue = (currentValue === "1") ? "0" : "1";
+    document.cookie = "nopage=" + newValue; 
     history.go(0);
-
 }
 
-//有勾選上下線 
-//alert(lineCookieValue);
-//console.log(lineCookieValue);
-if(lineCookieValue == "1"){
-    var data_other = {
-        label: 'High Torque',
-        borderColor: 'orange'
-    };
-    var data_other_1 = {
-        label: 'Low Torque',
-        borderColor: 'orange'
-    };
 
-}else{
-    var data_other = '';
-}
 
 
