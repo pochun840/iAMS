@@ -1,6 +1,4 @@
 
-var element = document.getElementById('DetailInfoDisplay');
-
 //清除 資料  回到最原始的紀錄
 function clear_button(){
 
@@ -280,7 +278,9 @@ function chat_mode(selectOS) {
         }
     }
 
-    document.cookie = "chat_mode=" + selectedOptions + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+    alert(selectedOptions);
+
+    document.cookie = "chat_modeno=" + selectedOptions + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
     history.go(0);
 
 }
@@ -319,10 +319,12 @@ function  angle_change(selectOS){
 
 //擷取曲線圖 
 function takeScreenshot(param) {
+
     var img_name = 'screenshot.'+ param;
   
     //設定要擷取的範圍
     var content = document.getElementById('myChart');
+
     domtoimage.toPng(content, { bgcolor: '#ffffff' }) //背景設成白色
         .then(function(dataUrl) {
             var link = document.createElement('a');
@@ -352,12 +354,15 @@ function getCookie(cookieName) {
     return '';
 }
 
+
+
 var lineCookieValue = getCookie('line_style');
 var low_val  = getCookie('lowval');
 var high_val = getCookie('highval');
+var chat_modeno = getCookie('chat_modeno');
+
 
 function nopage(){
-
     //0 =>不分頁 1=>分頁
     var currentValue = document.cookie.replace(/(?:(?:^|.*;\s*)nopage\s*\=\s*([^;]*).*$)|^.*$/, "$1");
     var newValue = (currentValue === "1") ? "0" : "1";
