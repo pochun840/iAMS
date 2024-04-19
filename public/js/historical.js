@@ -355,13 +355,6 @@ function getCookie(cookieName) {
 }
 
 
-
-var lineCookieValue = getCookie('line_style');
-var low_val  = getCookie('lowval');
-var high_val = getCookie('highval');
-var chat_modeno = getCookie('chat_modeno');
-
-
 function nopage(){
     //0 =>不分頁 1=>分頁
     var currentValue = document.cookie.replace(/(?:(?:^|.*;\s*)nopage\s*\=\s*([^;]*).*$)|^.*$/, "$1");
@@ -381,7 +374,24 @@ function nopage(){
 //回到上一頁
 function goBack() {
     window.history.back();
-  }
+}
 
+//勾選上下限
+function check_limit(checkbox){
+     limit_val = checkbox.checked;
+     if (limit_val) {
+         var limit_val = '1';
+     } else {
+         var limit_val = '0';
+     }
+     document.cookie = "limit_val=" + limit_val + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+     history.go(0);
 
+ }
+
+var lineCookieValue = getCookie('line_style');
+var low_val  = getCookie('lowval');
+var high_val = getCookie('highval');
+var chat_modeno = getCookie('chat_modeno');
+var limit_val = getCookie('limit_val');
 
