@@ -193,7 +193,7 @@ class Monitors extends Controller
 
             $no ="4178";
             $data = array();
-            $csvdata = $this->Monitors_newModel->connected_ftp($no);
+            //$csvdata = $this->Monitors_newModel->connected_ftp($no);
 
             $status_arr = $this->Monitors_newModel->status_code_change();
 
@@ -211,17 +211,18 @@ class Monitors extends Controller
                 $data['x_nodal_point'] = "'".$x_nodal_point."'";
 
                 #判斷 有無cookie chat_mode 
-                if (isset($_COOKIE['chat_mode'])) {
-                    $chat_mode = $_COOKIE['chat_mode'];
+                if (isset($_COOKIE['chat_modeno'])) {
+                    $chat_mode = $_COOKIE['chat_modeno'];
                 }else{
                     $chat_mode = "1";
                 }
 
+
+            
              
                 #取得曲線圖的模式
                 $chat_arr = $this->Monitors_newModel->chat_change($chat_mode);
                 $data['chat'] = $chat_arr;
-
 
                 #設置Y軸的最大及最小值
                 #要比對的位置
@@ -273,7 +274,8 @@ class Monitors extends Controller
                 2=>'Angle/Time',
                 3=>'RPM/Time',
                 4=>'Power/Time',
-                5=>'Torque/Angle'
+                5=>'Torque/Angle',
+                6=>'Torque&Angle/Time',
             );
 
             $torque_mode_arr = array(
@@ -297,12 +299,9 @@ class Monitors extends Controller
             $data['line_high'] = $info[0]['step_hightorque'];
     
             $this->view('monitor/index_info', $data);
-
-
         }
 
     }
-
 
     #利用job_id 及 seq_id 找到對應的task_id 
     #並組成 html的checkbox 格式
@@ -359,13 +358,58 @@ class Monitors extends Controller
 
     
     public function eee(){
-        $this->view('monitor/index_test1');
+
+        $multiArray = array(
+            'data0' => array(
+                0 => array('10','113','1566','12050'),
+                1 => array('110','2113','3566','42050'),
+            ),
+            'data1' => array(
+                20 => array('111','513','1566','12050'),
+                60 => array('112','4113','3566','42050'),
+            ),
+        );
+
+        
+        $res = array(); // 用于存储结果的数组
+        
+        $i = 1; // 用于计数
+        
+        // 迭代多维数组
+        foreach ($multiArray as $key => $innerArray) {
+            // 初始化 X 和 Y 的数组
+            $X = array();
+            $Y = array();
+        
+            // 迭代内部数组
+            foreach ($innerArray as $innerKey => $value) {
+                // 将 key 和 value 添加到 X 和 Y 数组中
+                $X[] = $innerKey;
+                $Y[] = $value;
+            }
+        
+            // 将结果存储到 $res 数组中
+            $res['ans' . $i]['X'] = implode(',', $X);
+            $res['ans' . $i]['Y'] = implode(',', $Y);
+        
+            $i++; // 增加计数
+        }
+        
+
+        
+    
     }
 
 
     public function combinedata(){
         #取得 id 
         #透過 id 取得完整的鎖附資料
+
+
+        #判斷有無cookie 
+
+
+        $chat_mode  = "1";//預設是torque/time 
         if(!empty($_COOKIE['checkedsn'])){
             $checkedsn = $_COOKIE['checkedsn'];
             $pos = strpos($checkedsn, ',');
@@ -384,15 +428,43 @@ class Monitors extends Controller
             $data['info_final'] = $info_final;
 
 
-            #針對 
+            //Torque/Time
+            #取得曲線圖的模式
+            $chat_arr = $this->Monitors_newModel->chat_change($chat_mode);
+            $data['chat'] = $chat_arr;
+
+            
+            #二筆鎖附資料的圖表
+            $final_label = $this->Monitors_newModel->get_result($checked_sn_in);
 
 
-            #$csvdata = $this->Monitors_newModel->connected_ftp($no);
-            #$csvdata = $this->Monitors_newModel->connected_ftp($no);
 
+            #圖表1的資訊
+            $data['chart1_xcoordinate'] = json_encode(array_keys($final_label['data0']));
+            $data['chart1_ycoordinate'] = json_encode($final_label['data0']);
+            $data['chart1_ycoordinate_max'] = max($final_label['data0']);
+            $data['chart1_ycoordinate_min'] = min($final_label['data0']);
+
+
+            #圖表2的資訊
+            $data['chart2_xcoordinate'] = json_encode(array_keys($final_label['data1']));
+            $data['chart2_ycoordinate'] = json_encode($final_label['data1']);
+            $data['chart2_ycoordinate_max'] = max($final_label['data1']);
+            $data['chart2_ycoordinate_min'] = min($final_label['data1']);
+            
+       
         }else{
-            //
+            
         }
+    
+        #扭力轉換
+        $torque_arr = $this->Monitors_newModel->torque_change();
+
+        #STATUS轉換
+        $status_arr = $this->Monitors_newModel->status_code_change();
+
+        $data['torque_arr'] = $torque_arr;
+        $data['status_arr'] = $status_arr;
 
         $this->view('monitor/index',$data);
     }
@@ -449,5 +521,49 @@ class Monitors extends Controller
 
         }     
     }
+
+
+    public function eeeq()
+    {
+        $multiArray = array(
+            'data0' => array(
+                0 => array('10','113','1566','12050'),
+                1 => array('110','2113','3566','42050'),
+            ),
+            'data1' => array(
+                20 => array('111','513','1566','12050'),
+                60 => array('112','4113','3566','42050'),
+            ),
+        );
+        
+        $res = array(); // 用于存储结果的数组
+        
+        // 迭代多维数组
+        foreach ($multiArray as $key => $innerArray) {
+            // 初始化临时数组
+            $tempArray = array();
+
+           
+        
+            // 仅检查内部数组的第二个索引位置的值是否在指定数组中，并将其添加到临时数组中
+            foreach ($innerArray as $value) {
+    
+                $tempArray = $value[1];
+            }
+        
+            // 将临时数组添加到结果数组中
+            $res[$key][] = $tempArray;
+        }
+        
+        // 输出结果
+        echo "<pre>";
+        print_r($res);
+        echo "</pre>";
+        die();
+
+    }
+
+    
+
 
 }

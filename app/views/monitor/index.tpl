@@ -32,12 +32,32 @@ if ($path == "combinedata") {
     </script>
     ";
 }
+
+if(!empty($_COOKIE['line_style'])){
+    $line_style = $_COOKIE['line_style'];
+}else{
+    $line_style = '';
+}
+
+
+if(!empty($_COOKIE['limit_val'])){
+    $limit_val = $_COOKIE['limit_val'];
+}else{
+    $limit_val = '';
+}
+
+if(!empty($_COOKIE['unit_mode'])){
+    $unit_mode = $_COOKIE['unit_mode'];
+}else{
+    $unit_mode = '';
+}
+
 ?>
 
 <style>
 
 
-.t1{font-size: 17px; margin: 3px 0px; display: flex; align-items: center;}
+.t1{font-size: 20px; margin: 3px 0px; display: flex; align-items: center;}
 .t2{font-size: 17px; margin: 3px 0px;}
 .t3{font-size: 17px; margin: 3px 0px; height: 29px;border-radius: 5px;}
 .t4{font-size: 17px; margin-right: 5px; border-radius: 5px}
@@ -66,6 +86,15 @@ if ($path == "combinedata") {
 }
                                     
 </style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.18/c3.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+
+
+
 
 <div class="container-ms">
     <header>
@@ -359,7 +388,7 @@ if ($path == "combinedata") {
                             <td>Member: <input class="t6" type="text" size="10" value="Esther" disabled="disabled" style="background-color: #F5F5F5"></td>
                             <td>Note: <input class="t6" type="text" value="arm (444,215)[200]" disabled="disabled" style="background-color: #F5F5F5; width: 15vw"></td>
                             <td colspan="3">
-                                <input class="form-check-input" type="checkbox" name="" id="" value="0" style="zoom:1.2; float: left">&nbsp; display the high/low auxiliary lines.
+                                <input class="form-check-input" type="checkbox"  id="myCheckbox"   id="myCheckbox"   onchange="touch(this);" style="zoom:1.2; float: left"  ?> >&nbsp; display the high/low auxiliary lines.
                             </td>
                         </tr>
                         <tr style="vertical-align: middle">
@@ -459,44 +488,36 @@ if ($path == "combinedata") {
                 </div>
 
                 <!-- Click Combine Data -->
-
-                <?php 
-                //echo "<pre>";
-                //print_r($data['info_final']);
-                //echo "</pre>";
-
-                
-                ?>
                 <div id="CombineDataDisplay" style="display: none">
                     <div class="topnav">
                         <label type="text" style="font-size: 20px; padding-left: 1%; margin: 6px">Fastenig record &#62; Combine data</label>
-                        <button id="back-setting" type="button" onclick="cancelSetting()">
-                            <img id="img-back" src="./img/back.svg" alt="">Back
+                        <button id="back-setting" type="button"  onclick="goBack()" >
+                            <img id="img-back" src="./img/back.svg" alt=""  onclick="goBack()" >Back
                         </button>
                     </div>
                     <div class="topnav-menu" style="background-color: #FFF; margin-top: 3px">
                         <div class="row t1">
                             <div class="col t2 form-check form-check-inline" style="margin-left: 10px">
-                                <input class="form-check-input" type="checkbox" checked="checked" name="optioncheck" id="optioncheck" value="0"style="zoom:1.2; vertical-align: middle">
+                                <input class="form-check-input" type="checkbox" id="myCheckbox" onchange="check_limit(this)";  <?php if($limit_val=="1"){ echo "checked"; }else{}?> style="zoom:1.2; vertical-align: middle">
                                 <label class="form-check-label" for="optioncheck">display the high/low auxiliary lines.</label>
 
                                 <label style="padding-left: 5%">
-                                    Angle : &nbsp;<select id="angle" style="width: 120px">
+                                    Angle : &nbsp;<select id="angle" style="width: 120px" onchange="angle_change(this)">
                                                     <option value="1">total angle</option>
                                                     <option value="2">task angle</option>
                                                   </select>
                                 </label>
                                 <label style="padding-left: 5%">
-                                    Unit :  &nbsp;<select id="unit" style="width: 100px">
-                                                    <option value="1">Kgf.m</option>
-                                                    <option value="2">N.m</option>
-                                                    <option value="2">Kgf.cm</option>
-                                                    <option value="2">In.lbs</option>
-                                                  </select>
+                                    Unit :  &nbsp;
+                                        <select id="unit" style="width: 100px" onchange="unit_change(this)" >
+                                          <?php foreach($data['torque_mode_arr'] as $k_torque => $v_torque){?>
+                                                            <option  value="<?php echo $k_torque;?>"  <?php if($unit_mode== $k_torque){echo "selected";}else{echo "";}?>  > <?php echo $v_torque;?> </option>
+                                          <?php } ?>        
+                                        </select>
                                 </label>
                             </div>
                             <div class="col t2">
-                                <button id="Save-combine" type="button">Save</button>
+                                <!---<button id="Save-combine" type="button">Save</button>-->
                                 <button id="Export-Excel-data" type="button" class="ExportButton">Export Excel</button>
                                 <button id="Export-chart" type="button" class="ExportButton">Export PNG</button>
                             </div>
@@ -506,7 +527,7 @@ if ($path == "combinedata") {
                     <hr class="w3-clear" style="width: 100%">
 
                     <div class="w3-col">
-                        <div class="w3-round" style="margin: 5px 0">
+                        <div class="w3-round" style="margin: 5px 0;">
                             <div class="w3-row-padding">
                                 <div class="scrollbar-Combine" id="style-Combine">
                                     <div class="force-overflow-Combine">
@@ -519,24 +540,30 @@ if ($path == "combinedata") {
                                                 </div>
                                                 <div class="row t1">
                                                     <div class="col"> Time : <?php echo $val['data_time'];?></div>
-                                                    <div class="col"> Task Time : </div>
-                                                    <div class="col"> Status : </div>
+                                                    <div class="col"> Task Time : <?php echo $val['fasten_time'];?> ms </div>
+                                                    <div class="col"> Status : <a style="background-color:<?php echo $data['status_arr']['status_color'][$val['fasten_status']];?>"><?php echo $data['status_arr']['status_type'][$val['fasten_status']];?></a></div>
                                                 </div>
                                                 <div class="row t1">
                                                     <div class="col"> barcodeSN : <?php echo $val['cc_barcodesn'];?></div>
-                                                    <div class="col"> Error Code : </div>
-                                                    <div class="col"> Actual Torque : <?php echo $val['fasten_torque'];?> N.m</div>
+                                                    <div class="col"> Error Code : <?php echo  $data['status_arr']['error_msg'][$val['error_message']];?></div>
+                                                    <div class="col"> Actual Torque : <?php echo $val['fasten_torque'] ." ".$data['torque_arr'][$val['torque_unit']];?> </div>
                                                 </div>
                                                 <div class="row t1">
                                                     <div class="col"> Equipment : </div>
                                                 </div>
-                                                <!----塞入第1筆的曲線圖-->
-                                                <img src="./img/chart-img.svg" style="width:90%" alt="Northern Lights" class="w3-margin-bottom">
                                              </div>
-                                 
-                                    
                                     <?php }?>
+                                        <!---圖表1--->
+                                        <div class="empty-div"></div>
+                                        <div id="chart"></div>
+                                        <div id="chart-title"><?php echo $data['info_final'][0]['job_name'];?></div>
+                                        <div class="empty-div"></div>
+                                        <!---圖表2--->
+                                        <div id="chart1"></div>
+                                        <div id="chart-title2"><?php echo $data['info_final'][1]['job_name'];?></div>
+                                                                   
                                     </div>
+                                  
                                 </div>
                             </div>
                         </div>
@@ -961,3 +988,141 @@ addMessage();
 </style>
 
 <?php require APPROOT . 'views/inc/footer.tpl'; ?>
+
+
+<script>
+
+    //整理X軸跟Y軸的數據data
+    var x_data = <?php echo  $data['chart1_xcoordinate']; ?>;
+    var y_data = <?php echo  $data['chart1_ycoordinate']; ?>;
+
+    var min = <?php echo $data['chart1_ycoordinate_min'];?>;
+    var max = <?php echo $data['chart1_ycoordinate_max'];?>;
+
+
+    var chartOptions = {
+        bindto: '#chart',
+        data: {
+            x: 'x',
+            columns: [
+                ['x'].concat(x_data),
+                ['Torque'].concat(y_data)
+            ]
+        },
+
+        axis: {
+            x: {
+                label: 'Time (ms)',
+                position: 'outer-center',
+                //size: 18,
+            },
+            y: {
+                label: 'Torque',
+                tick: {}
+            }
+        },
+
+        grid: {
+            y: {}
+        },
+        subchart: {
+            show: true
+        }
+    };
+
+    // 根據limit_val 的值決定是否顯示上下限
+    if (limit_val == 1) {
+        chartOptions.grid.y.lines = [
+            {value: min, text: 'Low Torque', position: 'start', class: 'grid-upper'},
+            {value: max, text: 'High Torque', position: 'start', class: 'grid-upper'}
+        ];
+    }
+
+    var chart = c3.generate(chartOptions);
+    var chartTitle = document.getElementById('chart-title');
+    chartTitle.style.textAlign = 'center';
+    chartTitle.style.fontSize = '21px'; 
+    chartTitle.style.color = 'blue'; 
+
+</script>
+
+
+<script>
+
+    //整理X軸跟Y軸的數據data
+    var x_data = <?php echo  $data['chart2_xcoordinate']; ?>;
+    var y_data = <?php echo  $data['chart2_ycoordinate']; ?>;
+
+    var min = <?php echo $data['chart2_ycoordinate_min'];?>;
+    var max = <?php echo $data['chart2_ycoordinate_max'];?>;
+
+    var chartOptions1 = {
+        bindto: '#chart1',
+        data: {
+            x: 'x',
+            columns: [
+                ['x'].concat(x_data),
+                ['Torque'].concat(y_data)
+            ]
+        },
+
+        axis: {
+            x: {
+                label: 'Time (ms)',
+            },
+            y: {
+                label: 'Torque',
+                tick: {}
+            }
+        },
+
+        grid: {
+            y: {}
+        },
+        subchart: {
+            show: true
+        }
+    };
+
+    //根據limit_val 的值決定是否顯示上下限
+    if (limit_val == 1) {
+        chartOptions1.grid.y.lines = [
+            {value: min, text: 'Low Torque', position: 'start', class: 'grid-upper',size:15},
+            {value: max, text: 'High Torque', position: 'start', class: 'grid-upper',size:15}
+        ];
+    }
+
+    var chart1 = c3.generate(chartOptions1);
+    var chartTitle2 = document.getElementById('chart-title2');
+    chartTitle2.style.textAlign = 'center';
+    chartTitle2.style.fontSize = '21px';
+    chartTitle2.style.color = 'blue'; 
+
+</script>
+
+<style>
+    .grid-upper line {
+        stroke: red;
+    }
+    .grid-lower line {
+        stroke: red;
+    }
+    .region-upper rect {
+        fill: rgba(255, 0, 0, 0.2);
+    }
+    .region-lower rect {
+        fill: rgba(255, 0, 0, 0.2);
+    }
+    .c3 .grid line.grid-upper {
+        stroke-width: 2px;
+    }
+
+    .empty-div {
+        width: 200px;
+        height:150px;
+    }
+     .empty-div1 {
+        width: 200px;
+        height:500px;
+    }
+</style>
