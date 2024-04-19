@@ -359,44 +359,7 @@ class Monitors extends Controller
     
     public function eee(){
 
-        $multiArray = array(
-            'data0' => array(
-                0 => array('10','113','1566','12050'),
-                1 => array('110','2113','3566','42050'),
-            ),
-            'data1' => array(
-                20 => array('111','513','1566','12050'),
-                60 => array('112','4113','3566','42050'),
-            ),
-        );
-
-        
-        $res = array(); // 用于存储结果的数组
-        
-        $i = 1; // 用于计数
-        
-        // 迭代多维数组
-        foreach ($multiArray as $key => $innerArray) {
-            // 初始化 X 和 Y 的数组
-            $X = array();
-            $Y = array();
-        
-            // 迭代内部数组
-            foreach ($innerArray as $innerKey => $value) {
-                // 将 key 和 value 添加到 X 和 Y 数组中
-                $X[] = $innerKey;
-                $Y[] = $value;
-            }
-        
-            // 将结果存储到 $res 数组中
-            $res['ans' . $i]['X'] = implode(',', $X);
-            $res['ans' . $i]['Y'] = implode(',', $Y);
-        
-            $i++; // 增加计数
-        }
-        
-
-        
+        $this->view('monitor/index_test1');
     
     }
 
@@ -456,6 +419,15 @@ class Monitors extends Controller
         }else{
             
         }
+
+        $torque_mode_arr = array(
+            1=>'N.m',
+            2=>'Kgf.m',
+            3=>'Kgf.cm',
+            4=>'In.lbs',
+
+        ); 
+
     
         #扭力轉換
         $torque_arr = $this->Monitors_newModel->torque_change();
@@ -465,6 +437,7 @@ class Monitors extends Controller
 
         $data['torque_arr'] = $torque_arr;
         $data['status_arr'] = $status_arr;
+        $data['torque_mode_arr'] = $torque_mode_arr;
 
         $this->view('monitor/index',$data);
     }

@@ -22,6 +22,24 @@
     echo $data['nav'];
 }
 
+if(!empty($_COOKIE['chat_mode'])){
+    $chat_mode = $_COOKIE['chat_mode'];
+}else{
+    $chat_mode = '';
+}
+
+if(!empty($_COOKIE['unit_mode'])){
+    $unit_mode = $_COOKIE['unit_mode'];
+}else{
+    $unit_mode = '';
+}
+
+if(!empty($_COOKIE['line_style'])){
+    $line_style = $_COOKIE['line_style'];
+}else{
+    $line_style = '';
+}
+
 ?>
 
 <style>
@@ -162,7 +180,7 @@
                             <td>Note : </td>
                             <td>Status : <a style="background-color: <?php echo $data['status_arr']['status_color'][$data['job_info'][0]['fasten_status']];?>; padding: 0 10px"><?php echo $data['status_arr']['status_type'][$data['job_info'][0]['fasten_status']];?></a></td>
                             <td>
-                                <input class="form-check-input" type="checkbox" name="" id="myCheckbox"    style="zoom:1.2; float: left" value="0"   <?php if($_COOKIE['line_style'] =="1"){ echo "checked";} ?> >&nbsp; display the high/low auxiliary lines.
+                                <input class="form-check-input" type="checkbox" name="" id="myCheckbox"    style="zoom:1.2; float: left" value="0"   <?php if($line_style == "1"){ echo "checked";} ?> >&nbsp; display the high/low auxiliary lines.
                             </td>
                         </tr>
 
@@ -170,7 +188,7 @@
                             <td>
                                 Chart : <select id="Chart-seting" class="t6 Select-All" style="float: none"  onchange="chat_mode(this)">
                                             <?php foreach($data['chat_mode_arr'] as $k_chat => $v_chat){?>
-                                                <option  value="<?php echo $k_chat;?>"  <?php if($_COOKIE['chat_mode']==$k_chat){echo "selected";}else{echo "";}?>  > <?php echo $v_chat;?> </option>
+                                                <option  value="<?php echo $k_chat;?>"  <?php if($chat_mode==$k_chat){echo "selected";}else{echo "";}?>  > <?php echo $v_chat;?> </option>
                                             <?php } ?>
                                                              
                                         </select>
@@ -178,7 +196,7 @@
                             <td>
                                 Torque Unit:    <select id="Torque-Unit" class="Select-All" style="float: none; width: 100px" onchange="unit_change(this)">
                                                     <?php foreach($data['torque_mode_arr'] as $k_torque => $v_torque){?>
-                                                            <option  value="<?php echo $k_torque;?>"  <?php if($_COOKIE['unit_mode']== $k_torque){echo "selected";}else{echo "";}?>  > <?php echo $v_torque;?> </option>
+                                                            <option  value="<?php echo $k_torque;?>"  <?php if($unit_mode== $k_torque){echo "selected";}else{echo "";}?>  > <?php echo $v_torque;?> </option>
                                                     <?php } ?>
                                                 </select>
                             </td>
@@ -890,11 +908,16 @@ addMessage();
     var dataset2Variable = {
         label: 'High Torque',
         borderColor: 'green',
+        borderColor: 'rgba(0, 0, 0, 0)', 
+        backgroundColor: 'rgba(0, 0, 0, 0)', 
+
     };
 
     var dataset3Variable = {
         label: 'Low Torque',
         borderColor: 'orange',
+        borderColor: 'rgba(0, 0, 0, 0)', 
+        backgroundColor: 'rgba(0, 0, 0, 0)', 
     };
 
 
@@ -987,4 +1010,3 @@ addMessage();
         }
     });
 </script>
-

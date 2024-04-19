@@ -387,11 +387,26 @@ function check_limit(checkbox){
      document.cookie = "limit_val=" + limit_val + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
      history.go(0);
 
- }
+}
+
+
+function captureScreenshot() {
+    html2canvas(document.body).then(function(canvas) {
+        
+        var img = canvas.toDataURL('image/png');
+
+        var win = window.open();
+        win.document.write('<img src="' + img + '" width="100%">');
+    });
+}
+
+
 
 var lineCookieValue = getCookie('line_style');
 var low_val  = getCookie('lowval');
 var high_val = getCookie('highval');
 var chat_modeno = getCookie('chat_modeno');
 var limit_val = getCookie('limit_val');
+
+//onclick="captureScreenshot()"
 

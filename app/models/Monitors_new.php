@@ -296,10 +296,12 @@ class Monitors_new{
 
         #FTP曲線圖路徑
 
-        if(empty($no)){
-            $no ="4157";
+        if(!empty($no)){
+            $csv_file = "DATALOG_000000".$no."_1p0.csv";
+        }else{
+            //$csv_file = '';
         }
-        $csv_file = "DATALOG_000000".$no."_1p0.csv";
+
         #連接到FTP
         $conn_id = ftp_connect($ftp_server);
 
@@ -311,7 +313,20 @@ class Monitors_new{
             if (ftp_chdir($conn_id, $ftp_dir)){
                 #取得.CSV 文件列表
                 $files = ftp_nlist($conn_id, ".");
+                if(empty($csv_file)){
+                    usort($files, function($a, $b) use ($conn_id) {
+                        $mtime_a = ftp_mdtm($conn_id, $a);
+                        $mtime_b = ftp_mdtm($conn_id, $b);
+                        return $mtime_b - $mtime_a; // 从大到小排序
+                    });
+        
+                }else{
+                    #combinedata的頁面過來
+                    $files[0] =  $csv_file;
+                }
                 if($files[0]!= ""){
+
+                    $csv_file = $files[0];
                     $filename =  $ftp_dir.$csv_file;
                     if (in_array($csv_file, $files)){
 
@@ -322,12 +337,15 @@ class Monitors_new{
                             $csvdata = array_map('str_getcsv', file($tempFile));
                             unlink($tempFile);
                         }else{
-                           
+                            #
                         }
 
                     } else {
                         echo "File".$ftp_file."does not exist";
                     }
+                }else{
+
+
                 }
             }else{
                 echo "Failed to change directory to".$ftp_dir; 
@@ -392,5 +410,42 @@ class Monitors_new{
         }
 
         return $chat_arr;
+    }
+
+
+    public function get_result($checked_sn_in){
+
+        $file_arr = array('_1p0','_2p0');
+
+
+        $checked_sn_in_new = '4178,4174';
+        $no_arr  = explode(',',$checked_sn_in_new);
+        
+        //$no_arr  = explode(',', $checked_sn_in);
+
+
+        foreach($no_arr as $key => $val){
+
+            $name = 'data'.$key;
+            if(!empty($val)){
+
+                $infile = "C:\web\mywebsite.com\imas\public\data\DATALOG_000000".$val."_1p0.csv";
+                $csvdata = file_get_contents($infile);
+                $rows = explode("\n", $csvdata);
+                $csv_array[$name] = array_map('str_getcsv', $rows);
+            }
+
+        }
+
+        foreach($csv_array as $key => &$innerArray) {
+            foreach($innerArray as $key1 => $va) {
+                if(empty($va[1])){
+                    unset($innerArray[$key1]);
+                }else{
+                    $innerArray[$key1] = $va[1];
+                }
+            }
+        }
+        return $csv_array;
     }
 }
