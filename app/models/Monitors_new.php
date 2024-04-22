@@ -393,11 +393,18 @@ class Monitors_new{
             $position = 4;  
             $yaxis_title = "Power";
             $xaxis_title = "Time(MS)";
-        }else{
+        }else if($chat_mode =="5"){
             $chat_name = "Torque/Angle";
             $position = '5';  
             $yaxis_title = "Torque";
             $xaxis_title = "Angle";
+
+        }else{
+            $chat_name = "Torque&Angle/Time";
+            $position = '6';  
+            $yaxis_title = "Torque/Angle";
+            $xaxis_title = "Time(MS)";
+
 
         }
 
@@ -415,37 +422,96 @@ class Monitors_new{
 
     public function get_result($checked_sn_in){
 
-        $file_arr = array('_1p0','_2p0');
-
-
-        $checked_sn_in_new = '4178,4174';
+        $file_arr = array('_0p5','_1p0','_2p0');#檔案格式
+        $checked_sn_in_new = '4178,0495';
         $no_arr  = explode(',',$checked_sn_in_new);
-        
-        //$no_arr  = explode(',', $checked_sn_in);
-
 
         foreach($no_arr as $key => $val){
-
             $name = 'data'.$key;
             if(!empty($val)){
-
-                $infile = "C:\web\mywebsite.com\imas\public\data\DATALOG_000000".$val."_1p0.csv";
-                $csvdata = file_get_contents($infile);
-                $rows = explode("\n", $csvdata);
-                $csv_array[$name] = array_map('str_getcsv', $rows);
+                foreach ($file_arr as $file_suffix) {
+                    $infile = "C:\web\mywebsite.com\imas\public\data\DATALOG_000000".$val.$file_suffix.".csv";
+                    if (file_exists($infile)) {
+                        $csvdata = file_get_contents($infile);
+                        $rows = explode("\n", $csvdata);
+                        $csv_array[$name] = array_map('str_getcsv', $rows);
+                        break; #找到了檔案，就中斷迴圈
+                    }
+                }
             }
-
         }
-
-        foreach($csv_array as $key => &$innerArray) {
-            foreach($innerArray as $key1 => $va) {
+        
+        foreach($csv_array as $key => &$innerarray) {
+            foreach($innerarray as $key1 => $va) {
                 if(empty($va[1])){
-                    unset($innerArray[$key1]);
+                    unset($innerarray[$key1]);
                 }else{
-                    $innerArray[$key1] = $va[1];
+                    $innerarray[$key1] = $va[1];
                 }
             }
         }
         return $csv_array;
+    }
+
+
+
+    public function get_info($no,$chat_mode){
+        if(!empty($no)){
+            $file_arr = array('_0p5','_1p0','_2p0');#檔案格式
+            foreach ($file_arr as $k_f => $v_f) {
+                if (!empty($v_f)) {
+                    $infile = "C:/web/mywebsite.com/imas/public/data/DATALOG_000000".$no.$v_f.".csv";
+                    if (file_exists($infile)) {
+                        $csvdata_tmp = file_get_contents($infile);
+                        if (!empty($csvdata_tmp)) {
+                            $csvdata = $csvdata_tmp;
+                            $lines = explode("\n", $csvdata); 
+                            $csv_array = array_map('str_getcsv', $lines); 
+                            break; 
+                        }
+                    }
+                }
+            }
+        }
+
+        if(empty($csv_array)){
+            echo '<script>alert("查無該筆的鎖附資料");</script>';
+            header("Location:?url=Monitors");
+            die();
+        }else{
+            $resultarr = array();
+            if($chat_mode =="5"){
+                $position  = (int)$chat_mode;#5
+                //$resultarr = $csv_array;
+                foreach($csv_array as $subarray){
+                    
+                    if(isset($subarray[1])){
+                        $resultarr['torque'][] = $subarray[1];
+                    }
+
+                    if(isset($subarray[2])){
+                        $resultarr['angle'][] = $subarray[2];
+                    }
+                        
+                }
+
+            }else if($chat_mode =="6"){
+                $position  = (int)$chat_mode;#6
+                $resultarr = $csv_array;
+
+
+            }else{
+                $position = (int)$chat_mode;
+                foreach ($csv_array as $subarray) {
+
+                    if(isset($subarray[$position])){
+                        $resultarr[] = $subarray[$position];
+                    }
+                }
+            }
+            return $resultarr;
+
+        }
+        
     }
 }

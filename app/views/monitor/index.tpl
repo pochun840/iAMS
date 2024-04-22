@@ -33,12 +33,25 @@ if ($path == "combinedata") {
     ";
 }
 
-if(!empty($_COOKIE['line_style'])){
-    $line_style = $_COOKIE['line_style'];
-}else{
-    $line_style = '';
-}
+if (strpos($path, "nextinfo") !== false) {
 
+      echo "
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var element = document.getElementById('DetailInfoDisplay');
+            if (element) {
+                element.style.display = 'block';
+            }
+        
+            var otherElement = document.getElementById('FasteningDisplay');
+            if (otherElement) {
+                otherElement.style.display = 'none';
+            }
+        });
+    </script>
+    ";
+
+}
 
 if(!empty($_COOKIE['limit_val'])){
     $limit_val = $_COOKIE['limit_val'];
@@ -51,6 +64,20 @@ if(!empty($_COOKIE['unit_mode'])){
 }else{
     $unit_mode = '';
 }
+
+if(!empty($_COOKIE['chat_mode'])){
+    $chat_mode = $_COOKIE['chat_mode'];
+}else{
+    $chat_mode = '';
+}
+
+if(!empty($_COOKIE['line_style'])){
+    $line_style = $_COOKIE['line_style'];
+}else{
+    $line_style = '';
+}
+
+
 
 ?>
 
@@ -304,8 +331,6 @@ if(!empty($_COOKIE['unit_mode'])){
                                     
                                         $link ='?url=Monitors/nextinfo/'.$v_info['system_sn'];
                                         ?>
-
-
                                         <tr>
                                             <td style="text-align: center;">
                                                 <input class="form-check-input" type="checkbox" name="test1" id="test1"  value="<?php echo $v_info['system_sn'];?>" style="zoom:1.2;vertical-align: middle;">
@@ -364,66 +389,67 @@ if(!empty($_COOKIE['unit_mode'])){
                 <div id="DetailInfoDisplay" style="display: none">
                     <div class="topnav">
                         <label type="text" style="font-size: 18px; padding-left: 1%; margin: 4px">Fastenig record &#62; Info</label>
-                        <button id="back-setting" type="button" onclick="cancelSetting()">
-                            <img id="img-back" src="./img/back.svg" alt="">Back
+                        <button id="back-setting" type="button" onclick="goBack()">
+                            <img id="img-back" src="./img/back.svg" alt=" onclick="goBack()">Back
                         </button>
                     </div>
 
                     <table class="table" style="font-size: 15px;">
                         <tr style="padding: 0 10px">
-                            <td>Index: <input class="t6" type="text" size="10" value="1"></td>
-                            <td>Job info: <input class="t6" type="text" size="15" value="job-1 > seq-1 > task-1" style="width: 15vw"></td>
-                            <td>Controller: <input class="t6" type="text" size="10" value="GTCS"></td>
-                            <td>Error code: <input class="t6" type="text" size="10" value=""></td>
-                            <td>Status: <input class="t6" type="text" size="10" value="ok" style="margin-right: 10px"></td>
+                            <td>Index: <?php echo $data['job_info'][0]['system_sn'];?></td>
+                            <td>Job info: <?php echo $data['job_info'][0]['job_name'];?> / <?php echo $data['job_info'][0]['sequence_name']. "/". $data['job_info'][0]['cc_task_name'];?></td>
+                            <td>Controller: </td>
+                            <td>Error code: <?php echo  $data['status_arr']['error_msg'][$data['job_info'][0]['error_message']];?></td>
+                            <td>Status : <a style="background-color: <?php echo $data['status_arr']['status_color'][$data['job_info'][0]['fasten_status']];?>; padding: 0 10px"><?php echo $data['status_arr']['status_type'][$data['job_info'][0]['fasten_status']];?></a></td>
                         </tr>
                         <tr>
-                            <td>Actual Torque: <input class="t6" type="text" size="10" value=""></td>
-                            <td>BarcodeSN: <input class="t6" type="text" size="10" value="123456" style="width: 15vw"></td>
-                            <td>Direction: <input class="t6" type="text" size="10" value="CW"></td>
-                            <td>Pset: <input class="t6" type="text" size="10" value="p1"></td>
-                            <td>Time: <input class="t6" type="text" size="10" value="task time" style="margin-right: 10px"></td>
+                            <td>Actual Torque: <?php echo $data['job_info'][0]['fasten_torque'];?> kgf.cm</td>
+                            <td>BarcodeSN: <?php echo $data['job_info'][0]['cc_barcodesn'];?></td>
+                            <td>Direction: <?php echo  $data['status_arr']['direction'][$data['job_info'][0]['count_direction']];?></td>
+                            <td>Pset: </td>
+                            <td>Time: <?php echo $data['job_info'][0]['data_time'];?></td>
                         </tr>
                         <tr  style="vertical-align: middle;">
                             <td>Member: <input class="t6" type="text" size="10" value="Esther" disabled="disabled" style="background-color: #F5F5F5"></td>
-                            <td>Note: <input class="t6" type="text" value="arm (444,215)[200]" disabled="disabled" style="background-color: #F5F5F5; width: 15vw"></td>
+                            <td>Note: <!--<input class="t6" type="text" value="arm (444,215)[200]" disabled="disabled" style="background-color: #F5F5F5; width: 15vw"></td>-->
                             <td colspan="3">
-                                <input class="form-check-input" type="checkbox"  id="myCheckbox"   id="myCheckbox"   onchange="touch(this);" style="zoom:1.2; float: left"  ?> >&nbsp; display the high/low auxiliary lines.
+                                <input class="form-check-input" type="checkbox"  id="myCheckbox"   id="myCheckbox"   onchange="touch(this);" style="zoom:1.2; float: left"  ?>&nbsp; display the high/low auxiliary lines.
                             </td>
                         </tr>
                         <tr style="vertical-align: middle">
                             <td>
-                                Chart Setting:  <select id="Chart-seting" class="t6 Select-All">
-                                                    <option value="1">Torque/Time</option>
-                                                    <option value="2">Angle/Time</option>
-                                                    <option value="3">RPM/Time</option>
-                                                    <option value="4">Power/Time</option>
-                                                    <option value="5">Torque/Angle</option>
-                                                </select>
+                                Chart Setting:  
+                                <select id="Chart-seting" class="t6 Select-All" style="float: none"  onchange="chat_mode(this)">
+                                            <?php foreach($data['chat_mode_arr'] as $k_chat => $v_chat){?>
+                                                <option  value="<?php echo $k_chat;?>"  <?php if($chat_mode==$k_chat){echo "selected";}else{echo "";}?>  > <?php echo $v_chat;?> </option>
+                                            <?php } ?>                             
+                                </select>
                             </td>
                             <td>
-                                Torque Unit:    <select id="Torque-Unit" class="t6 Select-All" style="width: 15vw">
-                                                    <option value="2">N.m</option>
-                                                    <option value="1">Kgf.m</option>
-                                                    <option value="2">Kgf.cm</option>
-                                                    <option value="2">In.lbs</option>
-                                                </select>
+                                Torque Unit:    
+                                <select id="Torque-Unit" class="Select-All" style="float: none; width: 100px" onchange="unit_change(this)">
+                                                    <?php foreach($data['torque_mode_arr'] as $k_torque => $v_torque){?>
+                                                            <option  value="<?php echo $k_torque;?>"  <?php if($unit_mode== $k_torque){echo "selected";}else{echo "";}?>  > <?php echo $v_torque;?> </option>
+                                                    <?php } ?>
+                                </select>
                             </td>
                             <td>
-                                Angle:  <select id="Angle" class="t6 Select-All">
+                                Angle:  <select id="Angle" class="t6 Select-All" id='angle_type'>
                                             <option value="1">Total angle</option>
                                             <option value="2">Task angle</option>
                                         </select>
                             </td>
                             <td>
-                                Sampling:  <select id="SelectOutputSampling" class="t6 Select-All">
+                                Sampling:  
+                                <select id="SelectOutputSampling" class="t6 Select-All" id='file_type'>
                                             <option value="1">1(ms)</option>
                                             <option value="2">0.5(ms)</option>
-                                        </select>
+                                            <option value="3">2(ms)</option>
+                                </select>
                             </td>
                             <td>
                                 <button id="Export-Excel" type="button" class="ExportButton" style="margin-top: 0">Export Excel</button>
-                                <button id="Save-info" type="button" style="margin-top: 0">Save</button>
+                                <!--<button id="Save-info" type="button" style="margin-top: 0">Save</button>-->
                             </td>
                         </tr>
                     </table>
@@ -431,7 +457,7 @@ if(!empty($_COOKIE['unit_mode'])){
                     <div>
                         <div style="text-align: center">
                             <label style="float: left"><b>Diagram Display</b></label>
-                            <label>Torque / Time</label>
+                            <label><?php echo $data['chat']['chat_name'];?></label>
                         </div>
                         <div id="chart-setting">
                             <div class="chart-container">
@@ -444,44 +470,8 @@ if(!empty($_COOKIE['unit_mode'])){
                                         <a href="#" onclick="downloadJpeg()">Download JPEG</a>
                                     </div>
                                 </div>
-
-                                <svg viewBox="0 0 500 300">
-                                    <!-- Draw X and Y axes -->
-                                    <line class="axis-x" x1="50" y1="215" x2="550" y2="215" />
-                                    <line class="axis-y" x1="50" y1="215" x2="50" y2="40" />
-
-                                    <!-- Draw grid lines on Y-axis -->
-                                    <line class="grid-line" x1="50" y1="190" x2="500" y2="190" />
-                                    <line class="grid-line" x1="50" y1="160" x2="500" y2="160" />
-                                    <line class="grid-line" x1="50" y1="130" x2="500" y2="130" />
-                                    <line class="grid-line" x1="50" y1="100" x2="500" y2="100" />
-                                    <line class="grid-line" x1="50" y1="70" x2="500" y2="70" />
-                                    <line class="grid-line" x1="50" y1="40" x2="500" y2="40" />
-
-                                    <!-- Draw Torque values -->
-                                    <text x="30" y="15" text-anchor="end">Torques</text>
-
-                                    <text x="40" y="40" text-anchor="end">0.7 N.m</text>
-                                    <text x="40" y="70" text-anchor="end">0.6 N.m</text>
-                                    <text x="40" y="100" text-anchor="end">0.5 N.m</text>
-                                    <text x="40" y="130" text-anchor="end">0.3 N.m</text>
-                                    <text x="40" y="160" text-anchor="end">0.3 N.m</text>
-                                    <text x="40" y="190" text-anchor="end">0.3 N.m</text>
-
-                                    <!-- Draw Count values -->
-                                    <text x="50" y="233" text-anchor="middle">0</text>
-                                    <text x="115" y="233" text-anchor="middle">100</text>
-                                    <text x="185" y="233" text-anchor="middle">200</text>
-                                    <text x="245" y="233" text-anchor="middle">300</text>
-                                    <text x="305" y="233" text-anchor="middle">400</text>
-                                    <text x="365" y="233" text-anchor="middle">500</text>
-                                    <text x="435" y="233" text-anchor="middle">600</text>
-                                    <text x="495" y="233" text-anchor="middle">700</text>
-
-                                    <text x="540" y="245" text-anchor="middle">Time</text>
-                                    <!-- Draw the line chart -->
-                                    <path class="line" d="M50 190 L150 180 L240 130 L350 158 L420 100 L530 60"/>
-                                </svg>
+                                <div id="chartinfo"></div>
+                                
                             </div>
                         </div>
                     </div>
@@ -519,7 +509,7 @@ if(!empty($_COOKIE['unit_mode'])){
                             <div class="col t2">
                                 <!---<button id="Save-combine" type="button">Save</button>-->
                                 <button id="Export-Excel-data" type="button" class="ExportButton">Export Excel</button>
-                                <button id="Export-chart" type="button" class="ExportButton">Export PNG</button>
+                                <button id="Export-chart" type="button" class="ExportButton" onclick='test_pic()'>Export PNG</button>
                             </div>
                         </div>
                     </div>
@@ -554,13 +544,16 @@ if(!empty($_COOKIE['unit_mode'])){
                                              </div>
                                     <?php }?>
                                         <!---圖表1--->
+                                        <div class="empty-div3"></div>
                                         <div class="empty-div"></div>
-                                        <div id="chart"></div>
                                         <div id="chart-title"><?php echo $data['info_final'][0]['job_name'];?></div>
-                                        <div class="empty-div"></div>
+                                        <div id="chart"></div>
+                       
+                                        <br><br><br><br>
                                         <!---圖表2--->
-                                        <div id="chart1"></div>
                                         <div id="chart-title2"><?php echo $data['info_final'][1]['job_name'];?></div>
+                                        <div id="chart1"></div>
+                                        
                                                                    
                                     </div>
                                   
@@ -990,8 +983,53 @@ addMessage();
 <?php require APPROOT . 'views/inc/footer.tpl'; ?>
 
 
+<!----nextinfo op----->
+<?php  if (strpos($path, "nextinfo") !== false) {?>
 <script>
+    var x_data_val = <?php echo  $data['chart_info']['x_val']; ?>;
+    var y_data_val = <?php echo  $data['chart_info']['y_val']; ?>;
 
+    var min_val = <?php echo  $data['chart_info']['min'];?>;
+    var max_val = <?php echo  $data['chart_info']['max'];?>;
+
+    var chartOptions_info = {
+    bindto: '#chartinfo',
+    data: {
+        x: 'x',
+        columns: [
+            ['x'].concat(x_data_val),
+            ['Torque'].concat(y_data_val)
+        ]
+    },
+
+    axis: {
+        x: {
+            label: 'Time (ms)',
+            position: 'outer-center',
+        },
+        y: {
+            label: 'Torque',
+            tick: {}
+        }
+    },
+
+    grid: {
+        y: {}
+    },
+    subchart: {
+        show: true
+    }
+    };
+
+    var chart = c3.generate(chartOptions_info);
+
+</script>
+<?php } ?>
+<!----nextinfo ed----->
+
+<!----combine op----->
+<?php if ($path == "combinedata"){?>
+<script>
     //整理X軸跟Y軸的數據data
     var x_data = <?php echo  $data['chart1_xcoordinate']; ?>;
     var y_data = <?php echo  $data['chart1_ycoordinate']; ?>;
@@ -1014,7 +1052,6 @@ addMessage();
             x: {
                 label: 'Time (ms)',
                 position: 'outer-center',
-                //size: 18,
             },
             y: {
                 label: 'Torque',
@@ -1055,6 +1092,10 @@ addMessage();
 
     var min = <?php echo $data['chart2_ycoordinate_min'];?>;
     var max = <?php echo $data['chart2_ycoordinate_max'];?>;
+
+
+    var x_title = '';
+    var y_title = '';
 
     var chartOptions1 = {
         bindto: '#chart1',
@@ -1099,7 +1140,10 @@ addMessage();
     chartTitle2.style.color = 'blue'; 
 
 </script>
+<?php } ?>
 
+
+<!----combine ed----->
 <style>
     .grid-upper line {
         stroke: red;
@@ -1124,5 +1168,9 @@ addMessage();
      .empty-div1 {
         width: 200px;
         height:500px;
+    }
+      .empty-div3 {
+        width: 200px;
+        height:50px;
     }
 </style>

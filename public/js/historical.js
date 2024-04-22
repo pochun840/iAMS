@@ -277,9 +277,6 @@ function chat_mode(selectOS) {
             selectedOptions.push(option.value);
         }
     }
-
-    alert(selectedOptions);
-
     document.cookie = "chat_modeno=" + selectedOptions + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
     history.go(0);
 

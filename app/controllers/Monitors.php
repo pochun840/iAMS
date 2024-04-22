@@ -185,7 +185,7 @@ class Monitors extends Controller
     
     }
 
-    public function nextinfo($index){
+    /*public function nextinfo($index){
         //透過index 取得相關的資料
         
         if(!empty($index)){
@@ -193,13 +193,68 @@ class Monitors extends Controller
 
             $no ="4178";
             $data = array();
-            //$csvdata = $this->Monitors_newModel->connected_ftp($no);
 
-            $status_arr = $this->Monitors_newModel->status_code_change();
+
+            #判斷 有無cookie chat_mode 
+            if(isset($_COOKIE['chat_modeno'])) {
+                $chat_mode = $_COOKIE['chat_modeno'];
+            }else{
+                $chat_mode = "1";
+            }
+
+
+            #取得曲線圖的模式
+            $chat_arr = $this->Monitors_newModel->chat_change($chat_mode);
+            $data['chat'] = $chat_arr;
+
+
+            //$csvdata = $this->Monitors_newModel->connected_ftp($no); //連FTP 
+            $csvdata_arr   = $this->Monitors_newModel->get_info($no,$chat_mode);//取得 完整的資料
+
+            
+            if(!empty($csvdata_arr)){
+                if(!empty($chat_mode)){
+                    if($chat_mode == "5"){
+                        
+                    }else if($chat_mode == "6"){
+                        
+                    }else{  
+                        
+
+                    }
+                }
+            }
+            
+            if(!empty($chat_mode)){
+                if($chat_mode == "5"){
+                    $position = 1;
+                    foreach($csvdata_arr as $subarray) {                    
+                        $values[] = $subarray[$position];
+                    } 
+                    $total_range = '';
+                    foreach($csvdata_arr as $kk =>$vv){
+                        $total_range .= $vv[$position].',';
+                    }
+            }else{
+                    $values = array();
+                    foreach ($csvdata_arr as $subarray) {                    
+                        $values[] = $subarray[$chat_arr['position']];
+                    } 
+
+                    $total_range = '';
+                    foreach($csvdata_arr as $kk =>$vv){
+                        $total_range .= $vv[$chat_arr['position']].',';
+                    }
+                }
+
+            var_dump($total_range);die();
+            //$status_arr = $this->Monitors_newModel->status_code_change();
 
             #取得完整的CSV資料 
-            if(!empty($csvdata)){
+            /*if(!empty($csvdata)){
 
+
+                
                 #計算X軸 
                 $x_count   = count($csvdata)-1;
                 $arr       = range(0, $x_count);
@@ -217,9 +272,6 @@ class Monitors extends Controller
                     $chat_mode = "1";
                 }
 
-
-            
-             
                 #取得曲線圖的模式
                 $chat_arr = $this->Monitors_newModel->chat_change($chat_mode);
                 $data['chat'] = $chat_arr;
@@ -232,7 +284,7 @@ class Monitors extends Controller
                 if(!empty($chat_mode)){
                     if($chat_mode == "5"){
                         $position = 1;
-                        foreach ($csvdata as $subarray) {                    
+                        foreach($csvdata as $subarray) {                    
                             $values[] = $subarray[$position];
                         } 
                         $total_range = '';
@@ -264,10 +316,12 @@ class Monitors extends Controller
 
                 }
                 
-            }
+            }*/
 
             
-            $data['job_info'] = $info;
+            //$data['job_info'] = $info;
+            /*$status_arr = $this->Monitors_newModel->status_code_change();
+
 
             $chat_mode_arr = array(
                 1=>'Torque/Time',
@@ -289,6 +343,7 @@ class Monitors extends Controller
             $data['torque_mode_arr'] = $torque_mode_arr;
             $data['status_arr'] = $status_arr;
 
+
     
             if(!empty($info[0]['step_lowtorque'])){
                 setcookie("lowval", $info[0]['step_lowtorque'], time() + (86400 * 30), "/"); 
@@ -296,11 +351,86 @@ class Monitors extends Controller
             }
 
             $data['line_low'] = $info[0]['step_lowtorque'];
-            $data['line_high'] = $info[0]['step_hightorque'];
+            $data['line_high'] = $info[0]['step_hightorque'];*/
     
-            $this->view('monitor/index_info', $data);
-        }
+            //$this->view('monitor/index_info_test', $data);
+       // }
 
+    //}
+
+    public function nextinfo($index){
+        
+        
+        if(!empty($index)){
+            $data = array();
+
+            $data['job_info'] = $this->Monitors_newModel->get_info_data($index);
+
+            
+            #判斷 有無cookie chat_mode 
+            if(isset($_COOKIE['chat_modeno'])) {
+                $chat_mode = $_COOKIE['chat_modeno'];
+            }else{
+                $chat_mode = "1";
+            }
+
+            #取得曲線圖的模式
+            $chat_arr = $this->Monitors_newModel->chat_change($chat_mode);
+            $data['chat'] = $chat_arr;
+            $no = "4174";
+            $csvdata_arr   = $this->Monitors_newModel->get_info($no,$chat_mode);//取得 完整的資料
+            $status_arr = $this->Monitors_newModel->status_code_change();
+
+            $chat_mode_arr = array(
+                1=>'Torque/Time(MS)',
+                2=>'Angle/Time(MS)',
+                3=>'RPM/Time(MS)',
+                4=>'Power/Time(MS)',
+                5=>'Torque/Angle',
+                6=>'Torque&Angle/Time(MS)',
+            );
+
+            $torque_mode_arr = array(
+                1=>'N.m',
+                2=>'Kgf.m',
+                3=>'Kgf.cm',
+                4=>'In.lbs',
+
+            );
+            
+            if($chat_mode =="5"){
+
+                #X=>Angle Y=>Torque
+
+                if(!empty($csvdata_arr['angle'])){
+                    $data['chart_info']['x_val'] = json_encode($csvdata_arr['angle']);
+                    $data['chart_info']['y_val'] = json_encode($csvdata_arr['torque']);
+                    $data['chart_info']['max']   = max($csvdata_arr['torque']);
+                    $data['chart_info']['min']   = min($csvdata_arr['torque']);
+                    
+                }
+            }elseif($chat_mode =="6"){
+
+            }else{
+                #圖表相關資料
+                $data['chart_info']['x_val'] = json_encode(array_keys($csvdata_arr));
+                $data['chart_info']['y_val'] = json_encode($csvdata_arr);
+                $data['chart_info']['max']   = max($csvdata_arr);
+                $data['chart_info']['min']   = min($csvdata_arr);
+
+            }
+            
+
+     
+      
+            
+            $data['chat_mode_arr'] = $chat_mode_arr;
+            $data['torque_mode_arr'] = $torque_mode_arr;
+            $data['status_arr'] = $status_arr;
+            $data['now_chattype'] = $data['chat_mode_arr'][$chat_mode];
+
+            $this->view('monitor/index', $data);
+        }
     }
 
     #利用job_id 及 seq_id 找到對應的task_id 
@@ -368,10 +498,7 @@ class Monitors extends Controller
         #取得 id 
         #透過 id 取得完整的鎖附資料
 
-
         #判斷有無cookie 
-
-
         $chat_mode  = "1";//預設是torque/time 
         if(!empty($_COOKIE['checkedsn'])){
             $checkedsn = $_COOKIE['checkedsn'];
@@ -395,12 +522,9 @@ class Monitors extends Controller
             #取得曲線圖的模式
             $chat_arr = $this->Monitors_newModel->chat_change($chat_mode);
             $data['chat'] = $chat_arr;
-
             
             #二筆鎖附資料的圖表
             $final_label = $this->Monitors_newModel->get_result($checked_sn_in);
-
-
 
             #圖表1的資訊
             $data['chart1_xcoordinate'] = json_encode(array_keys($final_label['data0']));
@@ -428,7 +552,6 @@ class Monitors extends Controller
 
         ); 
 
-    
         #扭力轉換
         $torque_arr = $this->Monitors_newModel->torque_change();
 
@@ -496,45 +619,6 @@ class Monitors extends Controller
     }
 
 
-    public function eeeq()
-    {
-        $multiArray = array(
-            'data0' => array(
-                0 => array('10','113','1566','12050'),
-                1 => array('110','2113','3566','42050'),
-            ),
-            'data1' => array(
-                20 => array('111','513','1566','12050'),
-                60 => array('112','4113','3566','42050'),
-            ),
-        );
-        
-        $res = array(); // 用于存储结果的数组
-        
-        // 迭代多维数组
-        foreach ($multiArray as $key => $innerArray) {
-            // 初始化临时数组
-            $tempArray = array();
-
-           
-        
-            // 仅检查内部数组的第二个索引位置的值是否在指定数组中，并将其添加到临时数组中
-            foreach ($innerArray as $value) {
-    
-                $tempArray = $value[1];
-            }
-        
-            // 将临时数组添加到结果数组中
-            $res[$key][] = $tempArray;
-        }
-        
-        // 输出结果
-        echo "<pre>";
-        print_r($res);
-        echo "</pre>";
-        die();
-
-    }
 
     
 
