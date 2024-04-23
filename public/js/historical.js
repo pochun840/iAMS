@@ -277,6 +277,27 @@ function chat_mode(selectOS) {
             selectedOptions.push(option.value);
         }
     }
+
+    document.cookie = "chat_modeno=" + selectedOptions + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+    history.go(0);
+
+}
+
+
+function chat_mode(selectOS) {
+ 
+    var selectElement = document.getElementById('Chart-seting');
+    var selectedOptions = [];
+    // 獲取所有被選中的選項
+    for (var i = 0; i < selectElement.options.length; i++) {
+        var option = selectElement.options[i];
+        if (option.selected) {
+            selectedOptions.push(option.value);
+        }
+    }
+
+    
+    
     document.cookie = "chat_modeno=" + selectedOptions + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
     history.go(0);
 
@@ -320,7 +341,7 @@ function takeScreenshot(param) {
     var img_name = 'screenshot.'+ param;
   
     //設定要擷取的範圍
-    var content = document.getElementById('myChart');
+    var content = document.getElementById('DetailInfoDisplay');
 
     domtoimage.toPng(content, { bgcolor: '#ffffff' }) //背景設成白色
         .then(function(dataUrl) {
@@ -336,6 +357,8 @@ function takeScreenshot(param) {
             console.error('Error while taking screenshot:', error);
         });
 }
+
+
 
 
 //讀取cookie 
@@ -397,13 +420,31 @@ function captureScreenshot() {
     });
 }
 
-
-
 var lineCookieValue = getCookie('line_style');
 var low_val  = getCookie('lowval');
 var high_val = getCookie('highval');
 var chat_modeno = getCookie('chat_modeno');
 var limit_val = getCookie('limit_val');
+var chat_mode_change = getCookie('chat_mode_change');
 
-//onclick="captureScreenshot()"
+
+
+
+/*document.getElementById("downloadBtn").addEventListener("click", function() {
+    // 使用 DOM to Image 將 c3.js 圖表轉換為圖像
+    console.log('eewweer');
+    domtoimage.toBlob(document.getElementById('style-Combine'), { bgcolor: '#ffffff' }) // 設置背景顏色為白色
+        .then(function(blob) {
+            // 創建下載連結
+            var downloadLink = document.createElement("a");
+            downloadLink.href = URL.createObjectURL(blob);
+            downloadLink.download = "chart_screenshot.png"; // 下載的文件名稱
+
+            // 模擬點擊下載連結
+            downloadLink.click();
+        });
+});*/
+
+
+
 

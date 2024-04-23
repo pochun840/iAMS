@@ -454,7 +454,7 @@ class Monitors_new{
     }
 
 
-
+    #nextinfo 
     public function get_info($no,$chat_mode){
         if(!empty($no)){
             $file_arr = array('_0p5','_1p0','_2p0');#檔案格式
@@ -482,7 +482,6 @@ class Monitors_new{
             $resultarr = array();
             if($chat_mode =="5"){
                 $position  = (int)$chat_mode;#5
-                //$resultarr = $csv_array;
                 foreach($csv_array as $subarray){
                     
                     if(isset($subarray[1])){
@@ -497,8 +496,18 @@ class Monitors_new{
 
             }else if($chat_mode =="6"){
                 $position  = (int)$chat_mode;#6
-                $resultarr = $csv_array;
+                $position  = 1;
+                foreach ($csv_array as $subarray) {
+                    if(isset($subarray[$position])){
+                        $resultarr['torque'][] = $subarray[$position];
+                    }
+                }
 
+                foreach($csv_array as $subarray){
+                    if(isset($subarray[2])){
+                        $resultarr['angle'][] = $subarray[2];
+                    }
+                }
 
             }else{
                 $position = (int)$chat_mode;
@@ -512,6 +521,9 @@ class Monitors_new{
             return $resultarr;
 
         }
+        
+    }
+    public function date_res(){
         
     }
 }

@@ -7,9 +7,13 @@
 
 <script src="<?php echo URLROOT; ?>js/flatpickr.js"></script>
 <script src="<?php echo URLROOT; ?>js/historical.js?v=202404111000"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
+
 <?php if(isset($data['nav'])){
     echo $data['nav'];
 }
+
+
 
 //
 //取得URL 
@@ -71,14 +75,28 @@ if(!empty($_COOKIE['chat_mode'])){
     $chat_mode = '';
 }
 
+if(!empty($_COOKIE['chat_modeno'])){
+    $chat_modeno = $_COOKIE['chat_modeno'];
+}else{
+    $chat_modeno = '';
+}
+
+if(!empty($_COOKIE['chat_mode_change'])){
+    $chat_mode_change= $_COOKIE['chat_mode_change'];
+}else{
+    $chat_mode_change = '';
+}
+
 if(!empty($_COOKIE['line_style'])){
     $line_style = $_COOKIE['line_style'];
 }else{
     $line_style = '';
 }
 
-
-
+//chat_mode_change
+/*var_dump($data['chart_info']['chat_mode']);
+echo "<br>";
+var_dump($data['chart_info']['y_val_1']);*/
 ?>
 
 <style>
@@ -410,18 +428,19 @@ if(!empty($_COOKIE['line_style'])){
                             <td>Time: <?php echo $data['job_info'][0]['data_time'];?></td>
                         </tr>
                         <tr  style="vertical-align: middle;">
-                            <td>Member: <input class="t6" type="text" size="10" value="Esther" disabled="disabled" style="background-color: #F5F5F5"></td>
+                            <td>Member: <!--<input class="t6" type="text" size="10" value="Esther" disabled="disabled" style="background-color: #F5F5F5">--></td>
                             <td>Note: <!--<input class="t6" type="text" value="arm (444,215)[200]" disabled="disabled" style="background-color: #F5F5F5; width: 15vw"></td>-->
-                            <td colspan="3">
-                                <input class="form-check-input" type="checkbox"  id="myCheckbox"   id="myCheckbox"   onchange="touch(this);" style="zoom:1.2; float: left"  ?>&nbsp; display the high/low auxiliary lines.
+                            <td>
+                                <input class="form-check-input" type="checkbox" id="myCheckbox" onchange="check_limit(this)"  <?php if($limit_val=="1"){ echo "checked"; }else{}?>  style="zoom:1.2; float: left">&nbsp; display the high/low auxiliary lines.
+                            </td>
                             </td>
                         </tr>
                         <tr style="vertical-align: middle">
                             <td>
                                 Chart Setting:  
-                                <select id="Chart-seting" class="t6 Select-All" style="float: none"  onchange="chat_mode(this)">
+                                <select id="chartseting" class="t6 Select-All" style="float: none"  onchange="chat_mode_change(this)">
                                             <?php foreach($data['chat_mode_arr'] as $k_chat => $v_chat){?>
-                                                <option  value="<?php echo $k_chat;?>"  <?php if($chat_mode==$k_chat){echo "selected";}else{echo "";}?>  > <?php echo $v_chat;?> </option>
+                                                <option  value="<?php echo $k_chat;?>"  <?php if($chat_mode_change == $k_chat){echo "selected";}else{echo "";}?>  > <?php echo $v_chat;?> </option>
                                             <?php } ?>                             
                                 </select>
                             </td>
@@ -434,19 +453,19 @@ if(!empty($_COOKIE['line_style'])){
                                 </select>
                             </td>
                             <td>
-                                Angle:  <select id="Angle" class="t6 Select-All" id='angle_type'>
+                                Angle:  <select id="Angle" class="t6 Select-All" id='angle_type' style="float: none; width: 100px">
                                             <option value="1">Total angle</option>
                                             <option value="2">Task angle</option>
                                         </select>
                             </td>
-                            <td>
+                           <!--<td>
                                 Sampling:  
                                 <select id="SelectOutputSampling" class="t6 Select-All" id='file_type'>
                                             <option value="1">1(ms)</option>
                                             <option value="2">0.5(ms)</option>
                                             <option value="3">2(ms)</option>
                                 </select>
-                            </td>
+                            </td>-->
                             <td>
                                 <button id="Export-Excel" type="button" class="ExportButton" style="margin-top: 0">Export Excel</button>
                                 <!--<button id="Save-info" type="button" style="margin-top: 0">Save</button>-->
@@ -466,10 +485,12 @@ if(!empty($_COOKIE['line_style'])){
                                     <div class="menu-content" id="myMenu">
                                         <a href="#" onclick="viewFullScreen()">View in full screen</a>
                                         <a href="#" onclick="printChart()">Print chart</a>
-                                        <a href="#" onclick="downloadPng()">Download PNG</a>
-                                        <a href="#" onclick="downloadJpeg()">Download JPEG</a>
+                                        <a  id="downloadPngBtn">Download PNG</a>
+                                        <a  id="downloadPngBtn">Download JEPG</a>
                                     </div>
+                                    
                                 </div>
+                                <div class="empty-div3"></div>
                                 <div id="chartinfo"></div>
                                 
                             </div>
@@ -509,7 +530,7 @@ if(!empty($_COOKIE['line_style'])){
                             <div class="col t2">
                                 <!---<button id="Save-combine" type="button">Save</button>-->
                                 <button id="Export-Excel-data" type="button" class="ExportButton">Export Excel</button>
-                                <button id="Export-chart" type="button" class="ExportButton" onclick='test_pic()'>Export PNG</button>
+                                <button id="downloadBtn" type="button" class="ExportButton" >Export PNG</button>
                             </div>
                         </div>
                     </div>
@@ -853,13 +874,6 @@ function handleButtonClick(button, content)
     });
 
 
-// Save_job
-function Save_job(){
-
-    //alert('eewqert');
-
-}
-
 // Next To Info
 function NextToInfo()
 {
@@ -984,13 +998,18 @@ addMessage();
 
 
 <!----nextinfo op----->
-<?php  if (strpos($path, "nextinfo") !== false) {?>
+<?php  if (strpos($path, "nextinfo") !== false && $data['chart_info']['chat_mode'] != "6") {?>
 <script>
     var x_data_val = <?php echo  $data['chart_info']['x_val']; ?>;
     var y_data_val = <?php echo  $data['chart_info']['y_val']; ?>;
 
     var min_val = <?php echo  $data['chart_info']['min'];?>;
     var max_val = <?php echo  $data['chart_info']['max'];?>;
+
+    var xaxislabel = '<?php echo $data['chart_info']['x_title'];?>';
+    var yaxislabel = '<?php echo $data['chart_info']['y_title'];?>';
+
+    var type = '<?php echo $data['chart_info']['chat_mode'];?>';
 
     var chartOptions_info = {
     bindto: '#chartinfo',
@@ -1004,11 +1023,11 @@ addMessage();
 
     axis: {
         x: {
-            label: 'Time (ms)',
+            label: xaxislabel,
             position: 'outer-center',
         },
         y: {
-            label: 'Torque',
+            label: yaxislabel,
             tick: {}
         }
     },
@@ -1020,19 +1039,102 @@ addMessage();
         show: true
     }
     };
+    // 根據limit_val 的值決定是否顯示上下限
+    console.log(limit_val);
+
+    if (limit_val == 1) {
+        chartOptions_info.grid.y.lines = [
+            {value: min_val, text: 'Low Torque', position: 'start', class: 'grid-upper'},
+            {value: max_val, text: 'High Torque', position: 'start', class: 'grid-upper'}
+        ];
+
+    }
 
     var chart = c3.generate(chartOptions_info);
 
 </script>
 <?php } ?>
+
+<?php  if (strpos($path, "nextinfo") !== false && $data['chart_info']['chat_mode'] == "6") {?>
+<script>
+        var x_data_val  = <?php echo  $data['chart_info']['x_val']; ?>;
+        var y_data_val  = <?php echo  $data['chart_info']['y_val']; ?>;
+        var y_data_val1 = <?php echo  $data['chart_info']['y_val_1'];?>;
+
+        var min_val = <?php echo  $data['chart_info']['min'];?>;
+        var max_val = <?php echo  $data['chart_info']['max'];?>;
+
+        var min_val1 = <?php echo  $data['chart_info']['min1'];?>;
+        var max_val1 = <?php echo  $data['chart_info']['max1'];?>;
+
+        
+
+        var xaxislabel = '<?php echo $data['chart_info']['x_title'];?>';
+        var yaxislabel = '<?php echo $data['chart_info']['y_title'];?>';
+
+        var chartOptions_info = {
+            bindto: '#chartinfo',
+            data: {
+                x: 'x',
+                columns: [
+                    ['x'].concat(x_data_val),
+                    ['Torque'].concat(y_data_val),
+                    ['Angle'].concat(y_data_val1)
+                ]
+            },
+
+            axis: {
+                x: {
+                    label: xaxislabel,
+                    position: 'outer-center',
+                },
+                y: {
+                    label: 'Angle',
+                    tick: {}
+                },
+                y2: {
+                    show: true,
+                    label: {
+                        text: 'Torque',
+                        position: 'outer-middle'
+                    }
+                }
+            },
+
+            grid: {
+                y: {}
+            },
+            subchart: {
+                show: true
+            }
+            };
+            // 根據limit_val 的值決定是否顯示上下限
+            if (limit_val == 1) {
+                chartOptions_info.grid.y.lines = [
+                    {value: min_val, text: 'Low Torque', position: 'start', class: 'grid-upper'},
+                    {value: max_val, text: 'High Torque', position: 'start', class: 'grid-upper'},
+                    {value: min_val1, text: 'Low Angle', position: 'start', class: 'grid-upper'},
+                    {value: max_val1, text: 'High Angle', position: 'start', class: 'grid-upper'},
+                ];
+            }
+
+            var chart = c3.generate(chartOptions_info);
+
+
+
+
+        
+</script>
+<?php }?>
 <!----nextinfo ed----->
 
 <!----combine op----->
 <?php if ($path == "combinedata"){?>
 <script>
     //整理X軸跟Y軸的數據data
-    var x_data = <?php echo  $data['chart1_xcoordinate']; ?>;
-    var y_data = <?php echo  $data['chart1_ycoordinate']; ?>;
+    var x_data  = <?php echo  $data['chart1_xcoordinate']; ?>;
+    var y_data  = <?php echo  $data['chart1_ycoordinate']; ?>;
+
 
     var min = <?php echo $data['chart1_ycoordinate_min'];?>;
     var max = <?php echo $data['chart1_ycoordinate_max'];?>;
@@ -1094,8 +1196,7 @@ addMessage();
     var max = <?php echo $data['chart2_ycoordinate_max'];?>;
 
 
-    var x_title = '';
-    var y_title = '';
+
 
     var chartOptions1 = {
         bindto: '#chart1',
@@ -1174,3 +1275,42 @@ addMessage();
         height:50px;
     }
 </style>
+
+<script>
+function chat_mode_change(selectOS){
+    var selectElement = document.getElementById('chartseting');
+    var selectedOptions = [];
+    // 獲取所有被選中的選項
+    for (var i = 0; i < selectElement.options.length; i++) {
+        var option = selectElement.options[i];
+        if (option.selected) {
+            selectedOptions.push(option.value);
+        }
+    }   
+     
+    document.cookie = "chat_mode_change=" + selectedOptions + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+    history.go(0);
+}
+
+
+
+
+
+// 點擊按鈕時執行截圖並下載
+var downloadBtn = document.getElementById("downloadBtn");
+console.log(downloadBtn);
+document.getElementById("downloadBtn").addEventListener("click", function() {
+    /*domtoimage.toBlob(document.getElementById('style-Combine'), { bgcolor: '#ffffff' }) // 設置背景顏色為白色
+        .then(function(blob) {
+            // 創建下載連結
+            var downloadLink = document.createElement("a");
+            downloadLink.href = URL.createObjectURL(blob);
+            downloadLink.download = "chart_screenshot.png"; // 下載的文件名稱
+
+            // 模擬點擊下載連結
+            downloadLink.click();
+        });*/
+});
+
+</script>
+

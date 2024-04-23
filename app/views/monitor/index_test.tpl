@@ -3,40 +3,55 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C3.js Line Chart with Custom Title</title>
-<!-- 引入C3.js库 -->
-<script src="https://d3js.org/d3.v7.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.css">
+<title>DOM to Image 與 C3.js 下載示例</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.18/c3.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
+
+
 </head>
 <body>
 
-<!-- 使用自定义标题 -->
+<!-- 定義一個用於顯示 c3.js 曲線圖的容器 -->
+<div id ='eeww'>
+<p>jjjejej</p>
+<br><br><br><br>
 <div id="chart"></div>
-<div id="chart-title">Custom Chart Title</div>
+</div>
+
+<!-- 添加截圖並下載的按鈕 -->
+<button id="downloadBtn">截圖並下載</button>
 
 <script>
-// 创建C3.js曲线图
+// 生成 c3.js 曲線圖
 var chart = c3.generate({
     bindto: '#chart',
     data: {
         columns: [
             ['data1', 30, 200, 100, 400, 150, 250],
-            ['data2', 50, 20, 10, 40, 15, 25]
+            ['data2', 130, 100, 140, 200, 150, 50]
         ],
-        types: {
-            data1: 'line',
-            data2: 'line'
-        }
+        type: 'line' // 設置曲線圖類型
     }
 });
 
-// 自定义标题样式
-var chartTitle = document.getElementById('chart-title');
-chartTitle.style.textAlign = 'center';
-chartTitle.style.fontSize = '24px'; // 设置标题字体大小
-chartTitle.style.marginTop = '20px'; // 设置标题与图表的间距
+// 點擊按鈕時執行截圖並下載
+document.getElementById("downloadBtn").addEventListener("click", function() {
+    // 使用 DOM to Image 將 c3.js 圖表轉換為圖像
+    domtoimage.toBlob(document.getElementById('chart'), { bgcolor: '#ffffff' }) // 設置背景顏色為白色
+        .then(function(blob) {
+            // 創建下載連結
+            var downloadLink = document.createElement("a");
+            downloadLink.href = URL.createObjectURL(blob);
+            downloadLink.download = "chart_screenshot.png"; // 下載的文件名稱
+
+            // 模擬點擊下載連結
+            downloadLink.click();
+        });
+});
 </script>
+
 
 </body>
 </html>
