@@ -1044,8 +1044,8 @@ addMessage();
 
     if (limit_val == 1) {
         chartOptions_info.grid.y.lines = [
-            {value: min_val, text: 'Low Torque', position: 'start', class: 'grid-upper'},
-            {value: max_val, text: 'High Torque', position: 'start', class: 'grid-upper'}
+            {value: min_val, text: 'Low Torque', position: 'middle', class: 'grid-upper'},
+            {value: max_val, text: 'High Torque', position: 'middle', class: 'grid-upper'}
         ];
 
     }
@@ -1111,10 +1111,10 @@ addMessage();
             // 根據limit_val 的值決定是否顯示上下限
             if (limit_val == 1) {
                 chartOptions_info.grid.y.lines = [
-                    {value: min_val, text: 'Low Torque', position: 'start', class: 'grid-upper'},
-                    {value: max_val, text: 'High Torque', position: 'start', class: 'grid-upper'},
-                    {value: min_val1, text: 'Low Angle', position: 'start', class: 'grid-upper'},
-                    {value: max_val1, text: 'High Angle', position: 'start', class: 'grid-upper'},
+                    {value: min_val, text: 'Low Torque', position: 'middle', class: 'grid-upper'},
+                    {value: max_val, text: 'High Torque', position: 'middle', class: 'grid-upper'},
+                    {value: min_val1, text: 'Low Angle', position: 'middle', class: 'grid-upper'},
+                    {value: max_val1, text: 'High Angle', position: 'middle', class: 'grid-upper'},
                 ];
             }
 
@@ -1172,8 +1172,8 @@ addMessage();
     // 根據limit_val 的值決定是否顯示上下限
     if (limit_val == 1) {
         chartOptions.grid.y.lines = [
-            {value: min, text: 'Low Torque', position: 'start', class: 'grid-upper'},
-            {value: max, text: 'High Torque', position: 'start', class: 'grid-upper'}
+            {value: min, text: 'Low Torque', position: 'middle', class: 'grid-upper'},
+            {value: max, text: 'High Torque', position: 'middle', class: 'grid-upper'}
         ];
     }
 
@@ -1229,8 +1229,8 @@ addMessage();
     //根據limit_val 的值決定是否顯示上下限
     if (limit_val == 1) {
         chartOptions1.grid.y.lines = [
-            {value: min, text: 'Low Torque', position: 'start', class: 'grid-upper',size:15},
-            {value: max, text: 'High Torque', position: 'start', class: 'grid-upper',size:15}
+            {value: min, text: 'Low Torque', position: 'middle', class: 'grid-upper',size:15  },
+            {value: max, text: 'High Torque', position: 'middle', class: 'grid-upper',size:15 }
         ];
     }
 

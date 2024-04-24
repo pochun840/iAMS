@@ -523,7 +523,8 @@ class Monitors_new{
         }
         
     }
+    #
     public function date_res(){
-        
+        #
     }
 }

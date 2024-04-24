@@ -335,12 +335,73 @@ class Monitors extends Controller
     }
 
     
+    public function get_fastendata_api(){
+        
+        $essential = array();
+        #筆數
+        if(isset($_GET['limit'])){
+            $limit = $_GET['limit'];
+            if(!preg_match('/^\d+$/', $limit)) $limit = 30;
+            $essential['limit'] = $limit;
+        }
+      
+        #起始日期
+        if(isset($_GET['startdate'])){
+            $startdate = $_GET['startdate'];
+            if(!preg_match('/^\d{8}$/', $startdate))  echo "日期格式錯誤";exit();
+        }else{
+            $startdate = date('Ymd');
+        }
+        $essential['startdate'] = $startdate." 00:00:00";
+
+        #結束日期
+        if(isset($_GET['enddate'])){
+            $enddate   = $_GET['enddate'];
+            if(!preg_match('/^\d{8}$/', $enddate))  echo "日期格式錯誤";exit();
+        }else{
+            $enddate = date('Ymd');
+        }   
+        $essential['enddate'] = $enddate." 23:59:59";
+
+        #狀態
+        if(isset($_GET['status'])){
+            $status   = $_GET['status']; 
+            if(!preg_match('/^\d+$/', $status)) $status = 0;
+            $essential['status'] = $status;
+        }
+
+
+        #人員 
+        if(isset($_GET['operator'])){
+            $operator   = $_GET['operator']; 
+            //if(!preg_match('/^\d+$/', $operator)) $operator = 0;
+        }
+
+        #JOB 
+        if(isset($_GET['job'])){
+            $job   = $_GET['job']; 
+            if(!preg_match('/^\d+$/', $job)) $job = 0;
+        }else{
+            $job = 0;
+        }
+        $essential['job'] = $job;
+
+
+        
 
 
 
+
+
+
+        $this->view('monitor/index_api');
+    }
+
+    #鎖附資料 圖表 
     public function tighten_result(){
-
-         
+        
+        #取出 各種的NG狀態
+        $this->view('monitor/index_report_history');
     }
 
 
@@ -466,6 +527,63 @@ class Monitors extends Controller
             unlink($filename);
 
         }     
+    }
+
+    //扭力單位轉換
+    public function unitConvert($torValue, $inputType, $TransType) {
+        $torValue = floatval($torValue);
+        $inputType = (int)($inputType);
+        $TransType = (int)($TransType);
+
+        $TorqueUnit = [
+            "N_M" => 1,
+            "KGF_M" => 0,
+            "KGF_CM" => 2,
+            "LBF_IN" => 3
+        ];
+
+
+        if ($inputType === $TorqueUnit["N_M"]) {
+            if ($TransType === $TorqueUnit["KGF_M"]) {
+                return round($torValue * 0.102, 4);
+            } elseif ($TransType === $TorqueUnit["KGF_CM"]) {
+                return round($torValue * 10.2, 2);
+            } elseif ($TransType === $TorqueUnit["LBF_IN"]) {
+                return round($torValue * 10.2 * 0.86805, 2);
+            } elseif ($TransType === $TorqueUnit["N_M"]) {
+                return round($torValue, 3);
+            }
+        } elseif ($inputType === $TorqueUnit["KGF_M"]) {
+            if ($TransType === $TorqueUnit["KGF_M"]) {
+                return round($torValue, 4);
+            } elseif ($TransType === $TorqueUnit["KGF_CM"]) {
+                return round($torValue * 100, 2);
+            } elseif ($TransType === $TorqueUnit["LBF_IN"]) {
+                return round($torValue * 100 * 0.86805, 2);
+            } elseif ($TransType === $TorqueUnit["N_M"]) {
+                return round($torValue * 9.80392156, 3);
+            }
+        } elseif ($inputType === $TorqueUnit["KGF_CM"]) {
+            if ($TransType === $TorqueUnit["KGF_M"]) {
+                return round($torValue * 0.01, 4);
+            } elseif ($TransType === $TorqueUnit["KGF_CM"]) {
+                return round($torValue, 2);
+            } elseif ($TransType === $TorqueUnit["LBF_IN"]) {
+                return round($torValue * 0.86805, 2);
+            } elseif ($TransType === $TorqueUnit["N_M"]) {
+                return round($torValue * 0.0980392156, 3);
+            }
+        } elseif ($inputType === $TorqueUnit["LBF_IN"]) {
+            if ($TransType === $TorqueUnit["KGF_M"]) {
+                return round($torValue * 1.152 * 0.01, 4);
+            } elseif ($TransType === $TorqueUnit["KGF_CM"]) {
+                return round($torValue * 1.152, 2);
+            } elseif ($TransType === $TorqueUnit["LBF_IN"]) {
+                return round($torValue, 2);
+            } elseif ($TransType === $TorqueUnit["N_M"]) {
+                return round($torValue * 0.11294117637119998, 3);
+            }
+        }
     }
 
 
