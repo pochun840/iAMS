@@ -191,10 +191,7 @@ class Historicals extends Controller
     #利用system_sn 取得完整的鎖附資料
     public function csv_downland(){
  
-
-
-        var_dump($_COOKIE['systemSnval']);
-        die();
+    
         if(!empty($_COOKIE['systemSnval'])){
             $system_sn = $_COOKIE['systemSnval'];
             $pos = strpos($system_sn, ',');
@@ -276,6 +273,9 @@ class Historicals extends Controller
             $csvdata_arr   = $this->Historicals_newModel->get_info($no,$chat_mode);//取得 完整的資料
             $status_arr = $this->Historicals_newModel->status_code_change();
 
+
+
+
             $chat_mode_arr = array(
                 1=>'Torque/Time(MS)',
                 2=>'Angle/Time(MS)',
@@ -308,12 +308,13 @@ class Historicals extends Controller
                 #X=>time Y=>torque && angle
                 
                 $data['chart_info']['x_val']  = json_encode(array_keys($csvdata_arr['torque'])); #X軸
-                $data['chart_info']['y_val'] = json_encode($csvdata_arr['torque']); #Y軸 torque
+                $data['chart_info']['y_val']  = json_encode($csvdata_arr['torque']); #Y軸 torque
                 $data['chart_info']['y_val_1'] = json_encode($csvdata_arr['angle']); #Y軸 angle
                 $data['chart_info']['max']   = max($csvdata_arr['torque']);
                 $data['chart_info']['min']   = min($csvdata_arr['torque']);
-                $data['chart_info']['max1']   = max($csvdata_arr['angle']);
-                $data['chart_info']['min1']   = min($csvdata_arr['angle']);
+                $data['chart_info']['max1']   = max($csvdata_arr['torque']);
+                $data['chart_info']['min1']   = min($csvdata_arr['torque']);
+
 
 
 
@@ -343,7 +344,7 @@ class Historicals extends Controller
                 $data['chart_info']['chat_mode'] = $chat_mode;
             }
 
-          
+            $data['nav'] = $this->NavsController->get_nav();
 
 
             $this->view('historicals/index', $data);
@@ -424,13 +425,22 @@ class Historicals extends Controller
             $data['info_final'] = $info_final;
 
 
+
             //Torque/Time
             #取得曲線圖的模式
             $chat_arr = $this->Historicals_newModel->chat_change($chat_mode);
             $data['chat'] = $chat_arr;
             
+            #取得曲線圖的ID
+            $id = '';
+            foreach($info_final as $kk =>$vv){
+                $id.= sprintf("%04d", $vv['id']).",";
+                
+            }
+            $id = rtrim($id,',');
             #二筆鎖附資料的圖表
-            $final_label = $this->Historicals_newModel->get_result($checked_sn_in);
+            
+            $final_label = $this->Historicals_newModel->get_result($checked_sn_in,$id);
 
             #圖表1的資訊
             $data['chart1_xcoordinate'] = json_encode(array_keys($final_label['data0']));
@@ -476,7 +486,7 @@ class Historicals extends Controller
     }
     
     public function ddd(){
-        $this->view('historicals/index_test');
+        $this->view('historicals/index_test3');
     }
 
     public function get_fastendata_api(){

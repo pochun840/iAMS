@@ -467,11 +467,10 @@ class Historicals_new{
     }
 
 
-    public function get_result($checked_sn_in){
+    public function get_result($checked_sn_in,$id){
 
         $file_arr = array('_0p5','_1p0','_2p0');#檔案格式
-        $checked_sn_in_new = '4178,0495';
-        $no_arr  = explode(',',$checked_sn_in_new);
+        $no_arr  = explode(',',$id);
 
         foreach($no_arr as $key => $val){
             $name = 'data'.$key;

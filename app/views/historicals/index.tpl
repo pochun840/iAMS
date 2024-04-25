@@ -485,7 +485,7 @@ if(!empty($_COOKIE['line_style'])){
                         </div>
                         <div id="chart-setting">
                             <div class="chart-container">
-                                <div class="menu-chart" onclick="toggleMenu()">
+                                <div class="menu-chart"  id="menu-chart" onclick="toggleMenu()">
                                     <i class="fa fa-bars" style="font-size: 26px"></i>
                                     <div class="menu-content" id="myMenu">
                                         <a href="#" onclick="viewFullScreen()">View in full screen</a>
@@ -1308,6 +1308,11 @@ function chat_mode_change(selectOS){
 
 
 document.getElementById('downloadchartbtn').addEventListener('click', function() {
+
+    var menuChartDiv = document.getElementById('menu-chart');
+    menuChartDiv.style.display = 'none';
+
+
     var divContent = document.getElementById('jobinfo').outerHTML;
     var stylesheets = document.getElementsByTagName('link');
     var cssString = Array.from(stylesheets)
@@ -1316,6 +1321,9 @@ document.getElementById('downloadchartbtn').addEventListener('click', function()
 
     var fullHTML = `<head>${cssString}</head>\n<body>${divContent}</body>`;
     var blob = new Blob([fullHTML], { type: 'text/html' });
+
+    menuChartDiv.style.display = '';
+
 
     var link = document.createElement('a');
     link.href = window.URL.createObjectURL(blob);
