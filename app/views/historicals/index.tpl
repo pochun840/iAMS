@@ -9,6 +9,11 @@
 <script src="<?php echo URLROOT; ?>js/historical.js?v=202404111000"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
 
+
+<!-- PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
+
 <?php if(isset($data['nav'])){
     echo $data['nav'];
 }
@@ -411,7 +416,7 @@ if(!empty($_COOKIE['line_style'])){
                             <img id="img-back" src="./img/back.svg" alt=" onclick="goBack()">Back
                         </button>
                     </div>
-
+                    <div id ="jobinfo">
                     <table class="table" style="font-size: 15px;">
                         <tr style="padding: 0 10px">
                             <td>Index: <?php echo $data['job_info'][0]['system_sn'];?></td>
@@ -485,8 +490,8 @@ if(!empty($_COOKIE['line_style'])){
                                     <div class="menu-content" id="myMenu">
                                         <a href="#" onclick="viewFullScreen()">View in full screen</a>
                                         <a href="#" onclick="printChart()">Print chart</a>
-                                        <a  onclick="nextinfo_png()">Download PNG</a>
-                                        <a  id="downloadPngBtn">Download JEPG</a>
+                                        <a  id="downloadchartbtn">Download HTML</a>
+                                        <!--<a  id="downloadPngBtn">Download JEPG</a>-->
                                     </div>
                                     
                                 </div>
@@ -495,6 +500,7 @@ if(!empty($_COOKIE['line_style'])){
                                 
                             </div>
                         </div>
+                    </div>
                     </div>
                 </div>
 
@@ -530,7 +536,7 @@ if(!empty($_COOKIE['line_style'])){
                             <div class="col t2">
                                 <!---<button id="Save-combine" type="button">Save</button>-->
                                 <button id="Export-Excel-data" type="button" class="ExportButton">Export Excel</button>
-                                <button id="downloadBtn" type="button" class="ExportButton" onclick="get_png()">Export PNG</button>
+                                <button id="downlandpdf_combine" type="button" class="ExportButton">Export HTML</button>
                             </div>
                         </div>
                     </div>
@@ -1062,73 +1068,71 @@ addMessage();
 
 <?php  if (strpos($path, "nextinfo") !== false && $data['chart_info']['chat_mode'] == "6") {?>
 <script>
-        var x_data_val  = <?php echo  $data['chart_info']['x_val']; ?>;
-        var y_data_val  = <?php echo  $data['chart_info']['y_val']; ?>;
-        var y_data_val1 = <?php echo  $data['chart_info']['y_val_1'];?>;
+    var x_data_val  = <?php echo  $data['chart_info']['x_val']; ?>;
+    var y_data_val  = <?php echo  $data['chart_info']['y_val']; ?>;
+    var y_data_val1 = <?php echo  $data['chart_info']['y_val_1'];?>;
 
-        var min_val = <?php echo  $data['chart_info']['min'];?>;
-        var max_val = <?php echo  $data['chart_info']['max'];?>;
+    console.log(y_data_val);
 
-        var min_val1 = <?php echo  $data['chart_info']['min1'];?>;
-        var max_val1 = <?php echo  $data['chart_info']['max1'];?>;
 
-        
+    var min_val = <?php echo  $data['chart_info']['min'];?>;
+    var max_val = <?php echo  $data['chart_info']['max'];?>;
 
-        var xaxislabel = '<?php echo $data['chart_info']['x_title'];?>';
-        var yaxislabel = '<?php echo $data['chart_info']['y_title'];?>';
+    var min_val1 = <?php echo  $data['chart_info']['min1'];?>;
+    var max_val1 = <?php echo  $data['chart_info']['max1'];?>;
 
-        var chartOptions_info = {
-            bindto: '#chartinfo',
-            data: {
-                x: 'x',
-                columns: [
-                    ['x'].concat(x_data_val),
-                    ['Torque'].concat(y_data_val),
-                    ['Angle'].concat(y_data_val1)
-                ]
+    var xaxislabel = '<?php echo $data['chart_info']['x_title'];?>';
+    var yaxislabel = '<?php echo $data['chart_info']['y_title'];?>';
+
+    var chartOptions_info = {
+        bindto: '#chartinfo',
+        data: {
+            x: 'x',
+            columns: [
+                ['x'].concat(x_data_val),
+                ['Torque'].concat(y_data_val),
+                ['Angle'].concat(y_data_val1)
+            ]
+        },
+
+        axis: {
+            x: {
+                label: xaxislabel,
+                position: 'outer-center',
             },
-
-            axis: {
-                x: {
-                    label: xaxislabel,
-                    position: 'outer-center',
-                },
-                y: {
-                    label: 'Angle',
-                    tick: {}
-                },
-                y2: {
-                    show: true,
-                    label: {
-                        text: 'Torque',
-                        position: 'outer-middle'
-                    }
+            y: {
+                label: 'Torque',
+                tick: {}
+            },
+            y2: {
+                show: true,
+                label: {
+                    text: 'Angle',
+                    position: 'outer-middle'
                 }
-            },
-
-            grid: {
-                y: {}
-            },
-            subchart: {
-                show: true
             }
-            };
-            // 根據limit_val 的值決定是否顯示上下限
-            if (limit_val == 1) {
-                chartOptions_info.grid.y.lines = [
-                    {value: min_val, text: 'Low Torque', position: 'middle', class: 'grid-upper'},
-                    {value: max_val, text: 'High Torque', position: 'middle', class: 'grid-upper'},
-                    {value: min_val1, text: 'Low Angle', position: 'middle', class: 'grid-upper'},
-                    {value: max_val1, text: 'High Angle', position: 'middle', class: 'grid-upper'},
-                ];
-            }
+        },
 
-            var chart = c3.generate(chartOptions_info);
+        grid: {
+            y: {}
+        },
+        subchart: {
+            show: true
+        }
+    };
 
+    // 根据 limit_val 的值决定是否显示上下限
+    if (limit_val == 1) {
+        chartOptions_info.grid.y.lines = [
+            {value: min_val, text: 'Low Torque', position: 'middle', class: 'grid-upper'},
+            {value: max_val, text: 'High Torque', position: 'middle', class: 'grid-upper'},
+            {value: min_val1, text: '', position: 'middle', class: 'grid-upper'},
+            {value: max_val1, text: '', position: 'middle', class: 'grid-upper'},
+        ];
+    }
 
-
-
-        
+    var chart = c3.generate(chartOptions_info);
+   
 </script>
 <?php }?>
 <!----nextinfo ed----->
@@ -1199,9 +1203,6 @@ addMessage();
 
     var min = <?php echo $data['chart2_ycoordinate_min'];?>;
     var max = <?php echo $data['chart2_ycoordinate_max'];?>;
-
-
-
 
     var chartOptions1 = {
         bindto: '#chart1',
@@ -1298,36 +1299,47 @@ function chat_mode_change(selectOS){
 }
 
 
-function get_png(){
-     // 使用 DOM to Image 將 c3.js 圖表轉換為圖像
-    domtoimage.toBlob(document.getElementById('chart'), { bgcolor: '#ffffff' })
-        .then(function(blob) {
-            // 創建下載連結
-            var downloadLink = document.createElement("a");
-            downloadLink.href = URL.createObjectURL(blob);
-            downloadLink.download = "chart_screenshot_0.png"; 
 
-            // 模擬點擊下載連結
-            downloadLink.click();
-            get_png_1();
-            
-    });
 
-}
+/*document.getElementById('downloadchartbtn').addEventListener('click', function() {
+    const element = document.body;
+    html2pdf().from(element).set({ html2canvas: { scale: 5 } }).save('download_chart11.pdf');
+});*/
 
-function get_png_1(){
-     // 使用 DOM to Image 將 c3.js 圖表轉換為圖像
-    domtoimage.toBlob(document.getElementById('chart1'), { bgcolor: '#ffffff' })
-        .then(function(blob) {
-            // 創建下載連結
-            var downloadLink = document.createElement("a");
-            downloadLink.href = URL.createObjectURL(blob);
-            downloadLink.download = "chart_screenshot_1.png"; 
 
-            // 模擬點擊下載連結
-            downloadLink.click();
-    });
+document.getElementById('downloadchartbtn').addEventListener('click', function() {
+    var divContent = document.getElementById('jobinfo').outerHTML;
+    var stylesheets = document.getElementsByTagName('link');
+    var cssString = Array.from(stylesheets)
+        .map(stylesheet => `<link rel="stylesheet" href="${stylesheet.href}">`)
+        .join('\n');
 
-}
+    var fullHTML = `<head>${cssString}</head>\n<body>${divContent}</body>`;
+    var blob = new Blob([fullHTML], { type: 'text/html' });
+
+    var link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = 'job_info.html';
+    link.click();
+
+});
+
+
+document.getElementById('downlandpdf_combine').addEventListener('click', function() {
+        var divContent = document.getElementById('style-Combine').outerHTML;
+        var stylesheets = document.getElementsByTagName('link');
+        var cssString = Array.from(stylesheets)
+            .map(stylesheet => `<link rel="stylesheet" href="${stylesheet.href}">`)
+            .join('\n');
+
+        var fullHTML = `<head>${cssString}</head>\n<body>${divContent}</body>`;
+        var blob = new Blob([fullHTML], { type: 'text/html' });
+
+        var link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = 'job_combinedata.html';
+        link.click();
+});
+
 </script>
 
