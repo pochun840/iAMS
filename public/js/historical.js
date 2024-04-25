@@ -4,16 +4,17 @@ function clear_button(){
 
     //預設status: ALL
     var status_val= '0';
+    var queryresult = '';
     $.ajax({
         type: "POST",
         data: {
               status_val: status_val
               },
-        url: '?url=Monitors/search_info_list',
+        url: '?url=Historicals/search_info_list',
         success: function(response) {
             if (response.trim() === '') {
                alert('查無資料');
-               window.location.href = '?url=Monitors';
+               window.location.href = '?url=Historicals';
                history.go(0);
 
             } else {
@@ -47,7 +48,7 @@ function delete_historyinfo() {
          $.ajax({
                 type: "POST",
                 data: {values: checkedValues},
-                url: '?url=Monitors/del_info',
+                url: '?url=Historicals/del_info',
                 success: function(response) {
                     history.go(0);
                 },
@@ -84,20 +85,21 @@ function NextToCombineData()
     if(checkedValues.length == 2){
         var checkedsn = checkedValues.join(', ');
         document.cookie = "checkedsn=" + checkedsn + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
-        window.location.href = '?url=Monitors/combinedata';    
+        window.location.href = '?url=Historicals/combinedata';    
     }
 }
 
 
 // 下載CSV
-function csv_download(){
 
-    if(queryresult === null) {
-        alert("請先執行查詢結果");
-        return;
-    }else{
-        var data_csv = queryresult;
-    }
+function csv_download(){
+    
+
+    //判斷有無點擊過SEARCH 
+
+    var data_csv = queryresult;
+
+
     //正則表達式
     var regex = /<td id='system_sn'>(.*?)<\/td>/g;
     var systemSns = [];
@@ -108,7 +110,7 @@ function csv_download(){
     var systemSnval = systemSns.join(',');
     var xhr = new XMLHttpRequest();
     document.cookie = "systemSnval=" + systemSnval + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
-    xhr.open('POST', '?url=Monitors/csv_downland', true);
+    xhr.open('POST', '?url=Historicals/csv_downland', true);
     xhr.responseType = 'blob'; 
     xhr.onload = function() {
         if (xhr.status === 200) {
@@ -135,6 +137,8 @@ function search_info(){
     var todate       = todate.replace("T", " ");
     var selectElement = document.getElementById("status");
     var status_val    = selectElement.value;
+
+    
 
 
     //job 
@@ -169,14 +173,20 @@ function search_info(){
               sequence_id: checkedseqidarr,
               cc_task_id:checkedtaskidarr
               },
-        url: '?url=Monitors/search_info_list',
+        url: '?url=Historicals/search_info_list',
         success: function(response) {
             if (response.trim() === '') {
                alert('查無資料');
-               window.location.href = '?url=Monitors';
+               window.location.href = '?url=Historicals';
 
             } else {
                 queryresult = response;
+
+                var search_do='yes';
+                document.cookie = "search_do=" + search_do + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+                //history.go(0);
+
+
                 document.getElementById("tbody1").innerHTML = response;
             }
         },
@@ -208,11 +218,11 @@ function JobCheckbox_seq(){
          $.ajax({
             type: "POST",
             data: {job_id: checkedjobidarr,seq_id: checkedseqidarr},
-            url: '?url=Monitors/get_correspond_val',
+            url: '?url=Historicals/get_correspond_val',
             success: function(response) {
                 if (response.trim() === '') {
                     alert('查無資料');
-                    window.location.href = '?url=Monitors';
+                    window.location.href = '?url=Historicals';
 
                 } else {
                     var taskListElement = document.getElementById('Task-list');
@@ -243,11 +253,11 @@ function JobCheckbox()
         $.ajax({
             type: "POST",
             data: {job_id: checkedjobidarr},
-            url: '?url=Monitors/get_correspond_val',
+            url: '?url=Historicals/get_correspond_val',
             success: function(response) {
                 if (response.trim() === '') {
                     alert('查無資料');
-                    window.location.href = '?url=Monitors';
+                    window.location.href = '?url=Historicals';
 
                 } else {
                     var seqListElement = document.getElementById('Seq-list');
@@ -426,25 +436,21 @@ var high_val = getCookie('highval');
 var chat_modeno = getCookie('chat_modeno');
 var limit_val = getCookie('limit_val');
 var chat_mode_change = getCookie('chat_mode_change');
+var search_do = getCookie('search_do');
 
 
-
-
-/*document.getElementById("downloadBtn").addEventListener("click", function() {
+function nextinfo_png(){
     // 使用 DOM to Image 將 c3.js 圖表轉換為圖像
-    console.log('eewweer');
-    domtoimage.toBlob(document.getElementById('style-Combine'), { bgcolor: '#ffffff' }) // 設置背景顏色為白色
-        .then(function(blob) {
-            // 創建下載連結
-            var downloadLink = document.createElement("a");
-            downloadLink.href = URL.createObjectURL(blob);
-            downloadLink.download = "chart_screenshot.png"; // 下載的文件名稱
+    domtoimage.toBlob(document.getElementById('DetailInfoDisplay'), { bgcolor: '#ffffff' })
+    .then(function(blob) {
+        // 創建下載連結
+        var downloadLink = document.createElement("a");
+        downloadLink.href = URL.createObjectURL(blob);
+        downloadLink.download = "chart.png"; 
 
-            // 模擬點擊下載連結
-            downloadLink.click();
-        });
-});*/
+        // 模擬點擊下載連結
+        downloadLink.click();
+     });
 
-
-
+}
 
