@@ -91,23 +91,26 @@ function NextToCombineData()
 
 
 // 下載CSV
-
+var queryresult ='';
 function csv_download(){
     
-
-    //判斷有無點擊過SEARCH 
+    if(queryresult === null) {
+        alert("請先執行查詢結果");
+        return;
+    }
 
     var data_csv = queryresult;
-
-
+    
     //正則表達式
     var regex = /<td id='system_sn'>(.*?)<\/td>/g;
     var systemSns = [];
     var match;
     while ((match = regex.exec(data_csv)) !== null) {
         systemSns.push(match[1]);
+        systemSns.push(match[1]);
+        var systemSnval = systemSns.join(',');
     }
-    var systemSnval = systemSns.join(',');
+   
     var xhr = new XMLHttpRequest();
     document.cookie = "systemSnval=" + systemSnval + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
     xhr.open('POST', '?url=Historicals/csv_downland', true);
@@ -440,16 +443,16 @@ var search_do = getCookie('search_do');
 
 
 function nextinfo_png(){
-    // 使用 DOM to Image 將 c3.js 圖表轉換為圖像
-    domtoimage.toBlob(document.getElementById('DetailInfoDisplay'), { bgcolor: '#ffffff' })
-    .then(function(blob) {
-        // 創建下載連結
-        var downloadLink = document.createElement("a");
-        downloadLink.href = URL.createObjectURL(blob);
-        downloadLink.download = "chart.png"; 
+        // 使用 DOM to Image 將 c3.js 圖表轉換為圖像
+        domtoimage.toBlob(document.getElementById('DetailInfoDisplay'), { bgcolor: '#ffffff' })
+        .then(function(blob) {
+            // 創建下載連結
+            var downloadLink = document.createElement("a");
+            downloadLink.href = URL.createObjectURL(blob);
+            downloadLink.download = "chart_screenshot_1.png"; 
 
-        // 模擬點擊下載連結
-        downloadLink.click();
+            // 模擬點擊下載連結
+            downloadLink.click();
      });
 
 }
