@@ -115,11 +115,11 @@
 
                     <button id="button-menulist" type="button"><img id="img-menulist" src="./img/dots-30.png" alt=""></button>
 
-                    <button id="delete-member" type="button">
+                    <button id="delete-member" type="button" onclick="delete_user();">
                         <img id="img-delete-member" src="./img/delete.svg" alt=""> Delete
                     </button>
 
-                    <button id="add-memberlist" type="button" onclick="document.getElementById('AddMember').style.display='block'">
+                    <button id="add-memberlist" type="button" onclick="add_user_div();">
                         <img id="img-add-member" src="./img/add-member.svg" alt=""> Add member
                     </button>
 
@@ -137,42 +137,31 @@
                                         <th style="width: 5%; text-align: center; vertical-align: middle;">
                                             <input type="checkbox" id="selectAll1" class="form-check-input" value="0" style="zoom:1.3">
                                         </th>
-                                        <th style="width:10%;">ID</th>
-                                        <th style="width:15%;">User Name</th>
-                                        <th style="width:20%;">RFID Serial Number</th>
+                                        <th style="width:10%;display: none;">ID</th>
+                                        <th style="width:15%;">Account</th>
+                                        <th style="width:20%;">User Name</th>
                                         <th style="width:10%;">Role</th>
-                                        <th style="width:10%;">Group</th>
-                                        <th style="width:25%;">Created Date</th>
+                                        <!-- <th style="width:10%;">Group</th> -->
+                                        <th style="width:25%;">Created Date (UTC)</th>
                                         <th style="width:5%;">Edit</th>
                                     </tr>
                                 </thead>
 
                                 <tbody id="tbody1" style="background-color: #F2F1F1; font-size: 1.8vmin;">
-                                    <tr style="text-align: center; vertical-align: middle;">
-                                        <td style="text-align: center; vertical-align: middle;">
-                                            <input class="form-check-input" type="checkbox" name="" id="" value="0" style="zoom:1.2">
-                                        </td>
-                                        <td>1</td>
-                                        <td>Jimmy Lee</td>
-                                        <td>123456789</td>
-                                        <td>Super Admin</td>
-                                        <td>RD</td>
-                                        <td>2024-01-01</td>
-                                        <td><img src="./img/user-edit.svg" style=" width: 35px; height: 35px"></td>
-                                    </tr>
-
-                                    <tr style="text-align: center; vertical-align: middle;">
-                                        <td style="text-align: center; vertical-align: middle;">
-                                            <input class="form-check-input" type="checkbox" name="" id="" value="0" style="zoom:1.2">
-                                        </td>
-                                        <td>1</td>
-                                        <td>Esther</td>
-                                        <td>123</td>
-                                        <td>Super Admin</td>
-                                        <td>RD</td>
-                                        <td>2024-01-01</td>
-                                        <td><img src="./img/user-edit.svg" style=" width: 35px; height: 35px"></td>
-                                    </tr>
+                                    <?php foreach ($data['all_users'] as $key => $value): ?>
+                                        <tr style="text-align: center; vertical-align: middle;">
+                                            <td style="text-align: center; vertical-align: middle;">
+                                            <input class="form-check-input" type="checkbox" name="user_check" id="" value="<?php echo $value['id']; ?>" style="zoom:1.2">
+                                            </td>
+                                            <td style="display: none;"><?php echo $value['id']; ?></td>
+                                            <td><?php echo $value['account']; ?></td>
+                                            <td><?php echo $value['name']; ?></td>
+                                            <td><?php echo $value['Title']; ?></td>
+                                            <!-- <td>-</td> -->
+                                            <td><?php echo $value['date_created']; ?></td>
+                                            <td><img src="./img/user-edit.svg" style=" width: 35px; height: 35px" onclick="load_user('<?php echo $value['id']; ?>')"></td>
+                                        </tr>
+                                    <?php endforeach ?>
                                 </tbody>
                             </table>
                         </div>
@@ -180,385 +169,7 @@
                 </div>
             </div>
 
-            <!-- Role Setting -->
-            <div id="roleContent" class="content"  style="display: none;">
-                <div id="AddRoleSetting" class="role-setting" >
-                    <div class="w3-panel alert-light">
-                        <label type="text" style="font-size: 22px; margin: 10px; color: #000"><b>Role</b></label>
-
-                        <button id="role-permission-setting" type="button" onclick="NextToRolePermissionsSetting()">
-                            <img id="img-user-setting" src="./img/user-setting.svg" alt="">
-                        </button>
-
-                        <button id="delete-button" type="button">
-                            <img id="img-delete-role" src="./img/delete.svg" alt="">
-                        </button>
-                    </div>
-                    <form id="form_add_role" onsubmit="addNewRole();return false;" method="post">
-                        <div class="row t1" style=" padding-left: 5%">
-                            <label for="role_name" class="col-2 t1">Add Role Name :</label>
-                            <div class="col-2 t2" style="margin-left: -15px">
-                                <input type="text" id="role_name" name="role_name" class="t3 form-control input-ms" maxlength="">
-                            </div>
-                            <div class="col t2">
-                                <input id="add-roleName" class="t3" type="submit" name="add_role" value="Add">
-                            </div>
-                        </div>
-                    </form>
-                    <div class="row t1" style="padding-left: 5%">
-                        <div for="role_name" class="col t1">Role Name :</div>
-                    </div>
-
-                    <div class="scrollbar-addRole" id="style-addRole">
-                        <div class="AddRole-force-overflow">
-                            <div class="row t1">
-                                <div class="col-6 t2" style="padding-left: 20%">
-                                    <ul class="rolelist t2" id="roleList">
-                                        <li ondblclick="NextToRoleSetting(1)">1. super admin</li>
-                                        <li ondblclick="NextToRoleSetting(2)">2. Admin</li>
-                                        <li ondblclick="NextToRoleSetting(3)">3. leader</li>
-                                        <li ondblclick="NextToRoleSetting(4)">4. operation</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!--Role Edit Setting  -->
-                <div class="role-edit" id="RoleEditSetting" style="display: none;">
-                    <div class="w3-panel alert-light" style="line-height: 30px">
-                        <label type="text" style="font-size: 24px; margin: 10px; color: #000"><b>Role<b style="font-size: 25px"> &gt;</b> Super admin setting</b></label>
-                        <label type="text" style="font-size: 22px; margin: 10px; padding-left: 5%">
-                            Role Name :
-                            <input id="RoleName" class="t3" type="submit" name="RoleName" value="super admin" disabled="disabled" style="color: #000">
-                        </label>
-
-                        <button id="back-setting" type="button" onclick="cancelSetting()">
-                            <img id="img-back" src="./img/back.svg" alt=""> Back
-                        </button>
-                        <button id="Bulk-Change" type="button" onclick="document.getElementById('BulkChange').style.display='block'">Bulk Change</button>
-                    </div>
-                    <div class="table-container">
-                        <div class="scrollbar" id="style-RoleEdit">
-                            <div class="force-overflow">
-                                <table class="table table-bordered table-hover" id="RoleEdit-table">
-                                    <thead id="header-table">
-                                        <tr>
-                                            <th style="width: 5%; text-align: center; vertical-align: middle;">
-                                                <input type="checkbox" id="selectAll2" class="form-check-input" value="0" style="zoom:1.3">
-                                            </th>
-                                            <th style="width: 20%;">Member</th>
-                                            <th style="width: 20%;">Serial Number</th>
-                                            <th style="width: 20%;">Role</th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody id="tbody2" style="background-color: #F2F1F1; font-size: 1.8vmin;">
-                                        <tr style="text-align: center; vertical-align: middle;">
-                                            <td style="text-align: center; vertical-align: middle;">
-                                                <input class="select-checkbox form-check-input" type="checkbox" name="" id="" value="0" style="zoom:1.2">
-                                            </td>
-                                            <td style="text-align: center">Jimmy Lee</td>
-                                            <td>123456789</td>
-                                            <td>Super Admin</td>
-                                        </tr>
-                                        <tr style="text-align: center; vertical-align: middle;">
-                                            <td style="text-align: center; vertical-align: middle;">
-                                                <input class="select-checkbox form-check-input" type="checkbox" name="" id="" value="0" style="zoom:1.2">
-                                            </td>
-                                            <td style="text-align: center">Esther</td>
-                                            <td>123</td>
-                                            <td>Super Admin</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="RolePermissionSetting" class="role-setting" style="display: none">
-                    <div class="w3-panel alert-light" style="line-height: 30px">
-                        <label type="text" style="font-size: 24px; margin: 10px; color: #000"><b>Role<b style="font-size: 25px"> &gt;</b> Role permissions setting</b></label>
-
-                        <button id="back-setting" type="button" onclick="cancelSetting()">
-                            <img id="img-back" src="./img/back.svg" alt=""> Back
-                        </button>
-                    </div>
-
-                    <div class="row" style=" padding-left: 5%">
-                        <div for="Role-Permissions" class="col t3" style="font-size: 20px">
-                            Role Name : &nbsp;<select id="controller_type" style="width: 200px; border: 1px solid #AAAAAA">
-                                            <option value="0">Choose a role</option>
-                                            <option value="1">Super admin</option>
-                                            <option value="2">Administrator</option>
-                                            <option value="3">operator</option>
-                                    	    <option value="4">Foreman</option>
-                                        </select></div>
-                    </div>
-
-                    <div class="Permissions_setting">
-                        <div class="scrollbar-Permissions" id="style-Permissions">
-                            <div class="Permissions-force-overflow">
-                                <table class="w3-table w3-large table-station">
-                                    <thead id="header-table" class="w3-large">
-                                        <tr>
-                                            <th width="25%">Permissions</th>
-                                            <th>Owner</th>
-                                            <th>Read</th>
-                                            <th>Write</th>
-                                            <th>Load</th>
-                                            <th>Save</th>
-                                            <th>Notification</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="tbody">
-                                        <tr style="margin-bottom: 10px;">
-                                            <td>Operation</td>
-                                            <td>
-                                                <div class="checkboxFive">
-                                                    <input id="01" type="checkbox" value="" name="" checked="checked">
-                                                    <label for="01" style="background-color: #DDDDDD"></label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="checkboxFive">
-                                                    <input id="02" type="checkbox" value="" name="">
-                                                    <label for="02" style="background-color: #DDDDDD"></label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="checkboxFive">
-                                                    <input id="03" type="checkbox" value="" name="">
-                                                    <label for="03" style="background-color: #D1E3FF"></label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="checkboxFive">
-                                                    <input id="04" type="checkbox" value="" name="">
-                                                    <label for="04" style="background-color: #D1E3FF"></label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="checkboxFive">
-                                                    <input id="05" type="checkbox" value="" name="">
-                                                    <label for="05" style="background-color: #D1E3FF"></label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="checkboxFive">
-                                                    <input id="06" type="checkbox" value="" checked="checked" name="">
-                                                    <label for="06"></label>
-                                                </div>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>Job</td>
-                                            <td>
-                                                <div class="checkboxFive">
-                                                    <input id="07" type="checkbox" value="" name="" checked="checked">
-                                                    <label for="07" style="background-color: #DDDDDD"></label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="checkboxFive">
-                                                    <input id="08" type="checkbox" value="" name="" checked="checked">
-                                                    <label for="08" style="background-color: #D1E3FF"></label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="checkboxFive">
-                                                    <input id="09" type="checkbox" value="1" name="">
-                                                    <label for="09" style="background-color: #D1E3FF"></label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="checkboxFive">
-                                                    <input id="10" type="checkbox" value="1" name="">
-                                                    <label for="10" style="background-color: #D1E3FF"></label>
-                                                </div>
-                                            </td>
-                                            <td></td>
-                                            <td>
-                                                <div class="checkboxFive">
-                                                    <input id="11" type="checkbox" value="" checked="checked" name="">
-                                                    <label for="11"></label>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>identification<br> access management</td>
-                                            <td>
-                                                <div class="checkboxFive" style="margin-top: 10px">
-                                                    <input id="12" type="checkbox" value=""  name="" checked="checked">
-                                                    <label for="12" style="background-color: #DDDDDD"></label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="checkboxFive" style="margin-top: 10px">
-                                                    <input id="13" type="checkbox" value=""  name="" checked="checked">
-                                                    <label for="13" style="background-color: #D1E3FF"></label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="checkboxFive" style="margin-top: 10px">
-                                                    <input id="14" type="checkbox" value="" name="">
-                                                    <label for="14" style="background-color: #D1E3FF"></label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="checkboxFive" style="margin-top: 10px">
-                                                    <input id="15" type="checkbox" value=""  name="">
-                                                    <label for="15" style="background-color: #D1E3FF"></label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="checkboxFive" style="margin-top: 10px">
-                                                    <input id="16" type="checkbox" value="" checked="checked" name="">
-                                                    <label for="16"></label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="checkboxFive" style="margin-top: 10px">
-                                                    <input id="17" type="checkbox" value="" checked="checked" name="">
-                                                    <label for="17"></label>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Program template</td>
-                                            <td>
-                                                <div class="checkboxFive">
-                                                    <input id="18" type="checkbox" value="" name="" checked="checked">
-                                                    <label for="18" style="background-color: #D1E3FF"></label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="checkboxFive">
-                                                    <input id="19" type="checkbox" value=""  name="" checked="checked">
-                                                    <label for="19" style="background-color: #D1E3FF"></label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="checkboxFive">
-                                                    <input id="20" type="checkbox" value=""  id="21" name="">
-                                                    <label for="20" style="background-color: #D1E3FF"></label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="checkboxFive">
-                                                    <input id="21" type="checkbox" value="" name="">
-                                                    <label for="21" style="background-color: #D1E3FF"></label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="checkboxFive">
-                                                    <input id="22" type="checkbox" value="" checked="checked" name="">
-                                                    <label for="22"></label>
-                                                </div>
-                                            </td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Equipment</td>
-                                            <td>
-                                                <div class="checkboxFive">
-                                                    <input id="23" type="checkbox" value="" name="" checked="checked">
-                                                    <label for="23"style="background-color: #DDDDDD"></label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="checkboxFive">
-                                                    <input id="24" type="checkbox" value="" name="">
-                                                    <label for="24" style="background-color: #D1E3FF"></label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="checkboxFive">
-                                                    <input id="25" type="checkbox" value="" checked="checked" id="21" name="">
-                                                    <label for="25"></label>
-                                                </div>
-                                            </td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Plugins</td>
-                                            <td>
-                                                <div class="checkboxFive">
-                                                    <input id="26" type="checkbox" value="" name="" checked="checked">
-                                                    <label for="26"style="background-color: #DDDDDD"></label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="checkboxFive">
-                                                    <input id="27" type="checkbox" value="" name="">
-                                                    <label for="27" style="background-color: #D1E3FF"></label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="checkboxFive">
-                                                    <input id="28" type="checkbox" value="" checked="checked" id="21" name="">
-                                                    <label for="28"></label>
-                                                </div>
-                                            </td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Setting</td>
-                                            <td>
-                                                <div class="checkboxFive">
-                                                    <input id="29" type="checkbox" value="" name="">
-                                                    <label for="29"style="background-color: #DDDDDD"></label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="checkboxFive">
-                                                    <input id="30" type="checkbox" value="" name="">
-                                                    <label for="30" style="background-color: #D1E3FF"></label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="checkboxFive">
-                                                    <input id="31" type="checkbox" value="" checked="checked" id="21" name="">
-                                                    <label for="31"></label>
-                                                </div>
-                                            </td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Calibration</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Notification</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <button class="saveButton" id="saveButton">Save</button>
-                    </div>
-                </div>
-            </div>
+           
         </div>
     </div>
 
@@ -569,21 +180,27 @@
                 <header class="w3-container modal-header">
                     <span onclick="document.getElementById('AddMember').style.display='none'"
                         class="w3-button w3-red w3-xxlarge w3-display-topright" style="padding: 7px; width: 60px">&times;</span>
-                    <h3>Add New Member</h3>
+                    <h3 id='modal_title'>Add New Member</h3>
                 </header>
 
                 <div class="modal-body">
                     <form id="new_member_form" style="padding-left: 10%">
-                        <div class="row">
-                            <div for="user_name" class="col-4 t1">Name :</div>
+                        <div class="row" id="user-id" style="display:none;">
+                            <div for="Number-ID" class="col-4 t1">ID :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="user_name" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="Number-ID" maxlength="" disabled >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="user-name" class="col-4 t1">Name :</div>
+                            <div class="col-4 t2">
+                                <input type="text" class="form-control input-ms" id="user-name" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
                             <div for="account" class="col-4 t1">Account :</div>
                             <div class="col-4 t2" >
-                                <input type="text" class="form-control input-ms" id="account" maxlength="12" required>
+                                <input type="text" class="form-control input-ms" id="user-account" maxlength="12" required>
                             </div>
                         </div>
                         <div class="row">
@@ -593,32 +210,19 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="Number-ID" class="col-4 t1">No :</div>
+                            <div for="employee-number" class="col-4 t1">Employee Number :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="Number-ID" maxlength="" >
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div for="card" class="col-4 t1">Card :</div>
-                            <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="card" maxlength="">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div for="serial-number" class="col-4 t1">Serial Number :</div>
-                            <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="serial-number" maxlength="">
+                                <input type="text" class="form-control input-ms" id="employee-number" maxlength="">
                             </div>
                         </div>
                         <div class="row">
                             <div for="authority" class="col-4 t1">Authority :</div>
                             <div class="col t2">
-                                <select id="controller_type" style="width: 169px">
-               					    <option value="0">Choose a role</option>
-               					    <option value="1">Super admin</option>
-             					    <option value="2">Administrator</option>
-            					    <option value="3">operator</option>
-    	        				    <option value="4">Foreman</option>
+                                <select id="user-role" style="width: 169px">
+               					    <option value="-1" disabled selected>Choose a role</option>
+                                    <?php foreach ($data['all_roles'] as $key => $value) {
+                                        echo '<option value="'.$value['ID'].'">'.$value['Title'].'</option>';
+                                    } ?>
                  				</select>
                             </div>
                         </div>
@@ -626,68 +230,8 @@
                 </div>
 
                 <div class="modal-footer justify-content-center">
-                    <button id="button1" class="button button3" >Save</button>
+                    <button id="button1" class="button button3" onclick="add_member_user()" >Save</button>
                     <button id="button2" class="button button3" onclick="document.getElementById('AddMember').style.display='none'" class="cancelbtn">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Bulk Change Modal -->
-    <div id="BulkChange" class="modal">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content w3-animate-zoom" style="width: 90%">
-                <header class="w3-container modal-header">
-                    <span onclick="document.getElementById('BulkChange').style.display='none'"
-                        class="w3-button w3-red w3-xxlarge w3-display-topright" style="padding: 7px; width: 60px">&times;</span>
-                    <h3>Bulk Change</h3>
-                </header>
-
-                <div class="modal-body">
-                    <form id="bulk_chage_form">
-                        <div class="row">
-                            <div for="selected_name" class="col-3 t1">Selected people :</div>
-                            <div class="col t2">
-                                <label>Jimmy Lee</label> ,
-                                <label>Esther</label>
-                            </div>
-                        </div>
-
-                        <div for="role_name" class="col-3 t1">Role Name :</div>
-                        <div style="padding-left: 16%;">
-                            <div class="row t1">
-                   	            <div class="col-3 t3 form-check form-check-inline">
-                                    <input class="t3 form-check-input" type="checkbox" checked="checked" name="Superadmin" id="Superadmin" value="0" style="zoom:1.2; vertical-align: middle">
-                                    <label class="t3 form-check-label" for="Superadmin">Super admin</label>
-                                </div>
-                                <div class="col-3 t3 form-check form-check-inline">
-                                    <input class="t3 form-check-input" type="checkbox" name="Administrator" id="Administrator" value="1" style="zoom:1.2; vertical-align: middle">
-                                    <label class="t3 form-check-label" for="Administrator">Administrator</label>
-                                </div>
-                                <div class="col-3 t3 form-check form-check-inline">
-                                    <input class="t3 form-check-input" type="checkbox" name="Operation" id="Operation" value="1" style="zoom:1.2; vertical-align: middle">
-                                    <label class="t3 form-check-label" for="Operation">Operation</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div style="padding-left: 16%;">
-                            <div class="row t1">
-                                <div class="col-3 t3 form-check form-check-inline">
-                                    <input class="t3 form-check-input" type="checkbox" name="foreman" id="foreman" value="1" style="zoom:1.2; vertical-align: middle">
-                                    <label class="t3 form-check-label" for="foreman">foreman</label>
-                                </div>
-                                <div class="col t3 form-check form-check-inline">
-                                    <input class="t3 form-check-input" type="checkbox" name="QualityAssurance" id="QualityAssurance" value="0" style="zoom:1.2; vertical-align: middle">
-                                    <label class="t3 form-check-label" for="QualityAssurance">Quality Assurance</label>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="modal-footer justify-content-center">
-                    <button id="button1" class="button button3" >Save</button>
-                    <button id="button2" class="button button3" onclick="document.getElementById('BulkChange').style.display='none'" class="cancelbtn">Cancel</button>
                 </div>
             </div>
         </div>
@@ -714,13 +258,21 @@ $(document).ready(function () {
 // menu nav button
 function showContent(contentType)
 {
-    var contents = document.getElementsByClassName("content");
-    for (var i = 0; i < contents.length; i++) {
-        contents[i].style.display = "none";
+    // var contents = document.getElementsByClassName("content");
+    // for (var i = 0; i < contents.length; i++) {
+    //     contents[i].style.display = "none";
+    // }
+
+    // var contentId = contentType + "Content";
+    // document.getElementById(contentId).style.display = "block";
+
+    if(contentType == 'role'){
+        window.location.href = "index.php?url=Users/role_setting";
     }
 
-    var contentId = contentType + "Content";
-    document.getElementById(contentId).style.display = "block";
+    if(contentType == 'member'){
+        window.location.href = "index.php?url=Users";
+    }
 }
 
 function handleButtonClick(button, content)
@@ -770,54 +322,11 @@ function addNewRole()
     }
 }
 
-
-// Next Role Permissions Setting
-function NextToRolePermissionsSetting()
-{
-    // Show RoleEditSetting
-    document.getElementById('RolePermissionSetting').style.display = 'block';
-
-    // Hide AddRoleSetting
-    document.getElementById('AddRoleSetting').style.display = 'none';
-}
-
-// Next Role Edit Setting
-function NextToRoleSetting(roleIndex)
-{
-    // Show RoleEditSetting
-    document.getElementById('RoleEditSetting').style.display = 'block';
-
-    // Hide AddRoleSetting
-    document.getElementById('AddRoleSetting').style.display = 'none';
-
-    // You can use the roleIndex to customize the behavior based on the clicked role
-    console.log('Double-clicked role:', roleIndex);
-}
-
-function cancelSetting() {
-    var addRoleSetting = document.getElementById('AddRoleSetting');
-    var roleEditSetting = document.getElementById('RoleEditSetting');
-    var rolePermissionSetting = document.getElementById('RolePermissionSetting');
-
-    // Check the current state and toggle accordingly
-    if (roleEditSetting.style.display === 'block') {
-        // If RoleEditSetting is currently displayed, switch to AddRoleSetting
-        addRoleSetting.style.display = 'block';
-        roleEditSetting.style.display = 'none';
-    } else if (rolePermissionSetting.style.display === 'block') {
-        // If RolePermissionSetting is currently displayed, switch to AddRoleSetting
-        addRoleSetting.style.display = 'block';
-        rolePermissionSetting.style.display = 'none';
-    } else {
-        // If AddRoleSetting is currently displayed or both are hidden, do nothing or handle it as needed
-    }
-}
-
 /// Onclick event for row background color
 $(document).ready(function () {
     // Call highlight_row function with table id
     highlight_row('member-table');
-    highlight_row('RoleEdit-table');
+    // highlight_row('RoleEdit-table');
 });
 
 function highlight_row(tableId)
@@ -879,5 +388,192 @@ addMessage();
 }*/
 </style>
 </div>
+
+<script type="text/javascript">
+
+    function add_user_div(argument) {
+        document.getElementById('Number-ID').value = '';
+        document.getElementById('user-name').value = '';
+        document.getElementById('user-account').value = '';
+        document.getElementById('user-password').value = '';
+        document.getElementById('employee-number').value = '';
+        document.getElementById('user-role').value = -1;
+
+        document.getElementById('user-account').disabled = false;
+        document.getElementById('modal_title').innerText = 'Add New Member';
+        document.getElementById('user-id').style.display='none';
+        document.getElementById('AddMember').style.display='block';
+    }
+    
+    function add_member_user(argument) {
+        let user_id = document.getElementById('Number-ID').value;
+        let user_name = document.getElementById('user-name').value;
+        let user_account = document.getElementById('user-account').value;
+        let user_password = document.getElementById('user-password').value;
+        let user_employee_number = document.getElementById('employee-number').value;
+        let user_role = document.getElementById('user-role').value;
+
+        let result = validate_adduser(user_id);
+
+        if(result){
+
+            if(user_id == ''){
+                $.ajax({ // 提醒
+                    type: "POST",
+                    data: { 
+                        'user_name': user_name,
+                        'user_account': user_account,
+                        'user_password': user_password,
+                        'user_employee_number': user_employee_number,
+                        'user_role': user_role,
+                        'add_user': true,
+                         },
+                    dataType: "json",
+                    url: "?url=Users/add_user",
+                }).done(function(notice) { //成功且有回傳值才會執行
+                    if (notice.error != '') {
+                        Swal.fire({ // DB sync notice
+                            title: 'Error',
+                            text: notice.error,
+                        })
+                    } else {
+                        Swal.fire('Saved!', '', 'success');
+                        window.location = window.location.href;
+                    }
+                }).fail(function () {
+                    // history.go(0);//失敗就重新整理
+                });
+            }else{
+                    $.ajax({ // 提醒
+                        type: "POST",
+                        data: { 
+                            'user_id': user_id,
+                            'user_name': user_name,
+                            'user_account': user_account,
+                            'user_password': user_password,
+                            'user_employee_number': user_employee_number,
+                            'user_role': user_role,
+                            },
+                        dataType: "json",
+                        url: "?url=Users/edit_user",
+                    }).done(function(notice) { //成功且有回傳值才會執行
+                        if (notice.error != '') {
+                        } else {
+                            Swal.fire('Saved!', '', 'success');
+                            window.location = window.location.href;
+                        }
+                    }).fail(function () {
+                        // history.go(0);//失敗就重新整理
+                    });
+            }
+
+
+
+        }else{
+            Swal.fire({ // DB sync notice
+                title: 'Error',
+                text: 'input Error',
+            })
+        }
+    }
+
+    function validate_adduser(user_id) {
+
+        if(user_id == ''){
+            let user_name = document.getElementById('user-name').value;
+            let user_account = document.getElementById('user-account').value;
+            let user_password = document.getElementById('user-password').value;
+            let user_employee_number = document.getElementById('employee-number').value;
+            let user_role = document.getElementById('user-role').value;
+
+            if (user_name == '' || user_account == '' || user_password == '' || user_employee_number == '' || user_role == '-1' ) {
+                return false;
+            }else{
+                return true;
+            }    
+        }else{
+            let user_name = document.getElementById('user-name').value;
+            let user_account = document.getElementById('user-account').value;
+            let user_password = document.getElementById('user-password').value;
+            let user_employee_number = document.getElementById('employee-number').value;
+            let user_role = document.getElementById('user-role').value;
+
+            if (user_name == '' || user_account == '' || user_employee_number == '' || user_role == '-1' ) {
+                return false;
+            }else{
+                return true;
+            }    
+        }
+        
+    }
+
+    function load_user(user_id){
+
+        $.ajax({ // 提醒
+            type: "POST",
+            data: { 
+                'user_id': user_id
+                 },
+            dataType: "json",
+            url: "?url=Users/get_user_by_id",
+        }).done(function(data) { //成功且有回傳值才會執行
+            if (data.error != '') {             
+                Swal.fire({ // DB sync notice
+                    title: 'Error',
+                    text: notice.error,
+                })
+            } else {
+                document.getElementById('Number-ID').value = data.id;
+                document.getElementById('user-name').value = data.name;
+                document.getElementById('user-account').value = data.account;
+                document.getElementById('employee-number').value = data.employee_number;
+                document.getElementById('user-role').value = data.RoleID;
+
+                document.getElementById('user-account').disabled = true;
+                document.getElementById('modal_title').innerText = 'Edit Member';
+                document.getElementById('user-id').style.display='flex'
+                document.getElementById('AddMember').style.display='block'
+            }
+            console.log(data);
+        }).fail(function () {
+            // history.go(0);//失敗就重新整理
+        });
+
+    }
+
+    function delete_user() {
+        let checked_user = document.querySelectorAll('input[name=user_check]:checked');
+        // let document.getElementsByClassName('selected')[0].cells[1].innerText;
+        console.log(checked_user.length);
+
+        for (var i = checked_user.length - 1; i >= 0; i--) {
+            // checked_user[i].value;
+            // console.log(checked_user[i].value);
+            $.ajax({ // 提醒
+                type: "POST",
+                data: { 
+                    'user_id': checked_user[i].value
+                     },
+                dataType: "json",
+                url: "?url=Users/del_user",
+            }).done(function(data) { //成功且有回傳值才會執行
+                if (data.error != '') {             
+                    Swal.fire({ // DB sync notice
+                        title: 'Error',
+                        text: '',
+                    })
+                } else {
+                    window.location = window.location.href;
+                }
+                // console.log(data);
+            }).fail(function () {
+                // history.go(0);//失敗就重新整理
+            });
+        }
+
+    }
+
+</script>
+
 
 <?php require APPROOT . 'views/inc/footer.tpl'; ?>

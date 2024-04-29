@@ -21,9 +21,77 @@
         <div class="program">
             <img id="header-img" src="./img/template-head.svg">Program Template
         </div>
-        <div class="notification"><i style=" width:auto; height: 40px" class="fa fa-bell"></i> Notification</div>
-        <div class="personnel"><i style=" width:auto; height: 40px" class="fa fa-desktop"></i> Personnel IP</div>
+        <div class="notification">
+            <i style="width:auto; height:40px" class="fa fa-bell" onclick="ClickNotification()"></i>
+            <span id="messageCount" class="badge"></span>
+        </div>
+        <div class="personnel"><i style="width:auto; height: 40px;font-size: 26px" class="fa fa-user"></i> Esther</div>
     </header>
+
+    <!-- Notification -->
+    <div id="messageBox" class="messageBox" style="display: none;">
+        <div class="topnav-message">
+            <label type="text" style="font-size: 24px; padding-left: 3%; margin: 7px 0; color: #000"><b>Notification</b></label>
+            <span class="close-message w3-display-topright" onclick="ClickNotification()">&times;</span>
+        </div>
+        <div class="scrollbar-message" id="style-message">
+            <div class="force-overflow-message">
+                <div style="padding: 0 10px; padding-bottom: 20px">
+                    <div id="EquipmentWarning" style="font-size: 18px">
+                        <a><b>Equipment Warning</b></a>
+                        <a style="float: right">11m</a>
+                    </div>
+                    <div id="EW-Mess" style="font-size: 15px; padding-bottom: 5px" class="checkboxFour">
+                        <a>recycle box: a-111s2 is reached the <br> threshold count for <a style="color: red">80%</a>. please reset recycle box.</a>
+                        <a style="float: right; margin: 5px;">
+                            <input type="checkbox" value="1" id="checkboxFourInput" name="" hidden="hidden" checked="checked">
+                            <label for="checkboxFourInput"></label>
+                        </a>
+                    </div>
+                    <div>
+                        <label class="recyclebox">Recycle box</label>
+                        <label class="workstation">workstation 3</label>
+                    </div>
+                </div>
+
+                <div style="padding: 0 10px; padding-bottom: 20px">
+                    <div id="EquipmentRecovery" style="font-size: 18px">
+                        <a><b>Equipment recovery</b></a>
+                        <a style="float: right">1m</a>
+                    </div>
+                    <div id="ER-Mess" style="font-size: 15px; padding-bottom: 5px" class="checkboxFour">
+                        <a>recycle box: a-111s2 is clear the threshold count.</a>
+                        <a style="float: right; margin: 5px;">
+                            <input type="checkbox" value="1" id="checkboxFourInput" name="" hidden="hidden" checked="checked">
+                            <label for="checkboxFourInput"></label>
+                        </a>
+                    </div>
+                    <div>
+                        <label class="recyclebox">Recycle box</label>
+                        <label class="workstation">workstation 3</label>
+                    </div>
+                </div>
+
+                <div style="padding: 0 10px; padding-bottom: 20px">
+                    <div id="EquipmentRecovery" style="font-size: 18px">
+                        <a><b>Equipment Warning</b></a>
+                        <a style="float: right">2h</a>
+                    </div>
+                    <div id="ER-Mess" style="font-size: 15px; padding-bottom: 10px" class="checkboxFour">
+                        <a>Controller:GTCS has............</a>
+                        <a style="float: right; margin: 5px;">
+                            <input type="checkbox" value="1" id="checkboxFourInput" name="" hidden="hidden" checked="checked">
+                            <label for="checkboxFourInput"></label>
+                        </a>
+                    </div>
+                    <div>
+                        <label class="recyclebox">Recycle box</label>
+                        <label class="workstation">workstation 3</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="topnav">
         <label type="text" style="font-size: 22px; margin: 6px;">Program - Normal</label>
@@ -992,6 +1060,21 @@ function delete_program() {
     }
 }
 
+// Notification ....................
+let messageCount = 0;
+
+function addMessage() {
+    messageCount++;
+    document.getElementById('messageCount').innerText = messageCount;
+}
+
+function ClickNotification() {
+    let messageBox = document.getElementById('messageBox');
+    let closeBtn = document.getElementsByClassName("close")[0];
+    messageBox.style.display = (messageBox.style.display === 'block') ? 'none' : 'block';
+}
+
+addMessage();
 
 </script>
 

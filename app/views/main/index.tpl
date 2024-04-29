@@ -502,7 +502,7 @@ button
             $.ajax({
                 type: "POST",
                 data: { },
-                dataType: "json",
+                // dataType: "json",
                 url: url,
                 beforeSend: function() {
                     $('#overlay').removeClass('hidden');

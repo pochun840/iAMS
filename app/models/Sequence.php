@@ -64,7 +64,7 @@ class Sequence{
         if( $this->CheckSeqExist($data['job_id'],$data['seq_id']) ){ //已存在，用update
 
             $sql = "UPDATE `sequence` 
-                    SET sequence_enable = :sequence_enable,
+                    SET 
                         seq_name = :seq_name,
                         tightening_repeat = :tightening_repeat,
                         ng_stop = :ng_stop,
@@ -74,7 +74,7 @@ class Sequence{
                         sequence_maxtime = :sequence_maxtime 
                     WHERE job_id = :job_id AND seq_id = :seq_id";
             $statement = $this->db->prepare($sql);
-            $statement->bindValue(':sequence_enable', $data['seq_enable']);
+            // $statement->bindValue(':sequence_enable', $data['seq_enable']);
             $statement->bindValue(':seq_name', $data['seq_name']);
             $statement->bindValue(':tightening_repeat', 1); //中控預設1
             $statement->bindValue(':ng_stop', $data['stop_on_NG']);
@@ -91,7 +91,7 @@ class Sequence{
             $sql = "INSERT INTO `sequence` ('sequence_enable','job_id','seq_id','seq_name','tightening_repeat','ng_stop','ok_sequence','ok_sequence_stop','sequence_mintime','sequence_maxtime','img' )
                     VALUES (:sequence_enable,:job_id,:seq_id,:seq_name,:tightening_repeat,:ng_stop,:ok_sequence,:ok_sequence_stop,:sequence_mintime,:sequence_maxtime,:img )";
             $statement = $this->db->prepare($sql);
-            $statement->bindValue(':sequence_enable', $data['seq_enable']);
+            $statement->bindValue(':sequence_enable', 1);
             $statement->bindValue(':seq_name', $data['seq_name']);
             $statement->bindValue(':tightening_repeat', 1); //中控預設1
             $statement->bindValue(':ng_stop', $data['stop_on_NG']);

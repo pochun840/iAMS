@@ -12,7 +12,7 @@ class Historicals extends Controller
         $this->DashboardModel = $this->model('Main');
         $this->NavsController = $this->controller_new('Navs');
         $this->UserModel = $this->model('User');
-        $this->Historicals_newModel = $this->model('Historicals_new');
+        $this->Historicals_newModel = $this->model('Historical');
     }
 
     // 取得所有Jobs
@@ -109,9 +109,9 @@ class Historicals extends Controller
             'torque_arr' => $torque_arr,
             'status_arr' => $status_arr,
             'job_arr' =>$job_arr
-
-            
         ];
+
+        $data['path'] = 'index';
 
         $this->view('historicals/index', $data);
     }
@@ -241,18 +241,97 @@ class Historicals extends Controller
      public function history_result(){
         
         $data = array();
+
+        $status_arr = $this->Historicals_newModel->status_code_change();
+        $mode_arr = array('ng_reason','fastening_status','job_info');
+
         #NG REASON 
-        $mode = "ng_reason";
-        //echo $mode;
-        $ng_reason_temp = $this->Historicals_newModel->for_api_test($mode);
+
+        foreach($mode_arr as $key =>$val){
+
+            if($val =="ng_reason"){
+                $ng_reason_temp = $this->Historicals_newModel->for_api_test($val);
+                if(!empty($ng_reason_temp)){
+
+                    foreach($ng_reason_temp as $key1 =>$val1){
+                        $ng_reason_temp[$key1]['error_msg_name'] = $status_arr['error_msg'][$val1['error_message']];
+                    }
+        
+                    $ng_reason = array();
+                    foreach ($ng_reason_temp as $item) {
+                        $ng_reason[] = array('value' => $item['total'], 'name' => $item['error_msg_name']);
+                    }
+                    $data['ng_reason_json'] = json_encode($ng_reason);
+                }
+            }
+
+            if($val =="fastening_status"){
+                $fastening_status_temp = $this->Historicals_newModel->for_api_test($val); 
+                if(!empty($fastening_status_temp)){
+                    foreach($fastening_status_temp as $key2 =>$val2){
+                        $fastening_status_temp[$key2]['status_type'] = $status_arr['status_type'][$val2['fasten_status']];
+                    }
+
+                    $fastening_status = array();
+                    foreach ($fastening_status_temp as $item1) {
+                        $fastening_status[] = array('value' => $item1['total'], 'name' => $item1['status_type']);
+                    }
+                
+
+                    $data['fastening_status'] = json_encode($fastening_status);
+                }
+                
+            }
+
+            if($val=="job_info"){
+                $job_info_temp = $this->Historicals_newModel->for_api_test($val); 
+                if(!empty($job_info_temp)){
+                    $job_info = array();
+                    $job_info = array_slice($job_info_temp,0,6);
+                    
+                    #柱狀圖
+                    $job_names = array();
+                    $fasten_time = array();
+                    foreach ($job_info as $item) {
+                        $job_names[] = $item['job_name'];
+                        $fasten_time[] = $item['fasten_time'];
+                    }
+                    $job_name_json = json_encode($job_names);
+                    $fasten_time_json = json_encode($fasten_time);
+                    $data['job_info']['job_name'] = $job_name_json;
+                    $data['job_info']['fasten_time'] =$fasten_time_json;
+
+
+                    #圓餅圖
+                    foreach ($job_info as $item1) {
+                        //$job_info[] = array('value' => $item1['total'], 'name' => $item1['status_type']);
+                    }
+
+
+                    
+
+
+                }
+            }
+        }
+
 
         #取出 各種的NG狀態
         $this->view('historicals/index_report_history',$data);
     }
 
 
+     #鎖附資料 圖表 
+     public function ddd(){
+        
+     
+        $this->view('historicals/index_report_history_bk');
+    }
+
+
+
     public function nextinfo($index){
-                
+        
         if(!empty($index)){
             $data = array();
 
@@ -307,16 +386,14 @@ class Historicals extends Controller
             }elseif($chat_mode =="6"){
                 #X=>time Y=>torque && angle
                 
+                
                 $data['chart_info']['x_val']  = json_encode(array_keys($csvdata_arr['torque'])); #X軸
-                $data['chart_info']['y_val']  = json_encode($csvdata_arr['torque']); #Y軸 torque
+                $data['chart_info']['y_val'] = json_encode($csvdata_arr['torque']); #Y軸 torque
                 $data['chart_info']['y_val_1'] = json_encode($csvdata_arr['angle']); #Y軸 angle
                 $data['chart_info']['max']   = max($csvdata_arr['torque']);
                 $data['chart_info']['min']   = min($csvdata_arr['torque']);
-                $data['chart_info']['max1']   = max($csvdata_arr['torque']);
-                $data['chart_info']['min1']   = min($csvdata_arr['torque']);
-
-
-
+                $data['chart_info']['max1']   = max($csvdata_arr['angle']);
+                $data['chart_info']['min1']   = min($csvdata_arr['angle']);
 
             }else{
                 #圖表相關資料
@@ -345,7 +422,8 @@ class Historicals extends Controller
             }
 
             $data['nav'] = $this->NavsController->get_nav();
-
+            $data['nopage'] = 0;
+            $data['path'] = 'nextinfo';
 
             $this->view('historicals/index', $data);
         }
@@ -480,14 +558,12 @@ class Historicals extends Controller
         $data['status_arr'] = $status_arr;
         $data['torque_mode_arr'] = $torque_mode_arr;
         $data['nav'] = $nav;
-
+        $data['nopage'] = 0;
+        $data['path'] = 'combinedata';
 
         $this->view('historicals/index',$data);
     }
-    
-    public function ddd(){
-        $this->view('historicals/index_test3');
-    }
+  
 
     public function get_fastendata_api(){
         

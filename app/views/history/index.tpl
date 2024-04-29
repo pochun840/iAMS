@@ -460,7 +460,7 @@
                     <div class="topnav">
                         <label type="text" style="font-size: 20px; padding-left: 1%; margin: 6px">Fastenig record &#62; Combine data</label>
                         <button id="back-setting" type="button" onclick="cancelSetting()">
-                            <img id="img-back" src="./img/back.svg" alt="" >Back
+                            <img id="img-back" src="./img/back.svg" alt="">Back
                         </button>
                     </div>
                     <div class="topnav-menu" style="background-color: #FFF; margin-top: 3px">

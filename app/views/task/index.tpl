@@ -270,15 +270,15 @@
                                 <div style="padding-left: 10px; margin: 10px 0">
                                     <div class="row">
                                         <div for="new_task_form" class="col-2 t1"><b>Sensor</b></div>
-                                        <div class="col-2 t2 form-check form-check-inline">
-                                            <input class="t2 form-check-input" type="checkbox" name="tower-light" id="tower-light" value="3" style="zoom:1.0; vertical-align: middle">&nbsp;
-                                            <label class="t2 form-check-label" for="tower-light">Tower Light</label>
+                               	        <div class="col-2 t2 form-check form-check-inline">
+                                            <input class="t2 form-check-input" type="checkbox" name="button" id="button" value="2" style="zoom:1.0; vertical-align: middle">&nbsp;
+                                            <label class="t2 form-check-label" for="button">Button</label>
                                         </div>
                                         <div class="col-3 t2 form-check form-check-inline">
                                             <input class="t2 form-check-input" type="checkbox" name="pick-to-light" id="pick-to-light" value="3" style="zoom:1.0; vertical-align: middle">&nbsp;
                                             <label class="t2 form-check-label" for="pick-to-light">Pick-To-Light</label>
                                         </div>
-                                        <div class="col t2 form-check form-check-inline">
+                                        <div class="col-3 t2 form-check form-check-inline">
                                             <input class="form-check-input" type="checkbox" name="" id="message" value="1" onclick="EquipmentCheckbox('message')" style="zoom:1.0; vertical-align: middle">&nbsp;
                                             <label class="form-check-label" for="message">Virtual message</label>
                                         </div>
@@ -286,21 +286,21 @@
 
                                     <div class="row">
                                         <div class="col-2 t1"></div>
-                               	        <div class="col-2 t2 form-check form-check-inline">
-                                            <input class="t2 form-check-input" type="checkbox" name="button" id="button" value="2" style="zoom:1.0; vertical-align: middle">&nbsp;
-                                            <label class="t2 form-check-label" for="button">Button</label>
+                                        <div class="col-2 t2 form-check form-check-inline">
+                                            <input class="t2 form-check-input" type="checkbox" name="sleeve" id="sleeve" value="3" style="zoom:1.0; vertical-align: middle">&nbsp;
+                                            <label class="t2 form-check-label" for="sleeve">Sleeve</label>
                                         </div>
                                	        <div class="col-3 t2 form-check form-check-inline">
                                             <input class="t2 form-check-input" type="checkbox" name="recycle-box" id="recycle-box" value="1" style="zoom:1.0; vertical-align: middle">&nbsp;
                                             <label class="t2 form-check-label" for="recycle-box">Recycle Box</label>
                                         </div>
-                                        <div class="col-2 t2 form-check form-check-inline">
-                                            <input class="t2 form-check-input" type="checkbox" name="sleeve" id="sleeve" value="3" style="zoom:1.0; vertical-align: middle">&nbsp;
-                                            <label class="t2 form-check-label" for="sleeve">Sleeve</label>
-                                        </div>
-                                        <div class="col t2 form-check form-check-inline">
+                                        <div class="col-3 t2 form-check form-check-inline">
                                             <input class="form-check-input" type="checkbox" name="" id="screw-feeder" value="1" onclick="EquipmentCheckbox()" style="zoom:1.0; vertical-align: middle">&nbsp;
                                             <label class="form-check-label" for="screw-feeder">Screw feeder</label>
+                                        </div>
+                                        <div class="col t2 form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" name="" id="socket-tray" value="1" style="zoom:1.0; vertical-align: middle">&nbsp;
+                                            <label class="form-check-label" for="socket-tray">Socket Tray</label>
                                         </div>
                                     </div>
                                 </div>
@@ -333,8 +333,26 @@
                         <!-- Program Setiing -->
                         <div class="scrollbar-all" id="style-all">
                             <div class="force-overflow-all">
+                                <!-- Socket tray Setiing -->
+                                <div id="socketTray-setting">
+                                    <div for="new_task_form" class="col-3 t1"><b>Socket Tray</b></div>
+                                     <div style="padding-left: 5%;margin-bottom: 15px;">
+                                        <div class="col t2" style="padding: 5px;">
+                                            <div class="row t2">
+                                                <div class="col-5 t3 Sockettray" style="display: flex;">
+                                                    <input type="text" id="Socket-tray1" value="1" class="form-control input-ms socket-tray" disabled="disabled">
+                                                    <input type="text" id="Socket-tray2" value="2" class="form-control input-ms socket-tray" disabled="disabled">
+                                                    <input type="text" id="Socket-tray3" value="3" class="form-control input-ms socket-tray" disabled="disabled">
+                                                    <input type="text" id="Socket-tray4" value="4" class="form-control input-ms socket-tray" disabled="disabled" style="background-color: red">
+                                                    <input type="text" id="Socket-tray5" value="5" class="form-control input-ms socket-tray" disabled="disabled">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr style="width: 98%; background-color: #999999">
+                                </div>
                                 <!-- program Setiing -->
-                                <div id="program-setting" style="display: none; padding: 0 5px">
+                                <div id="program-setting" style="display: none;">
                                     <div for="new_task_form" class="col-3 t1"><b>Program(controller)</b></div>
                                     <div class="scrollbar-Program border-bottom-div" id="style-Program">
                                         <div class="force-overflow-Program" style="padding-left: 7%">
@@ -478,21 +496,6 @@
                                             <div for="Pick-To-Light" class="col-4 t1">Mode</div>
                                             <div class="switch menu col-4 t2">
                                                 <input id="Light-on-off" type="checkbox" checked>
-                                                <label><i></i></label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <hr style="width: 98%; background-color: #999999">
-                                </div>
-
-                                <!-- Tower light Setiing -->
-                                <div id="tower-light-setting">
-                                    <div for="new_task_form" class="col-3 t1"><b>Tower Light</b></div>
-                                    <div style="padding-left: 5%; margin-bottom: 15px">
-                                        <div class="row t1" style="padding: 5px;">
-                                            <div for="Tower-Light" class="col-4 t1">Mode</div>
-                                            <div class="switch menu col-4 t2">
-                                                <input id="Tower-Light" type="checkbox" checked>
                                                 <label><i></i></label>
                                             </div>
                                         </div>
@@ -694,7 +697,7 @@ function new_task_save() {
     let task_id = document.getElementById("task_id").value;
     let screw_template_id = document.querySelector('input[name="screw"]:checked').value;
     let position = document.getElementById("position").value;
-    let tolerance = document.getElementById("tolerance").value;
+    let tolerance = document.getElementById("tolerance1").value;
     let message_text = document.getElementById("message_text").value;
     let delaytime = document.getElementById("delaytime").value;
     // let img_div = document.getElementById('img-container').innerHTML;//Tolerance 

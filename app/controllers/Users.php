@@ -27,10 +27,65 @@ class Users extends Controller
             'permission_list' => $permission_list,
             'all_roles' => $all_roles,
         ];
+
+        // var_dump($all_roles);
         
         $this->view('user/index', $data);
 
     }
+
+    // 取得所有Jobs
+    public function index2(){
+
+        $isMobile = $this->isMobileCheck();
+        $nav = $this->NavsController->get_nav();
+        $all_users = $this->UserModel->GetAllUser();
+        $permission_list = $this->UserModel->GetAllPermissions();
+        $all_roles = $this->UserModel->GetAllRole();
+
+        $data = [
+            'isMobile' => $isMobile,
+            'nav' => $nav,
+            'all_users' => $all_users,
+            'permission_list' => $permission_list,
+            'all_roles' => $all_roles,
+        ];
+        
+        $this->view('user/index2', $data);
+
+    }
+
+    //role setting page
+    public function role_setting(){
+
+        $this->PermissionsTableUpdate();//更新controller list
+
+        $isMobile = $this->isMobileCheck();
+        $nav = $this->NavsController->get_nav();
+        $all_users = $this->UserModel->GetAllUser();
+        $permission_list = $this->UserModel->GetAllPermissions();
+        $all_roles = $this->UserModel->GetAllRole();
+
+        $exculisve = array('navs','mains','logins');//不顯示在permissions設定
+        foreach ($permission_list as $key => $value) {
+            if(in_array($value['Route'], $exculisve)){
+                $permission_list[$key] = null;
+            }
+        }
+
+        $permission_list = array_filter($permission_list);
+
+        $data = [
+            'isMobile' => $isMobile,
+            'nav' => $nav,
+            'all_users' => $all_users,
+            'permission_list' => $permission_list,
+            'all_roles' => $all_roles,
+        ];
+        
+        $this->view('user/role_setting', $data);
+    }
+
 
     public function add_user(){
         // 處理新增使用者請求
@@ -48,12 +103,14 @@ class Users extends Controller
                 exit();
             }
 
+            $user_name = $_POST['user_name'];
             $user_account = $_POST['user_account'];
             $user_password = $_POST['user_password'];
-            $role = $_POST['role'];
-            $user_name = $_POST['user_name'];
+            $user_employee_number = $_POST['user_employee_number'];
+            $role = $_POST['user_role'];
+            
 
-            $user_id = $this->UserModel->AddUser($user_account,$user_password,$user_name);
+            $user_id = $this->UserModel->AddUser($user_account,$user_password,$user_name,$user_employee_number);
             if (isset($user_id)) {
                 $this->UserModel->AddUserRole($user_id,$role);
                 $this->logMessage('add user','success: user:'.$user_account);
@@ -103,11 +160,13 @@ class Users extends Controller
         if (isset($_POST['user_id'])) {
 
             $user_id = $_POST['user_id'];
-            $user_password = $_POST['user_password'];
-            $role = $_POST['role'];
             $user_name = $_POST['user_name'];
+            // $user_account = $_POST['user_account'];
+            $user_password = $_POST['user_password'];
+            $user_employee_number = $_POST['user_employee_number'];
+            $role = $_POST['user_role'];
 
-            $results = $this->UserModel->EditUser($user_id,$user_password,$user_name);
+            $results = $this->UserModel->EditUser($user_id,$user_password,$user_name,$user_employee_number);
             if ($results) {
                 $this->UserModel->EditUserRole($user_id,$role);
                 $this->logMessage('edit user','success: user_id:'.$user_id);
@@ -245,7 +304,52 @@ class Users extends Controller
             //驗證帳號不可重複
             $role_id = $_POST['role_id'];
 
-            $user_data = $this->UserModel->GetRolePermissions($role_id);
+            $role_data = $this->UserModel->GetRolePermissions($role_id);
+
+            if(!$role_data){
+                echo json_encode(array('error' => 'no permissions'));
+                exit();
+            }else{
+                $role_data['error'] = '';
+                echo json_encode($role_data);
+                exit();
+            }
+            
+        }
+    }
+
+    public function del_user()
+    {
+        // 處理新增使用者請求
+        $result = false;
+        $error_message = '';
+
+        if (isset($_POST['user_id'])) {
+
+            $user_id = $_POST['user_id'];
+
+            $result = $this->UserModel->DelUser($user_id);
+
+            if(!$result){
+                echo json_encode(array('error' => 'fail'));
+                exit();
+            }else{
+                echo json_encode(array('error' => ''));
+                exit();
+            }
+            
+        }
+    }
+
+    //get all user by role
+    public function get_users_by_role()
+    {
+        if (isset($_POST['role_id'])) {
+
+            //驗證帳號不可重複
+            $role_id = $_POST['role_id'];
+
+            $user_data = $this->UserModel->GetUsersByRole($role_id);
 
             if(!$user_data){
                 echo json_encode(array('error' => 'no permissions'));
@@ -257,6 +361,28 @@ class Users extends Controller
             }
             
         }
+    }
+
+    //抓app/controller中的檔案，並自動加入cc_permissions table中
+    public function PermissionsTableUpdate()
+    {
+        $path = '../app/controllers/';
+
+        $list = scandir($path);
+
+        $scanned_directory = array_diff($list, array('..', '.'));
+
+        foreach ($scanned_directory as $key => $value) {
+            $temp = explode(".",$value);
+            $scanned_directory[$key] = strtolower($temp[0]);
+        }
+
+        $scanned_directory = array_values($scanned_directory);
+
+        foreach ($scanned_directory as $key => $value) {
+            $this->UserModel->UpdatePermissionRoute($value);
+        }
+        
     }
     
 }

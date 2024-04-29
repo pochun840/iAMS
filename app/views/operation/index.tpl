@@ -28,9 +28,12 @@
             <i style=" width:auto; height: 40px;" class="fa fa-bell" onclick="ClickNotification()"></i>
             <span id="messageCount" class="badge"></span>
         </div>
-        <div class="personnel">
-            <i style=" width:auto; height: 40px" class="fa fa-desktop"></i> Esther
+        <div class="personnel"><i style=" width:auto; height: 40px" class="fa fa-user"></i> Esther</div>
+
+        <div class="ipconnection">
+            <i style=" width:auto; height: 40px" class="fa fa-desktop"></i> 192.168.51.22
         </div>
+
 
         <div style="display: none;">
             <input id="job_id" value="<?php echo $data['job_id']; ?>" disabled>
@@ -63,6 +66,20 @@
                 }
             }?>
 
+        </div>
+        <!-- for sensor position or status -->
+        <div style="display:none;">
+            <input id="arm_status" value="0" disabled>
+            <input id="arm_x" value="" disabled>
+            <input id="arm_y" value="" disabled>
+            <input id="socket_tray_status" value="1" disabled>
+            <input id="socket_tray" value="" disabled>
+            <input id="color_light_status" value="" disabled>
+            <input id="color_light_ok" value="" disabled>
+            <input id="color_light_ng" value="" disabled>
+            <input id="color_light_ok_sequence" value="" disabled>
+            <input id="color_light_ok_all" value="" disabled>
+            <input id="buzzer_status" value="" disabled>
         </div>
 
     </header>
@@ -187,15 +204,15 @@
         <div class="left">
             <div class="highlight" style="font-size: 2vmin">Tightening Status</div>
             <div class="container  my-1 custom-border">
-                <div id="tightening_status" class="container center-text">Ready</div>
+                <div id="tightening_status" class="container center-text"></div>
                 <div class="input-group mb-2">
                     <span class="input-group-text" style="font-size: 1.8vmin">TR</span>
-                    <input id="tightening_repeat" type="text" class="form-control" placeholder=" 0 / 2" style="font-size: 1.8vmin">
+                    <input id="tightening_repeat" type="text" class="form-control" placeholder="" style="font-size: 1.8vmin">
                     <button class="btn btn-secondary" type="submit" style="font-size: 1.8vmin">&#8635;</button>
                 </div>
                 <div class="input-group mb-2">
                     <span class="input-group-text" style="font-size: 1.8vmin">Time</span>
-                    <input id="tightening_time" type="text" class="form-control" placeholder="100" style="font-size: 1.8vmin">
+                    <input id="tightening_time" type="text" class="form-control" placeholder="" style="font-size: 1.8vmin">
                     <span class="input-group-text" style="font-size: 1.5vmin">sec</span>
                 </div>
             </div>
@@ -203,32 +220,32 @@
             <div class="container my-1 custom-border">
                 <div class="highlight" style="margin-bottom: 3%; font-size: 2vmin">Target Torque</div>
                 <div class="container row" id="Torque"  style="margin-left: 1px">
-                    <div id="target_torque" class="col text-black" style="font-size: 4vmin">00.6</div>
+                    <div id="target_torque" class="col text-black" style="font-size: 4vmin"></div>
                     <div class="col text-black" style="font-size: 1.5vmin">Nm</div>
                 </div>
                 <div class="input-group mb-2">
                     <span class="input-group-text" style="font-size: 1.8vmin">Hi Q</span>
-                    <input id="high_torque" type="text" class="form-control" placeholder="00.7" style="font-size: 1.8vmin">
+                    <input id="high_torque" type="text" class="form-control" placeholder="" style="font-size: 1.8vmin">
                 </div>
                 <div class="input-group mb-2">
                     <span class="input-group-text" style="font-size: 1.8vmin">Lo Q</span>
-                    <input id="low_torque" type="text" class="form-control" placeholder="00.3" style="font-size: 1.8vmin">
+                    <input id="low_torque" type="text" class="form-control" placeholder="" style="font-size: 1.8vmin">
                 </div>
             </div>
 
             <div class="container my-1">
                 <div class="highlight" style="margin-bottom: 3%; font-size: 2vmin">Target Angle</div>
                 <div class="container row" id="Thread" style="margin-left: 1px">
-                    <div id="target_angle" class="col text-black" style="font-size: 4vmin">1080</div>
+                    <div id="target_angle" class="col text-black" style="font-size: 4vmin"></div>
                     <div class="col text-black" style="font-size: 1.5vmin">deg</div>
                 </div>
                 <div class="input-group mb-2">
                     <span class="input-group-text" style="font-size: 1.8vmin">Hi A</span>
-                    <input id="high_angle" type="text" class="form-control" placeholder="1380" style="font-size: 1.8vmin">
+                    <input id="high_angle" type="text" class="form-control" placeholder="" style="font-size: 1.8vmin">
                 </div>
                 <div class="input-group mb-2">
                     <span class="input-group-text" style="font-size: 1.8vmin">Lo A</span>
-                    <input id="low_angle" type="text" class="form-control" placeholder="760" style="font-size: 1.8vmin">
+                    <input id="low_angle" type="text" class="form-control" placeholder="" style="font-size: 1.8vmin">
                 </div>
             </div>
         </div>
@@ -240,7 +257,7 @@
                         if( !empty($data['task_list'] )){
                             // echo $data['task_list'][count($data['task_list'])-1]['circle_div'];
 
-                            echo '<img id="imgId" style="width: 100%;height: auto;" src="'.$data['seq_img'].'">';
+                            echo '<img id="imgId" src="'.$data['seq_img'].'">';
                             foreach ($data['task_list'] as $key => $value) {
                                 echo '<div class="circle" data-id="'.($key+1).'" '.$value['circle_div'].'>';
                                 echo '<span class="">'.($key+1).'</span>';
@@ -270,7 +287,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <select style="margin: center" id="JobName" name="JobNameSelect" size="215">
+                                    <select style="margin: center" id="SeqNameSelect" name="SeqNameSelect" size="5">
                                          <?php foreach ($data['seq_list'] as $key => $seq) {
                                             echo "<option value=".$seq['seq_id'].">{$seq['seq_id']} &nbsp;{$seq['seq_name']}</option>";
                                         } ?>
@@ -325,7 +342,7 @@
             <div id="task-setting" class="container my-3">
                 <div class="input-group mb-3">
                     <span class="input-group-text"  style="font-size: 1.8vmin">Task</span>
-                    <input id="task_serail" type="text" class="form-control" placeholder="2 / 2"  style="font-size: 1.8vmin">
+                    <input id="task_serail" type="text" class="form-control" placeholder=""  style="font-size: 1.8vmin">
                     <button class="btn btn-secondary" type="submit"  style="font-size: 1.8vmin">&#8635;</button>
                 </div>
                 <div id="task_list" class="tasklist">
@@ -383,7 +400,7 @@
         <div id="screw_info_div" class="column">
             <div class="zoom">
                 <h5 style="font-size: 2.3vmin; line-height: 30px; text-align: left">Screw info</h5>
-                <label style="color: green; font-size: 2.8vmin;"><b><span id="screw_info">Retry or NG 2/2</span></b></label>
+                <label style="color: green; font-size: 2.8vmin;"><b><span id="screw_info"></span></b></label>
            </div>
         </div>
 
@@ -400,7 +417,7 @@
                     <img class="images" src="./img/torque.png" style="float: left; height: 20px;">Tool<br><span id="tool_name" style="padding-left:3px">SGT-CS303</span>
                 </h5>
                 <div id="completedIcon" style="display:block; text-align: left;padding-left: 31px">
-                    <span id="tool_task_id" style="color: #000">P1</span>
+                    <span id="tool_task_id" style="color: #000"></span>
                     <span id="tool_status_icon">
                     <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="green">
                         <path d="M0 0h24v24H0z" fill="none"/>
@@ -550,6 +567,8 @@ window.onclick = function(event) {
 
 <script type="text/javascript">
 let isSendingRequest = false;
+let isFulfilled = false; //前置條件是否滿足
+let light_signal = false;
 
 $(document).ready(function () {
     initail();
@@ -726,7 +745,9 @@ function initail() {
 
       socket.addEventListener('message', (event) => {
           // 处理接收到的WebSocket消息
+        if(isFulfilled){
           handleWebSocketMessage(event);
+        }
           // console.log(event);
       });
 
@@ -812,12 +833,15 @@ tt.set('start_time',new Date())
 
                         if(data.fasten_status == 4 || data.fasten_status == 5 || data.fasten_status == 6 ){
                             //OK、OK-JOB、OK-SEQ
+                            save_result(data);
                             retry_time = 0;//retry測試歸零
                             document.getElementById('screw_info').innerHTML = retry_time + ' / '+ '-';
                             current_circle.classList.add('finished')
                             current_circle.childNodes[1].classList.remove('circle-border')
                             // current_circle.childNodes[0].classList.remove('inner-text');
                             task_id = task_id + 1;
+
+                            
                             if(task_id <= task_count){
                                 document.getElementById('task_id').value = task_id;
                                 updateParameters(task_id)
@@ -829,6 +853,11 @@ tt.set('start_time',new Date())
                                 next_circle.style.backgroundColor = '#44d0ff';
                                 // next_circle.childNodes[0].classList.add('inner-text');
                                 document.getElementById('task_serail').value = task_id+' / '+task_count;
+
+                                light_signal = 'ok';
+                                console.log('aaa')
+                                afterward();
+                                console.log('bbb')
                             }else{
                                 document.getElementById('step'+(task_id-1)).style.color = 'white';
                                 document.getElementById('step'+(task_id-1)).style.backgroundColor = 'green';
@@ -855,9 +884,13 @@ tt.set('start_time',new Date())
                                     setTimeout(() => { force_switch_tool(0); }, 1000);
                                     document.getElementById('modbus_switch').value = 0;
                                 }
+
+                                light_signal = 'okall';
+                                afterward();
                             }
                         }else if(data.fasten_status == 7 || data.fasten_status == 8){
                             //NG、NG-STOP
+                            save_result(data);
                             current_circle.childNodes[1].classList.add('running')
                             current_circle.classList.add('ng');
                             retry_time = retry_time + 1;
@@ -865,6 +898,9 @@ tt.set('start_time',new Date())
 
                             document.getElementById('screw_info').innerHTML = retry_time + ' / '+ '-';
                             document.getElementById('modbus_switch').value = 1;
+
+                            light_signal = 'ng';
+                            afterward();
                         }
 
                     }
@@ -926,7 +962,8 @@ function change_seq(direction) {
     }else if(direction == 'next'){
         seq_id = +seq_id + 1; 
     }else{
-        seq_id = document.getElementById('SeqName').value;
+        seq_id = document.getElementById('SeqNameSelect').value;
+        console.log(seq_id);
     }
 
     if (seq_id > total_seq) {
@@ -945,8 +982,9 @@ function change_seq(direction) {
 
 // let isSendingRequest = false;
 
-setInterval(function() {
+// setInterval(check_tool_status, 200); // 每隔x秒發送一次請求，可以根據需要調整時間間隔
 
+function check_tool_status(){
     let modbus_switch = document.getElementById('modbus_switch').value
     // 發送 AJAX 請求到服務器
     if (isSendingRequest || modbus_switch == 0) {
@@ -977,12 +1015,18 @@ setInterval(function() {
             // console.log("fail");
         }
     });
-}, 300); // 每隔5秒發送一次請求，可以根據需要調整時間間隔
+}
 
 
 
-function switch_tool(status) {
+async function switch_tool(status) {
     let modbus_switch = document.getElementById('modbus_switch').value;
+    let current_tool_status = +document.getElementById('tool_status').value;
+    if( current_tool_status == status){
+        return;
+    }
+
+
     if (isSendingRequest || modbus_switch == 0) {
         // 如果正在發送，不執行新的请求
         return;
@@ -991,11 +1035,14 @@ function switch_tool(status) {
     $.ajax({
         url: '?url=Operations/Switch_Tool_Status', // 指向服務器端檢查更新的 PHP 腳本
         method: 'POST',
+        async: false,
         data: { 'tool_status': status },
         dataType: "json",
         success: function(response) {
             // 處理服務器返回的響應
-            // document.getElementById('tool_status').value = response.result;
+            if(response.result){
+                document.getElementById('tool_status').value = status;
+            }
 
             isSendingRequest = false;
         },
@@ -1011,10 +1058,8 @@ function switch_tool(status) {
 
 
 function force_switch_tool(status) {
-
     console.log(666)
     let done = true;
-
     while(done){
 
         let modbus_switch = document.getElementById('modbus_switch').value;
@@ -1052,10 +1097,155 @@ function force_switch_tool(status) {
 
         done = false;
     }
+}
 
+</script>
+
+
+<script>
+
+$(document).ready(async function () {
+    // setInterval(main_workflow, 300);
+    // 设置循环条件
+    let loop_condition = true;
+    let loop_count = 0;
+
+    // while 循环
+    while (loop_condition) {
+        // console.log(`Loop ${loop_count + 1}`);
+        await main_workflow(); // 调用 main_workflow 函数
+
+        // 检查循环结束条件
+        // 此处需要根据具体情况设置条件
+        if (loop_count >= 10) {
+            // loop_condition = false; // 当循环达到指定次数时结束
+        }
+
+        // 模拟等待一段时间后再次执行循环
+        await new Promise(resolve => setTimeout(resolve, 300)); // 等待 1 秒
+        loop_count++;
+    }
+});
+// main_workflow();
+
+// setInterval(main_workflow, 3000); // 每隔x秒發送一次請求，可以根據需要調整時間間隔
+
+//operation main workflow
+async function main_workflow(argument) {
+    // body...
+    // prerequisite ，判斷時否達到當前task的前置條件 ex: arm、socket tray、...等等
+    // console.log('-----start prerequisite------');
+    let aa = await prerequisite();
+    // console.log('-----end prerequisite------');
+
+    // console.log('-----start tool enable or disable------');
+    // await ;
+    // await switch_tool(0)
+    // console.log(aa)
+    if( aa == true ){
+        await switch_tool(1)
+        isFulfilled = true;
+    }else{
+        await switch_tool(0)
+        isFulfilled = false;
+    }
+
+    // await switch_tool(1)
+    // console.log('-----end tool enable or disable------');
+
+    // console.log('-----start afterward------');
+     // afterward();
+    // console.log('-----end afterward------');
+
+    // receive fasten result，接收控制器的鎖附結果產生對應的NG或OK等訊息
+    // afterward ，如果鎖附結果OK，進行當前task對應的後續資訊 ex:三色燈、message、video、audio、...等等
+
+
+}
+
+async function prerequisite(arguments) {
+    //get arm status
+    let arm_status = +document.getElementById('arm_status').value
+    //get socket tray status
+    let socket_tray_status = +document.getElementById('socket_tray_status').value
+    // console.log(arm_status,socket_tray_status)
+
+    let flag_ = false;
+
+    if (arm_status != 0) {
+    }
+
+    if (socket_tray_status != 0) {
+        $.ajax({
+            url: '?url=Operations/Get_IO_Signal', // 指向服務器端檢查更新的 PHP 腳本
+            async: false,
+            method: 'GET',
+            dataType: "json",
+            success: function(response) {
+                // 處理服務器返回的響應
+                // document.getElementById('tool_status').value = response.result;
+                // console.log(response);
+                // console.log(response.result);
+                // console.log(response.result[3]);
+                if( response.result[3] != true ){//tool enable
+                    flag = false;
+                }else{//tool disable
+                    flag = true;
+                }
+
+                isSendingRequest = false;
+            },
+            complete: function(XHR, TS) {
+                XHR = null;
+                // console.log("执行一次"); 
+            },
+            error: function(xhr, status, error) {
+                // console.log("fail");
+            }
+        });
+    }
+
+    return flag;
+
+    // return sleep(1000);
+}
+
+ function afterward(arguments) {
+    if(light_signal != false){
+        $.ajax({
+            url: '?url=Operations/Set_IO_Signal', // 指向服務器端檢查更新的 PHP 腳本
+            async: true, // 將此設置為 true 表示請求是非同步的
+            method: 'GET',
+            data: { 'light_signal': light_signal },
+            dataType: "json"
+        });
+    }
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function save_result(data) {
+    // console.log(data);
+    data.cc_job_id = document.getElementById('job_id').value;
+    data.cc_seq_id = document.getElementById('seq_id').value;
+    data.cc_task_id = document.getElementById('task_id').value;
+    data.cc_equipment = 'temp';
+    data.cc_barcodesn = 'temp';
+    data.cc_station = 'temp';
+    data.cc_operator = 'temp';
 
     
+    $.ajax({
+        url: '?url=Operations/Save_Result', // 指向服務器端檢查更新的 PHP 腳本
+        // async: false,
+        method: 'GET',
+        data: { 'data': data },
+        dataType: "json"
+    });
 }
+
 
 </script>
 
@@ -1159,6 +1349,7 @@ function toggleIdentityVerify()
 </style>
 
 <style>
+/*調整 circle的顯示size*/
 .circle{
     scale:<?php echo (1 + 1*($data['job_data']['point_size']/100) );?>;
 }

@@ -151,7 +151,7 @@
                                     echo   '<a style="margin-top: 10%">Controller Type :<i style="float: right">GTCS</i></a>';
                                     echo   '<a>Job ID :<i style="float: right">'.$job['job_id'].'</i></a>';
                                     echo   '<a>Ok Job :<i style="float: right">'.$job['ok_job'].'</i></a>';
-                                    echo   '<a>OK Job Stop :<i style="float: right">'.$job['ok_job_stop'].'</i></a>';
+                                    echo   '<a>Job Repeat :<i style="float: right">'.$job['ok_job_stop'].'</i></a>';
                                     echo   '<a>Reverse Button :<i style="float: right">'.$job['reverse_direction'].'</i></a>';
                                     echo   '<a>Reverse RPM :<i style="float: right">'.$job['reverse_rpm'].'</i></a>';
                                     echo   '<a>Reverse Force :<i style="float: right">'.$job['reverse_force'].'</i></a>';
@@ -226,7 +226,14 @@
                                 <div class="row">
                                     <div for="ok_job" class="col-5 t1"> OK Job :</div>
                                     <div class="switch menu col-5 t2">
-                                        <input id="ok_job" type="checkbox" checked>
+                                        <input id="ok_job" type="checkbox">
+                                        <label><i></i></label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div for="Tower-Light" class="col-5 t1">Tower Light :</div>
+                                    <div class="switch menu col-5 t2">
+                                        <input id="Tower-Light" type="checkbox">
                                         <label><i></i></label>
                                     </div>
                                 </div>
@@ -642,6 +649,7 @@ function updateCircleSize(value)
         let size = document.getElementById('size').value;
         let barcode_start = document.getElementById('barcode_start').checked; // $('input[name=Downshift_Enable]:checked').val();
         let job_repeat = document.getElementById('job_repeat').checked; // $('input[name=Downshift_Enable]:checked').val();
+        let tower_light = document.getElementById('Tower-Light').checked; // $('input[name=Downshift_Enable]:checked').val();
 
         var formData = new FormData();
         // 添加表单数据
@@ -657,7 +665,8 @@ function updateCircleSize(value)
         formData.append('threshold_torque', threshold_torque);
         formData.append('size', size);
         formData.append('barcode_start', barcode_start);
-        formData.append('job_repeat', job_repeat);
+        formData.append('ok_job_stop', job_repeat);
+        formData.append('tower_light', tower_light);
 
         // 添加图片数据
         var fileInput = $('#upload_img')[0].files[0];

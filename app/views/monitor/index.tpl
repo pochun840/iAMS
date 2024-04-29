@@ -1,151 +1,25 @@
 <?php require APPROOT . 'views/inc/header.tpl'; ?>
+
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/w3.css" type="text/css">
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/nav.css" type="text/css">
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/datatables.min.css">
 
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/historical.css?v=202404111200" type="text/css">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>css/historical.css" type="text/css">
 
 <script src="<?php echo URLROOT; ?>js/flatpickr.js"></script>
-<script src="<?php echo URLROOT; ?>js/historical.js?v=202404111000"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
 
 
-<!-- PDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
-
-
-<?php if(isset($data['nav'])){
-    echo $data['nav'];
-}
-
-
-
-//
-//取得URL 
-$path  = $_SERVER['REQUEST_URI'];
-$path  = str_replace('/public/index.php?url=Historicals/','',$path);
-$path = $data['path'];
-if ($path == "combinedata") {
-    echo "
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var element = document.getElementById('CombineDataDisplay');
-            if (element) {
-                element.style.display = 'block';
-            }
-        
-            var otherElement = document.getElementById('FasteningDisplay');
-            if (otherElement) {
-                otherElement.style.display = 'none';
-            }
-        });
-    </script>
-    ";
-}
-
-if (strpos($path, "nextinfo") !== false) {
-
-      echo "
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var element = document.getElementById('DetailInfoDisplay');
-            if (element) {
-                element.style.display = 'block';
-            }
-        
-            var otherElement = document.getElementById('FasteningDisplay');
-            if (otherElement) {
-                otherElement.style.display = 'none';
-            }
-        });
-    </script>
-    ";
-
-}
-
-if(!empty($_COOKIE['limit_val'])){
-    $limit_val = $_COOKIE['limit_val'];
-}else{
-    $limit_val = '';
-}
-
-if(!empty($_COOKIE['unit_mode'])){
-    $unit_mode = $_COOKIE['unit_mode'];
-}else{
-    $unit_mode = '';
-}
-
-if(!empty($_COOKIE['chat_mode'])){
-    $chat_mode = $_COOKIE['chat_mode'];
-}else{
-    $chat_mode = '';
-}
-
-if(!empty($_COOKIE['chat_modeno'])){
-    $chat_modeno = $_COOKIE['chat_modeno'];
-}else{
-    $chat_modeno = '';
-}
-
-if(!empty($_COOKIE['chat_mode_change'])){
-    $chat_mode_change= $_COOKIE['chat_mode_change'];
-}else{
-    $chat_mode_change = '';
-}
-
-if(!empty($_COOKIE['line_style'])){
-    $line_style = $_COOKIE['line_style'];
-}else{
-    $line_style = '';
-}
-
-
-?>
+<?php echo $data['nav']; ?>
 
 <style>
-
-
-.t1{font-size: 20px; margin: 3px 0px; display: flex; align-items: center;}
+.t1{font-size: 17px; margin: 3px 0px; display: flex; align-items: center;}
 .t2{font-size: 17px; margin: 3px 0px;}
 .t3{font-size: 17px; margin: 3px 0px; height: 29px;border-radius: 5px;}
 .t4{font-size: 17px; margin-right: 5px; border-radius: 5px}
 .t5{margin-left: 10px; text-align: center;}
 .t6{width: 116px;margin-right:10%}
 
-.pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    list-style: none;
-    padding: 0;
-}
-.pagination li {
-    margin-right: 5px;
-}
-.pagination li a,
-.pagination li span {
-    padding: 5px 10px;
-    text-decoration: none;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-}
-.current-page {
-    font-weight: bold;
-}
-                                    
 </style>
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.18/c3.min.js"></script>
-
-
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/c3.min.css?v=202404251500" type="text/css">
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
-
-
-
 
 <div class="container-ms">
     <header>
@@ -243,19 +117,14 @@ if(!empty($_COOKIE['line_style'])){
                 <div id="FasteningDisplay" style="margin-top: 40px">
                     <div style="padding-left: 2%">
                         <div class="row">
-                            <div for="BarcodeSN" class="col-1 t1">BarcodeSN</div>
+                            <div for="SN" class="col-1 t1">SN</div>
                             <div class="col-2 t2">
-                                <input type="text" class="t3 form-control input-ms" id="barcodesn" name="barcodesn" maxlength="" style="width: 190px;">
+                                <input type="text" class="t3 form-control input-ms" id="SN" maxlength="" style="width: 190px;">
                             </div>
 
                             <div for="Operator" class="col-1 t1">Operator</div>
                             <div class="col-2 t2">
-                               <!--<input type="text" class="t3 form-control input-ms" id="Operator" maxlength="" value="" style="width: 190px;">-->
-                               <!--<select>
-                                    <?//php foreach($data['all_roles'] as $key =>$val){ ?>
-                                            <!--<option value='<?//php echo $val['ID'];?>'> <?//php echo $val['Title'];?> </option>
-                                    <?//php } ?>
-                               </select>-->
+                                <input type="text" class="t3 form-control input-ms" id="Operator" maxlength="" value="" style="width: 190px;">
                             </div>
 
                             <div for="SelectJob" class="col-1 t1">Select Job</div>
@@ -279,29 +148,30 @@ if(!empty($_COOKIE['line_style'])){
                         <div class="row">
                             <div for="result-status" class="col-1 t1">Result Status</div>
                             <div class="col-2 t2">
-                                <select id="status" style="width: 190px">
-                                    <?php foreach($data['res_status_arr'] as $key_res =>$val_res){?>
-                                            <option value="<?php echo $key_res;?>"><?php echo $val_res;?></option>
-                                    <?php }?>
-                                    
+                                <select id="result-status" style="width: 190px">
+                                    <option value="1">ALL</option>
+                                    <option value="2">OK</option>
+                                    <option value="3">OKALL</option>
+                                    <option value="4">NG</option>
                                 </select>
                             </div>
 
                             <div for="Controller" class="col-1 t1">Controller</div>
                             <div class="col-2 t3">
                                 <select id="Controller" style="width: 190px;">
-                                    <?php foreach($data['res_controller_arr'] as $key_res_1 =>$val_res_1){?>
-                                            <option value="<?php echo $key_res_1;?>"><?php echo $val_res_1;?></option>
-                                    <?php }?>
+                                    <option value="1">GTCS</option>
+                                    <option value="2">TCG</option>
                                 </select>
                             </div>
 
                             <div for="Program" class="col-1 t1">program</div>
                             <div class="col-2 t3">
                                 <select id="Program" style="width: 190px;">
-                                     <?php foreach($data['res_program'] as $key_res_2 =>$val_res_2){?>
-                                            <option value="<?php echo $key_res_2;?>"><?php echo $val_res_2;?></option>
-                                    <?php }?>
+                                    <option value="1">P1</option>
+                                    <option value="2">P2</option>
+                                    <option value="2">P3</option>
+                                    <option value="2">P4</option>
+                                    <option value="2">P5</option>
                                 </select>
                             </div>
                         </div>
@@ -309,19 +179,17 @@ if(!empty($_COOKIE['line_style'])){
 
                     <div class="topnav-menu">
                         <div class="search-container">
-                            <input type="text" placeholder="Search.." name="sname" id="search_name" size="40" style="height: 35px">&nbsp;
-                            <button id="Search" type="button" class="Search-button" onclick="search_info()">Search</button>
+                            <form>
+                                <input type="text" placeholder="Search.." name="search" size="40" style="height: 35px">&nbsp;
+                                <button id="Search" type="submit" class="Search-button">Search</button>
+                            </form>
                         </div>
-
-
                         <div class="topnav-right">
-                            <button id="Export-CSV" type="button" class="ExportButton" onclick="csv_download()">Export CSV</button>
-                            <button id="Export-Report" type="button" class="ExportButton" onclick="window.location.href='?url=Historicals/history_result';" >Export Report</button>
+                            <button id="Export-CSV" type="button" class="ExportButton">Export CSV</button>
+                            <button id="Export-Report" type="button" class="ExportButton">Export Report</button>
                             <button id="Combine-btn" type="button" onclick="NextToCombineData()">Combine Data</button>
-                            <button id="Clear" type="button"   onclick="clear_button() ">Clear</button>
-                            <button  id="nopage" type="button"  onclick="nopage('nopage')">Nopage</button>
+                            <button id="Clear" type="button">Clear</button>
                         </div>
-
                     </div>
 
                     <div class="scrollbar-fastening" id="style-fastening">
@@ -329,20 +197,19 @@ if(!empty($_COOKIE['line_style'])){
                             <table class="table table-bordered table-hover" id="fastening-table">
                                 <thead id="header-table" style="text-align: center; vertical-align: middle">
                                     <tr>
-                                        <th><i class="fa fa-trash-o" style="font-size:26px;color:black" onclick="delete_historyinfo()"></i></th>
+                                        <th><i class="fa fa-trash-o" style="font-size:26px;color:black"></i></th>
                                         <th>Index</th>
                                         <th>Time</th>
-                                        <th>Station</th>
                                         <th>BarcodeSN</th>
                                         <th>Job Name</th>
                                         <th>Seq Name</th>
                                         <th>task</th>
-                                        <th>Equipment</th>
-                                        <th>Torque range</th>
-                                        <th>Angle range</th>
-                                        <th>Final Torque</th>
-                                        <th>Final Angle</th>
+                                        <th>Controller</th>
+                                        <th>Torque</th>
+                                        <th>Total.A</th>
                                         <th>Status</th>
+                                        <th>Job time</th>
+                                        <th>Task time</th>
                                         <th>Error</th>
                                         <th>Pset</th>
                                         <th>Action</th>
@@ -350,64 +217,52 @@ if(!empty($_COOKIE['line_style'])){
                                 </thead>
 
                                 <tbody id="tbody1" style="background-color: #F2F1F1; font-size: 1.8vmin;text-align: center; vertical-align: middle;">
-                                    
-                                    <?php 
-                                    if(isset($data['info'])){
-                                    foreach($data['info'] as $k_info =>$v_info){
-                                    
-                                        $link ='?url=Historicals/nextinfo/'.$v_info['system_sn'];
-                                        ?>
-                                        <tr>
-                                            <td style="text-align: center;">
-                                                <input class="form-check-input" type="checkbox" name="test1" id="test1"  value="<?php echo $v_info['system_sn'];?>" style="zoom:1.2;vertical-align: middle;">
-                                            </td>
-                                            <td><?php echo $v_info['system_sn'];?></td>
-                                            <td><?php echo $v_info['data_time'];?></td>
-                                            <td></td>
-                                            <td><?php echo $v_info['cc_barcodesn'];?></td>
-                                            <td><?php echo $v_info['job_name'];?></td>
-                                            <td><?php echo $v_info['sequence_name'];?></td>
-                                            <td><?php echo $v_info['cc_task_name'];?></td>
-                                            <td></td>
-                                            <td><?php echo $v_info['step_lowtorque']." ~ ".$v_info['step_hightorque'];?></td>
-                                            <td><?php echo $v_info['step_lowangle']." ~ ".$v_info['step_highangle'];?></td>
-                                            <td><?php echo $v_info['fasten_torque'].$data['torque_arr'][$v_info['torque_unit']] ;?></td>
-                                            <td><?php echo $v_info['fasten_angle'] . " deg";?></td>
-                                            <td style="background-color:<?php echo $data['status_arr']['status_color'][$v_info['fasten_status']];?> font-size: 20px"><?php echo $data['status_arr']['status_type'][$v_info['fasten_status']];?></td>
-                                            <td><?php echo $data['status_arr']['error_msg'][$v_info['error_message']];?></td>
-                                            <td></td>
-                                            <td>
-                                                <a href=" <?php echo $link;?> " >
-                                                    <img src="./img/info-30.png" alt="" style="height: 28px; vertical-align: middle;" >
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    <?php }?>
-                                    <?php }?>
+                                    <tr>
+                                        <td style="text-align: center;">
+                                            <input class="form-check-input" type="checkbox" name="" id="" value="0" style="zoom:1.2;vertical-align: middle;">
+                                        </td>
+                                        <td>1</td>
+                                        <td>2024/02/01 13:30:20</td>
+                                        <td>123456</td>
+                                        <td>job-1</td>
+                                        <td>seq-1</td>
+                                        <td>task-1</td>
+                                        <td>GTCS</td>
+                                        <td>0.6 N.m</td>
+                                        <td>223 deg</td>
+                                        <td>ok</td>
+                                        <td>100ms</td>
+                                        <td>100ms</td>
+                                        <td>error</td>
+                                        <td>p1</td>
+                                        <td>
+                                            <img src="./img/info-30.png" alt="" style="height: 28px; vertical-align: middle;" onclick="NextToInfo()">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: center; vertical-align: middle;">
+                                            <input class="form-check-input" type="checkbox" name="" id="" value="0" style="zoom:1.2">
+                                        </td>
+                                        <td>2</td>
+                                        <td>2024/02/01 13:30:20</td>
+                                        <td>123456</td>
+                                        <td>job-2</td>
+                                        <td>seq-2</td>
+                                        <td>task-2</td>
+                                        <td>GTCS</td>
+                                        <td>0.6 N.m</td>
+                                        <td>223 deg</td>
+                                        <td>ok</td>
+                                        <td>100ms</td>
+                                        <td>100ms</td>
+                                        <td>error</td>
+                                        <td>p1</td>
+                                        <td>
+                                            <img src="./img/info-30.png" alt="" style="height: 28px; vertical-align: middle;">
+                                        </td>
+                                     </tr>
                                 </tbody>
                             </table>
-
-
-                            <?php if( $data['nopage'] ==  "1"){ ?>
-                            <div class="pagination" align="center">
-                                <?php if ($data['page'] > 1): ?>
-                                    <a href="?url=Historicals&p=<?php echo ($data['page'] - 1); ?>"> Pre  &nbsp;&nbsp;</a>
-                                <?php endif; ?>
-                                
-                                <?php for ($i = 1; $i <= $data['totalPages']; $i++): ?>
-                                    <?php if ($i == $data['page']): ?>
-                                        <span class="current-page"><?php echo $i; ?></span>
-                                    <?php else: ?>
-                                        <a href="?url=Historicals&p=<?php echo $i; ?>"><?php echo "&nbsp;&nbsp$i&nbsp;&nbsp"; ?>&nbsp;&nbsp;</a>
-                                    <?php endif; ?>
-                                <?php endfor; ?>
-                                
-                                <?php if ($data['page'] < $data['totalPages']): ?>
-                                    <a href="?url=Historicals&p=<?php echo ($data['page'] + 1); ?>"> Next  &nbsp;&nbsp;</a>
-                                <?php endif; ?>
-
-                            </div>
-                            <?php } ?>
                         </div>
                     </div>
                 </div>
@@ -416,68 +271,66 @@ if(!empty($_COOKIE['line_style'])){
                 <div id="DetailInfoDisplay" style="display: none">
                     <div class="topnav">
                         <label type="text" style="font-size: 18px; padding-left: 1%; margin: 4px">Fastenig record &#62; Info</label>
-                        <button id="back-setting" type="button" onclick="goBack()">
-                            <img id="img-back" src="./img/back.svg" alt=" onclick="goBack()">Back
+                        <button id="back-setting" type="button" onclick="cancelSetting()">
+                            <img id="img-back" src="./img/back.svg" alt="">Back
                         </button>
                     </div>
-                    <div id ="jobinfo">
+
                     <table class="table" style="font-size: 15px;">
                         <tr style="padding: 0 10px">
-                            <td>Index: <?php echo $data['job_info'][0]['system_sn'];?></td>
-                            <td>Job info: <?php echo $data['job_info'][0]['job_name'];?> / <?php echo $data['job_info'][0]['sequence_name']. "/". $data['job_info'][0]['cc_task_name'];?></td>
-                            <td>Controller: </td>
-                            <td>Error code: <?php echo  $data['status_arr']['error_msg'][$data['job_info'][0]['error_message']];?></td>
-                            <td>Status : <a style="background-color: <?php echo $data['status_arr']['status_color'][$data['job_info'][0]['fasten_status']];?>; padding: 0 10px"><?php echo $data['status_arr']['status_type'][$data['job_info'][0]['fasten_status']];?></a></td>
+                            <td>Index: <input class="t6" type="text" size="10" value="1"></td>
+                            <td>Job info: <input class="t6" type="text" size="15" value="job-1 > seq-1 > task-1" style="width: 15vw"></td>
+                            <td>Controller: <input class="t6" type="text" size="10" value="GTCS"></td>
+                            <td>Error code: <input class="t6" type="text" size="10" value=""></td>
+                            <td>Status: <input class="t6" type="text" size="10" value="ok" style="margin-right: 10px"></td>
                         </tr>
                         <tr>
-                            <td>Actual Torque: <?php echo $data['job_info'][0]['fasten_torque'];?> kgf.cm</td>
-                            <td>BarcodeSN: <?php echo $data['job_info'][0]['cc_barcodesn'];?></td>
-                            <td>Direction: <?php echo  $data['status_arr']['direction'][$data['job_info'][0]['count_direction']];?></td>
-                            <td>Pset: </td>
-                            <td>Time: <?php echo $data['job_info'][0]['data_time'];?></td>
+                            <td>Actual Torque: <input class="t6" type="text" size="10" value=""></td>
+                            <td>BarcodeSN: <input class="t6" type="text" size="10" value="123456" style="width: 15vw"></td>
+                            <td>Direction: <input class="t6" type="text" size="10" value="CW"></td>
+                            <td>Pset: <input class="t6" type="text" size="10" value="p1"></td>
+                            <td>Time: <input class="t6" type="text" size="10" value="task time" style="margin-right: 10px"></td>
                         </tr>
                         <tr  style="vertical-align: middle;">
-                            <td>Member: <!--<input class="t6" type="text" size="10" value="Esther" disabled="disabled" style="background-color: #F5F5F5">--></td>
-                            <td>Note: <!--<input class="t6" type="text" value="arm (444,215)[200]" disabled="disabled" style="background-color: #F5F5F5; width: 15vw"></td>-->
-                            <td>
-                                <input class="form-check-input" type="checkbox" id="myCheckbox" onchange="check_limit(this)"  <?php if($limit_val=="1"){ echo "checked"; }else{}?>  style="zoom:1.2; float: left">&nbsp; display the high/low auxiliary lines.
-                            </td>
+                            <td>Member: <input class="t6" type="text" size="10" value="Esther" disabled="disabled" style="background-color: #F5F5F5"></td>
+                            <td>Note: <input class="t6" type="text" value="arm (444,215)[200]" disabled="disabled" style="background-color: #F5F5F5; width: 15vw"></td>
+                            <td colspan="3">
+                                <input class="form-check-input" type="checkbox" name="" id="" value="0" style="zoom:1.2; float: left">&nbsp; display the high/low auxiliary lines.
                             </td>
                         </tr>
                         <tr style="vertical-align: middle">
                             <td>
-                                Chart Setting:  
-                                <select id="chartseting" class="t6 Select-All" style="float: none"  onchange="chat_mode_change(this)">
-                                            <?php foreach($data['chat_mode_arr'] as $k_chat => $v_chat){?>
-                                                <option  value="<?php echo $k_chat;?>"  <?php if($chat_mode_change == $k_chat){echo "selected";}else{echo "";}?>  > <?php echo $v_chat;?> </option>
-                                            <?php } ?>                             
-                                </select>
+                                Chart Setting:  <select id="Chart-seting" class="t6 Select-All">
+                                                    <option value="1">Torque/Time</option>
+                                                    <option value="2">Angle/Time</option>
+                                                    <option value="3">RPM/Time</option>
+                                                    <option value="4">Power/Time</option>
+                                                    <option value="5">Torque/Angle</option>
+                                                </select>
                             </td>
                             <td>
-                                Torque Unit:    
-                                <select id="Torque-Unit" class="Select-All" style="float: none; width: 100px" onchange="unit_change(this)">
-                                                    <?php foreach($data['torque_mode_arr'] as $k_torque => $v_torque){?>
-                                                            <option  value="<?php echo $k_torque;?>"  <?php if($unit_mode== $k_torque){echo "selected";}else{echo "";}?>  > <?php echo $v_torque;?> </option>
-                                                    <?php } ?>
-                                </select>
+                                Torque Unit:    <select id="Torque-Unit" class="t6 Select-All" style="width: 15vw">
+                                                    <option value="2">N.m</option>
+                                                    <option value="1">Kgf.m</option>
+                                                    <option value="2">Kgf.cm</option>
+                                                    <option value="2">In.lbs</option>
+                                                </select>
                             </td>
                             <td>
-                                Angle:  <select id="Angle" class="t6 Select-All" id='angle_type' style="float: none; width: 100px">
+                                Angle:  <select id="Angle" class="t6 Select-All">
                                             <option value="1">Total angle</option>
                                             <option value="2">Task angle</option>
                                         </select>
                             </td>
-                           <!--<td>
-                                Sampling:  
-                                <select id="SelectOutputSampling" class="t6 Select-All" id='file_type'>
+                            <td>
+                                Sampling:  <select id="SelectOutputSampling" class="t6 Select-All">
                                             <option value="1">1(ms)</option>
                                             <option value="2">0.5(ms)</option>
-                                            <option value="3">2(ms)</option>
-                                </select>
-                            </td>-->
+                                        </select>
+                            </td>
                             <td>
                                 <button id="Export-Excel" type="button" class="ExportButton" style="margin-top: 0">Export Excel</button>
-                                <!--<button id="Save-info" type="button" style="margin-top: 0">Save</button>-->
+                                <button id="Save-info" type="button" style="margin-top: 0">Save</button>
                             </td>
                         </tr>
                     </table>
@@ -485,26 +338,59 @@ if(!empty($_COOKIE['line_style'])){
                     <div>
                         <div style="text-align: center">
                             <label style="float: left"><b>Diagram Display</b></label>
-                            <label><?php echo $data['chat']['chat_name'];?></label>
+                            <label>Torque / Time</label>
                         </div>
                         <div id="chart-setting">
                             <div class="chart-container">
-                                <div class="menu-chart"  id="menu-chart" onclick="toggleMenu()">
+                                <div class="menu-chart" onclick="toggleMenu()">
                                     <i class="fa fa-bars" style="font-size: 26px"></i>
                                     <div class="menu-content" id="myMenu">
                                         <a href="#" onclick="viewFullScreen()">View in full screen</a>
                                         <a href="#" onclick="printChart()">Print chart</a>
-                                        <a  id="downloadchartbtn">Download HTML</a>
-                                        <!--<a  id="downloadPngBtn">Download JEPG</a>-->
+                                        <a href="#" onclick="downloadPng()">Download PNG</a>
+                                        <a href="#" onclick="downloadJpeg()">Download JPEG</a>
                                     </div>
-                                    
                                 </div>
-                                <div class="empty-div3"></div>
-                                <div id="chartinfo"></div>
-                                
+
+                                <svg viewBox="0 0 500 300">
+                                    <!-- Draw X and Y axes -->
+                                    <line class="axis-x" x1="50" y1="215" x2="550" y2="215" />
+                                    <line class="axis-y" x1="50" y1="215" x2="50" y2="40" />
+
+                                    <!-- Draw grid lines on Y-axis -->
+                                    <line class="grid-line" x1="50" y1="190" x2="500" y2="190" />
+                                    <line class="grid-line" x1="50" y1="160" x2="500" y2="160" />
+                                    <line class="grid-line" x1="50" y1="130" x2="500" y2="130" />
+                                    <line class="grid-line" x1="50" y1="100" x2="500" y2="100" />
+                                    <line class="grid-line" x1="50" y1="70" x2="500" y2="70" />
+                                    <line class="grid-line" x1="50" y1="40" x2="500" y2="40" />
+
+                                    <!-- Draw Torque values -->
+                                    <text x="30" y="15" text-anchor="end">Torques</text>
+
+                                    <text x="40" y="40" text-anchor="end">0.7 N.m</text>
+                                    <text x="40" y="70" text-anchor="end">0.6 N.m</text>
+                                    <text x="40" y="100" text-anchor="end">0.5 N.m</text>
+                                    <text x="40" y="130" text-anchor="end">0.3 N.m</text>
+                                    <text x="40" y="160" text-anchor="end">0.3 N.m</text>
+                                    <text x="40" y="190" text-anchor="end">0.3 N.m</text>
+
+                                    <!-- Draw Count values -->
+                                    <text x="50" y="233" text-anchor="middle">0</text>
+                                    <text x="115" y="233" text-anchor="middle">100</text>
+                                    <text x="185" y="233" text-anchor="middle">200</text>
+                                    <text x="245" y="233" text-anchor="middle">300</text>
+                                    <text x="305" y="233" text-anchor="middle">400</text>
+                                    <text x="365" y="233" text-anchor="middle">500</text>
+                                    <text x="435" y="233" text-anchor="middle">600</text>
+                                    <text x="495" y="233" text-anchor="middle">700</text>
+
+                                    <text x="540" y="245" text-anchor="middle">Time</text>
+                                    <!-- Draw the line chart -->
+                                    <path class="line" d="M50 190 L150 180 L240 130 L350 158 L420 100 L530 60"/>
+                                </svg>
                             </div>
                         </div>
-                    </div>
                     </div>
                 </div>
 
@@ -512,34 +398,35 @@ if(!empty($_COOKIE['line_style'])){
                 <div id="CombineDataDisplay" style="display: none">
                     <div class="topnav">
                         <label type="text" style="font-size: 20px; padding-left: 1%; margin: 6px">Fastenig record &#62; Combine data</label>
-                        <button id="back-setting" type="button"  onclick="goBack()" >
-                            <img id="img-back" src="./img/back.svg" alt=""  onclick="goBack()" >Back
+                        <button id="back-setting" type="button" onclick="cancelSetting()">
+                            <img id="img-back" src="./img/back.svg" alt="">Back
                         </button>
                     </div>
                     <div class="topnav-menu" style="background-color: #FFF; margin-top: 3px">
                         <div class="row t1">
                             <div class="col t2 form-check form-check-inline" style="margin-left: 10px">
-                                <input class="form-check-input" type="checkbox" id="myCheckbox" onchange="check_limit(this)";  <?php if($limit_val=="1"){ echo "checked"; }else{}?> style="zoom:1.2; vertical-align: middle">
+                                <input class="form-check-input" type="checkbox" checked="checked" name="optioncheck" id="optioncheck" value="0"style="zoom:1.2; vertical-align: middle">
                                 <label class="form-check-label" for="optioncheck">display the high/low auxiliary lines.</label>
 
                                 <label style="padding-left: 5%">
-                                    Angle : &nbsp;<select id="angle" style="width: 120px" onchange="angle_change(this)">
+                                    Angle : &nbsp;<select id="angle" style="width: 120px">
                                                     <option value="1">total angle</option>
                                                     <option value="2">task angle</option>
                                                   </select>
                                 </label>
                                 <label style="padding-left: 5%">
-                                    <!--Unit :
-                                        <select id="unit" style="width: 100px" onchange="unit_change(this)" >
-                                          <?php foreach($data['torque_mode_arr'] as $k_torque => $v_torque){?>
-                                                <option  value="<?php echo $k_torque;?>"  <?php if($unit_mode== $k_torque){echo "selected";}else{echo "";}?>  > <?php echo $v_torque;?> </option>
-                                          <?php } ?>        
-                                        </select>-->
+                                    Unit :  &nbsp;<select id="unit" style="width: 100px">
+                                                    <option value="1">Kgf.m</option>
+                                                    <option value="2">N.m</option>
+                                                    <option value="2">Kgf.cm</option>
+                                                    <option value="2">In.lbs</option>
+                                                  </select>
                                 </label>
                             </div>
                             <div class="col t2">
+                                <button id="Save-combine" type="button">Save</button>
                                 <button id="Export-Excel-data" type="button" class="ExportButton">Export Excel</button>
-                                <button id="downlandpdf_combine" type="button" class="ExportButton">Export HTML</button>
+                                <button id="Export-chart" type="button" class="ExportButton">Export PNG</button>
                             </div>
                         </div>
                     </div>
@@ -547,48 +434,54 @@ if(!empty($_COOKIE['line_style'])){
                     <hr class="w3-clear" style="width: 100%">
 
                     <div class="w3-col">
-                        <div class="w3-round" style="margin: 5px 0;">
+                        <div class="w3-round" style="margin: 5px 0">
                             <div class="w3-row-padding">
                                 <div class="scrollbar-Combine" id="style-Combine">
                                     <div class="force-overflow-Combine">
-                                    <?php foreach( $data['info_final'] as $key =>$val){?>
-                                            <div class="w3-half">
-                                                <div class="row t1">
-                                                    <div class="col"> Index : <?php echo $val['system_sn'];?></div>
-                                                    <div class="col"> Job info : <?php echo $val['job_name'];?></div>
-                                                    <div class="col"> Pset : </div>
-                                                </div>
-                                                <div class="row t1">
-                                                    <div class="col"> Time : <?php echo $val['data_time'];?></div>
-                                                    <div class="col"> Task Time : <?php echo $val['fasten_time'];?> ms </div>
-                                                    <div class="col"> Status : <a style="background-color:<?php echo $data['status_arr']['status_color'][$val['fasten_status']];?>"><?php echo $data['status_arr']['status_type'][$val['fasten_status']];?></a></div>
-                                                </div>
-                                                <div class="row t1">
-                                                    <div class="col"> barcodeSN : <?php echo $val['cc_barcodesn'];?></div>
-                                                    <div class="col"> Error Code : <?php echo  $data['status_arr']['error_msg'][$val['error_message']];?></div>
-                                                    <div class="col"> Actual Torque : <?php echo $val['fasten_torque'] ." ".$data['torque_arr'][$val['torque_unit']];?> </div>
-                                                </div>
-                                                <div class="row t1">
-                                                    <div class="col"> Equipment : </div>
-                                                </div>
-                                             </div>
-                                    <?php }?>
+                                        <div class="w3-half">
+                                            <div class="row t1">
+                                                <div class="col"> Index : 1</div>
+                                                <div class="col"> Job info : job-1</div>
+                                                <div class="col"> Pset : p1</div>
+                                            </div>
+                                            <div class="row t1">
+                                                <div class="col"> Time : 13:00</div>
+                                                <div class="col"> Task Time : 100sec</div>
+                                                <div class="col"> Status : ok</div>
+                                            </div>
+                                            <div class="row t1">
+                                                <div class="col"> barcodeSN : 12345</div>
+                                                <div class="col"> Error Code : </div>
+                                                <div class="col"> Actual Torque : 0.6N.m</div>
+                                            </div>
+                                            <div class="row t1">
+                                                <div class="col"> Equipment : Note:arm(444,215)(200)</div>
+                                            </div>
+                                            <img src="./img/chart-img.svg" style="width:90%" alt="Northern Lights" class="w3-margin-bottom">
+                                        </div>
 
-                                
-
-                                        <!---圖表1--->
-                                        <div class="empty-div"></div>
-                                        <div id="chart-title"><?php echo $data['info_final'][0]['job_name'];?></div>
-                                        <div id="chart"></div>
-
-                                        <br><br><br><br>
-                                        <div class="empty-div"></div>
-                                        <div id="chart-title2"><?php echo $data['info_final'][1]['job_name'];?></div>
-                                        <div id="chart1"></div>
-                                        
-                                                                   
+                                        <div class="w3-half">
+                                            <div class="row t1">
+                                                <div class="col"> Index : 2</div>
+                                                <div class="col"> Job info : job-2</div>
+                                                <div class="col"> Pset : p1</div>
+                                            </div>
+                                            <div class="row t1">
+                                                <div class="col"> Time : 13:00</div>
+                                                <div class="col"> Task Time : 100sec</div>
+                                                <div class="col"> Status : ok</div>
+                                            </div>
+                                            <div class="row t1">
+                                                <div class="col"> barcodeSN : 12345</div>
+                                                <div class="col"> Error Code : </div>
+                                                <div class="col"> Actual Torque : 0.6N.m</div>
+                                            </div>
+                                            <div class="row t1">
+                                                <div class="col"> Equipment : Note:arm(444,215)(200)</div>
+                                            </div>
+                                            <img src="./img/chart-img.svg" style="width:90%" alt="Nature" class="w3-margin-bottom">
+                                        </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -701,7 +594,7 @@ if(!empty($_COOKIE['line_style'])){
                         <img src="./img/pick-A-screw.svg" style=" height: 40vh; width: 70vw" alt="Nature" class="w3-margin-bottom">
                     </div>
 
-                    <button class="Save-button" id="saveButton" onclick="Save_job()">Save</button>
+                    <button class="Save-button" id="saveButton">Save</button>
                 </div>
             </div>
 
@@ -785,16 +678,66 @@ if(!empty($_COOKIE['line_style'])){
                     <h4>Job</h4>
                     <div class="scrollbar-jobselect" id="style-jobselect">
                         <div class="force-overflow-jobselect">
-
-                            <?php foreach($data['job_arr'] as $k_job =>$v_job){?>
-                                    <div class="row t1">
-                                        <div class="col t5 form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" name="jobid" id="jobid" value="<?php echo $v_job['job_id'];?>" onclick="JobCheckbox()" style="zoom:1.0; vertical-align: middle;">&nbsp;
-                                            <label class="form-check-label" for="Job-1"><?php echo $v_job['job_name'];?></label>
-                                        </div>
-                                    </div>
-
-                            <?php }?>
+                            <div class="row t1">
+                                <div class="col t5 form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="Job-1" id="Job-1" value="" onclick="JobCheckbox()" style="zoom:1.0; vertical-align: middle;">&nbsp;
+                                    <label class="form-check-label" for="Job-1">Job 1</label>
+                                </div>
+                            </div>
+                            <div class="row t1">
+                                <div class="col t5 form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="Job-2" id="Job-2" value=""  style="zoom:1.0; vertical-align: middle;">&nbsp;
+                                    <label class="form-check-label" for="Job-2">Job 2</label>
+                                </div>
+                            </div>
+                            <div class="row t1">
+                                <div class="col t5 form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="Job-3" id="Job-3" value=""  style="zoom:1.0; vertical-align: middle;">&nbsp;
+                                    <label class="form-check-label" for="Job-3">Job 3</label>
+                                </div>
+                            </div>
+                            <div class="row t1">
+                                <div class="col t5 form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="Job-4" id="Job-4" value=""  style="zoom:1.0; vertical-align: middle;">&nbsp;
+                                    <label class="form-check-label" for="Job-4">Job 4</label>
+                                </div>
+                            </div>
+                            <div class="row t1">
+                                <div class="col t5 form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="Job-5" id="Job-5" value=""  style="zoom:1.0; vertical-align: middle;">&nbsp;
+                                    <label class="form-check-label" for="Job-5">Job 5</label>
+                                </div>
+                            </div>
+                            <div class="row t1">
+                                <div class="col t5 form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="Job-6" id="Job-6" value=""  style="zoom:1.0; vertical-align: middle;">&nbsp;
+                                    <label class="form-check-label" for="Job-6">Job 6</label>
+                                </div>
+                            </div>
+                            <div class="row t1">
+                                <div class="col t5 form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="Job-7" id="Job-7" value=""  style="zoom:1.0; vertical-align: middle;">&nbsp;
+                                    <label class="form-check-label" for="Job-7">Job 7</label>
+                                </div>
+                            </div>
+                            <div class="row t1">
+                                <div class="col t5 form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="Job-8" id="Job-8" value=""  style="zoom:1.0; vertical-align: middle;">&nbsp;
+                                    <label class="form-check-label" for="Job-8">Job 8</label>
+                                </div>
+                            </div>
+                            <div class="row t1">
+                                <div class="col t5 form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="Job-9" id="Job-9" value=""  style="zoom:1.0; vertical-align: middle;">&nbsp;
+                                    <label class="form-check-label" for="Job-9">Job 9</label>
+                                </div>
+                            </div>
+                            <div class="row t1">
+                                <div class="col t5 form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="Job-10" id="Job-10" value="" style="zoom:1.0; vertical-align: middle;">&nbsp;
+                                    <label class="form-check-label" for="Job-10">Job 10</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -803,6 +746,12 @@ if(!empty($_COOKIE['line_style'])){
                     <div class="scrollbar-jobselect" id="style-jobselect">
                         <div class="force-overflow-jobselect">
                             <div id="Seq-list" style="display: none">
+                                <div class="row t1">
+                                    <div class="col t5 form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" name="Seq-1" id="Seq-1" value="" onclick="JobCheckbox()" style="zoom:1.0; vertical-align: middle;">&nbsp;
+                                        <label class="form-check-label" for="Seq-1">Seq 1</label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -812,13 +761,17 @@ if(!empty($_COOKIE['line_style'])){
                     <div class="scrollbar-jobselect" id="style-jobselect">
                         <div class="force-overflow-jobselect">
                             <div id="Task-list" style="display: none">
-                              
+                                <div class="row t1">
+                                    <div class="col t5">
+                                        <label class="form-check-label" for="Task-1">Task 1</label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!--<span class="Save-button" onclick='Save_job()'>Save</span>-->
+                <span class="Save-button" >Save</span>
             </div>
         </div>
     </div>
@@ -875,7 +828,26 @@ function handleButtonClick(button, content)
         }
     });
 
+    function JobCheckbox()
+    {
+        var checkBox1 = document.getElementById("Job-1");
+        var text1 = document.getElementById("Seq-list");
 
+        var checkBox2 = document.getElementById("Seq-1");
+        var text2 = document.getElementById("Task-list");
+
+        if (checkBox1.checked == true) {
+            text1.style.display = "block";
+        } else {
+            text1.style.display = "none";
+        }
+
+        if (checkBox2.checked == true) {
+            text2.style.display = "block";
+        } else {
+            text2.style.display = "none";
+        }
+    }
 
     // Close the modal when clicking outside the modal content
     window.addEventListener('click', function(event) {
@@ -884,16 +856,25 @@ function handleButtonClick(button, content)
         }
     });
 
-
 // Next To Info
 function NextToInfo()
 {
     // Show DetailInfo
-    // Hide FasteningDisplay
     document.getElementById('DetailInfoDisplay').style.display = 'block';
+
+    // Hide FasteningDisplay
     document.getElementById('FasteningDisplay').style.display = 'none';
 }
 
+// Next To Combine data
+function NextToCombineData()
+{
+    // Show Combine data
+    document.getElementById('CombineDataDisplay').style.display = 'block';
+
+    // Hide FasteningDisplay
+    document.getElementById('FasteningDisplay').style.display = 'none';
+}
 
 function WorkFlowLogInfo()
 {
@@ -904,7 +885,7 @@ function WorkFlowLogInfo()
     document.getElementById('WorkFlowLogDisplay').style.display = 'none';
 }
 
-/*function cancelSetting()
+function cancelSetting()
 {
     var FasteningDisplay = document.getElementById('FasteningDisplay');
     var detailInfo = document.getElementById('DetailInfoDisplay');
@@ -933,7 +914,7 @@ function WorkFlowLogInfo()
     {
         // If FasteningDisplay is currently displayed or both are hidden, do nothing or handle it as needed
     }
-}*/
+}
 
 function toggleMenu() {
     var menuContent = document.getElementById("myMenu");
@@ -943,6 +924,15 @@ function toggleMenu() {
 function printChart() {
 
 }
+
+function downloadPng() {
+
+}
+
+function downloadJpeg() {
+
+}
+
 
 /// Onclick event for row background color
 $(document).ready(function () {
@@ -1003,347 +993,9 @@ addMessage();
 {
     background-color: #9AC0CD !important;
 }
-</style>
 
+./*selected :hover{
+    background-color: #9AC0CD;
+}*/
+</style>
 <?php require APPROOT . 'views/inc/footer.tpl'; ?>
-
-
-<!----nextinfo op----->
-<?php  if (strpos($path, "nextinfo") !== false && $data['chart_info']['chat_mode'] != "6") {?>
-<script>
-    var x_data_val = <?php echo  $data['chart_info']['x_val']; ?>;
-    var y_data_val = <?php echo  $data['chart_info']['y_val']; ?>;
-
-    var min_val = <?php echo  $data['chart_info']['min'];?>;
-    var max_val = <?php echo  $data['chart_info']['max'];?>;
-
-    var xaxislabel = '<?php echo $data['chart_info']['x_title'];?>';
-    var yaxislabel = '<?php echo $data['chart_info']['y_title'];?>';
-
-    var type = '<?php echo $data['chart_info']['chat_mode'];?>';
-
-    var chartOptions_info = {
-    bindto: '#chartinfo',
-    data: {
-        x: 'x',
-        columns: [
-            ['x'].concat(x_data_val),
-            ['Torque'].concat(y_data_val)
-        ]
-    },
-
-    axis: {
-        x: {
-            label: xaxislabel,
-            position: 'outer-center',
-        },
-        y: {
-            label: yaxislabel,
-            tick: {}
-        }
-    },
-
-    grid: {
-        y: {}
-    },
-    subchart: {
-        show: true
-    }
-    };
-    // 根據limit_val 的值決定是否顯示上下限
-    if (limit_val == 1) {
-        chartOptions_info.grid.y.lines = [
-            {value: min_val, text: 'Low Torque', position: 'middle', class: 'grid-upper'},
-            {value: max_val, text: 'High Torque', position: 'middle', class: 'grid-upper'}
-        ];
-
-    }
-
-    var chart = c3.generate(chartOptions_info);
-
-</script>
-<?php } ?>
-
-<?php  if (strpos($path, "nextinfo") !== false && $data['chart_info']['chat_mode'] == "6") {?>
-<script>
-    var x_data_val  = <?php echo  $data['chart_info']['x_val']; ?>;
-    var y_data_val  = <?php echo  $data['chart_info']['y_val']; ?>;
-    var y_data_val1 = <?php echo  $data['chart_info']['y_val_1'];?>;
-
-
-    var min_val = <?php echo  $data['chart_info']['min'];?>;
-    var max_val = <?php echo  $data['chart_info']['max'];?>;
-
-    var min_val1 = <?php echo  $data['chart_info']['min1'];?>;
-    var max_val1 = <?php echo  $data['chart_info']['max1'];?>;
-
-    var xaxislabel = '<?php echo $data['chart_info']['x_title'];?>';
-    var yaxislabel = '<?php echo $data['chart_info']['y_title'];?>';
-
-    var chartOptions_info = {
-        bindto: '#chartinfo',
-        data: {
-            x: 'x',
-            columns: [
-                ['x'].concat(x_data_val),
-                ['Torque'].concat(y_data_val1),
-                ['Angle'].concat(y_data_val1)
-            ]
-        },
-
-        axis: {
-            x: {
-                label: xaxislabel,
-                position: 'outer-center',
-            },
-            y: {
-                label: 'Angle',
-                tick: {}
-            },
-            y2: {
-                show: true,
-                label: {
-                    text: 'Torque',
-                    position: 'outer-middle'
-                }
-            }
-        },
-
-        grid: {
-            y: {}
-        },
-        subchart: {
-            show: true
-        }
-    };
-
-    // 根据 limit_val 的值决定是否显示上下限
-    if (limit_val == 1) {
-        chartOptions_info.grid.y.lines = [
-            {value: min_val, text: 'Low Torque', position: 'middle', class: 'grid-upper'},
-            {value: max_val, text: 'High Torque', position: 'middle', class: 'grid-upper'},
-            {value: min_val1, text: '', position: 'middle', class: 'grid-upper'},
-            {value: max_val1, text: '', position: 'middle', class: 'grid-upper'},
-        ];
-    }
-
-    var chart = c3.generate(chartOptions_info);
-   
-</script>
-<?php }?>
-<!----nextinfo ed----->
-
-<!----combine op----->
-<?php if ($path == "combinedata"){?>
-<script>
-    //整理X軸跟Y軸的數據data
-    var x_data  = <?php echo  $data['chart1_xcoordinate']; ?>;
-    var y_data  = <?php echo  $data['chart1_ycoordinate']; ?>;
-
-
-    var min = <?php echo $data['chart1_ycoordinate_min'];?>;
-    var max = <?php echo $data['chart1_ycoordinate_max'];?>;
-
-
-    var chartOptions = {
-        bindto: '#chart',
-        data: {
-            x: 'x',
-            columns: [
-                ['x'].concat(x_data),
-                ['Torque'].concat(y_data)
-            ]
-        },
-
-        axis: {
-            x: {
-                label: 'Time (ms)',
-                position: 'outer-center',
-            },
-            y: {
-                label: 'Torque',
-                tick: {}
-            }
-        },
-
-        grid: {
-            y: {}
-        },
-        subchart: {
-            show: true
-        }
-    };
-
-    // 根據limit_val 的值決定是否顯示上下限
-    if (limit_val == 1) {
-        chartOptions.grid.y.lines = [
-            {value: min, text: 'Low Torque', position: 'middle', class: 'grid-upper'},
-            {value: max, text: 'High Torque', position: 'middle', class: 'grid-upper'}
-        ];
-    }
-
-    var chart = c3.generate(chartOptions);
-    var chartTitle = document.getElementById('chart-title');
-    chartTitle.style.textAlign = 'center';
-    chartTitle.style.fontSize = '21px'; 
-    chartTitle.style.color = 'blue'; 
-
-</script>
-
-
-<script>
-
-    //整理X軸跟Y軸的數據data
-    var x_data = <?php echo  $data['chart2_xcoordinate']; ?>;
-    var y_data = <?php echo  $data['chart2_ycoordinate']; ?>;
-
-    var min = <?php echo $data['chart2_ycoordinate_min'];?>;
-    var max = <?php echo $data['chart2_ycoordinate_max'];?>;
-
-    var chartOptions1 = {
-        bindto: '#chart1',
-        data: {
-            x: 'x',
-            columns: [
-                ['x'].concat(x_data),
-                ['Torque'].concat(y_data)
-            ]
-        },
-
-        axis: {
-            x: {
-                label: 'Time (ms)',
-            },
-            y: {
-                label: 'Torque',
-                tick: {}
-            }
-        },
-
-        grid: {
-            y: {}
-        },
-        subchart: {
-            show: true
-        }
-    };
-
-    //根據limit_val 的值決定是否顯示上下限
-    if (limit_val == 1) {
-        chartOptions1.grid.y.lines = [
-            {value: min, text: 'Low Torque', position: 'middle', class: 'grid-upper',size:15  },
-            {value: max, text: 'High Torque', position: 'middle', class: 'grid-upper',size:15 }
-        ];
-    }
-
-    var chart1 = c3.generate(chartOptions1);
-    var chartTitle2 = document.getElementById('chart-title2');
-    chartTitle2.style.textAlign = 'center';
-    chartTitle2.style.fontSize = '21px';
-    chartTitle2.style.color = 'blue'; 
-
-</script>
-<?php } ?>
-
-
-<!----combine ed----->
-<style>
-    .grid-upper line {
-        stroke: red;
-    }
-    .grid-lower line {
-        stroke: red;
-    }
-    .region-upper rect {
-        fill: rgba(255, 0, 0, 0.2);
-    }
-    .region-lower rect {
-        fill: rgba(255, 0, 0, 0.2);
-    }
-    .c3 .grid line.grid-upper {
-        stroke-width: 2px;
-    }
-
-    .empty-div {
-        width: 200px;
-        height:150px;
-    }
-     .empty-div1 {
-        width: 200px;
-        height:500px;
-    }
-      .empty-div3 {
-        width: 200px;
-        height:50px;
-    }
-</style>
-
-<script>
-function chat_mode_change(selectOS){
-    var selectElement = document.getElementById('chartseting');
-    var selectedOptions = [];
-    // 獲取所有被選中的選項
-    for (var i = 0; i < selectElement.options.length; i++) {
-        var option = selectElement.options[i];
-        if (option.selected) {
-            selectedOptions.push(option.value);
-        }
-    }   
-     
-    document.cookie = "chat_mode_change=" + selectedOptions + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
-    history.go(0);
-}
-
-
-
-
-/*document.getElementById('downloadchartbtn').addEventListener('click', function() {
-    const element = document.body;
-    html2pdf().from(element).set({ html2canvas: { scale: 5 } }).save('download_chart11.pdf');
-});*/
-
-
-document.getElementById('downloadchartbtn').addEventListener('click', function() {
-
-    var menuChartDiv = document.getElementById('menu-chart');
-    menuChartDiv.style.display = 'none';
-
-
-    var divContent = document.getElementById('jobinfo').outerHTML;
-    var stylesheets = document.getElementsByTagName('link');
-    var cssString = Array.from(stylesheets)
-        .map(stylesheet => `<link rel="stylesheet" href="${stylesheet.href}">`)
-        .join('\n');
-
-    var fullHTML = `<head>${cssString}</head>\n<body>${divContent}</body>`;
-    var blob = new Blob([fullHTML], { type: 'text/html' });
-
-    menuChartDiv.style.display = '';
-
-
-    var link = document.createElement('a');
-    link.href = window.URL.createObjectURL(blob);
-    link.download = 'job_info.html';
-    link.click();
-
-});
-
-
-document.getElementById('downlandpdf_combine').addEventListener('click', function() {
-        var divContent = document.getElementById('style-Combine').outerHTML;
-        var stylesheets = document.getElementsByTagName('link');
-        var cssString = Array.from(stylesheets)
-            .map(stylesheet => `<link rel="stylesheet" href="${stylesheet.href}">`)
-            .join('\n');
-
-        var fullHTML = `<head>${cssString}</head>\n<body>${divContent}</body>`;
-        var blob = new Blob([fullHTML], { type: 'text/html' });
-
-        var link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.download = 'job_combinedata.html';
-        link.click();
-});
-
-</script>
-

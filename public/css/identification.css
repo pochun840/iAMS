@@ -921,6 +921,25 @@ select:focus~.selectIcon svg.icon
 
 .checkboxFive label:after
 {
+    /*content: '';
+    position: absolute;
+    width: 13px;
+    height: 8px;
+    background: transparent;
+    top: 5px;
+    left: 15px;
+    border: 2px solid #333;
+    border-top: none;
+    border-right: none;
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    transform: rotate(-45deg);*/
+}
+
+.checkboxFive input[type=checkbox]:checked + label:after
+{
     content: '';
     position: absolute;
     width: 13px;
@@ -936,11 +955,7 @@ select:focus~.selectIcon svg.icon
     -o-transform: rotate(-45deg);
     -ms-transform: rotate(-45deg);
     transform: rotate(-45deg);
-}
-
-.checkboxFive input[type=checkbox]:checked + label:after
-{
-    opacity: 0;
+    opacity: 1;
 }
 
 /* scrollbar style permissions setting*/

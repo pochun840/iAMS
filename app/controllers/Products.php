@@ -154,6 +154,26 @@ class Products extends Controller
                 $input_check = false;
                 $error_message .= "size,";
             }
+            if(  !empty($data_array['barcode_start']) && isset($data_array['barcode_start']) ){
+                if($data_array['barcode_start'] == 'true'){
+                    $data_array['barcode_start'] = 1;
+                }else{
+                    $data_array['barcode_start'] = 0;
+                }
+            }else{ 
+                $input_check = false;
+                $error_message .= "ok_job,";
+            }
+            if(  !empty($data_array['tower_light']) && isset($data_array['tower_light']) ){
+                if($data_array['tower_light'] == 'true'){
+                    $data_array['tower_light'] = 1;
+                }else{
+                    $data_array['tower_light'] = 0;
+                }
+            }else{ 
+                $input_check = false;
+                $error_message .= "ok_job,";
+            }
 
             if ($input_check) {
                 $jobs = $this->ProductModel->EditJob($data_array);

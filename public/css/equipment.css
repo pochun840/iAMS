@@ -278,6 +278,15 @@ header::after
     }
 }
 
+#container
+{
+    position: relative;
+    padding: 10px;
+    background-color: #FCFCFC;
+    box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
+    height: calc(100vh - 150px);
+}
+
 #Equipment_Setting
 {
     width: 100%;
@@ -701,7 +710,7 @@ header::after
 .scrollbar-Communicationlog
 {
     float: left;
-    height: calc(100vh - 560px);
+    height: calc(100vh - 570px);
     width: 100%;
     overflow-y: scroll;
 }
@@ -960,16 +969,6 @@ header::after
 
 /***** Style css Device Edit ****/
 
-#container
-{
-    position: relative;
-    padding: 10px;
-    background-color: #FCFCFC;
-    box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
-    height: calc(100vh - 130px);
-
-}
-
 .saveButton
 {
     background-color: #555;
@@ -1058,13 +1057,14 @@ header::after
     box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.2);
 }
 
-/* scrollbar Arm */
+/* scrollbar Arm Encoders Setting */
 .scrollbar-Arm
 {
     float: left;
     height: calc(100vh - 280px);
     width: 100%;
     overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .force-overflow
@@ -1085,7 +1085,7 @@ header::after
     background-color: #F5F5F5;
 }
 
-/**  STYLE Y */
+/**  STYLE ARM */
 #style-Arm::-webkit-scrollbar-thumb
 {
     border-radius: 10px;
@@ -1306,18 +1306,16 @@ header::after
     z-index: 2000;
 }
 
-.label-text label
-{
-    font-weight: bold;
-}
 
-.input-setting input
+/* Tower light css style  */
+.coler-setting input
 {
-    margin-right: 10px;
+    margin-right: 20px;
     margin-top: 5px;
     border: none;
-    width: 60px;
+    width: 70px;
     height: 30px;
+    border: 1px solid #999999;
 }
 
 .Buzzer-Button
@@ -1327,12 +1325,238 @@ header::after
     width: auto;
     height: 30px;
     padding: 0 5px;
-    line-height: 0px;
+    margin-top: 5px;
+    margin-left: 5px;
+    border-radius: 5px;
+    margin-bottom: 2px;
     color: #000;
-    align-items: center;
     text-align: center;
     font-size: 16px;
 }
+
+.left-right-setting
+{
+    display: flex;
+    margin-top: 2%;
+}
+
+.left-column, .right-column
+{
+    box-sizing: border-box;
+}
+
+.left-column
+{
+    padding: 0px;
+    padding-left: 15%;
+    width: 40%;
+}
+
+.right-column
+{
+    padding: 0 0px;
+    width: 60%;
+}
+
+.length-signal
+{
+    height: 25px;
+    width: 60px;
+    margin-right: 15px;
+    margin-bottom: 3px;
+    vertical-align: middle;
+}
+
+.lighttime
+{
+    vertical-align: middle;
+    background-color: #DEDEDE;
+    border-radius: 10px;
+    width: 60px;
+    text-align: center;
+}
+
+
+/* PLC In-Out css style  */
+.left-middle-right-IO
+{
+    display: flex;
+    margin-top: 1%;
+    padding:0 100px;
+    z-index: 500;
+}
+
+.left-middle-right-header
+{
+    display: flex;
+    margin-top: 1%;
+    padding:0 100px;
+    z-index: 500;
+}
+
+.left-column-input, .right-column-output .middle-pin
+{
+    box-sizing: border-box;
+}
+
+.left-column-input
+{
+    padding-left: 0%;
+    width: 45%;
+}
+
+.middle-pin
+{
+    padding: 0 5px;
+    width: 5%;
+}
+
+.right-column-output
+{
+    padding-right: 0%;
+    width: 45%;
+}
+
+.w3-button
+{
+    border-radius: 10px;
+    vertical-align: middle;
+    width: 100px;
+}
+
+.header-input
+{
+    display: block;
+    padding: 0px 5px;
+    width: 100%;
+    height: 40px;
+    line-height: 35px;
+    text-align: left;
+    padding-left: 10%;
+    background: #C70028;
+    color: white;
+    padding-bottom: 0px;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+}
+
+.header-PIN
+{
+    padding: 0px 5px;
+    text-align: center;
+}
+
+.header-output
+{
+    display: block;
+    padding: 0px 5px;
+    height: 40px;
+    line-height: 35px;
+    width: 100%;
+    text-align: left;
+    padding-left: 10%;
+    background: #2C3752;
+    color: white;
+    padding-bottom: 0px;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+}
+
+.input-pin, .output-pin
+{
+    display: block;
+    width: 100%;
+    height: calc(100vh - 335px);
+    padding-bottom: 0px;
+    margin-top: 0px;
+    padding-left: 10%;
+    align-items: center;
+    justify-content: center;
+}
+
+.input-pin label,
+.output-pin label,
+.pin label
+{
+    display: block;
+    width: 90%;
+    height: 25px;
+    padding-left: 3%;
+    margin-top: 8px;
+    margin-bottom: 5px;
+    text-align: left;
+    background-color: #fff;
+    align-items: center;
+    justify-content: center;
+}
+
+.pin
+{
+    display: block;
+    width: 100%;
+    margin-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 16%;
+    align-items: center;
+    justify-content: center;
+}
+
+.pin label
+{
+    background-color: #D9D9D9;
+    text-align: center;
+}
+
+.output-pin label input
+{
+    zoom:1.0;
+    vertical-align: middle;
+    float: right;margin-right: 10%;
+    margin-top: 5px;
+}
+
+/* scrollbar I/O */
+.scrollbar-IO
+{
+    float: left;
+    height: calc(100vh - 340px);
+    width: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.force-overflow-IO
+{
+    min-height: 500px;
+}
+
+#style-IO::-webkit-scrollbar
+{
+    width: 15px;
+    display: none;
+}
+
+/**  STYLE I/O */
+#style-IO::-webkit-scrollbar-thumb
+{
+    border-radius: 10px;
+    background: linear-gradient(left, #96A6BF, #63738C);
+    box-shadow: inset 0 0 1px 1px #5C6670;
+}
+
+#style-IO::-webkit-scrollbar-track
+{
+    border-radius: 10px;
+    box-shadow: 0 0 1px 1px #bbb, inset 0 0 7px rgba(0,0,0,0.3)
+}
+
+#style-IO::-webkit-scrollbar-thumb:hover
+{
+    background: linear-gradient(left, #8391A6, #536175);
+}
+
 
 
 

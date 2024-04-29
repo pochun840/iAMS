@@ -252,7 +252,7 @@
                             </div>
                         </div>
 
-                        <!-- <div class="row">
+                       <!--  <div class="row">
                             <div for="seq_enable" class="col-4 t1">Seq Enable :</div>
                             <div class="switch menu col-4 t2">
                                 <input id="seq_enable" type="checkbox" checked>
@@ -455,7 +455,7 @@ function displayImage()
         document.getElementById("seq_name").value = '';
         document.getElementById("barcode_enable").checked = 0;
         document.getElementById("stop_on_NG").value = 0;
-        document.getElementById('seq_enable').checked = 1;
+        // document.getElementById('seq_enable').checked = 1;
         document.getElementById('ok_seq').checked = 1;
         document.getElementById("timeout").value = 20;
 
@@ -476,9 +476,10 @@ function displayImage()
         let seq_name = document.getElementById("seq_name").value;
         let barcode_enable = document.getElementById("barcode_enable").checked;
         let stop_on_NG = document.getElementById("stop_on_NG").value;
-        let seq_enable = document.getElementById('seq_enable').checked; //$('input[id=ok_job]:checked').val();
+        // let seq_enable = document.getElementById('seq_enable').checked; //$('input[id=ok_job]:checked').val();
         let ok_seq = document.getElementById('ok_seq').checked; // $('input[name=Downshift_Enable]:checked').val();
         let timeout = document.getElementById("timeout").value;
+        let ok_seq_stop = 1;
 
         var formData = new FormData();
         // 添加表单数据
@@ -486,11 +487,12 @@ function displayImage()
         formData.append('job_id', job_id);
         formData.append('seq_id', seq_id);
         formData.append('seq_name', seq_name);
-        formData.append('barcode_enable', barcode-enable);
+        formData.append('barcode_enable', barcode_enable);
         formData.append('stop_on_NG', stop_on_NG);
-        formData.append('seq_enable', seq_enable);
+        // formData.append('seq_enable', seq_enable);
         formData.append('ok_seq', ok_seq);
         formData.append('timeout', timeout);
+        formData.append('ok_seq_stop', ok_seq_stop);
         // 添加图片数据
         var fileInput = $('#custom-file')[0].files[0];
         formData.append('image', fileInput);

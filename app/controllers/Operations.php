@@ -7,6 +7,7 @@ class Operations extends Controller
     private $SequenceModel;
     private $TaskModel;
     private $NavsController;
+    private $EquipmentModel;
     // 在建構子中將 Post 物件（Model）實例化
     public function __construct()
     {
@@ -15,6 +16,7 @@ class Operations extends Controller
         $this->SequenceModel = $this->model('Sequence');
         $this->TaskModel = $this->model('Task');
         $this->NavsController = $this->controller_new('Navs');
+        $this->EquipmentModel = $this->model('Equipment');
     }
 
     // 取得所有Jobs
@@ -252,5 +254,169 @@ class Operations extends Controller
         }
         
     }
+
+    public function Get_IO_Signal($value='')
+    {   
+        $error_message = '';
+        require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
+            $modbus = new ModbusMaster('192.168.1.75', "TCP");
+            try {
+                $modbus->port = 502;
+                $modbus->timeout_sec = 10;
+                // $data = array($tool_status);
+                $dataTypes = array("INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT");
+
+                // FC 2
+                $data = $modbus->readInputDiscretes(0, 0, 16);
+                // var_dump($data);
+                echo json_encode(array('result' => $data,'error' => $error_message));
+                exit();
+            } catch (Exception $e) {
+                echo $modbus->status;
+                exit();
+            }
+    }
+
+    public function Set_IO_Signal($value='')
+    {   
+        $data_true = array(true,true);
+        $data_false = array(false,false);
+        $regiest = 0x04;
+        $ledMax = 12;
+        $TowerLightSetting = $this->EquipmentModel->GetTowerLightSetting();
+        $IO = $this->EquipmentModel->GetIOPinSetting();
+
+        if(isset($_GET['light_signal']) ){
+            $light_signal = $_GET['light_signal'];
+        }else{
+            $light_signal = false;
+        }
+
+        if($light_signal){
+
+            $post['light_signal'] = $light_signal;
+            $post['IO'] = $IO;
+            $post['TowerLightSetting'] = $TowerLightSetting;
+            
+            $url = $_SERVER['REQUEST_SCHEME'].'://'. $_SERVER['SERVER_NAME'].'/CC/api/set_io_signal.php';
+
+            $curl = curl_init();
+            // $post['test'] = 'examples daata'; // our data todo in received
+            // $post['IO'] = $IO;
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt ($curl, CURLOPT_POST, TRUE);
+            curl_setopt ($curl, CURLOPT_POSTFIELDS, json_encode($post));
+            curl_setopt( $curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+
+            curl_setopt($curl, CURLOPT_USERAGENT, 'api');
+
+            // curl_setopt($curl, CURLOPT_TIMEOUT, 1); //if your connect is longer than 1s it lose data in POST better is finish script in recevie
+            curl_setopt($curl, CURLOPT_HEADER, 0);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, false);
+            curl_setopt($curl, CURLOPT_FORBID_REUSE, true);
+            curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 1);
+            curl_setopt($curl, CURLOPT_DNS_CACHE_TIMEOUT, 100);
+            curl_setopt($curl, CURLOPT_NOSIGNAL, 1);
+            curl_setopt($curl, CURLOPT_TIMEOUT_MS, 50);
+
+            curl_setopt($curl, CURLOPT_FRESH_CONNECT, true);
+
+            curl_exec($curl);
+
+            curl_close($curl);
+
+        }
+
+    }
+
+    public function Save_Result()
+    {
+        $this->OperationModel->SaveFastenData($_GET['data']);        
+    }
+
+    public function FunctionName($value='')
+    {
+        $TowerLightSetting = $this->EquipmentModel->GetTowerLightSetting();
+        var_dump($TowerLightSetting);
+        $IO = $this->EquipmentModel->GetIOPinSetting();
+        var_dump($IO);
+
+        // $pin0 = boolval($TowerLightSetting[0]['buzzer']);
+        // $pin1 = boolval($TowerLightSetting[0]['yellow_light']);
+        // $pin4 = boolval($TowerLightSetting[0]['green_light']);
+        // $pin5 = boolval($TowerLightSetting[0]['red_light']);
+
+        $pins = array();
+        $pins[0] = false;
+        $pins[1] = false;
+        $pins[2] = false;
+        $pins[3] = false;
+        $pins[4] = false;
+        $pins[5] = false;
+        $pins[6] = false;
+        $pins[7] = false;
+        $pins[8] = false;
+        $pins[9] = false;
+        $pins[10] = false;
+        $pins[11] = false;
+
+        foreach ($IO as $key => $value) {
+            if(in_array('red_light',$value)){
+                $pins[$value['pin_number']] = boolval($TowerLightSetting[0]['red_light']);
+            }
+            if(in_array('green_light',$value)){
+                $pins[$value['pin_number']] = boolval($TowerLightSetting[0]['green_light']);
+            }
+            if(in_array('yellow_light',$value)){
+                $pins[$value['pin_number']] = boolval($TowerLightSetting[0]['yellow_light']);
+            }
+            if(in_array('buzzer',$value)){
+                $pins[$value['pin_number']] = boolval($TowerLightSetting[0]['buzzer']);
+            }
+        }
+
+        var_dump($pins);
+
+    }
+
+    // Define your asynchronous function
+    public function asyncFunction($data)
+    {
+        $deferred = new Deferred();
+
+        var_dump($data);
+
+        // Simulate some asynchronous task (e.g., fetching data from database or external API)
+        $loop = Factory::create();
+        $loop->addTimer(1, function () use ($deferred, $data) {
+            // Once the task is completed, resolve the promise with the result
+            $deferred->resolve("Result for $data");
+            var_dump($data);
+        });
+
+        return $deferred->promise();
+    }
+
+    public function react($value='')
+    {
+        // echo 123;
+        // Create event loop
+        $loop = Factory::create();
+        $dataList = ['data1', 'data2', 'data3'];
+        // var_dump($dataList);
+        // Process each data asynchronously
+        foreach ($dataList as $data) {
+            $this->asyncFunction($data)->then(function ($result) use ($data) {
+                echo "Completed processing for $data: $result\n";
+            });
+        }
+
+        $loop->run();
+
+
+    }
+
+
+
 
 }

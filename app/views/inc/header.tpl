@@ -20,6 +20,7 @@
 
     <script src="<?php echo URLROOT; ?>/js/jquery-3.7.1.min.js"></script>
     <script src="<?php echo URLROOT; ?>/js/sweetalert2.js"></script>
+    <script src="<?php echo URLROOT; ?>/js/moment.min.js"></script>
     
     <title><?php echo SITENAME; ?></title>
 </head>

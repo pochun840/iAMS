@@ -7,37 +7,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/print-history-excel.css">
 <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/datatables.min.css">
-<!-----echart.js 測試-->
-<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.0/dist/echarts.min.js"></script>
-
-<!-- Include JSZip library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
-
-<!-- Include FileSaver.js library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-
-<!-- PDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
-
-
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
 </head>
 
 <body>
-
+    
     <div class="excel-sheet">
         <header class="border-bottom">
             <h2><img src="./img/logo.jpg" alt="Logo"></h2>
             <p  style="font-weight: bold; font-size: 34px; padding-bottom: 5px">Fastening Statistics Report</p>
+                <button id="download-btn">PDF</button>
+                <button onclick="downloadPage()">Download Page</button>
 
-                
         </header>
-
 
         <div style="padding-top: 10px;">
             <table class="table table-bordered" style="">
                 <tr>
-                    <td colspan="4" style="text-align: left; padding-left: 5.7%"> Report Time : <?php echo date("Y-m-d H:i:s");?></td>
+                    <td colspan="4" style="text-align: left; padding-left: 5.7%"> Report Time : 2024/12/25 10:11:25</td>
                 </tr>
                 <tr>
                     <td>Screw drivers : 3</td>
@@ -53,14 +42,21 @@
                 </tr>
             </table>
         </div>
-        <label style="font-weight: bold">Lock Status Statistics</label> <label style="font-weight: bold; margin-left: 50%">Fastening Status</label>
+        <label style="font-weight: bold">Lock Status Statistics</label> 
+        
+        <!--<label style="font-weight: bold; margin-left: 50%">Fastening Status</label>-->
         <div style="padding-bottom: 20px">
-            <img src="img/fastening-log.png" width="60%" height="220" alt=""><img src="img/fastening-status.png" width="40%" height="165px" alt="">
+    
+            <img src="img/fastening-log.png" width="60%" height="220" alt="">
+            <div id="fastening_status_chart" style="width: 40%; height: 165px;"></div>
         </div>
         <hr>
-        <label style="font-weight: bold">Screw Time</label> <label style="font-weight: bold; margin-left: 60%">Job V.s Time</label>
+        <label style="font-weight: bold">Screw Time</label> 
         <div style="padding-bottom: 20px">
-            <img src="img/screw-time.png" width="60%" height="200" alt=""><img src="img/job-time.png" width="40%" height="155px" alt="">
+            
+            <div id="main" style="width: 60%;height:350px;"></div>
+            
+            <img src="img/job-time.png" width="40%" height="155px" alt="">
         </div>
         <hr>
         <label style="font-weight: bold">Station Time</label>
@@ -70,71 +66,187 @@
         
         <label style="font-weight: bold; margin-top: 5%">NG Reason</label>
         <div style="padding-bottom: 20px">
-            
-
-
+            <div id="chart" style="width: 600px; height: 400px;"></div>
         </div>
         <hr>
         <label style="font-weight: bold">NG Error v.s Operator</label>
         <div style="padding-bottom: 20px">
             <img src="img/NG v.s Operator.png" width="60%" height="200" alt="">
         </div>
-
-            <!--<button id="downloadHtmlBtn">Download  HTML</button>-->
-            <button id="download-btn">Download PDF</button>
-
-
     </div>
-
 </body>
 </html>
 
-
 <script>
 
-document.getElementById('download-btn').addEventListener('click', function() {
-    const element = document.body;
-    html2pdf().from(element).save('current_page.pdf');
-});
+/*document.getElementById('downloadHtmlBtn').addEventListener('click', function() {
+    // 创建一个新的 Blob 对象，包含当前页面的 HTML 内容
+    const htmlContent = document.documentElement.outerHTML;
+    const blob = new Blob([htmlContent], { type: 'text/html' });
 
-document.getElementById('downloadHtmlBtn').addEventListener('click', function() {
-    downloadPageAsHtmlWithImages();
-});
+    // 创建一个链接，指向这个 Blob 对象，并将其添加到页面中
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'current_page.html';
+    document.body.appendChild(a);
 
+    // 模拟点击链接以触发下载
+    a.click();
 
+    // 清理创建的链接对象
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+});*/
 
-function downloadPageAsHtmlWithImages() {
+/*function downloadPage() {
     var htmlContent = document.documentElement.outerHTML;
-    var images = document.querySelectorAll('img');
-    var imagePromises = [];
+    var blob = new Blob([htmlContent], { type: 'text/html' });
 
-    images.forEach(function(image, index) {
-        var imageUrl = image.src;
-        var imageName = 'image_' + index + '.' + imageUrl.split('.').pop(); // Generate unique name for each image
-        var imagePromise = fetch(imageUrl)
-            .then(function(response) {
-                return response.blob();
-            })
-            .then(function(blob) {
-                return {
-                    name: imageName,
-                    blob: blob
-                };
+    var zip = new JSZip();
+    zip.file("index.html", blob);
+
+    var cssUrl = "styles.css";
+    fetch(cssUrl)
+        .then(response => response.text())
+        .then(cssContent => {
+            zip.file("styles.css", cssContent);
+            return cssContent;
+        });
+
+    var imageUrl = "image.jpg";
+    fetch(imageUrl)
+        .then(response => response.blob())
+        .then(imageBlob => {
+            zip.file("image.jpg", imageBlob, { binary: true });
+            return imageBlob;
+        })
+        .then(() => {
+            zip.generateAsync({ type: "blob" }).then(function (content) {
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(content);
+                link.download = 'page.zip';
+                link.click();
             });
-        imagePromises.push(imagePromise);
-    });
-
-    Promise.all(imagePromises).then(function(imageDataArray) {
-        var zip = new JSZip();
-        zip.file('page.html', htmlContent); // Add HTML content to zip file
-
-        imageDataArray.forEach(function(imageData) {
-            zip.file(imageData.name, imageData.blob); // Add each image to zip file
         });
+}*/
+</script>
+<script>
+    var ng_reason = <?php echo $data['ng_reason_json']; ?>;
+    var myChart = echarts.init(document.getElementById('chart'));
+    var option = {
+        title: {
+            text: 'NG Reason',
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: '{a} <br/>{b} : {c} ({d}%)'
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+            data: ng_reason.map(function(item) { return item.name; })
+        },
+        series: [
+            {
+                name: 'Error Type',
+                type: 'pie',
+                radius: '55%',
+                center: ['50%', '60%'],
+                data: ng_reason,
+                animationType: 'scale', // 添加動畫效果
+                animationEasing: 'elasticOut' // 彈性彈跳效果
+            }
+        ]
+    };
+    myChart.setOption(option);
 
-        zip.generateAsync({type:"blob"}).then(function(content) {
-            saveAs(content, "page_with_images.zip"); // Download zip file
-        });
-    });
-}
+
+    var fastening_status =<?php echo $data['fastening_status']; ?>;
+    var fChart = echarts.init(document.getElementById('fastening_status_chart'));
+    var option = {
+        title: {
+            text: 'fastening_status',
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: '{a} <br/>{b} : {c} ({d}%)'
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+            data: fastening_status.map(function(item) { return item.name; })
+        },
+        series: [
+            {
+                name: 'Status',
+                type: 'pie',
+                radius: '55%',
+                center: ['50%', '60%'],
+                data: fastening_status,
+                animationType: 'scale', // 添加動畫效果
+                animationEasing: 'elasticOut' // 彈性彈跳效果
+            }
+        ]
+    };
+    fChart.setOption(option);
+
+    var maimchart = echarts.init(document.getElementById('main'));
+    var job_name  =<?php echo $data['job_info']['job_name']; ?>;
+    var fasten_time  =<?php echo $data['job_info']['fasten_time']; ?>;
+ 
+    // 指定图表的配置项和数据
+    var option = {
+        tooltip: {
+            trigger:'axis',
+            formatter: '{b0}({a0}): {c0}'
+        },
+        legend: {
+            data:['']
+        },
+        xAxis: {
+            data: job_name
+        },
+        yAxis: [ {
+            type: 'value',
+            name: '毫秒',
+            show:true,
+            interval: 10,
+            axisLine: {
+                lineStyle: {
+                    color: '#5e859e',
+                    width: 2
+                }
+            }
+        },{
+            type: 'value',
+            name: '',
+            min: 0,
+            max: 100,
+            interval: 10,
+            axisLabel: {
+                formatter: '{value} %'
+            },
+            axisLine: {
+                lineStyle: {
+                    color: '#5e859e',//纵坐标轴和字体颜色
+                    width: 2
+                }
+            }
+        }],
+        series: [{
+            name: '毫秒',
+            type: 'bar',
+            barWidth : '50%',
+            data: fasten_time
+        }]
+    };
+
+    maimchart.setOption(option);
+
+
+
+
 </script>

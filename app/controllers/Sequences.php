@@ -77,16 +77,16 @@ class Sequences extends Controller
                 $input_check = false;
                 $error_message .= "stop_on_NG,";
             }
-            if(  !empty($data_array['seq_enable']) && isset($data_array['seq_enable']) ){
-                if($data_array['seq_enable'] == 'true'){
-                    $data_array['seq_enable'] = 1;
-                }else{
-                    $data_array['seq_enable'] = 0;
-                }
-            }else{ 
-                $input_check = false;
-                $error_message .= "seq_enable,";
-            }
+            // if(  !empty($data_array['seq_enable']) && isset($data_array['seq_enable']) ){
+            //     if($data_array['seq_enable'] == 'true'){
+            //         $data_array['seq_enable'] = 1;
+            //     }else{
+            //         $data_array['seq_enable'] = 0;
+            //     }
+            // }else{ 
+            //     $input_check = false;
+            //     $error_message .= "seq_enable,";
+            // }
             if(  !empty($data_array['ok_seq']) && isset($data_array['ok_seq'])  ){
                 if($data_array['ok_seq'] == 'true'){
                     $data_array['ok_seq'] = 1;
