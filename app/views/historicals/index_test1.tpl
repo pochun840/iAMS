@@ -1,40 +1,26 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>图表导出为图片</title>
-    <!-- 引入 D3.js 库 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.16.0/d3.min.js"></script>
-    <!-- 引入 C3.js 库 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.js"></script>
-</head>
-<body>
-    <button onclick="exportChart()">导出图表为图片</button>
+<?php 
+// 假設你的陣列名稱是 $array
+$array = array(
+    '20240422' => array('ng_count' => 0, 'ok_count' => 0, 'ok_all_count' => 0),
+    '20240423' => array('ng_count' => 3, 'ok_count' => 0, 'ok_all_count' => 0),
+    '20240424' => array('ng_count' => 0, 'ok_count' => 0, 'ok_all_count' => 0),
+    '20240425' => array('ng_count' => 0, 'ok_count' => 0, 'ok_all_count' => 0),
+    '20240426' => array('ng_count' => 0, 'ok_count' => 1, 'ok_all_count' => 6),
+    '20240427' => array('ng_count' => 0, 'ok_count' => 0, 'ok_all_count' => 0),
+    '20240428' => array('ng_count' => 0, 'ok_count' => 0, 'ok_all_count' => 0),
+    '20240429' => array('ng_count' => 0, 'ok_count' => 0, 'ok_all_count' => 0)
+);
 
-    <div id="chartContainer"></div>
+// 提取 ng_count 的值
+$ng_counts = array();
+foreach ($array as $date => $data) {
+    $ng_counts[$date] = $data['ng_count'];
+}
 
-    <script>
-        // 创建 c3.js 曲线图
-        var chart = c3.generate({
-            bindto: '#chartContainer',
-            data: {
-                columns: [
-                    ['data1', 30, 200, 100, 400, 150, 250],
-                    ['data2', 50, 20, 10, 40, 15, 25]
-                ]
-            }
-        });
+// 將陣列轉換成 JSON 格式
+$json_data = json_encode($ng_counts);
 
-        // 导出图表为图片函数
-        function exportChart() {
-            // 使用 c3.js 提供的图片导出功能
-            chart.exportChart({
-                format: 'png',
-                filename: 'chart',
-                done: function() {
-                    alert('图表已成功导出为图片！');
-                }
-            });
-        }
-    </script>
-</body>
-</html>
+// 輸出 JSON 資料
+echo $json_data;
+
+?>

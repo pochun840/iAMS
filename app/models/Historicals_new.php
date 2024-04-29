@@ -1,6 +1,6 @@
 <?php
 
-class Historical{
+class Historicals_new{
     private $db;//condb control box
     private $db_dev;//devdb tool
     private $db_data;//devdb tool
@@ -92,7 +92,6 @@ class Historical{
             $sql .=" AND job_id = '".$info_arr['job_id'][0]."' AND sequence_id = '".$info_arr['sequence_id'][0]."' AND  cc_task_id = '".$info_arr['cc_task_id'][0]."' ";
         }
         $sql.=" order by data_time desc limit '".$offset."','".$limit."' ";
-
         $statement = $this->db->prepare($sql);
         $statement->execute();
         $rows = $statement->fetchall(PDO::FETCH_ASSOC);
@@ -473,14 +472,11 @@ class Historical{
         $file_arr = array('_0p5','_1p0','_2p0');#檔案格式
         $no_arr  = explode(',',$id);
 
-        // var_dump($checked_sn_in);
-        // var_dump($id);
-
         foreach($no_arr as $key => $val){
             $name = 'data'.$key;
             if(!empty($val)){
                 foreach ($file_arr as $file_suffix) {
-                    $infile = "..\public\data\DATALOG_000000".$val.$file_suffix.".csv";
+                    $infile = "C:\web\mywebsite.com\imas\public\data\DATALOG_000000".$val.$file_suffix.".csv";
                     if (file_exists($infile)) {
                         $csvdata = file_get_contents($infile);
                         $rows = explode("\n", $csvdata);
@@ -510,7 +506,7 @@ class Historical{
             $file_arr = array('_0p5','_1p0','_2p0');#檔案格式
             foreach ($file_arr as $k_f => $v_f) {
                 if (!empty($v_f)) {
-                    $infile = "../public/data/DATALOG_000000".$no.$v_f.".csv";
+                    $infile = "C:/web/mywebsite.com/imas/public/data/DATALOG_000000".$no.$v_f.".csv";
                     if (file_exists($infile)) {
                         $csvdata_tmp = file_get_contents($infile);
                         if (!empty($csvdata_tmp)) {
@@ -584,8 +580,6 @@ class Historical{
 
         return  $res_ng_arr;
  
-
-
     }
 
     /*public function for_api($essential){
@@ -595,7 +589,7 @@ class Historical{
         if($essential['mode' ] == "ng_reason"){
             //$sql = "SELECT error_message  FROM `fasten_data` WHERE  on_flag = '0' ";
             $sql.= "AND fasten_status in('7','8')";
-        }
+        }W
 
         $sql.= " ORDER BY data_time DESC ";
         $statement = $this->db->prepare($sql);
@@ -615,69 +609,9 @@ class Historical{
             $sql = "SELECT error_message,fasten_status,count(fasten_status)AS total   FROM `fasten_data` WHERE  on_flag = '0' ";
             $sql.= "AND fasten_status in('7','8')";
             $sql.= " GROUP BY error_message, fasten_status";
-            $sql.= " ORDER BY data_time DESC ";
         }
 
-        if($mode == "fastening_status"){
-            $sql = "SELECT fasten_status,count(fasten_status)AS total   FROM `fasten_data` WHERE  on_flag = '0' ";
-            $sql.= "AND fasten_status !=''";
-            $sql.= " GROUP BY fasten_status";
-            $sql.= " ORDER BY data_time DESC ";
-        }
-
-        if($mode =="job_info"){
-            $sql ="SELECT fasten_time, job_name FROM `fasten_data` WHERE on_flag='0' order by data_time DESC";
-
-        }
-
-        if($mode =="statistics_ng"){
-
-            $after_date  = date('Ymd 23:59:59');
-            $before_date = date('Ymd', strtotime('-7 days')) . ' 00:00:00';
-
-            $sql ="SELECT 
-                substr(data_time, 1, 8) AS date,
-                fasten_status,
-                COUNT(*) AS status_count
-            FROM fasten_data
-            WHERE data_time between '". $before_date."' AND '".$after_date."' 
-            AND on_flag = '0'  AND  fasten_status IN('7','8')
-            GROUP BY substr(data_time, 1, 10), fasten_status;";
-    
-        }
-
-        if($mode =="statistics_ok"){
-
-            $after_date  = date('Ymd 23:59:59');
-            $before_date = date('Ymd', strtotime('-7 days')) . ' 00:00:00';
-
-            $sql ="SELECT 
-                substr(data_time, 1, 8) AS date,
-                fasten_status,
-                COUNT(*) AS status_count
-            FROM fasten_data
-            WHERE data_time between '". $before_date."' AND '".$after_date."' 
-            AND on_flag = '0'  AND  fasten_status IN('4')
-            GROUP BY substr(data_time, 1, 10), fasten_status;";
-    
-        }
-
-        if($mode =="statistics_okall"){
-
-            $after_date  = date('Ymd 23:59:59');
-            $before_date = date('Ymd', strtotime('-7 days')) . ' 00:00:00';
-
-            $sql ="SELECT 
-                substr(data_time, 1, 8) AS date,
-                fasten_status,
-                COUNT(*) AS status_count
-            FROM fasten_data
-            WHERE data_time between '". $before_date."' AND '".$after_date."' 
-            AND on_flag = '0'  AND  fasten_status IN('5','6')
-            GROUP BY substr(data_time, 1, 10), fasten_status;";
-    
-        }
-
+        $sql.= " ORDER BY data_time DESC ";
         $statement = $this->db->prepare($sql);
         $statement->execute();
         $result = $statement->fetchall(PDO::FETCH_ASSOC);
@@ -686,6 +620,5 @@ class Historical{
 
 
     }
-
 
 }

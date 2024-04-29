@@ -47,7 +47,8 @@
         <!--<label style="font-weight: bold; margin-left: 50%">Fastening Status</label>-->
         <div style="padding-bottom: 20px">
     
-            <img src="img/fastening-log.png" width="60%" height="220" alt="">
+            <!--<img src="img/fastening-log.png" width="60%" height="220" alt="">-->
+            <div id="lineChart" style="width: 950px;height:400px;"></div>
             <div id="fastening_status_chart" style="width: 40%; height: 165px;"></div>
         </div>
         <hr>
@@ -223,11 +224,11 @@
         },{
             type: 'value',
             name: '',
-            min: 0,
-            max: 100,
+            //min: 0,
+            //max: 100,
             interval: 10,
             axisLabel: {
-                formatter: '{value} %'
+                //formatter: '{value} %'
             },
             axisLine: {
                 lineStyle: {
@@ -247,6 +248,54 @@
     maimchart.setOption(option);
 
 
+    // 初始化 ECharts 圖表實例
+    var lineChart = echarts.init(document.getElementById('lineChart'));
+
+    var line_title =<?php echo $data['statistics']['date'];?>;
+    var line_ng =<?php echo $data['statistics']['ng'];?>;
+    var line_ok =<?php echo $data['statistics']['ok'];?>;
+    var line_okall =<?php echo $data['statistics']['ok_all'];?>;
+    console.log(line_ng);
+
+        // ECharts 的配置選項
+        var options = {
+            title: {
+                text: '折線圖示例'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['數據1', '數據2', '數據3']
+            },
+            xAxis: {
+                type: 'category',
+                data: line_title
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    name: 'OK',
+                    type: 'line',
+                    data: line_ok
+                },
+                {
+                    name: 'NG',
+                    type: 'line',
+                    data: line_ng
+                },
+                {
+                    name: 'OKALL',
+                    type: 'line',
+                    data: line_okall
+                }
+            ]
+        };
+
+        // 使用上面的配置選項創建圖表
+        lineChart.setOption(options);
 
 
 </script>

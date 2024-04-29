@@ -243,7 +243,7 @@ class Historicals extends Controller
         $data = array();
 
         $status_arr = $this->Historicals_newModel->status_code_change();
-        $mode_arr = array('ng_reason','fastening_status','job_info');
+        $mode_arr = array('ng_reason','fastening_status','job_info','statistics');
 
         #NG REASON 
 
@@ -307,15 +307,125 @@ class Historicals extends Controller
                         //$job_info[] = array('value' => $item1['total'], 'name' => $item1['status_type']);
                     }
 
-
-                    
-
-
                 }
             }
+
+            if($val =="statistics"){
+
+                $start_date = date('Y-m-d', strtotime('-7 days'));
+                $end_date = date('Y-m-d');
+
+                $date_array = array();
+                for ($date = strtotime($start_date); $date <= strtotime($end_date); $date = strtotime('+1 day', $date)) {
+                    $formatted_date = date('Ymd', $date);
+                    $date_array[$formatted_date] = null;
+                }
+
+                #OK
+                $statistics_ok_temp = $this->Historicals_newModel->for_api_test('statistics_ok'); 
+                if(!empty($statistics_ok_temp)){
+                    foreach($statistics_ok_temp  as $kk1 =>$vv1){
+                        unset($statistics_ok_temp[$kk1]);
+                        $statistics_ok_temp[$vv1['date']] = $vv1;
+                        $statistics_ok_temp[$vv1['date']]['ok_count']=$vv1['status_count'];
+                    }
+                }
+
+                #NG
+                $statistics_ng_temp = $this->Historicals_newModel->for_api_test('statistics_ng'); 
+                if(!empty($statistics_ng_temp)){
+                    foreach($statistics_ng_temp as $kk =>$vv){
+                        unset($statistics_ng_temp[$kk]);
+                        $statistics_ng_temp[$vv['date']] = $vv;
+                        $statistics_ng_temp[$vv['date']]['ng_count'] = $vv['status_count'];
+                    }
+                }
+
+                #OKALL 
+                $statistics_okall_temp = $this->Historicals_newModel->for_api_test('statistics_okall'); 
+                if(!empty($statistics_okall_temp)){
+                    foreach($statistics_okall_temp as $kk2 =>$vv2){
+                        unset($statistics_okall_temp[$kk2]);
+                        $statistics_okall_temp[$vv2['date']] = $vv2;
+                        $statistics_okall_temp[$vv2['date']]['ok_all_count']=$vv2['status_count'];    
+                    }
+                }                
+                $type_arr  = $statistics_ok_temp + $statistics_ng_temp;
+                if(!empty($type_arr)){
+                    foreach($type_arr as $kd =>$vd){
+                        foreach($statistics_okall_temp as $kd1 =>$vd1)
+                        {
+                            if($kd1 == $kd){
+                                $type_arr[$kd]['ok_all_count'] = $vd1['ok_all_count'];
+                            }
+                        }
+
+                        if(empty($vd['ng_count'])){
+                            $type_arr[$kd]['ng_count'] = 0;
+                        }
+                        if(empty($vd['ok_count'])){
+                            $type_arr[$kd]['ok_count'] = 0;
+                        }  
+                        
+                        unset($type_arr[$kd]['fasten_status']);
+                        unset($type_arr[$kd]['status_count']);
+               
+                    } 
+
+                    foreach($type_arr as $kw =>$vw){
+                        if(empty($vw['ok_all_count'])){
+                            $type_arr[$kw]['ok_all_count'] = 0;
+                        }
+                    }
+                }
+                
+
+                #陣列合併
+                foreach($date_array as $ke1 =>$ve1){
+                    foreach($type_arr as $ke2 =>$ve2){
+                        if($ke1 == $ke2){
+                            $date_array[$ke1]=$ve2;
+                            unset($date_array[$ke1]['date']); 
+                        }
+                    }
+                }
+
+                foreach($date_array as $k3 =>$v3){
+                     if(empty($v3['ng_count'])){
+                        $date_array[$k3]['ng_count'] = 0;
+                        $ng_counts[] = 0; 
+                     }else{
+                        $ng_counts[] = $v3['ng_count'];
+                     }
+
+                     if(empty($v3['ok_count'])){
+                        $date_array[$k3]['ok_count'] = 0;
+                        $ok_counts[] = 0;
+                     }else{
+                        $ok_counts[] = $v3['ok_count'];
+                     }
+
+                     if(empty($v3['ok_all_count'])){
+                        $date_array[$k3]['ok_all_count'] = 0;
+                        $ok_all_counts[] = 0;
+                     }else{
+                        $ok_all_counts[] = $v3['ok_all_count'];
+                     }
+                }
+       
+                $data['statistics']['date'] = json_encode(array_keys($date_array));
+                $data['statistics']['ng'] = json_encode($ng_counts);
+                $data['statistics']['ok'] = json_encode($ok_counts);
+                $data['statistics']['ok_all'] = json_encode($ok_all_counts);
+              
+
+            }
+
+
+          
         }
 
-
+      
         #取出 各種的NG狀態
         $this->view('historicals/index_report_history',$data);
     }
@@ -325,7 +435,7 @@ class Historicals extends Controller
      public function ddd(){
         
      
-        $this->view('historicals/index_report_history_bk');
+        $this->view('historicals/index_test1');
     }
 
 
