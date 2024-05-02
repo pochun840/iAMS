@@ -303,10 +303,12 @@ class Historicals extends Controller
 
 
                     #圓餅圖
-                    foreach ($job_info as $item1) {
-                        //$job_info[] = array('value' => $item1['total'], 'name' => $item1['status_type']);
-                    }
-
+                    $job_time = array();
+                    $job_time_temp = $this->Historicals_newModel->for_api_test('job_time'); 
+                    foreach($job_time_temp as $k_time =>$v_time){
+                        $job_time[] = array('value' => $v_time['duplicate_count'], 'name' => "JOB-".$v_time['job_id']); 
+                    } 
+                    $data['job_time_json'] = json_encode($job_time);
                 }
             }
 
@@ -412,17 +414,14 @@ class Historicals extends Controller
                         $ok_all_counts[] = $v3['ok_all_count'];
                      }
                 }
-       
+                $ng_counts = array_map('intval', $ng_counts);
+                $ok_counts = array_map('intval', $ok_counts);
+                $ok_all_counts = array_map('intval', $ok_all_counts);
                 $data['statistics']['date'] = json_encode(array_keys($date_array));
                 $data['statistics']['ng'] = json_encode($ng_counts);
                 $data['statistics']['ok'] = json_encode($ok_counts);
                 $data['statistics']['ok_all'] = json_encode($ok_all_counts);
-              
-
             }
-
-
-          
         }
 
       
@@ -433,9 +432,56 @@ class Historicals extends Controller
 
      #鎖附資料 圖表 
      public function ddd(){
+        $data = array();
+        $chat_mode = 1;
+        $chat_arr = $this->Historicals_newModel->chat_change($chat_mode);
+        $data['chat'] = $chat_arr;
+        $no = "4145";
+        $csvdata_arr   = $this->Historicals_newModel->get_info($no,$chat_mode);
+
+        $data['chart_info']['x_val'] = json_encode(array_keys($csvdata_arr));
+        $data['chart_info']['y_val'] = json_encode($csvdata_arr);
+        $data['chart_info']['max']   = max($csvdata_arr);
+        $data['chart_info']['min']   = min($csvdata_arr);
+
+
+        $this->view('historicals/index_test1',$data);
+    }
+
+
+    public function test_chart(){
+        $chat_mode  = "1";
+        $data = array();
+
+        $no = "4145";
+        $csvdata_arr   = $this->Historicals_newModel->get_info($no,$chat_mode);
+
+        $no1 = "4159";
+        $csvdata_arr1   = $this->Historicals_newModel->get_info($no1,$chat_mode);
+
+        #chart1
+        $data['chart_info']['x_val'] = json_encode(array_keys($csvdata_arr));
+        $data['chart_info']['y_val'] = json_encode($csvdata_arr);
+        $data['chart_info']['max']   = max($csvdata_arr);
+        $data['chart_info']['min']   = min($csvdata_arr);
+
+        #chart2
+        $data['chart_info1']['x_val'] = json_encode(array_keys($csvdata_arr1));
+        $data['chart_info1']['y_val'] = json_encode($csvdata_arr1);
+        $data['chart_info1']['max']   = max($csvdata_arr1);
+        $data['chart_info1']['min']   = min($csvdata_arr1);
+
+
+
+
         
-     
-        $this->view('historicals/index_test1');
+
+
+        $this->view('historicals/index_test11',$data);
+
+
+
+
     }
 
 
@@ -458,7 +504,7 @@ class Historicals extends Controller
             #取得曲線圖的模式
             $chat_arr = $this->Historicals_newModel->chat_change($chat_mode);
             $data['chat'] = $chat_arr;
-            $no = "4174";
+            $no = "4159";
             $csvdata_arr   = $this->Historicals_newModel->get_info($no,$chat_mode);//取得 完整的資料
             $status_arr = $this->Historicals_newModel->status_code_change();
 
@@ -530,6 +576,8 @@ class Historicals extends Controller
                 $data['chart_info']['y_title'] = $line_title_arr[0];
                 $data['chart_info']['chat_mode'] = $chat_mode;
             }
+
+    
 
             $data['nav'] = $this->NavsController->get_nav();
             $data['nopage'] = 0;
@@ -606,14 +654,18 @@ class Historicals extends Controller
                 $checked_sn_in =  $checkedsn;
             }
 
-            #取得該筆的所有完整詳細資料
-            $info_final = $this->Historicals_newModel->csv_info($checked_sn_in);
+            if(!empty($_COOKIE['angle_mode_combine'])){
+                $angle_mode_combine = $_COOKIE['angle_mode_combine'];
 
-            
+            }else{
+                $angle_mode_combine = 1;
+            }
+
+            #取得該筆的所有完整詳細資料
+            $info_final = $this->Historicals_newModel->csv_info($checked_sn_in);            
             $data['info_final'] = $info_final;
 
-
-
+        
             //Torque/Time
             #取得曲線圖的模式
             $chat_arr = $this->Historicals_newModel->chat_change($chat_mode);
@@ -625,23 +677,24 @@ class Historicals extends Controller
                 $id.= sprintf("%04d", $vv['id']).",";
                 
             }
+
             $id = rtrim($id,',');
             #二筆鎖附資料的圖表
             
             $final_label = $this->Historicals_newModel->get_result($checked_sn_in,$id);
 
+        
             #圖表1的資訊
             $data['chart1_xcoordinate'] = json_encode(array_keys($final_label['data0']));
             $data['chart1_ycoordinate'] = json_encode($final_label['data0']);
-            $data['chart1_ycoordinate_max'] = max($final_label['data0']);
-            $data['chart1_ycoordinate_min'] = min($final_label['data0']);
-
+            $data['chart1_ycoordinate_max'] = floatval(max($final_label['data0']));
+            $data['chart1_ycoordinate_min'] = floatval(min($final_label['data0']));
 
             #圖表2的資訊
             $data['chart2_xcoordinate'] = json_encode(array_keys($final_label['data1']));
             $data['chart2_ycoordinate'] = json_encode($final_label['data1']);
-            $data['chart2_ycoordinate_max'] = max($final_label['data1']);
-            $data['chart2_ycoordinate_min'] = min($final_label['data1']);
+            $data['chart2_ycoordinate_max'] = floatval(max($final_label['data1']));
+            $data['chart2_ycoordinate_min'] = floatval(min($final_label['data1']));
             
        
         }else{
@@ -662,94 +715,14 @@ class Historicals extends Controller
         #STATUS轉換
         $status_arr = $this->Historicals_newModel->status_code_change();
 
-        $nav = $this->NavsController->get_nav();
-
+        $torque_mode_arr = array();
         $data['torque_arr'] = $torque_arr;
         $data['status_arr'] = $status_arr;
-        $data['torque_mode_arr'] = $torque_mode_arr;
-        $data['nav'] = $nav;
+        $data['torque_mode_arr'] = $torque_arr;
+        $data['nav'] = $this->NavsController->get_nav();
         $data['nopage'] = 0;
         $data['path'] = 'combinedata';
 
         $this->view('historicals/index',$data);
     }
-  
-
-    public function get_fastendata_api(){
-        
-        $essential = array();
-        #筆數
-        if(isset($_GET['limit'])){
-            $limit = $_GET['limit'];
-            if(!preg_match('/^\d+$/', $limit)) $limit = 30;
-            $essential['limit'] = $limit;
-        }
-      
-        #起始日期
-        if(isset($_GET['startdate'])){
-            $startdate = $_GET['startdate'];
-            //if(!preg_match('/^\d{8}$/', $startdate))  echo "日期格式錯誤";exit();
-        }else{
-            $startdate = date('Ymd');
-        }
-        $essential['startdate'] = $startdate." 00:00:00";
-
-        #結束日期
-        if(isset($_GET['enddate'])){
-            $enddate   = $_GET['enddate'];
-            //if(!preg_match('/^\d{8}$/', $enddate))  echo "日期格式錯誤";exit();
-        }else{
-            $enddate = date('Ymd');
-        }   
-        $essential['enddate'] = $enddate." 23:59:59";
-
-        #狀態
-        if(isset($_GET['status'])){
-            $status   = $_GET['status']; 
-            if(!preg_match('/^\d+$/', $status)) $status = 0;
-            $essential['status'] = $status;
-        }
-
-
-        #人員 
-        if(isset($_GET['operator'])){
-            $operator   = $_GET['operator']; 
-            //if(!preg_match('/^\d+$/', $operator)) $operator = 0;
-        }
-
-        #JOB 
-        if(isset($_GET['job'])){
-            $job   = $_GET['job']; 
-            if(!preg_match('/^\d+$/', $job)) $job = 0;
-        }else{
-            $job = 0;
-        }
-        $essential['job'] = $job;
-
-        #mode
-        if(isset($_GET['mode'])){
-            $mode  = $_GET['mode'];    
-        }else{
-            $mode  = "ng_rank";
-        }
-        $essential['mode'] = $mode;
-
-
-        //type=json && xml && array
-        if(isset($_GET['type'])){
-            $type  = $_GET['type'];  
-        }else{
-            $type  = 'xml';
-        }
-        
-        #取得回傳資料
-        $resitem = $this->Historicals_newModel->for_api($essential);
-
-        $data = array();
-        $data['type']    = $type;
-        $data['resitem'] = $resitem;
-        $data['mode']    = $mode;
-        $this->view('historicals/index_api',$data);
-    }
-
 }

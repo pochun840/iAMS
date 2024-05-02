@@ -677,5 +677,68 @@ class Historical{
 
     }
 
+    //扭力單位的轉換
+    function unit_change($torValue, $inputType, $TransType){
 
+        $torValue = floatval($torValue);
+        $inputType = (int)($inputType);
+        $TransType = (int)($TransType);
+
+        $TorqueUnit = [
+            "N_M" => 1,
+            "KGF_M" => 0,
+            "KGF_CM" => 2,
+            "LBF_IN" => 3
+        ];
+
+       
+        if ($inputType === $TorqueUnit["N_M"]) {
+            if ($TransType === $TorqueUnit["KGF_M"]) {
+                return round($torValue * 0.102, 4);
+            } elseif ($TransType === $TorqueUnit["KGF_CM"]) {
+                return round($torValue * 10.2, 2);
+            } elseif ($TransType === $TorqueUnit["LBF_IN"]) {
+                return round($torValue * 10.2 * 0.86805, 2);
+            } elseif ($TransType === $TorqueUnit["N_M"]) {
+                return round($torValue, 3);
+            }
+        }   
+        
+        elseif ($inputType === $TorqueUnit["KGF_M"]) {
+            if ($TransType === $TorqueUnit["KGF_M"]) {
+                return round($torValue, 4);
+            } elseif ($TransType === $TorqueUnit["KGF_CM"]) {
+                return round($torValue * 100, 2);
+            } elseif ($TransType === $TorqueUnit["LBF_IN"]) {
+                return round($torValue * 100 * 0.86805, 2);
+            } elseif ($TransType === $TorqueUnit["N_M"]) {
+                return round($torValue * 9.80392156, 3);
+            }
+        }
+
+        elseif ($inputType === $TorqueUnit["KGF_CM"]) {
+            if ($TransType === $TorqueUnit["KGF_M"]) {
+                return round($torValue * 0.01, 4);
+            } elseif ($TransType === $TorqueUnit["KGF_CM"]) {
+                return round($torValue, 2);
+            } elseif ($TransType === $TorqueUnit["LBF_IN"]) {
+                return round($torValue * 0.86805, 2);
+            } elseif ($TransType === $TorqueUnit["N_M"]) {
+                return round($torValue * 0.0980392156, 3);
+            }
+        }
+
+        elseif ($inputType === $TorqueUnit["LBF_IN"]) {
+            if ($TransType === $TorqueUnit["KGF_M"]) {
+                return round($torValue * 1.152 * 0.01, 4);
+            } elseif ($TransType === $TorqueUnit["KGF_CM"]) {
+                return round($torValue * 1.152, 2);
+            } elseif ($TransType === $TorqueUnit["LBF_IN"]) {
+                return round($torValue, 2);
+            } elseif ($TransType === $TorqueUnit["N_M"]) {
+                return round($torValue * 0.11294117637119998, 3);
+            }
+        }
+        
+    }
 }

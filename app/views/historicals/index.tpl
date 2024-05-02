@@ -1258,6 +1258,7 @@ addMessage();
         option.series.push({
             type: 'line',
             markLine: {
+                symbol: 'none',
                 data: [
                     { yAxis: min_val, lineStyle: { type: 'dashed', color: 'rgb(255, 0, 0)' } }, 
                     { yAxis: max_val, lineStyle: { type: 'dashed', color: 'rgb(255, 0, 0)' } }   
@@ -1271,9 +1272,10 @@ addMessage();
         option.series.push({
             type: 'line',
             markLine: {
+                symbol: 'none',
                 data: [
-                    { yAxis: min_val_1, lineStyle: { type: 'dashed', color: 'rgb(44,55,82)' } },
-                    { yAxis: max_val_1, lineStyle: { type: 'dashed', color: 'rgb(44,55,82)' } }    
+                    { yAxis: min_val_1, lineStyle: { type: 'dashed', color: 'rgb(44,55,82)'  } },
+                    { yAxis: max_val_1, lineStyle: { type: 'dashed', color: 'rgb(44,55,82)'  } }    
                 ]
             }
         });
