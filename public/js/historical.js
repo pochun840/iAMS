@@ -348,6 +348,21 @@ function  angle_change(selectOS){
     history.go(0);
 }
 
+function  angle_change_combine(selectOS){
+    var selectElement = document.getElementById('angle');
+    var selectedOptions = [];
+    // 獲取所有被選中的選項
+    for (var i = 0; i < selectElement.options.length; i++) {
+        var option = selectElement.options[i];
+        if (option.selected) {
+            selectedOptions.push(option.value);
+        }
+    }
+    document.cookie = "angle_mode_combine=" + selectedOptions + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+    history.go(0);
+}
+
+
 //擷取曲線圖 
 function takeScreenshot(param) {
 
@@ -456,4 +471,3 @@ function nextinfo_png(){
      });
 
 }
-

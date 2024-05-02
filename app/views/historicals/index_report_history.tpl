@@ -1,4 +1,4 @@
-
+<?php date_default_timezone_set('Asia/Taipei');?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,6 +10,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+<script src="<?php echo URLROOT; ?>js/historical.js?v=202405021000"></script>
 </head>
 
 <body>
@@ -18,15 +19,14 @@
         <header class="border-bottom">
             <h2><img src="./img/logo.jpg" alt="Logo"></h2>
             <p  style="font-weight: bold; font-size: 34px; padding-bottom: 5px">Fastening Statistics Report</p>
-                <button id="download-btn">PDF</button>
-                <button onclick="downloadPage()">Download Page</button>
+                <!--<button id="downloadHtmlBtn">Download HTML</button>-->
 
         </header>
 
         <div style="padding-top: 10px;">
             <table class="table table-bordered" style="">
                 <tr>
-                    <td colspan="4" style="text-align: left; padding-left: 5.7%"> Report Time : 2024/12/25 10:11:25</td>
+                    <td colspan="4" style="text-align: left; padding-left: 5.7%"> Report Time :<?php echo date("Y-m-d H:i:s");?></td>
                 </tr>
                 <tr>
                     <td>Screw drivers : 3</td>
@@ -49,7 +49,7 @@
     
             <!--<img src="img/fastening-log.png" width="60%" height="220" alt="">-->
             <div id="lineChart" style="width: 950px;height:400px;"></div>
-            <div id="fastening_status_chart" style="width: 40%; height: 165px;"></div>
+            <div  align="center" id="fastening_status_chart" style="width: 40%; height: 400px;"></div>
         </div>
         <hr>
         <label style="font-weight: bold">Screw Time</label> 
@@ -57,7 +57,8 @@
             
             <div id="main" style="width: 60%;height:350px;"></div>
             
-            <img src="img/job-time.png" width="40%" height="155px" alt="">
+            <!--<img src="img/job-time.png" width="40%" height="155px" alt="">-->
+            <div id="jobtime" style="width: 40%;height:400px;"></div>
         </div>
         <hr>
         <label style="font-weight: bold">Station Time</label>
@@ -65,7 +66,7 @@
             <img src="img/station-time.png" width="70%" height="200" alt="">
         </div>
         
-        <label style="font-weight: bold; margin-top: 5%">NG Reason</label>
+        <!--<label style="font-weight: bold; margin-top: 5%">NG Reason</label>-->
         <div style="padding-bottom: 20px">
             <div id="chart" style="width: 600px; height: 400px;"></div>
         </div>
@@ -77,61 +78,6 @@
     </div>
 </body>
 </html>
-
-<script>
-
-/*document.getElementById('downloadHtmlBtn').addEventListener('click', function() {
-    // 创建一个新的 Blob 对象，包含当前页面的 HTML 内容
-    const htmlContent = document.documentElement.outerHTML;
-    const blob = new Blob([htmlContent], { type: 'text/html' });
-
-    // 创建一个链接，指向这个 Blob 对象，并将其添加到页面中
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'current_page.html';
-    document.body.appendChild(a);
-
-    // 模拟点击链接以触发下载
-    a.click();
-
-    // 清理创建的链接对象
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-});*/
-
-/*function downloadPage() {
-    var htmlContent = document.documentElement.outerHTML;
-    var blob = new Blob([htmlContent], { type: 'text/html' });
-
-    var zip = new JSZip();
-    zip.file("index.html", blob);
-
-    var cssUrl = "styles.css";
-    fetch(cssUrl)
-        .then(response => response.text())
-        .then(cssContent => {
-            zip.file("styles.css", cssContent);
-            return cssContent;
-        });
-
-    var imageUrl = "image.jpg";
-    fetch(imageUrl)
-        .then(response => response.blob())
-        .then(imageBlob => {
-            zip.file("image.jpg", imageBlob, { binary: true });
-            return imageBlob;
-        })
-        .then(() => {
-            zip.generateAsync({ type: "blob" }).then(function (content) {
-                var link = document.createElement('a');
-                link.href = window.URL.createObjectURL(content);
-                link.download = 'page.zip';
-                link.click();
-            });
-        });
-}*/
-</script>
 <script>
     var ng_reason = <?php echo $data['ng_reason_json']; ?>;
     var myChart = echarts.init(document.getElementById('chart'));
@@ -162,6 +108,37 @@
         ]
     };
     myChart.setOption(option);
+
+    var job_time = <?php echo $data['job_time_json']; ?>;
+    var jobtimeChart = echarts.init(document.getElementById('jobtime'));
+      var option = {
+        title: {
+            text: 'JOB VS TIME',
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: '{a} <br/>{b} : {c} ({d}%)'
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+            data: job_time.map(function(item) { return item.name; })
+        },
+        series: [
+            {
+                name: 'Time Required',
+                type: 'pie',
+                radius: '55%',
+                center: ['50%', '60%'],
+                data: job_time,
+                animationType: 'scale', // 添加動畫效果
+                animationEasing: 'elasticOut' // 彈性彈跳效果
+            }
+        ]
+    };
+    jobtimeChart.setOption(option);
+
 
 
     var fastening_status =<?php echo $data['fastening_status']; ?>;
@@ -197,8 +174,7 @@
     var maimchart = echarts.init(document.getElementById('main'));
     var job_name  =<?php echo $data['job_info']['job_name']; ?>;
     var fasten_time  =<?php echo $data['job_info']['fasten_time']; ?>;
- 
-    // 指定图表的配置项和数据
+
     var option = {
         tooltip: {
             trigger:'axis',
@@ -247,26 +223,23 @@
 
     maimchart.setOption(option);
 
-
-    // 初始化 ECharts 圖表實例
     var lineChart = echarts.init(document.getElementById('lineChart'));
 
     var line_title =<?php echo $data['statistics']['date'];?>;
     var line_ng =<?php echo $data['statistics']['ng'];?>;
     var line_ok =<?php echo $data['statistics']['ok'];?>;
     var line_okall =<?php echo $data['statistics']['ok_all'];?>;
-    console.log(line_ng);
 
         // ECharts 的配置選項
         var options = {
             title: {
-                text: '折線圖示例'
+                text: ''
             },
             tooltip: {
                 trigger: 'axis'
             },
             legend: {
-                data:['數據1', '數據2', '數據3']
+                data:['', '', '']
             },
             xAxis: {
                 type: 'category',
@@ -294,8 +267,24 @@
             ]
         };
 
-        // 使用上面的配置選項創建圖表
-        lineChart.setOption(options);
+    lineChart.setOption(options);
+
+    function downloadHtml() {
+
+        const htmlContent = document.documentElement.outerHTML;
+        const blob = new Blob([htmlContent], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'current_page.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+        
+
+
 
 
 </script>

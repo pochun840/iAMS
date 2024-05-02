@@ -6,12 +6,14 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/historical.css?v=202404111200" type="text/css">
 
 <script src="<?php echo URLROOT; ?>js/flatpickr.js"></script>
-<script src="<?php echo URLROOT; ?>js/historical.js?v=202404111000"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
+<script src="<?php echo URLROOT; ?>js/historical.js?v=202405021200"></script>
 
 
-<!-- PDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
+<!---new echart.js-->
+<script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+
+
 
 
 <?php if(isset($data['nav'])){
@@ -42,9 +44,7 @@ if ($path == "combinedata") {
     </script>
     ";
 }
-
-if (strpos($path, "nextinfo") !== false) {
-
+if($path == "nextinfo"){
       echo "
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -316,7 +316,7 @@ if(!empty($_COOKIE['line_style'])){
 
                         <div class="topnav-right">
                             <button id="Export-CSV" type="button" class="ExportButton" onclick="csv_download()">Export CSV</button>
-                            <button id="Export-Report" type="button" class="ExportButton" onclick="window.location.href='?url=Historicals/history_result';" >Export Report</button>
+                            <button id="Export-Report" type="button" class="ExportButton" onclick="window.open('?url=Historicals/history_result', '_blank');" >Export Report</button>
                             <button id="Combine-btn" type="button" onclick="NextToCombineData()">Combine Data</button>
                             <button id="Clear" type="button"   onclick="clear_button() ">Clear</button>
                             <button  id="nopage" type="button"  onclick="nopage('nopage')">Nopage</button>
@@ -476,7 +476,7 @@ if(!empty($_COOKIE['line_style'])){
                                 </select>
                             </td>-->
                             <td>
-                                <button id="Export-Excel" type="button" class="ExportButton" style="margin-top: 0">Export Excel</button>
+                                <!--<button id="Export-Excel" type="button" class="ExportButton" style="margin-top: 0">Export Excel</button>-->
                                 <!--<button id="Save-info" type="button" style="margin-top: 0">Save</button>-->
                             </td>
                         </tr>
@@ -492,15 +492,11 @@ if(!empty($_COOKIE['line_style'])){
                                 <div class="menu-chart"  id="menu-chart" onclick="toggleMenu()">
                                     <i class="fa fa-bars" style="font-size: 26px"></i>
                                     <div class="menu-content" id="myMenu">
-                                        <a href="#" onclick="viewFullScreen()">View in full screen</a>
-                                        <a href="#" onclick="printChart()">Print chart</a>
                                         <a  id="downloadchartbtn">Download HTML</a>
-                                        <!--<a  id="downloadPngBtn">Download JEPG</a>-->
                                     </div>
                                     
                                 </div>
-                                <div class="empty-div3"></div>
-                                <div id="chartinfo"></div>
+                                <div id="chartinfo" style="width: 1500px; height: 400px;"></div>
                                 
                             </div>
                         </div>
@@ -523,7 +519,7 @@ if(!empty($_COOKIE['line_style'])){
                                 <label class="form-check-label" for="optioncheck">display the high/low auxiliary lines.</label>
 
                                 <label style="padding-left: 5%">
-                                    Angle : &nbsp;<select id="angle" style="width: 120px" onchange="angle_change(this)">
+                                    Angle : &nbsp;<select id="angle" style="width: 120px" onchange="angle_change_combine(this)">
                                                     <option value="1">total angle</option>
                                                     <option value="2">task angle</option>
                                                   </select>
@@ -538,7 +534,7 @@ if(!empty($_COOKIE['line_style'])){
                                 </label>
                             </div>
                             <div class="col t2">
-                                <button id="Export-Excel-data" type="button" class="ExportButton">Export Excel</button>
+                                <!--<button id="Export-Excel-data" type="button" class="ExportButton">Export Excel</button>-->
                                 <button id="downlandpdf_combine" type="button" class="ExportButton">Export HTML</button>
                             </div>
                         </div>
@@ -573,20 +569,11 @@ if(!empty($_COOKIE['line_style'])){
                                                 </div>
                                              </div>
                                     <?php }?>
-
-                                
-
                                         <!---圖表1--->
-                                        <div class="empty-div"></div>
-                                        <div id="chart-title"><?php echo $data['info_final'][0]['job_name'];?></div>
-                                        <div id="chart"></div>
+                                        <div id="empty1" style="width: 800px; height: 200px;">
+                                        <div id="chart-title" style="visibility: hidden;" >曲線圖資料</div>
+                                        <div id="chart_combine" style="width: 1500px; height: 400px; margin-left: 20px !important;"></div>
 
-                                        <br><br><br><br>
-                                        <div class="empty-div"></div>
-                                        <div id="chart-title2"><?php echo $data['info_final'][1]['job_name'];?></div>
-                                        <div id="chart1"></div>
-                                        
-                                                                   
                                     </div>
 
                                 </div>
@@ -936,6 +923,7 @@ function WorkFlowLogInfo()
 }*/
 
 function toggleMenu() {
+    alert('eeertt');
     var menuContent = document.getElementById("myMenu");
     menuContent.style.display = (menuContent.style.display === "block") ? "none" : "block";
 }
@@ -1009,274 +997,295 @@ addMessage();
 
 
 <!----nextinfo op----->
-<?php  if (strpos($path, "nextinfo") !== false && $data['chart_info']['chat_mode'] != "6") {?>
+<?php  if($path =="nextinfo" &&  $data['chart_info']['chat_mode'] != "6") {?>
 <script>
+    var myChart = echarts.init(document.getElementById('chartinfo'));
+
     var x_data_val = <?php echo  $data['chart_info']['x_val']; ?>;
     var y_data_val = <?php echo  $data['chart_info']['y_val']; ?>;
 
     var min_val = <?php echo  $data['chart_info']['min'];?>;
     var max_val = <?php echo  $data['chart_info']['max'];?>;
 
-    var xaxislabel = '<?php echo $data['chart_info']['x_title'];?>';
-    var yaxislabel = '<?php echo $data['chart_info']['y_title'];?>';
+    var x_title = '<?php echo $data['chart_info']['x_title'];?>';
+    var y_title = '<?php echo $data['chart_info']['y_title'];?>';
 
-    var type = '<?php echo $data['chart_info']['chat_mode'];?>';
+   
 
-    var chartOptions_info = {
-    bindto: '#chartinfo',
-    data: {
-        x: 'x',
-        columns: [
-            ['x'].concat(x_data_val),
-            ['Torque'].concat(y_data_val)
+    var option = {
+            tooltip: {
+                trigger: 'axis',
+                position: function (pt) {
+                    return [pt[0], '10%'];
+                },
+                formatter: function (params) {
+                    var state = '<span style="color: red;">' + y_title + '</span>';
+                    var value = '<span style="color: red;">' + params[0].value + '</span>';
+                    return state + ': ' + value; 
+                },
+                
+            },
+            title: {
+                left: 'center',
+                text: '',
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                name: x_title,
+                data: x_data_val
+            },
+            yAxis: {
+                type: 'value',
+                name: y_title,
+                boundaryGap: [0, '100%']
+            },
+        dataZoom: [{
+            type: 'inside',
+            start: 0,
+            end: 10
+        }, {
+            show: false, 
+            type: 'slider',
+            start: 0,
+            end: 10,
+            handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+            handleSize: '80%',
+            handleStyle: {
+                color: '#fff',
+                shadowBlur: 3,
+                shadowColor: 'rgba(0, 0, 0, 0)',
+                shadowOffsetX: 0,
+                shadowOffsetY: 0
+            }
+        }],
+        series: [
+            {
+                name:'',
+                type:'line',
+                //smooth:true,
+                symbol: 'none',
+                sampling: 'average',
+                
+                itemStyle: {
+                    normal: {
+                        color: 'rgb(255,0,0)'
+                    }
+                },
+                areaStyle: {
+                    normal: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 0, [{
+                            offset: 0,
+                            color: 'rgb(255,255,255)'
+                        }, {
+                            offset: 0,
+                            color: 'rgb(255,255,255)'
+                        }])
+                    }
+                },
+                    lineStyle: {
+                        width: 0.75
+                },
+                data: y_data_val
+            }
         ]
-    },
-
-    axis: {
-        x: {
-            label: xaxislabel,
-            position: 'outer-center',
-        },
-        y: {
-            label: yaxislabel,
-            tick: {}
-        }
-    },
-
-    grid: {
-        y: {}
-    },
-    subchart: {
-        show: true
-    }
     };
-    // 根據limit_val 的值決定是否顯示上下限
+
+    
+    //如果 limit_val=1 曲線圖 要顯示上下限 min_val 及 max_val
     if (limit_val == 1) {
-        chartOptions_info.grid.y.lines = [
-            {value: min_val, text: 'Low Torque', position: 'middle', class: 'grid-upper'},
-            {value: max_val, text: 'High Torque', position: 'middle', class: 'grid-upper'}
-        ];
-
+        option.series[0].markLine = {
+            data: [
+                {yAxis: min_val, name: ''}, // 下限
+                {yAxis: max_val, name: ''}  // 上限
+            ],
+            symbol: 'none',
+            lineStyle: {
+            //type: 'solid' 
+            } 
+        };
     }
+    myChart.setOption(option);
 
-    var chart = c3.generate(chartOptions_info);
 
 </script>
 <?php } ?>
 
-<?php  if (strpos($path, "nextinfo") !== false && $data['chart_info']['chat_mode'] == "6") {?>
+<?php  if($path =="nextinfo" &&  $data['chart_info']['chat_mode'] == "6") {?>
 <script>
-    var x_data_val  = <?php echo  $data['chart_info']['x_val']; ?>;
-    var y_data_val  = <?php echo  $data['chart_info']['y_val']; ?>;
-    var y_data_val1 = <?php echo  $data['chart_info']['y_val_1'];?>;
-
-
-    var min_val = <?php echo  $data['chart_info']['min'];?>;
-    var max_val = <?php echo  $data['chart_info']['max'];?>;
-
-    var min_val1 = <?php echo  $data['chart_info']['min1'];?>;
-    var max_val1 = <?php echo  $data['chart_info']['max1'];?>;
-
-    var xaxislabel = '<?php echo $data['chart_info']['x_title'];?>';
-    var yaxislabel = '<?php echo $data['chart_info']['y_title'];?>';
-
-    var chartOptions_info = {
-        bindto: '#chartinfo',
-        data: {
-            x: 'x',
-            columns: [
-                ['x'].concat(x_data_val),
-                ['Torque'].concat(y_data_val1),
-                ['Angle'].concat(y_data_val1)
-            ]
-        },
-
-        axis: {
-            x: {
-                label: xaxislabel,
-                position: 'outer-center',
-            },
-            y: {
-                label: 'Angle',
-                tick: {}
-            },
-            y2: {
-                show: true,
-                label: {
-                    text: 'Torque',
-                    position: 'outer-middle'
-                }
-            }
-        },
-
-        grid: {
-            y: {}
-        },
-        subchart: {
-            show: true
-        }
-    };
-
-    // 根据 limit_val 的值决定是否显示上下限
-    if (limit_val == 1) {
-        chartOptions_info.grid.y.lines = [
-            {value: min_val, text: 'Low Torque', position: 'middle', class: 'grid-upper'},
-            {value: max_val, text: 'High Torque', position: 'middle', class: 'grid-upper'},
-            {value: min_val1, text: '', position: 'middle', class: 'grid-upper'},
-            {value: max_val1, text: '', position: 'middle', class: 'grid-upper'},
-        ];
-    }
-
-    var chart = c3.generate(chartOptions_info);
    
 </script>
 <?php }?>
 <!----nextinfo ed----->
 
 <!----combine op----->
+
 <?php if ($path == "combinedata"){?>
 <script>
-    //整理X軸跟Y軸的數據data
-    var x_data  = <?php echo  $data['chart1_xcoordinate']; ?>;
-    var y_data  = <?php echo  $data['chart1_ycoordinate']; ?>;
+        var myChart_combine = echarts.init(document.getElementById('chart_combine'));
+
+        //圖表1的資訊
+        var x_data_val   = <?php echo  $data['chart1_xcoordinate']; ?>;
+        var y_data_val  = <?php echo  $data['chart1_ycoordinate']; ?>;
+        var min_val = <?php echo $data['chart1_ycoordinate_min'];?>;
+        var max_val = <?php echo $data['chart1_ycoordinate_max'];?>;
+
+        var job_info ='<?php echo $data['info_final'][0]['job_name'];?>';
+
+        //圖表2的資訊
+        var x_data_val_1 = <?php echo  $data['chart2_xcoordinate']; ?>;
+        var y_data_val_1 = <?php echo  $data['chart2_ycoordinate']; ?>;
+        var min_val_1 = <?php echo $data['chart2_ycoordinate_min'];?>;
+        var max_val_1 = <?php echo $data['chart2_ycoordinate_max'];?>;
 
 
-    var min = <?php echo $data['chart1_ycoordinate_min'];?>;
-    var max = <?php echo $data['chart1_ycoordinate_max'];?>;
+        var job_info_1 ='<?php echo $data['info_final'][1]['job_name'];?>';
 
 
-    var chartOptions = {
-        bindto: '#chart',
-        data: {
-            x: 'x',
-            columns: [
-                ['x'].concat(x_data),
-                ['Torque'].concat(y_data)
-            ]
-        },
 
-        axis: {
-            x: {
-                label: 'Time (ms)',
-                position: 'outer-center',
+        var option = {
+              tooltip: {
+                trigger: 'axis',
+                position: function (pt) {
+                    return [pt[0], '10%'];
+                },
+               formatter: function (params) {
+                    var tooltipContent = ''; 
+                    for (var i = 0; i < params.length; i++) {
+                        var seriesName = params[i].seriesName; 
+                        var dataValue = params[i].value; 
+                        var color = params[i].color; 
+                        tooltipContent += '<span style="color:' + color + ';">' + job_info + ': ' + dataValue  +'</span><br>'; // 将曲线名称、数值和颜色拼接到tooltip内容中，并设置颜色样式
+                    }
+                    return tooltipContent; 
+                }
+
             },
-            y: {
-                label: 'Torque',
-                tick: {}
-            }
-        },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                name: 'Time(ms)',
+                data: x_data_val
+            },
 
-        grid: {
-            y: {}
-        },
-        subchart: {
-            show: true
-        }
-    };
+            yAxis: {
+                type: 'value',
+                name: 'Torque',
+                boundaryGap: [0, '100%']
+            },
 
-    // 根據limit_val 的值決定是否顯示上下限
+            dataZoom: [
+                {
+                    type: 'inside', // 內置的 dataZoom 類型
+                    start: 0, // 起始位置百分比
+                    end: 100 // 結束位置百分比
+                },
+                {
+                    show: false, // 顯示滑塊型的 dataZoom
+                    type: 'slider', // 滑塊型的 dataZoom 類型
+                    start: 0, // 初始的起始位置百分比
+                    end: 100, // 初始的結束位置百分比
+                    handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z', // 自定義滑塊的圖標
+                    handleSize: '80%', // 滑塊的大小
+                    handleStyle: {
+                        color: '#fff', // 滑塊的顏色
+                        shadowBlur: 3, // 滑塊的陰影模糊度
+                        shadowColor: 'rgba(0, 0, 0, 0)', // 滑塊的陰影顏色
+                        shadowOffsetX: 2, // 滑塊的陰影 X 方向偏移
+                        shadowOffsetY: 2 // 滑塊的陰影 Y 方向偏移
+                    }
+                }
+            ],
+
+            series: [
+                {
+                    name: '', // 第一條曲線的名稱
+                    type: 'line',
+                    symbol: 'none',
+                    sampling: 'average',
+                    itemStyle: {
+                        normal: {
+                            color: 'rgb(255, 0, 0)' 
+                        }
+                    },
+                    areaStyle: {
+                        normal: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 0, [{
+                                offset: 0,
+                                color: 'rgb(255,255,255)'
+                            }, {
+                                offset: 1,
+                                color: 'rgb(255,255,255)'
+                            }])
+                        }
+                    },
+                    lineStyle: {
+                        width: 0.75 
+                    },
+                    data: y_data_val 
+                },
+                {
+                    name: '', 
+                    type: 'line',
+                    symbol: 'none',
+                    sampling: 'average',
+                    itemStyle: {
+                        normal: {
+                            color: 'rgb(44,55,82)' 
+                        }
+                    },
+                    areaStyle: {
+                        normal: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 0, [{
+                                offset: 0,
+                                color: 'rgb(255,255,255)'
+                            }, {
+                                offset: 1,
+                                color: 'rgb(255,255,255)'
+                            }])
+                        }
+                    },
+                    lineStyle: {
+                        width: 0.75 
+                    },
+                    data: y_data_val_1 
+                }
+            ]
+        };
+
+    //第一條曲線的上下限
     if (limit_val == 1) {
-        chartOptions.grid.y.lines = [
-            {value: min, text: 'Low Torque', position: 'middle', class: 'grid-upper'},
-            {value: max, text: 'High Torque', position: 'middle', class: 'grid-upper'}
-        ];
+        option.series.push({
+            type: 'line',
+            markLine: {
+                data: [
+                    { yAxis: min_val, lineStyle: { type: 'dashed', color: 'rgb(255, 0, 0)' } }, 
+                    { yAxis: max_val, lineStyle: { type: 'dashed', color: 'rgb(255, 0, 0)' } }   
+                ]
+            }
+        });
     }
 
-    var chart = c3.generate(chartOptions);
-    var chartTitle = document.getElementById('chart-title');
-    chartTitle.style.textAlign = 'center';
-    chartTitle.style.fontSize = '21px'; 
-    chartTitle.style.color = 'blue'; 
-
-</script>
-
-
-<script>
-
-    //整理X軸跟Y軸的數據data
-    var x_data = <?php echo  $data['chart2_xcoordinate']; ?>;
-    var y_data = <?php echo  $data['chart2_ycoordinate']; ?>;
-
-    var min = <?php echo $data['chart2_ycoordinate_min'];?>;
-    var max = <?php echo $data['chart2_ycoordinate_max'];?>;
-
-    var chartOptions1 = {
-        bindto: '#chart1',
-        data: {
-            x: 'x',
-            columns: [
-                ['x'].concat(x_data),
-                ['Torque'].concat(y_data)
-            ]
-        },
-
-        axis: {
-            x: {
-                label: 'Time (ms)',
-            },
-            y: {
-                label: 'Torque',
-                tick: {}
-            }
-        },
-
-        grid: {
-            y: {}
-        },
-        subchart: {
-            show: true
-        }
-    };
-
-    //根據limit_val 的值決定是否顯示上下限
+    //第二條曲線的上下限
     if (limit_val == 1) {
-        chartOptions1.grid.y.lines = [
-            {value: min, text: 'Low Torque', position: 'middle', class: 'grid-upper',size:15  },
-            {value: max, text: 'High Torque', position: 'middle', class: 'grid-upper',size:15 }
-        ];
+        option.series.push({
+            type: 'line',
+            markLine: {
+                data: [
+                    { yAxis: min_val_1, lineStyle: { type: 'dashed', color: 'rgb(44,55,82)' } },
+                    { yAxis: max_val_1, lineStyle: { type: 'dashed', color: 'rgb(44,55,82)' } }    
+                ]
+            }
+        });
     }
 
-    var chart1 = c3.generate(chartOptions1);
-    var chartTitle2 = document.getElementById('chart-title2');
-    chartTitle2.style.textAlign = 'center';
-    chartTitle2.style.fontSize = '21px';
-    chartTitle2.style.color = 'blue'; 
+
+    myChart_combine.setOption(option);
 
 </script>
 <?php } ?>
-
-
 <!----combine ed----->
-<style>
-    .grid-upper line {
-        stroke: red;
-    }
-    .grid-lower line {
-        stroke: red;
-    }
-    .region-upper rect {
-        fill: rgba(255, 0, 0, 0.2);
-    }
-    .region-lower rect {
-        fill: rgba(255, 0, 0, 0.2);
-    }
-    .c3 .grid line.grid-upper {
-        stroke-width: 2px;
-    }
 
-    .empty-div {
-        width: 200px;
-        height:150px;
-    }
-     .empty-div1 {
-        width: 200px;
-        height:500px;
-    }
-      .empty-div3 {
-        width: 200px;
-        height:50px;
-    }
-</style>
 
 <script>
 function chat_mode_change(selectOS){
@@ -1295,19 +1304,16 @@ function chat_mode_change(selectOS){
 }
 
 
-
-
-/*document.getElementById('downloadchartbtn').addEventListener('click', function() {
-    const element = document.body;
-    html2pdf().from(element).set({ html2canvas: { scale: 5 } }).save('download_chart11.pdf');
-});*/
-
-
 document.getElementById('downloadchartbtn').addEventListener('click', function() {
 
     var menuChartDiv = document.getElementById('menu-chart');
     menuChartDiv.style.display = 'none';
 
+    //取得圖表的base64編碼
+    var chartDataURL = myChart.getDataURL({
+        pixelRatio: 2, 
+        backgroundColor: '#fff' //背景為白色
+    });
 
     var divContent = document.getElementById('jobinfo').outerHTML;
     var stylesheets = document.getElementsByTagName('link');
@@ -1315,11 +1321,11 @@ document.getElementById('downloadchartbtn').addEventListener('click', function()
         .map(stylesheet => `<link rel="stylesheet" href="${stylesheet.href}">`)
         .join('\n');
 
-    var fullHTML = `<head>${cssString}</head>\n<body>${divContent}</body>`;
+    ////取得圖表的base64編碼插入到HTML
+    var fullHTML = `<head>${cssString}</head>\n<body>${divContent}<img src="${chartDataURL}" alt="ECharts Chart"></body>`;
     var blob = new Blob([fullHTML], { type: 'text/html' });
 
     menuChartDiv.style.display = '';
-
 
     var link = document.createElement('a');
     link.href = window.URL.createObjectURL(blob);
@@ -1327,6 +1333,7 @@ document.getElementById('downloadchartbtn').addEventListener('click', function()
     link.click();
 
 });
+
 
 
 document.getElementById('downlandpdf_combine').addEventListener('click', function() {

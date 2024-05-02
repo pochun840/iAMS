@@ -573,39 +573,7 @@ class Historical{
         }
         
     }
-    #api 
-    public function  fasten_data_status(){
-        
-        #1. 取出NG的狀態()
-        $sql ="SELECT * FROM fasten_data WHERE fasten_status not in('4','5','6') ORDER BY data_time DESC ";
-        $statement = $this->db->prepare($sql);
-        $statement->execute();
-        $res_ng_arr = $statement->fetchall(PDO::FETCH_ASSOC);
-
-        return  $res_ng_arr;
- 
-
-
-    }
-
-    /*public function for_api($essential){
-        
-        $sql = "SELECT * FROM `fasten_data` WHERE  on_flag = '0' ";
-        #列出所有error_message
-        if($essential['mode' ] == "ng_reason"){
-            //$sql = "SELECT error_message  FROM `fasten_data` WHERE  on_flag = '0' ";
-            $sql.= "AND fasten_status in('7','8')";
-        }
-
-        $sql.= " ORDER BY data_time DESC ";
-        $statement = $this->db->prepare($sql);
-        $statement->execute();
-        $result = $statement->fetchall(PDO::FETCH_ASSOC);
-
-        return $result; 
-
-
-    }*/
+   
 
     public function for_api_test($mode){
         
@@ -676,6 +644,28 @@ class Historical{
             AND on_flag = '0'  AND  fasten_status IN('5','6')
             GROUP BY substr(data_time, 1, 10), fasten_status;";
     
+        }
+
+        if($mode =="job_time"){
+            $sql ="SELECT 
+            job_id, 
+            COUNT(job_id) AS duplicate_count,
+            job_name,
+            fasten_time,  
+            SUM(fasten_time) AS total_fasten_time,
+            AVG(fasten_time) AS average_fasten_time
+            FROM 
+                fasten_data 
+            WHERE 
+                on_flag = 0 
+                AND step_targettype IN ('1','2')
+            GROUP BY 
+                job_id 
+            HAVING 
+                COUNT(job_id) > 1 
+            ORDER BY 
+                data_time DESC ";
+        
         }
 
         $statement = $this->db->prepare($sql);
