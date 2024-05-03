@@ -16,7 +16,12 @@ class Historicals_new{
 
     #取得CSV
     public function csv_info($system_sn){
-        $sql = "SELECT * FROM `fasten_data` WHERE    on_flag ='0' AND system_sn in('".$system_sn."') order by data_time desc";
+
+        if($system_sn ! = 'total'){
+            $sql = "SELECT * FROM `fasten_data` WHERE    on_flag ='0' AND system_sn in('".$system_sn."') order by data_time desc";
+        }else{
+            $sql = "SELECT * FROM `fasten_data` WHERE    on_flag ='0' order by data_time desc";
+        }    
         $statement = $this->db->prepare($sql);
         $statement->execute();
         $rows = $statement->fetchall(PDO::FETCH_ASSOC);

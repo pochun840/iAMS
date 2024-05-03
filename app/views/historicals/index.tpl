@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/historical.css?v=202404111200" type="text/css">
 
 <script src="<?php echo URLROOT; ?>js/flatpickr.js"></script>
-<script src="<?php echo URLROOT; ?>js/historical.js?v=202405021200"></script>
+<script src="<?php echo URLROOT; ?>js/historical.js?v=202405031200"></script>
 
 
 
@@ -19,8 +19,6 @@
 <?php if(isset($data['nav'])){
     echo $data['nav'];
 }
-
-
 
 //
 //取得URL 
@@ -44,6 +42,7 @@ if ($path == "combinedata") {
     </script>
     ";
 }
+
 if($path == "nextinfo"){
       echo "
     <script>
@@ -63,6 +62,7 @@ if($path == "nextinfo"){
 
 }
 
+#曲線圖 是否要顯示上下限
 if(!empty($_COOKIE['limit_val'])){
     $limit_val = $_COOKIE['limit_val'];
 }else{
@@ -93,13 +93,13 @@ if(!empty($_COOKIE['chat_mode_change'])){
     $chat_mode_change = '';
 }
 
+
+#曲線圖 是否要顯示上下限
 if(!empty($_COOKIE['line_style'])){
     $line_style = $_COOKIE['line_style'];
 }else{
     $line_style = '';
 }
-
-
 ?>
 
 <style>
@@ -454,15 +454,15 @@ if(!empty($_COOKIE['line_style'])){
                                 </select>
                             </td>
                             <td>
-                                Torque Unit:    
+                                Torque Unit:  
                                 <select id="Torque-Unit" class="Select-All" style="float: none; width: 100px" onchange="unit_change(this)">
-                                                    <?php foreach($data['torque_mode_arr'] as $k_torque => $v_torque){?>
-                                                            <option  value="<?php echo $k_torque;?>"  <?php if($unit_mode== $k_torque){echo "selected";}else{echo "";}?>  > <?php echo $v_torque;?> </option>
+                                                    <?php foreach($data['torque_mode_arr'] as $k_torque =>$v_torque){?>
+                                                            <option  value="<?php echo $k_torque;?>"> <?php echo $v_torque; ?> </option>
                                                     <?php } ?>
                                 </select>
                             </td>
                             <td>
-                                Angle:  <select id="Angle" class="t6 Select-All" id='angle_type' style="float: none; width: 100px">
+                                Angle:  <select id="Angle" class="t6 Select-All" id='angle_type' style="float: none; width: 100px" onchange="angle_change(this)">
                                             <option value="1">Total angle</option>
                                             <option value="2">Task angle</option>
                                         </select>
@@ -487,7 +487,9 @@ if(!empty($_COOKIE['line_style'])){
                             <label style="float: left"><b>Diagram Display</b></label>
                             <label><?php echo $data['chat']['chat_name'];?></label>
                         </div>
-                        <div id="chart-setting">
+                       
+
+                       <div id="chart-setting">
                             <div class="chart-container">
                                 <div class="menu-chart"  id="menu-chart" onclick="toggleMenu()">
                                     <i class="fa fa-bars" style="font-size: 26px"></i>
@@ -685,7 +687,7 @@ if(!empty($_COOKIE['line_style'])){
                     <hr style="width: 100%; height: 4px;">
                     <b style="font-size: 20px">Diagram Display</b>
                     <div class="w3-center">
-                        <img src="./img/pick-A-screw.svg" style=" height: 40vh; width: 70vw" alt="Nature" class="w3-margin-bottom">
+                        <img src="./img/pick-A-screw.svg" style=" height: 40vh; width: 70vw" alt="Nature" class="w3-margin-bottom">--<
                     </div>
 
                     <button class="Save-button" id="saveButton" onclick="Save_job()">Save</button>
@@ -923,14 +925,11 @@ function WorkFlowLogInfo()
 }*/
 
 function toggleMenu() {
-    alert('eeertt');
     var menuContent = document.getElementById("myMenu");
     menuContent.style.display = (menuContent.style.display === "block") ? "none" : "block";
 }
 
-function printChart() {
 
-}
 
 /// Onclick event for row background color
 $(document).ready(function () {
@@ -1011,8 +1010,16 @@ addMessage();
     var y_title = '<?php echo $data['chart_info']['y_title'];?>';
 
    
-
+    
     var option = {
+            //設置圖表的占容器的百分比
+            grid: {
+                width: '90%',  
+                height: '70%', 
+                left: '3%',  
+                top: '20%' 
+            },
+
             tooltip: {
                 trigger: 'axis',
                 position: function (pt) {
@@ -1041,23 +1048,24 @@ addMessage();
                 boundaryGap: [0, '100%']
             },
         dataZoom: [{
-            type: 'inside',
-            start: 0,
-            end: 10
-        }, {
-            show: false, 
-            type: 'slider',
-            start: 0,
-            end: 10,
-            handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
-            handleSize: '80%',
-            handleStyle: {
-                color: '#fff',
-                shadowBlur: 3,
-                shadowColor: 'rgba(0, 0, 0, 0)',
-                shadowOffsetX: 0,
-                shadowOffsetY: 0
-            }
+                type: 'inside',
+                start: 0,
+                end: 100
+            }, 
+            {
+                show: false, 
+                type: 'slider',
+                start: 0,
+                end: 100,
+                handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+                handleSize: '80%',
+                handleStyle: {
+                    color: '#fff',
+                    shadowBlur: 3,
+                    shadowColor: 'rgba(0, 0, 0, 0)',
+                    shadowOffsetX: 0,
+                    shadowOffsetY: 0
+                }
         }],
         series: [
             {
@@ -1113,7 +1121,146 @@ addMessage();
 
 <?php  if($path =="nextinfo" &&  $data['chart_info']['chat_mode'] == "6") {?>
 <script>
-   
+    var myChart = echarts.init(document.getElementById('chartinfo'));
+
+    var x_data_val = <?php echo $data['chart_info']['x_val']; ?>; // X軸
+    var y_data_val = <?php echo $data['chart_info']['y_val']; ?>; // Y軸1(torque)
+    var y_data_val_1 = <?php echo $data['chart_info']['y_val_1']; ?>; // Y軸2(angle)
+
+    var max_val = <?php echo $data['chart_info']['max']; ?>; // Y軸1的上限
+    var min_val = <?php echo $data['chart_info']['min']; ?>; // Y軸1的下限
+
+    var max_val_1 = <?php echo $data['chart_info']['max1']; ?>; // Y軸2的上限
+    var min_val_1 = <?php echo $data['chart_info']['min1']; ?>; // Y軸2的上限
+
+    var option = {
+
+        //設置圖表的占容器的百分比
+        grid: {
+            width: '90%',  
+            height: '70%', 
+            left: '3%',  
+            top: '20%' 
+        },
+
+        tooltip: {
+            trigger: 'axis',
+            position: function (pt) {
+                return [pt[0], '10%'];
+            },
+            formatter: function (params) {
+                var torqueColor = 'rgb(255,0,0)'; 
+                var angleColor = 'rgb(44,55,82)';
+                return '<span style="color:' + torqueColor + '">Torque: ' + params[0].value + '</span><br/>' +
+                       '<span style="color:' + angleColor + '">Angle: ' + params[1].value + '</span>';
+            }
+        },
+        title: {
+            left: 'center',
+            text: ''
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            name: 'Time(ms)',
+            data: x_data_val
+        },
+        yAxis: [
+            {
+                type: 'value',
+                name: 'Torque',
+                min: min_val,
+                max: max_val
+            },
+            {
+                type: 'value',
+                name: 'Angle',
+                min: min_val_1,
+                max: max_val_1
+            }
+        ],
+        dataZoom: [{
+                type: 'inside',
+                start: 0,
+                end: 100
+            }, 
+            {
+                show: false, 
+                type: 'slider',
+                start: 0,
+                end: 100,
+                handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+                handleSize: '80%',
+                handleStyle: {
+                    color: '#fff',
+                    shadowBlur: 3,
+                    shadowColor: 'rgba(0, 0, 0, 0)',
+                    shadowOffsetX: 0,
+                    shadowOffsetY: 0
+                }
+        }],
+
+        series: [
+            {
+                name: 'Torque',
+                type: 'line',
+                yAxisIndex: 0,
+                symbol: 'none',
+                sampling: 'average',
+                itemStyle: {
+                    color: 'rgb(255,0,0)'
+                },
+                lineStyle: {
+                    width: 0.75
+                },
+                data: y_data_val
+            },
+            {
+                name: 'Angle',
+                type: 'line',
+                yAxisIndex: 1,
+                symbol: 'none',
+                sampling: 'average',
+                itemStyle: {
+                    color: 'rgb(44,55,82)'
+                },
+                lineStyle: {
+                    width: 0.75
+                },
+                data: y_data_val_1
+            }
+        ]
+    };
+
+    
+    //第一條曲線的上下限
+    if (limit_val == 1) {
+        option.series.push({
+            type: 'line',
+            markLine: {
+                symbol: 'none',
+                data: [
+                    { yAxis: min_val, lineStyle: { type: 'dashed', color: 'rgb(255, 0, 0)' } }, 
+                    { yAxis: max_val, lineStyle: { type: 'dashed', color: 'rgb(255, 0, 0)' } }   
+                ]
+            }
+        });
+    }
+
+    //第二條曲線的上下限
+    if (limit_val == 1) {
+        option.series.push({
+            type: 'line',
+            markLine: {
+                symbol: 'none',
+                data: [
+                    { yAxis: min_val_1, lineStyle: { type: 'dashed', color: 'rgb(44,55,82)'  } },
+                    { yAxis: max_val_1, lineStyle: { type: 'dashed', color: 'rgb(44,55,82)'  } }    
+                ]
+            }
+        });
+    }
+    myChart.setOption(option);
 </script>
 <?php }?>
 <!----nextinfo ed----->
@@ -1176,9 +1323,9 @@ addMessage();
 
             dataZoom: [
                 {
-                    type: 'inside', // 內置的 dataZoom 類型
-                    start: 0, // 起始位置百分比
-                    end: 100 // 結束位置百分比
+                    type: 'inside', 
+                    start: 0, 
+                    end: 100 
                 },
                 {
                     show: false, // 顯示滑塊型的 dataZoom
@@ -1356,3 +1503,21 @@ document.getElementById('downlandpdf_combine').addEventListener('click', functio
 
 </script>
 
+<style>
+#chartinfo {
+    margin-left: 0 !important;
+}
+</style>
+
+<script>
+var queryresult;
+
+function checkAndDownload() {
+  if (queryresult == null) {
+    //沒有search 
+    
+  }else{
+    csv_download();
+  }
+}
+</script>

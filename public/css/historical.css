@@ -756,6 +756,7 @@ table
 {
     display: flex;
     padding: 0px 0;
+    justify-content: flex-start;
 }
 
 .chart-container

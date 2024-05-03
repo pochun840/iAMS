@@ -1,76 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Download Page with CSS</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta charset="utf-8">
+    <title>ECharts 折線圖範例</title>
+    <!-- 引入 ECharts.js -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
 </head>
 <body>
-    <div id="chart1"></div>
-    <div id="chart2"></div>
-    <div id="chart3"></div>
+    <!-- 定義一個具有指定大小（寬度和高度）的 div，用於顯示折線圖 -->
+    <div id="chart" style="width: 800px; height: 600px;"></div>
 
-    <button id="downloadBtn">Download Page</button>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.16.0/d3.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.js"></script>
     <script>
-        // Create sample C3.js charts
-        var chart1 = c3.generate({
-            bindto: '#chart1',
-            data: {
-                columns: [
-                    ['data1', 30, 200, 100, 400, 150, 250],
-                    ['data2', 50, 20, 10, 40, 15, 25]
-                ]
-            }
-        });
+        // 初始化 ECharts 實例
+        var myChart = echarts.init(document.getElementById('chart'));
 
-        var chart2 = c3.generate({
-            bindto: '#chart2',
-            data: {
-                columns: [
-                    ['data1', 130, 100, 140, 200, 150, 50],
-                    ['data2', 230, 200, 240, 250, 250, 100]
-                ]
-            }
-        });
+        // 定義 x 軸的座標數據
+        var xAxisData = [];
+        for (var i = 0; i <= 1024; i++) {
+            xAxisData.push(i);
+        }
 
-        var chart3 = c3.generate({
-            bindto: '#chart3',
-            data: {
-                columns: [
-                    ['data1', 30, 200, 100, 400, 150, 250],
-                    ['data2', 130, 300, 200, 300, 250, 450]
-                ]
-            }
-        });
+        // 定義 y 軸的數據（這裡以亂數生成）
+        var seriesData = [];
+        for (var i = 0; i <= 1024; i++) {
+            seriesData.push(Math.random() * 100); // 生成 0 到 100 的隨機數
+        }
 
-        // Function to download the page as HTML file
-        document.getElementById('downloadBtn').addEventListener('click', function() {
-            var htmlContent = document.documentElement.outerHTML;
-            var stylesheets = document.getElementsByTagName('link');
+        // 定義折線圖的配置項
+        var option = {
+            xAxis: {
+                type: 'category',
+                data: xAxisData
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: seriesData,
+                type: 'line'
+            }],
+            // 設置 dataZoom，使用者可以縮放 x 軸的數據範圍
+            dataZoom: [
+                {
+                    type: 'inside', // 內部的 dataZoom，使用滑桿縮放
+                    start: 0,
+                    end: 100 // 默認結束位置為 100%
+                }
+            ]
+        };
 
-            // 下載頁面中使用的 CSS 文件
-            Promise.all(Array.from(stylesheets).map(function(stylesheet) {
-                var cssUrl = stylesheet.href;
-                return fetch(cssUrl)
-                    .then(response => response.text())
-                    .then(cssContent => {
-                        return {url: cssUrl, content: cssContent};
-                    });
-            })).then(function(cssFiles) {
-                var cssString = cssFiles.map(cssFile => `<style>${cssFile.content}</style>`).join('\n');
-                var fullHTML = `${cssString}\n${htmlContent}`;
-                var blob = new Blob([fullHTML], { type: 'text/html' });
-
-                var link = document.createElement('a');
-                link.href = window.URL.createObjectURL(blob);
-                link.download = 'page_with_css.html';
-                link.click();
-            });
-        });
+        // 使用剛剛定義的配置項顯示折線圖
+        myChart.setOption(option);
     </script>
 </body>
 </html>

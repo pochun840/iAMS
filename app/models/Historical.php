@@ -16,7 +16,13 @@ class Historical{
 
     #取得CSV
     public function csv_info($system_sn){
-        $sql = "SELECT * FROM `fasten_data` WHERE    on_flag ='0' AND system_sn in('".$system_sn."') order by data_time desc";
+
+        if($system_sn != 'total'){
+            $sql = "SELECT * FROM `fasten_data` WHERE on_flag ='0' AND system_sn IN('".$system_sn."') order by data_time desc";
+        }else{
+            $sql = "SELECT * FROM `fasten_data` WHERE on_flag ='0' ORDER BY data_time desc";
+        }
+       
         $statement = $this->db->prepare($sql);
         $statement->execute();
         $rows = $statement->fetchall(PDO::FETCH_ASSOC);
@@ -740,5 +746,107 @@ class Historical{
             }
         }
         
+    }
+
+
+    public function unitarr_change($torValues, $inputType, $TransType){
+        
+        $inputType = (int)$inputType;
+        $TransType = (int)$TransType;
+
+        
+        $TorqueUnit = [
+            "N_M" => 1,
+            "KGF_M" => 0,
+            "KGF_CM" => 2,
+            "LBF_IN" => 3
+        ];
+
+        //var_dump($TransType);
+
+        //var_dump($TorqueUnit["N_M"]);
+
+        if($inputType == $TorqueUnit["N_M"]){
+            echo "re1";
+        }
+
+        if($inputType == $TorqueUnit["KGF_M"]){
+            echo "re2";
+        }
+
+        if($inputType == $TorqueUnit["KGF_CM"]){
+            echo "re3";
+        }
+
+        if($inputType == $TorqueUnit["LBF_IN"]){
+            echo "re4";
+        }
+
+        $convertedValues = array();
+        foreach($torValues as $torValue) {
+           
+            $torValue = floatval($torValue);
+           
+            if ($inputType == $TorqueUnit["N_M"]) {
+                
+                var_dump($TransType);
+
+              
+
+                if ($TransType == $TorqueUnit["KGF_M"]) {
+                    echo "e1";die();
+                    $convertedValues[] = round($torValue * 0.102, 4);
+                } elseif ($TransType == $TorqueUnit["KGF_CM"]) {
+                    echo "e2";die();
+                    $convertedValues[] = round($torValue * 10.2, 2);
+                } elseif ($TransType == $TorqueUnit["LBF_IN"]) {
+                    echo "e3";die();
+                    $convertedValues[] = round($torValue * 10.2 * 0.86805, 2);
+                } elseif ($TransType == $TorqueUnit["N_M"]) {
+                    echo "e4";die();
+                    $convertedValues[] = round($torValue, 3);
+                }
+            } 
+            
+            elseif ($inputType == $TorqueUnit["KGF_M"]) {
+                if ($TransType == $TorqueUnit["KGF_M"]) {
+                    $convertedValues[] = round($torValue, 4);
+                } elseif ($TransType == $TorqueUnit["KGF_CM"]) {
+                    $convertedValues[] = round($torValue * 100, 2);
+                } elseif ($TransType == $TorqueUnit["LBF_IN"]) {
+                    
+                    $convertedValues[] = round($torValue * 100 * 0.86805, 2);
+                } elseif ($TransType == $TorqueUnit["N_M"]) {
+                    $convertedValues[] = round($torValue * 9.80392156, 3);
+                }
+            }
+
+            elseif ($inputType == $TorqueUnit["KGF_CM"]) {
+                if ($TransType == $TorqueUnit["KGF_M"]) {
+                    $convertedValues[] = round($torValue * 0.01, 4);
+                } elseif ($TransType == $TorqueUnit["KGF_CM"]) {
+                    $convertedValues[] = round($torValue, 2);
+                } elseif ($TransType == $TorqueUnit["LBF_IN"]) {
+                    $convertedValues[] = round($torValue * 0.86805, 2);
+                } elseif ($TransType == $TorqueUnit["N_M"]) {
+                    $convertedValues[] = round($torValue * 0.0980392156, 3);
+                }
+            }
+
+            elseif ($inputType == $TorqueUnit["LBF_IN"]) {
+                
+                if ($TransType == $TorqueUnit["KGF_M"]) {
+                    $convertedValues[] = round($torValue * 1.152 * 0.01, 4);
+                } elseif ($TransType == $TorqueUnit["KGF_CM"]) {
+                    $convertedValues[] = round($torValue * 1.152, 2);
+                } elseif ($TransType == $TorqueUnit["LBF_IN"]) {
+                    $convertedValues[] = round($torValue, 2);
+                } elseif ($TransType == $TorqueUnit["N_M"]) {
+                    $convertedValues[] = round($torValue * 0.11294117637119998, 3);
+                }
+            }
+        }
+
+        return $convertedValues;
     }
 }
