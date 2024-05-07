@@ -235,6 +235,8 @@ class Historicals extends Controller
         
         $data = array();
 
+        
+
         $status_arr = $this->Historicals_newModel->status_code_change();
         $mode_arr = array('ng_reason','fastening_status','job_info','statistics');
 
@@ -417,28 +419,32 @@ class Historicals extends Controller
             }
         }
 
-      
+        //
+        if(!empty($_GET['type']="downland")){
+            $data['type'] ="downland";
+        }else{
+            $data['type'] = '';
+        }
+       
         #取出 各種的NG狀態
         $this->view('historicals/index_report_history',$data);
     }
 
 
     #鎖附資料 圖表 
-    public function ddd(){
+    /*public function ddd(){
  
-        $this->view('historicals/index_test');
-    }
+        $this->view('historicals/index_test2');
+    }*/
 
 
-    public function test_chart(){
+    /*public function test_chart(){
         $chat_mode  = "6";
         $data = array();
 
         $no = "4145";
         $csvdata_arr   = $this->Historicals_newModel->get_info($no,$chat_mode);
-
-
-              $values = array_values($csvdata_arr['torque']);
+        $values = array_values($csvdata_arr['torque']);
               
         $data['chart_info']['x_val']  = json_encode(array_keys($csvdata_arr['torque'])); #X軸
         $data['chart_info']['y_val'] = json_encode($csvdata_arr['torque']); #Y軸 torque
@@ -454,7 +460,7 @@ class Historicals extends Controller
 
 
 
-    }
+    }*/
 
 
 
@@ -514,12 +520,9 @@ class Historicals extends Controller
 
             );
 
-       
-            
             if($chat_mode =="5"){
 
                 #X=>Angle Y=>Torque
-
                 if(!empty($csvdata_arr['angle'])){
                     $data['chart_info']['x_val'] = json_encode($csvdata_arr['angle']);
                     $data['chart_info']['y_val'] = json_encode($csvdata_arr['torque']);
@@ -704,6 +707,11 @@ class Historicals extends Controller
 
         ); 
 
+        $angle_mode_arr = array(
+            1 =>'total angle',
+            2 =>'task angle'
+        );
+
         #扭力轉換
         $torque_arr = $this->Historicals_newModel->torque_change();
 
@@ -714,6 +722,7 @@ class Historicals extends Controller
         $data['torque_arr'] = $torque_arr;
         $data['status_arr'] = $status_arr;
         $data['torque_mode_arr'] = $torque_arr;
+        $data['angle_mode_arr'] = $angle_mode_arr;
         $data['nav'] = $this->NavsController->get_nav();
         $data['nopage'] = 0;
         $data['path'] = __FUNCTION__;
