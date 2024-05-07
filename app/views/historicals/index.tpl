@@ -524,12 +524,12 @@ if(!empty($_COOKIE['line_style'])){
                                 <label class="form-check-label" for="optioncheck">display the high/low auxiliary lines.</label>
 
                                 <label style="padding-left: 5%">
-                                    Angle : &nbsp;<select id="angle" style="width: 120px" onchange="angle_change_combine(this)">
+                                    Angle : &nbsp;
+                                    <select id="angle" style="width: 120px" onchange="angle_change_combine(this)">
                                                     <?php foreach($data['angle_mode_arr'] as $ke =>$ve){?>
                                                         <option value="<?php echo $ke;?>"><?php echo $ve;?></option>
                                                     <?php } ?>
-                                              
-                                                  </select>
+                                    </select>
                                 </label>
                                 <label style="padding-left: 5%">
                                     <!--Unit :
@@ -1109,8 +1109,8 @@ addMessage();
     if (limit_val == 1) {
         option.series[0].markLine = {
             data: [
-                {yAxis: min_val, name: ''}, // 下限
-                {yAxis: max_val, name: ''}  // 上限
+                {yAxis: min_val, name: '',label: {position: 'middle',formatter: 'low torque'}}, // 下限
+                {yAxis: max_val, name: '',label: {position: 'middle',formatter: 'high torque'}}  // 上限
             ],
             symbol: 'none',
             lineStyle: {
@@ -1245,8 +1245,8 @@ addMessage();
             markLine: {
                 symbol: 'none',
                 data: [
-                    { yAxis: min_val, lineStyle: { type: 'dashed', color: 'rgb(255, 0, 0)' } }, 
-                    { yAxis: max_val, lineStyle: { type: 'dashed', color: 'rgb(255, 0, 0)' } }   
+                    { yAxis: min_val,name: '',label: {position: 'middle',formatter: 'low torque'},lineStyle: { type: 'dashed', color: 'rgb(255, 0, 0)' } }, 
+                    { yAxis: max_val,name: '',label: {position: 'middle',formatter: 'high torque'}, lineStyle: { type: 'dashed', color: 'rgb(255, 0, 0)' } }   
                 ]
             }
         });
@@ -1259,8 +1259,8 @@ addMessage();
             markLine: {
                 symbol: 'none',
                 data: [
-                    { yAxis: min_val_1, lineStyle: { type: 'dashed', color: 'rgb(44,55,82)'  } },
-                    { yAxis: max_val_1, lineStyle: { type: 'dashed', color: 'rgb(44,55,82)'  } }    
+                    { yAxis: min_val_1, name: '',label: {position: 'middle',formatter: 'low angle'}, lineStyle: { type: 'dashed', color: 'rgb(44,55,82)'  } },
+                    { yAxis: max_val_1, name: '',label: {position: 'middle',formatter: 'high angle'}, lineStyle: { type: 'dashed', color: 'rgb(44,55,82)'  } }    
                 ]
             }
         });
@@ -1410,8 +1410,8 @@ addMessage();
             markLine: {
                 symbol: 'none',
                 data: [
-                    { yAxis: min_val, lineStyle: { type: 'dashed', color: 'rgb(255, 0, 0)' } }, 
-                    { yAxis: max_val, lineStyle: { type: 'dashed', color: 'rgb(255, 0, 0)' } }   
+                    { yAxis: min_val, name: '',label: {position: 'middle',formatter: 'low torque'},lineStyle: { type: 'dashed', color: 'rgb(255, 0, 0)' } }, 
+                    { yAxis: max_val, name: '',label: {position: 'middle',formatter: 'high torque'},lineStyle: { type: 'dashed', color: 'rgb(255, 0, 0)' } }   
                 ]
             }
         });
@@ -1424,14 +1424,12 @@ addMessage();
             markLine: {
                 symbol: 'none',
                 data: [
-                    { yAxis: min_val_1, lineStyle: { type: 'dashed', color: 'rgb(44,55,82)'  } },
-                    { yAxis: max_val_1, lineStyle: { type: 'dashed', color: 'rgb(44,55,82)'  } }    
+                    { yAxis: min_val_1, name: '',label: {position: 'middle',formatter: 'low torque'},lineStyle: { type: 'dashed', color: 'rgb(44,55,82)'  } },
+                    { yAxis: max_val_1, name: '',label: {position: 'middle',formatter: 'high torque'},lineStyle: { type: 'dashed', color: 'rgb(44,55,82)'  } }    
                 ]
             }
         });
     }
-
-
     myChart_combine.setOption(option);
 
 </script>
