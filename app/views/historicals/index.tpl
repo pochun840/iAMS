@@ -525,10 +525,10 @@ if(!empty($_COOKIE['line_style'])){
 
                                 <label style="padding-left: 5%">
                                     Angle : &nbsp;
-                                    <select id="angle" style="width: 120px" onchange="angle_change_combine(this)">
-                                                    <?php foreach($data['angle_mode_arr'] as $ke =>$ve){?>
-                                                        <option value="<?php echo $ke;?>"><?php echo $ve;?></option>
-                                                    <?php } ?>
+                                    <select id="angle_combine" style="width: 120px" onchange="angle_change_combine(this)">
+                                            <?php foreach($data['angle_mode_arr'] as $ke =>$ve){?>
+                                                <option value="<?php echo $ke;?>" <?php if($data['anglecombine'] == $ke){ echo "selected";}?>><?php echo $ve;?></option>
+                                            <?php } ?>
                                     </select>
                                 </label>
                                 <label style="padding-left: 5%">

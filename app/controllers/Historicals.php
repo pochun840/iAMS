@@ -714,6 +714,13 @@ class Historicals extends Controller
             2 =>'task angle'
         );
 
+
+        if(!empty($_GET['anglecombine'])){
+            $data['anglecombine'] = $_GET['anglecombine'];
+        }else{
+            $data['anglecombine'] = '';
+        }
+
         #扭力轉換
         $torque_arr = $this->Historicals_newModel->torque_change();
 

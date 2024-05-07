@@ -382,34 +382,41 @@ function angle_select(){
     
 }
 
-function  angle_change_combine(){
-    var selectElement = document.getElementById('angle');
+function angle_change_combine(){
+    var selectElement = document.getElementById('angle_combine');
     var selectedOption = selectElement.options[selectElement.selectedIndex];
     var selectedValue = selectedOption.value;
     var selectedText = selectedOption.textContent;
+    
     var xhttp = new XMLHttpRequest();
+    var currentUrl = window.location.href;
+    var anglevalueIndex = currentUrl.indexOf('anglecombine=');
+    var nextinfo_url;
+
+    if (anglevalueIndex !== -1) {
+        // 如果已經存在 anglevalue 參數，則需替換
+        nextinfo_url = currentUrl.substring(0, anglevalueIndex) + 'anglecombine=' + selectedValue;
+    } else {
+        // 如果不存在 anglevalue 參數，則要新增
+        nextinfo_url = currentUrl + (currentUrl.indexOf('?') !== -1 ? '&' : '?') + 'anglecombine=' + selectedValue;
+    }
+
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var convertedValue = this.responseText;
-            // 取得當前網址
-            var currentUrl = window.location.href;
-            // 找出是否已經存在 anglevalue 參數
-            var anglevalueIndex = currentUrl.indexOf('anglevalue=');
-            if (anglevalueIndex !== -1) {
-                // 如果已經存在 anglevalue 參數，則需替換
-                var nextinfo_url = currentUrl.substring(0, anglevalueIndex) + 'anglevalue=' + selectedValue;
-            } else {
-                // 如果不存在 anglevalue 參數，則要新增
-                var nextinfo_url = currentUrl + (currentUrl.indexOf('?') !== -1 ? '&' : '?') + 'anglevalue=' + selectedValue;
-            }
             // 將瀏覽器的當前網址更改為新的 URL
             window.location.assign(nextinfo_url);
         }
     };
+
+    // 打開並發送XMLHttpRequest請求
     xhttp.open("GET", nextinfo_url, true);
     xhttp.send();
-
 }
+
+
+
+
 //讀取cookie 
 function getCookie(cookieName) {
     var cookies = document.cookie.split(';');
