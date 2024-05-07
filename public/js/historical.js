@@ -387,32 +387,36 @@ function angle_change_combine(){
     var selectedOption = selectElement.options[selectElement.selectedIndex];
     var selectedValue = selectedOption.value;
     var selectedText = selectedOption.textContent;
-    
-    var xhttp = new XMLHttpRequest();
+
     var currentUrl = window.location.href;
-    var anglevalueIndex = currentUrl.indexOf('anglecombine=');
+    var anglecombineIndex = currentUrl.lastIndexOf('anglecombine=');
+
     var nextinfo_url;
 
-    if (anglevalueIndex !== -1) {
-        // 如果已經存在 anglevalue 參數，則需替換
-        nextinfo_url = currentUrl.substring(0, anglevalueIndex) + 'anglecombine=' + selectedValue;
+    if (anglecombineIndex !== -1) {
+        // 如果已經存在 anglecombine 參數，則替換它
+        nextinfo_url = currentUrl.substring(0, anglecombineIndex) + 'anglecombine=' + selectedValue;
     } else {
-        // 如果不存在 anglevalue 參數，則要新增
+        // 如果不存在 anglecombine 參數，則新增它
         nextinfo_url = currentUrl + (currentUrl.indexOf('?') !== -1 ? '&' : '?') + 'anglecombine=' + selectedValue;
     }
 
+    // 創建一個新的 XMLHttpRequest 對象
+    var xhttp = new XMLHttpRequest();
+
+    // 定義當狀態改變時的處理函數
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            var convertedValue = this.responseText;
-            // 將瀏覽器的當前網址更改為新的 URL
+
             window.location.assign(nextinfo_url);
         }
     };
 
-    // 打開並發送XMLHttpRequest請求
+    // 打開並發送 XMLHttpRequest 請求
     xhttp.open("GET", nextinfo_url, true);
     xhttp.send();
 }
+
 
 
 
