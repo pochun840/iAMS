@@ -354,32 +354,23 @@ function angle_select(){
     var selectedOption = selectElement.options[selectElement.selectedIndex];
     var selectedValue = selectedOption.value;
     var selectedText = selectedOption.textContent;
-    //console.log('Selected option value: ' + selectedValue); //選取的value
-    //console.log('Selected option text: ' + selectedText); //名稱
+
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var convertedValue = this.responseText;
-            // 取得當前網址
             var currentUrl = window.location.href;
-            // 找出是否已經存在 anglevalue 參數
             var anglevalueIndex = currentUrl.indexOf('anglevalue=');
             if (anglevalueIndex !== -1) {
-                // 如果已經存在 anglevalue 參數，則需替換
                 var nextinfo_url = currentUrl.substring(0, anglevalueIndex) + 'anglevalue=' + selectedValue;
             } else {
-                // 如果不存在 anglevalue 參數，則要新增
                 var nextinfo_url = currentUrl + (currentUrl.indexOf('?') !== -1 ? '&' : '?') + 'anglevalue=' + selectedValue;
             }
-            // 將瀏覽器的當前網址更改為新的 URL
             window.location.assign(nextinfo_url);
         }
     };
     xhttp.open("GET", nextinfo_url, true);
     xhttp.send();
-
-
-    
 }
 
 function angle_change_combine(){
@@ -394,33 +385,21 @@ function angle_change_combine(){
     var nextinfo_url;
 
     if (anglecombineIndex !== -1) {
-        // 如果已經存在 anglecombine 參數，則替換它
         nextinfo_url = currentUrl.substring(0, anglecombineIndex) + 'anglecombine=' + selectedValue;
     } else {
-        // 如果不存在 anglecombine 參數，則新增它
         nextinfo_url = currentUrl + (currentUrl.indexOf('?') !== -1 ? '&' : '?') + 'anglecombine=' + selectedValue;
     }
 
-    // 創建一個新的 XMLHttpRequest 對象
     var xhttp = new XMLHttpRequest();
-
-    // 定義當狀態改變時的處理函數
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
 
             window.location.assign(nextinfo_url);
         }
     };
-
-    // 打開並發送 XMLHttpRequest 請求
     xhttp.open("GET", nextinfo_url, true);
     xhttp.send();
 }
-
-
-
-
-
 //讀取cookie 
 function getCookie(cookieName) {
     var cookies = document.cookie.split(';');
