@@ -443,9 +443,6 @@ function check_limit(checkbox){
 }
 
 var lineCookieValue = getCookie('line_style');
-var low_val  = getCookie('lowval');
-var high_val = getCookie('highval');
 var chat_modeno = getCookie('chat_modeno');
 var limit_val = getCookie('limit_val');
 var chat_mode_change = getCookie('chat_mode_change');
-
