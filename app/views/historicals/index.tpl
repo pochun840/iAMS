@@ -1485,7 +1485,7 @@ document.getElementById('downloadchartbtn').addEventListener('click', function()
         .map(stylesheet => `<link rel="stylesheet" href="${stylesheet.href}">`)
         .join('\n');
 
-    ////取得圖表的base64編碼插入到HTML
+    //取得圖表的base64編碼插入到HTML
     var fullHTML = `<head>${cssString}</head>\n<body>${divContent}<img src="${chartDataURL}" alt="ECharts Chart" style="max-width: 100%; height: auto;"></body>`;
     var blob = new Blob([fullHTML], { type: 'text/html' });
 
@@ -1511,7 +1511,7 @@ document.getElementById('downlandpdf_combine').addEventListener('click', functio
     if(divToRemove2) {
         divToRemove2.parentNode.removeChild(divToRemove2);
     }
-    
+
     document.getElementById('angle').disabled = true;
     var disabledSelects = document.querySelectorAll('select[disabled]');
     disabledSelects.forEach(function(select) {
@@ -1526,6 +1526,7 @@ document.getElementById('downlandpdf_combine').addEventListener('click', functio
     });
 
     var divContent = document.getElementById('combinedata').outerHTML;
+    divContent = divContent.replace('force-overflow-Combine', 'photo');
     var stylesheets = document.getElementsByTagName('link');
     var cssString = Array.from(stylesheets)
         .map(stylesheet => `<link rel="stylesheet" href="${stylesheet.href}">`)
@@ -1543,8 +1544,4 @@ document.getElementById('downlandpdf_combine').addEventListener('click', functio
 
     event.preventDefault();
 }, { passive: true });
-
-
-
-
 </script>
