@@ -11,16 +11,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
 <script src="<?php echo URLROOT; ?>js/historical.js?v=202405021000"></script>
+
 </head>
 
 <body>
     
-    <div class="excel-sheet">
+    <div class="excel-sheet" id='excelsheet'>
         <header class="border-bottom">
             <h2><img src="./img/logo.jpg" alt="Logo"></h2>
             <p  style="font-weight: bold; font-size: 34px; padding-bottom: 5px">Fastening Statistics Report</p>
-                <!--<button id="downloadHtmlBtn">Download HTML</button>-->
-
         </header>
 
         <div style="padding-top: 10px;">
@@ -47,34 +46,31 @@
         <!--<label style="font-weight: bold; margin-left: 50%">Fastening Status</label>-->
         <div style="padding-bottom: 20px">
     
-            <!--<img src="img/fastening-log.png" width="60%" height="220" alt="">-->
-            <div id="lineChart" style="width: 950px;height:400px;"></div>
-            <div  align="center" id="fastening_status_chart" style="width: 40%; height: 400px;"></div>
+            <div  align='center' id="lineChart" style="width: 950px;height:400px;"></div>
+            <div  align='center' id="fastening_status_chart" style="width: 40%; height: 400px;"></div>
         </div>
         <hr>
         <label style="font-weight: bold">Screw Time</label> 
         <div style="padding-bottom: 20px">
             
-            <div id="main" style="width: 60%;height:350px;"></div>
-            
-            <!--<img src="img/job-time.png" width="40%" height="155px" alt="">-->
-            <div id="jobtime" style="width: 40%;height:400px;"></div>
+            <div  align='center' id="main" style="width: 60%;height:400px;"></div>
+            <div  align='center' id="jobtime" style="width: 40%;height:400px;"></div>
         </div>
         <hr>
-        <label style="font-weight: bold">Station Time</label>
+        <!--<label style="font-weight: bold">Station Time</label>
         <div style="padding-bottom: 20px">
             <img src="img/station-time.png" width="70%" height="200" alt="">
-        </div>
+        </div>-->
         
         <!--<label style="font-weight: bold; margin-top: 5%">NG Reason</label>-->
         <div style="padding-bottom: 20px">
             <div id="chart" style="width: 600px; height: 400px;"></div>
         </div>
         <hr>
-        <label style="font-weight: bold">NG Error v.s Operator</label>
+        <!--<label style="font-weight: bold">NG Error v.s Operator</label>
         <div style="padding-bottom: 20px">
             <img src="img/NG v.s Operator.png" width="60%" height="200" alt="">
-        </div>
+        </div>-->
     </div>
 </body>
 </html>
@@ -102,8 +98,8 @@
                 radius: '55%',
                 center: ['50%', '60%'],
                 data: ng_reason,
-                animationType: 'scale', // 添加動畫效果
-                animationEasing: 'elasticOut' // 彈性彈跳效果
+                animationType: 'scale', 
+                animationEasing: 'elasticOut' 
             }
         ]
     };
@@ -132,8 +128,8 @@
                 radius: '55%',
                 center: ['50%', '60%'],
                 data: job_time,
-                animationType: 'scale', // 添加動畫效果
-                animationEasing: 'elasticOut' // 彈性彈跳效果
+                animationType: 'scale', 
+                animationEasing: 'elasticOut' 
             }
         ]
     };
@@ -164,8 +160,8 @@
                 radius: '55%',
                 center: ['50%', '60%'],
                 data: fastening_status,
-                animationType: 'scale', // 添加動畫效果
-                animationEasing: 'elasticOut' // 彈性彈跳效果
+                animationType: 'scale', 
+                animationEasing: 'elasticOut' 
             }
         ]
     };
@@ -208,7 +204,7 @@
             },
             axisLine: {
                 lineStyle: {
-                    color: '#5e859e',//纵坐标轴和字体颜色
+                    color: '#5e859e',
                     width: 2
                 }
             }
@@ -269,22 +265,56 @@
 
     lineChart.setOption(options);
 
-    function downloadHtml() {
-
-        const htmlContent = document.documentElement.outerHTML;
-        const blob = new Blob([htmlContent], { type: 'text/html' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'current_page.html';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    }
-        
-
-
-
-
+  
+    
 </script>
+<script>
+if ("<?php echo $data['type']; ?>" == "downland") {
+
+    var stylesheets = document.getElementsByTagName('link');
+    var cssString = Array.from(stylesheets)
+        .map(stylesheet => `<link rel="stylesheet" href="${stylesheet.href}">`)
+        .join('\n');
+    var newContent = ["<head>"];
+
+    Array.from(stylesheets).forEach(function(stylesheet) {
+        newContent.push(`<link rel="stylesheet" href="${stylesheet.href}">`);
+    });
+
+    newContent.push("</head><body>");
+    newContent.push(document.documentElement.innerHTML);
+
+    newContent.push("</body>");
+    var blob = new Blob([newContent.join('\n')], { type: 'text/html' });
+    var link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = 'history_chart.html';
+    link.click(); 
+}
+</script>
+
+<style>
+    #jobtime{
+        width: 40%;
+        height: 400px;
+        margin: 0 auto; 
+    }
+
+    #main{
+        width: 60%;
+        height: 400px;
+        margin: 0 auto; 
+    }
+
+    #fastening_status_chart{
+        width: 40%;
+        height: 400px;
+        margin: 0 auto; 
+    }
+
+    #chart{
+        width: 600px;
+        height: 400px;
+        margin: 0 auto; 
+    }
+</style>
