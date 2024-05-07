@@ -525,8 +525,10 @@ if(!empty($_COOKIE['line_style'])){
 
                                 <label style="padding-left: 5%">
                                     Angle : &nbsp;<select id="angle" style="width: 120px" onchange="angle_change_combine(this)">
-                                                    <option value="1">total angle</option>
-                                                    <option value="2">task angle</option>
+                                                    <?php foreach($data['angle_mode_arr'] as $ke =>$ve){?>
+                                                        <option value="<?php echo $ke;?>"><?php echo $ve;?></option>
+                                                    <?php } ?>
+                                              
                                                   </select>
                                 </label>
                                 <label style="padding-left: 5%">
@@ -1263,6 +1265,7 @@ addMessage();
             }
         });
     }
+
     myChart.setOption(option);
 </script>
 <?php }?>
