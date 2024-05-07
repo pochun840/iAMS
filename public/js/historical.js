@@ -4,7 +4,6 @@ function clear_button(){
 
     //預設status: ALL
     var status_val= '0';
-    //var queryresult = '';
     $.ajax({
         type: "POST",
         data: {
@@ -52,10 +51,10 @@ function deleteinfo() {
                     history.go(0);
                 },
                 error: function(error) {
-                    //console.log("Error occurred: " + error);
+                   
                 }
             }).fail(function () {
-                // history.go(0);//失敗就重新整理
+                
             });
     }else{
 
