@@ -418,7 +418,6 @@ class Historicals extends Controller
 
 
         if(!empty($_GET['type'])){
-            echo "yes";
             if($_GET['type'] =="downland"){
                 $data['type'] = "downland";
             }
