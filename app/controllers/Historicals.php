@@ -117,13 +117,7 @@ class Historicals extends Controller
     public function del_info(){
 
         $del_info_sn_arr = array();
-        $del_info_sn_arr = $_POST['values'];
-        $del_info_sn = implode(",",$del_info_sn_arr);
-
-        #如果是複選 則 強制修改內容
-        $del_info_sn = str_replace("," ,"','",$del_info_sn);
-
-        #刪除鎖附結果 以 system_sn 當成唯一值
+        $del_info_sn = $_POST['values'];
         $res = $this->Historicals_newModel->del_info($del_info_sn);
         return $res;
     }
@@ -187,12 +181,8 @@ class Historicals extends Controller
     #產生CSV的文件 
     #利用system_sn 取得完整的鎖附資料
     public function csv_downland(){
- 
-    
         if(!empty($_COOKIE['systemSnval'])){
-            
             $system_sn = $_COOKIE['systemSnval'];
-
             if($system_sn != 'total'){
                 $pos = strpos($system_sn, ',');
 
@@ -434,22 +424,10 @@ class Historicals extends Controller
 
 
     #鎖附資料 圖表 
-    /*public function ddd(){
-        $data = array();
-        $chat_mode = 1;
-        $chat_arr = $this->Historicals_newModel->chat_change($chat_mode);
-        $data['chat'] = $chat_arr;
-        $no = "4145";
-        $csvdata_arr   = $this->Historicals_newModel->get_info($no,$chat_mode);
-
-        $data['chart_info']['x_val'] = json_encode(array_keys($csvdata_arr));
-        $data['chart_info']['y_val'] = json_encode($csvdata_arr);
-        $data['chart_info']['max']   = max($csvdata_arr);
-        $data['chart_info']['min']   = min($csvdata_arr);
-
-
-        $this->view('historicals/index_test1',$data);
-    }*/
+    public function ddd(){
+ 
+        $this->view('historicals/index_test');
+    }
 
 
     public function test_chart(){
@@ -458,15 +436,8 @@ class Historicals extends Controller
 
         $no = "4145";
         $csvdata_arr   = $this->Historicals_newModel->get_info($no,$chat_mode);
-        #chart1
-        /*$data['chart_info']['x_val'] = json_encode(array_keys($csvdata_arr));
-        $data['chart_info']['y_val'] = json_encode($csvdata_arr);
-        $data['chart_info']['max']   = max($csvdata_arr);
-        $data['chart_info']['min']   = min($csvdata_arr);*/
 
-        //$chart_mode = 6;
-              #X=>time Y=>torque && angle
-                
+
               $values = array_values($csvdata_arr['torque']);
               
         $data['chart_info']['x_val']  = json_encode(array_keys($csvdata_arr['torque'])); #X軸
@@ -503,9 +474,21 @@ class Historicals extends Controller
 
             if(!empty($_GET['unitvalue'])){
                 $unitvalue = $_GET['unitvalue'];
+            }else{
+                $data['job_info'][0]['torque_unit'] = (int)$data['job_info'][0]['torque_unit'];
+                $unitvalue =  $data['job_info'][0]['torque_unit'];
+
             }
+
+            /*if(!empty($_GET['anglevalue'])){
+                $anglevalue = $_GET['anglevalue'];
+            }else{
+                $anglevalue = "1";
+            }*/
+            $data['unitvalue'] = $unitvalue;
           
-          
+            //531 task angle
+            //530 total angle 
 
             #取得曲線圖的模式
             $chat_arr = $this->Historicals_newModel->chat_change($chat_mode);
@@ -513,14 +496,6 @@ class Historicals extends Controller
             $no = "4169";
             $csvdata_arr   = $this->Historicals_newModel->get_info($no,$chat_mode);//取得 完整的資料
             $status_arr = $this->Historicals_newModel->status_code_change();
-
-    
-
-            //取得下拉式選單的扭力單位
-
-
-            
-
 
             $chat_mode_arr = array(
                 1=>'Torque/Time(MS)',
@@ -533,11 +508,13 @@ class Historicals extends Controller
 
             $torque_mode_arr = array(
                 1=>'N.m',
-                2=>'Kgf.m',
-                3=>'Kgf.cm',
-                4=>'In.lbs',
+                0=>'Kgf.m',
+                2=>'Kgf.cm',
+                3=>'In.lbs',
 
             );
+
+       
             
             if($chat_mode =="5"){
 
@@ -552,9 +529,7 @@ class Historicals extends Controller
                 }
             }elseif($chat_mode =="6"){
                 #X=>time Y=>torque && angle
-                
-                
-                
+            
                 $data['chart_info']['x_val']  = json_encode(array_keys($csvdata_arr['torque'])); #X軸
                 $data['chart_info']['y_val'] = json_encode($csvdata_arr['torque']); #Y軸 torque
                 $data['chart_info']['y_val_1'] = json_encode($csvdata_arr['angle']); #Y軸 angle
@@ -566,23 +541,23 @@ class Historicals extends Controller
             }else{
 
                 #圖表相關資料
-
-                if($chat_mode =="1" && $unitvalue !="1"){
+                if(($chat_mode == "1" || $chat_mode == "3" || $chat_mode == "4" ) && $unitvalue !="1"){
                     //針對Y軸的value 進行轉換
                     $TransType = $unitvalue;
                     $torValues = $csvdata_arr;
-                    $ss = $this->Historicals_newModel->unitarr_change($torValues, 1, $TransType);
-                    var_dump($ss);
-                    //echo $data['chart_info']['y_val_new'] = json_encode($ss);
+                    $temp_val = $this->Historicals_newModel->unitarr_change($torValues, 1, $TransType);
+                    $data['chart_info']['y_val'] = json_encode($temp_val);
+                    $data['chart_info']['max']   = max($temp_val);
+                    $data['chart_info']['min']   = min($temp_val);
+            
+                }else{
+                    $data['chart_info']['y_val'] = json_encode($csvdata_arr);
+                    $data['chart_info']['max']   = max($csvdata_arr);
+                    $data['chart_info']['min']   = min($csvdata_arr);
 
                 }
 
-                echo "<br>";
                 $data['chart_info']['x_val'] = json_encode(array_keys($csvdata_arr));
-                $data['chart_info']['y_val'] = json_encode($csvdata_arr);
-                $data['chart_info']['max']   = max($csvdata_arr);
-                $data['chart_info']['min']   = min($csvdata_arr);
-                echo $data['chart_info']['y_val'];
 
             }
                
@@ -672,7 +647,6 @@ class Historicals extends Controller
                 $checkedsn_array = explode(",",$checkedsn);
                 $checked_sn_in = implode("','", $checkedsn_array);
                 
-            
             }else{
                 $checked_sn_in =  $checkedsn;
             }
@@ -703,10 +677,8 @@ class Historicals extends Controller
 
             $id = rtrim($id,',');
             #二筆鎖附資料的圖表
-            
-            $final_label = $this->Historicals_newModel->get_result($checked_sn_in,$id);
+            $final_label = $this->Historicals_newModel->get_result($checked_sn_in,$id);     
 
-        
             #圖表1的資訊
             $data['chart1_xcoordinate'] = json_encode(array_keys($final_label['data0']));
             $data['chart1_ycoordinate'] = json_encode($final_label['data0']);
@@ -726,9 +698,9 @@ class Historicals extends Controller
 
         $torque_mode_arr = array(
             1=>'N.m',
-            2=>'Kgf.m',
-            3=>'Kgf.cm',
-            4=>'In.lbs',
+            0=>'Kgf.m',
+            2=>'Kgf.cm',
+            3=>'In.lbs',
 
         ); 
 

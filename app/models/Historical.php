@@ -112,17 +112,15 @@ class Historical{
 
     #刪除鎖附資料
     public function del_info($del_info_sn){
-
-
         #20240401 修改成 update on_flag的資料(0:顯示 1:隱藏)
-        $sql= "UPDATE fasten_data SET on_flag = '1' WHERE system_sn = ' ".$del_info_sn."' ";
-        
-        $statement = $this->db->prepare($sql);
-        $statement->execute();
-        $rows = $statement->fetchall(PDO::FETCH_ASSOC);
 
-
-        return $rows;
+        foreach($del_info_sn as $kk =>$vv){
+            $sql= "UPDATE fasten_data SET on_flag = '1' WHERE system_sn = ' ".$vv."' ";
+            $statement = $this->db->prepare($sql);
+            $statement->execute();
+            $rows = $statement->fetchall(PDO::FETCH_ASSOC); 
+        } 
+        return $del_info_sn;
     }
     public function getTotalItemCount() {
 
@@ -762,48 +760,23 @@ class Historical{
             "LBF_IN" => 3
         ];
 
-        //var_dump($TransType);
-
-        //var_dump($TorqueUnit["N_M"]);
-
-        if($inputType == $TorqueUnit["N_M"]){
-            echo "re1";
-        }
-
-        if($inputType == $TorqueUnit["KGF_M"]){
-            echo "re2";
-        }
-
-        if($inputType == $TorqueUnit["KGF_CM"]){
-            echo "re3";
-        }
-
-        if($inputType == $TorqueUnit["LBF_IN"]){
-            echo "re4";
-        }
-
         $convertedValues = array();
         foreach($torValues as $torValue) {
            
             $torValue = floatval($torValue);
            
             if ($inputType == $TorqueUnit["N_M"]) {
-                
-                var_dump($TransType);
-
-              
-
                 if ($TransType == $TorqueUnit["KGF_M"]) {
-                    echo "e1";die();
+                    //echo "e1";//die();
                     $convertedValues[] = round($torValue * 0.102, 4);
                 } elseif ($TransType == $TorqueUnit["KGF_CM"]) {
-                    echo "e2";die();
+                    //echo "e2";//die();
                     $convertedValues[] = round($torValue * 10.2, 2);
                 } elseif ($TransType == $TorqueUnit["LBF_IN"]) {
-                    echo "e3";die();
+                    //echo "e3";//die();
                     $convertedValues[] = round($torValue * 10.2 * 0.86805, 2);
                 } elseif ($TransType == $TorqueUnit["N_M"]) {
-                    echo "e4";die();
+                    //echo "e4";//die();
                     $convertedValues[] = round($torValue, 3);
                 }
             } 

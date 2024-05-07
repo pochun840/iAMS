@@ -6,14 +6,15 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/historical.css?v=202404111200" type="text/css">
 
 <script src="<?php echo URLROOT; ?>js/flatpickr.js"></script>
-<script src="<?php echo URLROOT; ?>js/historical.js?v=202405031200"></script>
+<script src="<?php echo URLROOT; ?>js/historical.js?v=202405051000"></script>
 
 
 
 <!---new echart.js-->
 <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
 
-
+<!-- 引入 HTML2Canvas 库 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
 
 
 <?php if(isset($data['nav'])){
@@ -100,6 +101,8 @@ if(!empty($_COOKIE['line_style'])){
 }else{
     $line_style = '';
 }
+
+
 ?>
 
 <style>
@@ -329,7 +332,7 @@ if(!empty($_COOKIE['line_style'])){
                             <table class="table table-bordered table-hover" id="fastening-table">
                                 <thead id="header-table" style="text-align: center; vertical-align: middle">
                                     <tr>
-                                        <th><i class="fa fa-trash-o" style="font-size:26px;color:black" onclick="delete_historyinfo()"></i></th>
+                                        <th><i class="fa fa-trash-o" style="font-size:26px;color:black" onclick="deleteinfo()"></i></th>
                                         <th>Index</th>
                                         <th>Time</th>
                                         <th>Station</th>
@@ -448,21 +451,21 @@ if(!empty($_COOKIE['line_style'])){
                             <td>
                                 Chart Setting:  
                                 <select id="chartseting" class="t6 Select-All" style="float: none"  onchange="chat_mode_change(this)">
-                                            <?php foreach($data['chat_mode_arr'] as $k_chat => $v_chat){?>
-                                                <option  value="<?php echo $k_chat;?>"  <?php if($chat_mode_change == $k_chat){echo "selected";}else{echo "";}?>  > <?php echo $v_chat;?> </option>
-                                            <?php } ?>                             
+                                    <?php foreach($data['chat_mode_arr'] as $k_chat => $v_chat){?>
+                                        <option  value="<?php echo $k_chat;?>"  <?php if($chat_mode_change == $k_chat){echo "selected";}else{echo "";}?>  > <?php echo $v_chat;?> </option>
+                                    <?php } ?>                             
                                 </select>
                             </td>
                             <td>
                                 Torque Unit:  
                                 <select id="Torque-Unit" class="Select-All" style="float: none; width: 100px" onchange="unit_change(this)">
-                                                    <?php foreach($data['torque_mode_arr'] as $k_torque =>$v_torque){?>
-                                                            <option  value="<?php echo $k_torque;?>"> <?php echo $v_torque; ?> </option>
-                                                    <?php } ?>
+                                    <?php foreach($data['torque_mode_arr'] as $k_torque =>$v_torque){?>
+                                            <option  value="<?php echo $k_torque;?>" <?php if($data['unitvalue'] == $k_torque){echo "selected";}else{echo "";}?> > <?php echo $v_torque; ?> </option>
+                                    <?php } ?>
                                 </select>
                             </td>
                             <td>
-                                Angle:  <select id="Angle" class="t6 Select-All" id='angle_type' style="float: none; width: 100px" onchange="angle_change(this)">
+                                Angle:  <select id="Angle" class="t6 Select-All" id='angle_type' style="float: none; width: 100px" onchange="angle_select(this)">
                                             <option value="1">Total angle</option>
                                             <option value="2">Task angle</option>
                                         </select>
@@ -484,7 +487,7 @@ if(!empty($_COOKIE['line_style'])){
 
                     <div>
                         <div style="text-align: center">
-                            <label style="float: left"><b>Diagram Display</b></label>
+                            <label style="float: left" id='DiagramDisplay'><b>Diagram Display</b></label>
                             <label><?php echo $data['chat']['chat_name'];?></label>
                         </div>
                        
@@ -1287,9 +1290,6 @@ addMessage();
 
 
         var job_info_1 ='<?php echo $data['info_final'][1]['job_name'];?>';
-
-
-
         var option = {
               tooltip: {
                 trigger: 'axis',
@@ -1452,6 +1452,7 @@ function chat_mode_change(selectOS){
     history.go(0);
 }
 
+//nextinfo
 
 document.getElementById('downloadchartbtn').addEventListener('click', function() {
 
@@ -1485,21 +1486,45 @@ document.getElementById('downloadchartbtn').addEventListener('click', function()
 
 
 
+//chart_combine -圖表
+//style-Combine
 document.getElementById('downlandpdf_combine').addEventListener('click', function() {
-        var divContent = document.getElementById('style-Combine').outerHTML;
-        var stylesheets = document.getElementsByTagName('link');
-        var cssString = Array.from(stylesheets)
-            .map(stylesheet => `<link rel="stylesheet" href="${stylesheet.href}">`)
-            .join('\n');
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
 
-        var fullHTML = `<head>${cssString}</head>\n<body>${divContent}</body>`;
-        var blob = new Blob([fullHTML], { type: 'text/html' });
+    // 获取容器的内容
+    var containerContent = document.getElementById('style-Combine').innerHTML;
+     // 设置 Canvas 的宽度和高度
+            canvas.width = 600; // 设置宽度为容器宽度
+            canvas.height = 400; // 设置高度为容器高度
 
-        var link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.download = 'job_combinedata.html';
-        link.click();
-});
+            // 创建一个 Image 元素
+            var image = new Image();
+
+            // 在 Image 元素加载完成后绘制容器的内容到 Canvas 上
+            image.onload = function() {
+                ctx.drawImage(image, 0, 0);
+
+                // 将 Canvas 导出为图片
+                var imgDataURL = canvas.toDataURL('image/png');
+
+                // 创建一个 <a> 元素
+                var link = document.createElement('a');
+
+                // 设置 <a> 元素的 href 属性为图片的 Base64 编码
+                link.href = imgDataURL;
+
+                // 设置 <a> 元素的 download 属性为图片文件的名称
+                link.download = 'combined_image.png';
+
+                // 触发 <a> 元素的点击事件，以下载图片
+                link.click();
+            };
+
+            // 将容器的内容作为图片绘制到 Image 元素上
+            image.src = 'data:image/svg+xml;base64,' + btoa(encodeURIComponent(containerContent));
+        });
+
 
 </script>
 
@@ -1507,17 +1532,10 @@ document.getElementById('downlandpdf_combine').addEventListener('click', functio
 #chartinfo {
     margin-left: 0 !important;
 }
-</style>
 
-<script>
-var queryresult;
-
-function checkAndDownload() {
-  if (queryresult == null) {
-    //沒有search 
-    
-  }else{
-    csv_download();
-  }
+select[disabled] {
+    color: #808080; 
+    background-color: #f0f0f0;
 }
-</script>
+
+</style>

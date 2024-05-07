@@ -35,14 +35,13 @@ function clear_button(){
 
 
 //刪除(可支援複選)
-function delete_historyinfo() {
+function deleteinfo() {
     var checkboxes = document.querySelectorAll('input[type="checkbox"][name="test1"]:checked');
     var checkedValues = [];
 
     checkboxes.forEach(function(checkbox) {
         checkedValues.push(checkbox.value);
     });
-
     var yes = confirm('確定是否要刪除選定的資料？');
     if (yes) {
          $.ajax({
@@ -53,7 +52,7 @@ function delete_historyinfo() {
                     history.go(0);
                 },
                 error: function(error) {
- 
+                    //console.log("Error occurred: " + error);
                 }
             }).fail(function () {
                 // history.go(0);//失敗就重新整理
@@ -321,51 +320,42 @@ function chat_mode(selectOS) {
 }
 
 //單位選擇 
-var nextinfo_url=''; // 在函式外定義 nextinfo_url 變數
-function  unit_change(){
+var nextinfo_url = ''; 
+function unit_change() {
     var selectElement = document.getElementById('Torque-Unit');
     var selectedOption = selectElement.options[selectElement.selectedIndex];
     var selectedValue = selectedOption.value;
     var selectedText = selectedOption.textContent;
-    console.log('Selected option value: ' + selectedValue); //要轉換的扭力數值
-    console.log('Selected option text: ' + selectedText); //名稱
-    
+
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var convertedValue = this.responseText;
-            // 取得當前網址
             var currentUrl = window.location.href;
-            // 找出是否已經存在 unitvalue 參數
             var unitvalueIndex = currentUrl.indexOf('unitvalue=');
             if (unitvalueIndex !== -1) {
-                // 如果已經存在 unitvalue 參數，則需替換
                 var nextinfo_url = currentUrl.substring(0, unitvalueIndex) + 'unitvalue=' + selectedValue;
             } else {
-                // 如果不存在 unitvalue 參數，則要新增
                 var nextinfo_url = currentUrl + (currentUrl.indexOf('?') !== -1 ? '&' : '?') + 'unitvalue=' + selectedValue;
             }
-            // 將瀏覽器的當前網址更改為新的 URL
             window.location.assign(nextinfo_url);
             console.log(nextinfo_url);
         }
     };
     xhttp.open("GET", nextinfo_url, true);
     xhttp.send();
-
 }
 
 
 //角度切換
-/*var nextinfo_url='';
-function  angle_change(){
+var nextinfo_url='';
+function angle_select(){
     var selectElement = document.getElementById('Angle');
     var selectedOption = selectElement.options[selectElement.selectedIndex];
     var selectedValue = selectedOption.value;
     var selectedText = selectedOption.textContent;
-    console.log('Selected option value: ' + selectedValue); //選取的value
-    console.log('Selected option text: ' + selectedText); //名稱
-
+    //console.log('Selected option value: ' + selectedValue); //選取的value
+    //console.log('Selected option text: ' + selectedText); //名稱
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -389,49 +379,37 @@ function  angle_change(){
     xhttp.send();
 
 
-}*/
-
-function  angle_change_combine(selectOS){
-    var selectElement = document.getElementById('angle');
-    var selectedOptions = [];
-    // 獲取所有被選中的選項
-    for (var i = 0; i < selectElement.options.length; i++) {
-        var option = selectElement.options[i];
-        if (option.selected) {
-            selectedOptions.push(option.value);
-        }
-    }
-    document.cookie = "angle_mode_combine=" + selectedOptions + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
-    history.go(0);
+    
 }
 
+function  angle_change_combine(){
+    var selectElement = document.getElementById('angle');
+    var selectedOption = selectElement.options[selectElement.selectedIndex];
+    var selectedValue = selectedOption.value;
+    var selectedText = selectedOption.textContent;
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var convertedValue = this.responseText;
+            // 取得當前網址
+            var currentUrl = window.location.href;
+            // 找出是否已經存在 anglevalue 參數
+            var anglevalueIndex = currentUrl.indexOf('anglevalue=');
+            if (anglevalueIndex !== -1) {
+                // 如果已經存在 anglevalue 參數，則需替換
+                var nextinfo_url = currentUrl.substring(0, anglevalueIndex) + 'anglevalue=' + selectedValue;
+            } else {
+                // 如果不存在 anglevalue 參數，則要新增
+                var nextinfo_url = currentUrl + (currentUrl.indexOf('?') !== -1 ? '&' : '?') + 'anglevalue=' + selectedValue;
+            }
+            // 將瀏覽器的當前網址更改為新的 URL
+            window.location.assign(nextinfo_url);
+        }
+    };
+    xhttp.open("GET", nextinfo_url, true);
+    xhttp.send();
 
-//擷取曲線圖 
-/*function takeScreenshot(param) {
-
-    var img_name = 'screenshot.'+ param;
-  
-    //設定要擷取的範圍
-    var content = document.getElementById('DetailInfoDisplay');
-
-    domtoimage.toPng(content, { bgcolor: '#ffffff' }) //背景設成白色
-        .then(function(dataUrl) {
-            var link = document.createElement('a');
-            link.href = dataUrl;
-            link.download = img_name;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        })
-
-        .catch(function(error) {
-            console.error('Error while taking screenshot:', error);
-        });
-}*/
-
-
-
-
+}
 //讀取cookie 
 function getCookie(cookieName) {
     var cookies = document.cookie.split(';');
@@ -480,17 +458,6 @@ function check_limit(checkbox){
 
 }
 
-
-function captureScreenshot() {
-    html2canvas(document.body).then(function(canvas) {
-        
-        var img = canvas.toDataURL('image/png');
-
-        var win = window.open();
-        win.document.write('<img src="' + img + '" width="100%">');
-    });
-}
-
 var lineCookieValue = getCookie('line_style');
 var low_val  = getCookie('lowval');
 var high_val = getCookie('highval');
@@ -499,18 +466,3 @@ var limit_val = getCookie('limit_val');
 var chat_mode_change = getCookie('chat_mode_change');
 var search_do = getCookie('search_do');
 
-
-function nextinfo_png(){
-        // 使用 DOM to Image 將 c3.js 圖表轉換為圖像
-        domtoimage.toBlob(document.getElementById('DetailInfoDisplay'), { bgcolor: '#ffffff' })
-        .then(function(blob) {
-            // 創建下載連結
-            var downloadLink = document.createElement("a");
-            downloadLink.href = URL.createObjectURL(blob);
-            downloadLink.download = "chart_screenshot_1.png"; 
-
-            // 模擬點擊下載連結
-            downloadLink.click();
-     });
-
-}
