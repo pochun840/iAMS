@@ -419,13 +419,18 @@ class Historicals extends Controller
             }
         }
 
-        //
-        if(!empty($_GET['type']="downland")){
-            $data['type'] ="downland";
+
+        if(!empty($_GET['type'])){
+            echo "yes";
+            if($_GET['type'] =="downland"){
+                $data['type'] = "downland";
+            }
+
         }else{
             $data['type'] = '';
         }
-       
+        
+
         #取出 各種的NG狀態
         $this->view('historicals/index_report_history',$data);
     }
