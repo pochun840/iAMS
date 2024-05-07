@@ -234,9 +234,6 @@ class Historicals extends Controller
      public function history_result(){
         
         $data = array();
-
-        
-
         $status_arr = $this->Historicals_newModel->status_code_change();
         $mode_arr = array('ng_reason','fastening_status','job_info','statistics');
 
