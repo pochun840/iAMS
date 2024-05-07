@@ -551,7 +551,7 @@ if(!empty($_COOKIE['line_style'])){
                         <div class="w3-round" style="margin: 5px 0;">
                             <div class="w3-row-padding">
                                 <div class="scrollbar-Combine" id="style-Combine">
-                                    <div class="force-overflow-Combine">
+                                    <div class="force-overflow-Combine" id="combinedata">
                                     <?php foreach( $data['info_final'] as $key =>$val){?>
                                             <div class="w3-half">
                                                 <div class="row t1">
@@ -575,9 +575,9 @@ if(!empty($_COOKIE['line_style'])){
                                              </div>
                                     <?php }?>
                                         <!---圖表1--->
-                                        <div id="empty1" style="width: 800px; height: 200px;">
+                                        <div id="empty1" style="width: 800px; height:150px;">
                                         <div id="chart-title" style="visibility: hidden;" >曲線圖資料</div>
-                                        <div id="chart_combine" style="width: 1500px; height: 400px; margin-left: 20px !important;"></div>
+                                        <div id="chart_combine" style="width: 1500px; height: 400px;"></div>
 
                                     </div>
 
@@ -1455,14 +1455,28 @@ function chat_mode_change(selectOS){
 //nextinfo
 
 document.getElementById('downloadchartbtn').addEventListener('click', function() {
-
     var menuChartDiv = document.getElementById('menu-chart');
     menuChartDiv.style.display = 'none';
+    document.getElementById('chart-setting').style.display = 'none';
+    document.getElementById('DiagramDisplay').style.display = 'none';
+
+    //下拉式選單disable 做反灰的動作
+    document.getElementById('chartseting').disabled = true;
+    document.getElementById('Torque-Unit').disabled = true;
+    document.getElementById('Angle').disabled = true;
+
+    var disabledSelects = document.querySelectorAll('select[disabled]');
+    disabledSelects.forEach(function(select) {
+        select.style.color = '#808080'; 
+        select.style.backgroundColor = '#f0f0f0';
+    });
+
+
 
     //取得圖表的base64編碼
     var chartDataURL = myChart.getDataURL({
-        pixelRatio: 2, 
-        backgroundColor: '#fff' //背景為白色
+        pixelRatio: 2,
+        backgroundColor: '#fff' // 背景為白色
     });
 
     var divContent = document.getElementById('jobinfo').outerHTML;
@@ -1472,7 +1486,7 @@ document.getElementById('downloadchartbtn').addEventListener('click', function()
         .join('\n');
 
     ////取得圖表的base64編碼插入到HTML
-    var fullHTML = `<head>${cssString}</head>\n<body>${divContent}<img src="${chartDataURL}" alt="ECharts Chart"></body>`;
+    var fullHTML = `<head>${cssString}</head>\n<body>${divContent}<img src="${chartDataURL}" alt="ECharts Chart" style="max-width: 100%; height: auto;"></body>`;
     var blob = new Blob([fullHTML], { type: 'text/html' });
 
     menuChartDiv.style.display = '';
@@ -1481,61 +1495,56 @@ document.getElementById('downloadchartbtn').addEventListener('click', function()
     link.href = window.URL.createObjectURL(blob);
     link.download = 'job_info.html';
     link.click();
-
+    history.go(0);
 });
 
+document.getElementById('downlandpdf_combine').addEventListener('click', function(event) {
 
 
-//chart_combine -圖表
-//style-Combine
-document.getElementById('downlandpdf_combine').addEventListener('click', function() {
-    var canvas = document.createElement('canvas');
-    var ctx = canvas.getContext('2d');
+    var divToRemove = document.getElementById('empty1');
+    var divToRemove2 = document.getElementById('chart-title');
+    
+    if(divToRemove) {
+        divToRemove.parentNode.removeChild(divToRemove);
+    }
 
-    // 获取容器的内容
-    var containerContent = document.getElementById('style-Combine').innerHTML;
-     // 设置 Canvas 的宽度和高度
-            canvas.width = 600; // 设置宽度为容器宽度
-            canvas.height = 400; // 设置高度为容器高度
+    if(divToRemove2) {
+        divToRemove2.parentNode.removeChild(divToRemove2);
+    }
+    
+    document.getElementById('angle').disabled = true;
+    var disabledSelects = document.querySelectorAll('select[disabled]');
+    disabledSelects.forEach(function(select) {
+        select.style.color = '#808080'; 
+        select.style.backgroundColor = '#f0f0f0';
+    });
 
-            // 创建一个 Image 元素
-            var image = new Image();
+    // 取得圖表的base64編碼
+    var chartDataURL = myChart_combine.getDataURL({
+        pixelRatio: 2,
+        backgroundColor: '#fff' // 背景為白色
+    });
 
-            // 在 Image 元素加载完成后绘制容器的内容到 Canvas 上
-            image.onload = function() {
-                ctx.drawImage(image, 0, 0);
+    var divContent = document.getElementById('combinedata').outerHTML;
+    var stylesheets = document.getElementsByTagName('link');
+    var cssString = Array.from(stylesheets)
+        .map(stylesheet => `<link rel="stylesheet" href="${stylesheet.href}">`)
+        .join('\n');
 
-                // 将 Canvas 导出为图片
-                var imgDataURL = canvas.toDataURL('image/png');
+    // 取得圖表的base64編碼插入到HTML
+    var fullHTML = `<head>${cssString}</head>\n<body>${divContent}<img src="${chartDataURL}" alt="ECharts Chart" style="max-width: 100%; height: auto;"></body>`;
+    var blob = new Blob([fullHTML], { type: 'text/html' });
 
-                // 创建一个 <a> 元素
-                var link = document.createElement('a');
+    var link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = 'job_combine.html';
+    link.click();
+    history.go(0);
 
-                // 设置 <a> 元素的 href 属性为图片的 Base64 编码
-                link.href = imgDataURL;
+    event.preventDefault();
+}, { passive: true });
 
-                // 设置 <a> 元素的 download 属性为图片文件的名称
-                link.download = 'combined_image.png';
 
-                // 触发 <a> 元素的点击事件，以下载图片
-                link.click();
-            };
-
-            // 将容器的内容作为图片绘制到 Image 元素上
-            image.src = 'data:image/svg+xml;base64,' + btoa(encodeURIComponent(containerContent));
-        });
 
 
 </script>
-
-<style>
-#chartinfo {
-    margin-left: 0 !important;
-}
-
-select[disabled] {
-    color: #808080; 
-    background-color: #f0f0f0;
-}
-
-</style>
