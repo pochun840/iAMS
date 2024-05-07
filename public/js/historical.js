@@ -188,10 +188,9 @@ function search_info(){
             } else {
                 queryresult = response;
 
-                var search_do='yes';
-                document.cookie = "search_do=" + search_do + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
-                //history.go(0);
-
+                //var search_do='yes';
+                //document.cookie = "search_do=" + search_do + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+                
 
                 document.getElementById("tbody1").innerHTML = response;
             }
@@ -454,5 +453,5 @@ var high_val = getCookie('highval');
 var chat_modeno = getCookie('chat_modeno');
 var limit_val = getCookie('limit_val');
 var chat_mode_change = getCookie('chat_mode_change');
-var search_do = getCookie('search_do');
+//var search_do = getCookie('search_do');
 
