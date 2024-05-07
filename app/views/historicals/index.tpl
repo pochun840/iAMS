@@ -466,8 +466,9 @@ if(!empty($_COOKIE['line_style'])){
                             </td>
                             <td>
                                 Angle:  <select id="Angle" class="t6 Select-All" id='angle_type' style="float: none; width: 100px" onchange="angle_select(this)">
-                                            <option value="1">Total angle</option>
-                                            <option value="2">Task angle</option>
+                                            <?php foreach($data['angle_mode_arr'] as $ke =>$ve){?>
+                                                <option value="<?php echo $ke;?>" <?php if($data['anglevalue'] == $ke){ echo "selected";}?>><?php echo $ve;?></option>
+                                            <?php } ?>
                                         </select>
                             </td>
                            <!--<td>

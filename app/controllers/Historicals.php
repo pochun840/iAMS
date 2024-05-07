@@ -463,8 +463,6 @@ class Historicals extends Controller
 
     }*/
 
-
-
     public function nextinfo($index){
         
         if(!empty($index)){
@@ -487,11 +485,12 @@ class Historicals extends Controller
 
             }
 
-            /*if(!empty($_GET['anglevalue'])){
-                $anglevalue = $_GET['anglevalue'];
+            if(!empty($_GET['anglevalue'])){
+                $data['anglevalue'] = $_GET['anglevalue'];
             }else{
-                $anglevalue = "1";
-            }*/
+                $data['anglevalue'] = "";
+            }
+
             $data['unitvalue'] = $unitvalue;
           
             //531 task angle
@@ -519,6 +518,11 @@ class Historicals extends Controller
                 2=>'Kgf.cm',
                 3=>'In.lbs',
 
+            );
+
+            $angle_mode_arr = array(
+                1 =>'total angle',
+                2 =>'task angle'
             );
 
             if($chat_mode =="5"){
@@ -584,6 +588,7 @@ class Historicals extends Controller
             $data['nav'] = $this->NavsController->get_nav();
             $data['nopage'] = 0;
             $data['path'] = __FUNCTION__;
+            $data['angle_mode_arr'] = $angle_mode_arr;
 
             $this->view('historicals/index', $data);
         }
