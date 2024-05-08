@@ -647,6 +647,8 @@ class Historical{
             WHERE data_time between '". $before_date."' AND '".$after_date."' 
             AND on_flag = '0'  AND  fasten_status IN('5','6')
             GROUP BY substr(data_time, 1, 10), fasten_status;";
+
+          
     
         }
 

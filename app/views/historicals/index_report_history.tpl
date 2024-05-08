@@ -7,7 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/print-history-excel.css">
 <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/datatables.min.css">
-<script src="<?php echo URLROOT; ?>js/echarts_min.js?v=202405080900"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
 <script src="<?php echo URLROOT; ?>js/historical.js?v=202405021000"></script>
 
 </head>
@@ -267,41 +268,52 @@
     
 </script>
 
-
 <script>
+
+//var isDownloaded = localStorage.getItem('downloaded');
+
 if ("<?php echo $data['type']; ?>" == "downland") {
+        var today = new Date();
+        var day = String(today.getDate()).padStart(2, '0');
+        var month = String(today.getMonth() + 1).padStart(2, '0'); 
+        var year = today.getFullYear();
 
-    document.getElementById('fastening_status_chart').style.marginLeft = "auto";
-    document.getElementById('fastening_status_chart').style.marginRight = "auto";
+        today = year + month + day;
 
-    document.getElementById('main').style.marginLeft = "auto";
-    document.getElementById('main').style.marginRight = "auto";
+        document.getElementById('fastening_status_chart').style.marginLeft = "auto";
+        document.getElementById('fastening_status_chart').style.marginRight = "auto";
 
-    document.getElementById('jobtime').style.marginLeft  = "auto";
-    document.getElementById('jobtime').style.marginRight = "auto";
+        document.getElementById('main').style.marginLeft = "auto";
+        document.getElementById('main').style.marginRight = "auto";
 
-    document.getElementById('chart').style.marginLeft  = "auto";
-    document.getElementById('chart').style.marginRight = "auto";
+        document.getElementById('jobtime').style.marginLeft  = "auto";
+        document.getElementById('jobtime').style.marginRight = "auto";
 
-    var stylesheets = document.getElementsByTagName('link');
-    var cssString = Array.from(stylesheets)
-        .map(stylesheet => `<link rel="stylesheet" href="${stylesheet.href}">`)
-        .join('\n');
-    var newContent = ["<head>"];
+        document.getElementById('chart').style.marginLeft  = "auto";
+        document.getElementById('chart').style.marginRight = "auto";
 
-    Array.from(stylesheets).forEach(function(stylesheet) {
-        newContent.push(`<link rel="stylesheet" href="${stylesheet.href}">`);
-    });
+        var stylesheets = document.getElementsByTagName('link');
+        var cssString = Array.from(stylesheets)
+            .map(stylesheet => `<link rel="stylesheet" href="${stylesheet.href}">`)
+            .join('\n');
+        var newContent = ["<head>"];
 
-    newContent.push("</head><body>");
-    newContent.push(document.documentElement.innerHTML);
+        Array.from(stylesheets).forEach(function(stylesheet) {
+            newContent.push(`<link rel="stylesheet" href="${stylesheet.href}">`);
+        });
 
-    newContent.push("</body>");
-    var blob = new Blob([newContent.join('\n')], { type: 'text/html' });
-    var link = document.createElement('a');
-    link.href = window.URL.createObjectURL(blob);
-    link.download = 'history_chart.html';
-    link.click(); 
+        newContent.push("</head><body>");
+        newContent.push(document.documentElement.innerHTML);
+
+        newContent.push("</body>");
+        var blob = new Blob([newContent.join('\n')], { type: 'text/html' });
+        var link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = 'history_chart_' + today + '.html';
+        link.click();
+
+        // 設置標誌，表示已經下載過
+        //localStorage.setItem('downloaded', 'true');
 }
 </script>
 

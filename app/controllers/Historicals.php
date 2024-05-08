@@ -310,7 +310,7 @@ class Historicals extends Controller
                     $formatted_date = date('Ymd', $date);
                     $date_array[$formatted_date] = null;
                 }
-
+                $combined_statistics = [];
                 #OK
                 $statistics_ok_temp = $this->Historicals_newModel->for_api_test('statistics_ok'); 
                 if(!empty($statistics_ok_temp)){
@@ -339,8 +339,9 @@ class Historicals extends Controller
                         $statistics_okall_temp[$vv2['date']] = $vv2;
                         $statistics_okall_temp[$vv2['date']]['ok_all_count']=$vv2['status_count'];    
                     }
-                }                
-                $type_arr  = $statistics_ok_temp + $statistics_ng_temp;
+                }     
+             
+                $type_arr  = $statistics_ok_temp + $statistics_ng_temp + $statistics_okall_temp;
                 if(!empty($type_arr)){
                     foreach($type_arr as $kd =>$vd){
                         foreach($statistics_okall_temp as $kd1 =>$vd1)
@@ -409,6 +410,9 @@ class Historicals extends Controller
                 $data['statistics']['ng'] = json_encode($ng_counts);
                 $data['statistics']['ok'] = json_encode($ok_counts);
                 $data['statistics']['ok_all'] = json_encode($ok_all_counts);
+
+
+
             }
         }
 
@@ -653,9 +657,6 @@ class Historicals extends Controller
                 $checked_sn_in =  $checkedsn;
             }
 
-
-         
-           
             #取得該筆的所有完整詳細資料
             $info_final = $this->Historicals_newModel->csv_info($checked_sn_in);            
             $data['info_final'] = $info_final;
