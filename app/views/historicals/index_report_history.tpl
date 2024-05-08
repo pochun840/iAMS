@@ -272,7 +272,7 @@
 
 //var isDownloaded = localStorage.getItem('downloaded');
 
-if ("<?php echo $data['type']; ?>" == "downland") {
+if ("<?php echo $data['type']; ?>" == "download") {
         var today = new Date();
         var day = String(today.getDate()).padStart(2, '0');
         var month = String(today.getMonth() + 1).padStart(2, '0'); 
@@ -291,6 +291,15 @@ if ("<?php echo $data['type']; ?>" == "downland") {
 
         document.getElementById('chart').style.marginLeft  = "auto";
         document.getElementById('chart').style.marginRight = "auto";
+
+    
+        var images = document.getElementsByTagName('img');
+
+
+        var imagesHTML = Array.from(images)
+            .map(image => image.outerHTML)
+            .join('\n');
+
 
         var stylesheets = document.getElementsByTagName('link');
         var cssString = Array.from(stylesheets)
