@@ -332,32 +332,6 @@ function unit_change() {
 }
 
 
-//角度切換
-var nextinfo_url='';
-function angle_select(){
-    var selectElement = document.getElementById('Angle');
-    var selectedOption = selectElement.options[selectElement.selectedIndex];
-    var selectedValue = selectedOption.value;
-    var selectedText = selectedOption.textContent;
-
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            var convertedValue = this.responseText;
-            var currentUrl = window.location.href;
-            var anglevalueIndex = currentUrl.indexOf('anglevalue=');
-            if (anglevalueIndex !== -1) {
-                var nextinfo_url = currentUrl.substring(0, anglevalueIndex) + 'anglevalue=' + selectedValue;
-            } else {
-                var nextinfo_url = currentUrl + (currentUrl.indexOf('?') !== -1 ? '&' : '?') + 'anglevalue=' + selectedValue;
-            }
-            window.location.assign(nextinfo_url);
-        }
-    };
-    xhttp.open("GET", nextinfo_url, true);
-    xhttp.send();
-}
-
 function angle_change_combine(){
     var selectElement = document.getElementById('angle_combine');
     var selectedOption = selectElement.options[selectElement.selectedIndex];
