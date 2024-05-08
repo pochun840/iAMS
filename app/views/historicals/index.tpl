@@ -15,6 +15,8 @@
     echo $data['nav'];
 }
 
+
+
 //
 //取得URL 
 $path  = $_SERVER['REQUEST_URI'];
@@ -518,14 +520,16 @@ if(!empty($_COOKIE['line_style'])){
                                 <input class="form-check-input" type="checkbox" id="myCheckbox" onchange="check_limit(this)";  <?php if($limit_val=="1"){ echo "checked"; }else{}?> style="zoom:1.2; vertical-align: middle">
                                 <label class="form-check-label" for="optioncheck">display the high/low auxiliary lines.</label>
 
-                                <!--<label style="padding-left: 5%">
-                                    Angle : &nbsp;
-                                    <select id="angle_combine" style="width: 120px" onchange="angle_change_combine(this)">
-                                            <?php foreach($data['angle_mode_arr'] as $ke =>$ve){?>
-                                                <option value="<?php echo $ke;?>" <?php if($data['anglecombine'] == $ke){ echo "selected";}?>><?php echo $ve;?></option>
-                                            <?php } ?>
+                                <label style="padding-left: 5%">
+                                    Chart Setting : &nbsp;
+                                      <?php //var_dump($data['chat_mode_arr_combine']);?>
+                                    <select id>
+                                    <?php foreach($data['chat_mode_arr_combine'] as $k_mode => $v_mode){ ?>
+                                        <option value="<?php echo $k_mode; ?>"><?php echo $v_mode; ?></option>
+                                    <?php } ?>
                                     </select>
-                                </label>-->
+
+                                </label>
                                 <label style="padding-left: 5%">
                                     Unit :
                                         <select id="unit" style="width: 100px" onchange="unit_change_combine(this)" >
@@ -1163,6 +1167,8 @@ addMessage();
             type: 'category',
             boundaryGap: false,
             name: 'Time(ms)',
+            nameLocation: 'end', 
+            nameGap: 50, 
             data: x_data_val
         },
         yAxis: [
@@ -1459,6 +1465,7 @@ document.getElementById('downloadchartbtn').addEventListener('click', function()
     //下拉式選單disable 做反灰的動作
     document.getElementById('chartseting').disabled = true;
     document.getElementById('Torque-Unit').disabled = true;
+    document.getElementById('myCheckbox').disabled = true;
     //document.getElementById('Angle').disabled = true;
 
     var disabledSelects = document.querySelectorAll('select[disabled]');
@@ -1496,7 +1503,6 @@ document.getElementById('downloadchartbtn').addEventListener('click', function()
 
 document.getElementById('downlandpdf_combine').addEventListener('click', function(event) {
 
-
     var divToRemove = document.getElementById('empty1');
     var divToRemove2 = document.getElementById('chart-title');
     
@@ -1515,7 +1521,7 @@ document.getElementById('downlandpdf_combine').addEventListener('click', functio
         select.style.backgroundColor = '#f0f0f0';
     });
 
-    // 取得圖表的base64編碼
+    //取得圖表的base64編碼
     var chartDataURL = myChart_combine.getDataURL({
         pixelRatio: 2,
         backgroundColor: '#fff' // 背景為白色
@@ -1527,6 +1533,7 @@ document.getElementById('downlandpdf_combine').addEventListener('click', functio
     var cssString = Array.from(stylesheets)
         .map(stylesheet => `<link rel="stylesheet" href="${stylesheet.href}">`)
         .join('\n');
+    
 
     // 取得圖表的base64編碼插入到HTML
     var fullHTML = `<head>${cssString}</head>\n<body>${divContent}<img src="${chartDataURL}" alt="ECharts Chart" style="max-width: 100%; height: auto;"></body>`;
