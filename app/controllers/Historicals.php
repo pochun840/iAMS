@@ -69,11 +69,9 @@ class Historicals extends Controller
         $all_roles = $this->UserModel->GetAllRole();
         $all_roles = array_slice($all_roles,0,3);
     
-
         #鎖附結果
         $res_status_arr = array('ALL','OK','OKALL','NG');
       
-
         #Controller 分類
         $res_controller_arr = array('GTCS','TCG');
 
@@ -86,8 +84,6 @@ class Historicals extends Controller
 
         #取得還存在的job_id 
         $job_arr    = $this->Historicals_newModel->get_job_id();
-
-
 
         #STATUS轉換
         $status_arr = $this->Historicals_newModel->status_code_change();
@@ -439,7 +435,7 @@ class Historicals extends Controller
     }*/
 
 
-    /*public function test_chart(){
+    public function test_chart(){
         $chat_mode  = "6";
         $data = array();
 
@@ -456,12 +452,12 @@ class Historicals extends Controller
         $data['chart_info']['min1']   = min($csvdata_arr['angle']);
 
        
-        $this->view('historicals/index_test3');
+        //$this->view('historicals/index_test3');
 
 
 
 
-    }*/
+    }
 
     public function nextinfo($index){
         
@@ -493,13 +489,10 @@ class Historicals extends Controller
 
             $data['unitvalue'] = $unitvalue;
           
-            //531 task angle
-            //530 total angle 
-
             #取得曲線圖的模式
             $chat_arr = $this->Historicals_newModel->chat_change($chat_mode);
             $data['chat'] = $chat_arr;
-            $no = "4169";
+            $no = "0533";
             $csvdata_arr   = $this->Historicals_newModel->get_info($no,$chat_mode);//取得 完整的資料
             $status_arr = $this->Historicals_newModel->status_code_change();
 
@@ -660,13 +653,9 @@ class Historicals extends Controller
                 $checked_sn_in =  $checkedsn;
             }
 
-            if(!empty($_COOKIE['angle_mode_combine'])){
-                $angle_mode_combine = $_COOKIE['angle_mode_combine'];
 
-            }else{
-                $angle_mode_combine = 1;
-            }
-
+         
+           
             #取得該筆的所有完整詳細資料
             $info_final = $this->Historicals_newModel->csv_info($checked_sn_in);            
             $data['info_final'] = $info_final;
@@ -688,54 +677,84 @@ class Historicals extends Controller
             #二筆鎖附資料的圖表
             $final_label = $this->Historicals_newModel->get_result($checked_sn_in,$id);     
 
-            #圖表1的資訊
-            $data['chart1_xcoordinate'] = json_encode(array_keys($final_label['data0']));
-            $data['chart1_ycoordinate'] = json_encode($final_label['data0']);
-            $data['chart1_ycoordinate_max'] = floatval(max($final_label['data0']));
-            $data['chart1_ycoordinate_min'] = floatval(min($final_label['data0']));
+            #取得下拉選單的unit
+            if(!empty($_GET['unit'])) {
+                $data['unit'] = $_GET['unit'];
+            }else{
+                $data['unit'] = 0;
+            }
 
-            #圖表2的資訊
-            $data['chart2_xcoordinate'] = json_encode(array_keys($final_label['data1']));
-            $data['chart2_ycoordinate'] = json_encode($final_label['data1']);
-            $data['chart2_ycoordinate_max'] = floatval(max($final_label['data1']));
-            $data['chart2_ycoordinate_min'] = floatval(min($final_label['data1']));
-            
-       
+
+            $TransType = $data['unit'];
+
+            if(!empty($TransType)){
+                
+                $temp_val0 = $this->Historicals_newModel->unitarr_change($final_label['data0'], 1, $TransType);
+                $temp_val1 = $this->Historicals_newModel->unitarr_change($final_label['data1'], 1, $TransType);
+
+                #圖表1的資訊
+                $data['chart1_xcoordinate'] = json_encode(array_keys($final_label['data0']));
+                $data['chart1_ycoordinate'] = json_encode($temp_val0);
+                $data['chart1_ycoordinate_max'] = floatval(max($temp_val0));
+                $data['chart1_ycoordinate_min'] = floatval(min($temp_val0));
+
+                #圖表2的資訊
+                $data['chart2_xcoordinate'] = json_encode(array_keys($final_label['data1']));
+                $data['chart2_ycoordinate'] = json_encode($temp_val1);
+                $data['chart2_ycoordinate_max'] = floatval(max($temp_val1));
+                $data['chart2_ycoordinate_min'] = floatval(min($temp_val1));
+               
+            }else{
+
+                #圖表1的資訊
+                $data['chart1_xcoordinate'] = json_encode(array_keys($final_label['data0']));
+                $data['chart1_ycoordinate'] = json_encode($final_label['data0']);
+                $data['chart1_ycoordinate_max'] = floatval(max($final_label['data0']));
+                $data['chart1_ycoordinate_min'] = floatval(min($final_label['data0']));
+
+                #圖表2的資訊
+                $data['chart2_xcoordinate'] = json_encode(array_keys($final_label['data1']));
+                $data['chart2_ycoordinate'] = json_encode($final_label['data1']);
+                $data['chart2_ycoordinate_max'] = floatval(max($final_label['data1']));
+                $data['chart2_ycoordinate_min'] = floatval(min($final_label['data1']));
+
+            }   
         }else{
             
+        }
+
+
+        
+        if(!empty($_GET['unit'])) {
+            $data['unit'] = $_GET['unit'];
+        }else{
+            $data['unit'] = 0;
         }
 
         $torque_mode_arr = array(
-            1=>'N.m',
-            0=>'Kgf.m',
-            2=>'Kgf.cm',
-            3=>'In.lbs',
-
-        ); 
-
-        $angle_mode_arr = array(
-            1 =>'total angle',
-            2 =>'task angle'
+            1 => 'N.m',
+            0 => 'Kgf.m',
+            2 => 'Kgf.cm',
+            3 => 'In.lbs',
         );
 
-
-        if(!empty($_GET['anglecombine'])){
-            $data['anglecombine'] = $_GET['anglecombine'];
-        }else{
-            $data['anglecombine'] = '';
-        }
-
+        //
+        
+    
+        
+        
         #扭力轉換
         $torque_arr = $this->Historicals_newModel->torque_change();
 
         #STATUS轉換
         $status_arr = $this->Historicals_newModel->status_code_change();
 
-        $torque_mode_arr = array();
+
+        
         $data['torque_arr'] = $torque_arr;
         $data['status_arr'] = $status_arr;
-        $data['torque_mode_arr'] = $torque_arr;
-        $data['angle_mode_arr'] = $angle_mode_arr;
+        $data['torque_mode_arr'] = $torque_mode_arr;
+        //$data['angle_mode_arr'] = $angle_mode_arr;
         $data['nav'] = $this->NavsController->get_nav();
         $data['nopage'] = 0;
         $data['path'] = __FUNCTION__;
