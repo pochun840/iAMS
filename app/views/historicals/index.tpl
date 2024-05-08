@@ -11,7 +11,7 @@
 
 
 <!---new echart.js-->
-<script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+<script src="<?php echo URLROOT; ?>js/echarts_min.js?v=202405080900"></script>
 
 <!-- 引入 HTML2Canvas 库 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
@@ -464,13 +464,13 @@ if(!empty($_COOKIE['line_style'])){
                                     <?php } ?>
                                 </select>
                             </td>
-                            <td>
+                            <!--<td>
                                 Angle:  <select id="Angle" class="t6 Select-All" id='angle_type' style="float: none; width: 100px" onchange="angle_select(this)">
                                             <?php foreach($data['angle_mode_arr'] as $ke =>$ve){?>
                                                 <option value="<?php echo $ke;?>" <?php if($data['anglevalue'] == $ke){ echo "selected";}?>><?php echo $ve;?></option>
                                             <?php } ?>
                                         </select>
-                            </td>
+                            </td>-->
                            <!--<td>
                                 Sampling:  
                                 <select id="SelectOutputSampling" class="t6 Select-All" id='file_type'>
@@ -524,21 +524,21 @@ if(!empty($_COOKIE['line_style'])){
                                 <input class="form-check-input" type="checkbox" id="myCheckbox" onchange="check_limit(this)";  <?php if($limit_val=="1"){ echo "checked"; }else{}?> style="zoom:1.2; vertical-align: middle">
                                 <label class="form-check-label" for="optioncheck">display the high/low auxiliary lines.</label>
 
-                                <label style="padding-left: 5%">
+                                <!--<label style="padding-left: 5%">
                                     Angle : &nbsp;
                                     <select id="angle_combine" style="width: 120px" onchange="angle_change_combine(this)">
                                             <?php foreach($data['angle_mode_arr'] as $ke =>$ve){?>
                                                 <option value="<?php echo $ke;?>" <?php if($data['anglecombine'] == $ke){ echo "selected";}?>><?php echo $ve;?></option>
                                             <?php } ?>
                                     </select>
-                                </label>
+                                </label>-->
                                 <label style="padding-left: 5%">
-                                    <!--Unit :
+                                    Unit :
                                         <select id="unit" style="width: 100px" onchange="unit_change(this)" >
                                           <?php foreach($data['torque_mode_arr'] as $k_torque => $v_torque){?>
-                                                <option  value="<?php echo $k_torque;?>"  <?php if($unit_mode== $k_torque){echo "selected";}else{echo "";}?>  > <?php echo $v_torque;?> </option>
+                                                <option  value="<?php echo $k_torque;?>"  <?php if($unit_mode == $k_torque){echo "selected";}else{echo "";}?>  > <?php echo $v_torque;?> </option>
                                           <?php } ?>        
-                                        </select>-->
+                                        </select>
                                 </label>
                             </div>
                             <div class="col t2">

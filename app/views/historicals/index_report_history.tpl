@@ -7,9 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/print-history-excel.css">
 <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/datatables.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+<script src="<?php echo URLROOT; ?>js/echarts_min.js?v=202405080900"></script>
 <script src="<?php echo URLROOT; ?>js/historical.js?v=202405021000"></script>
 
 </head>
