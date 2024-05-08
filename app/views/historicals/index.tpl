@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/historical.css?v=202404111200" type="text/css">
 
 <script src="<?php echo URLROOT; ?>js/flatpickr.js"></script>
-<script src="<?php echo URLROOT; ?>js/historical.js?v=202405051000"></script>
+<script src="<?php echo URLROOT; ?>js/historical.js?v=202405081700"></script>
 
 <script src="<?php echo URLROOT; ?>js/echarts_min.js?v=202405080900"></script>
 <script src="<?php echo URLROOT; ?>js/html2canvas_min.js?v=202405080900"></script>
@@ -522,13 +522,11 @@ if(!empty($_COOKIE['line_style'])){
 
                                 <label style="padding-left: 5%">
                                     Chart Setting : &nbsp;
-                                      <?php //var_dump($data['chat_mode_arr_combine']);?>
-                                    <select id>
-                                    <?php foreach($data['chat_mode_arr_combine'] as $k_mode => $v_mode){ ?>
-                                        <option value="<?php echo $k_mode; ?>"><?php echo $v_mode; ?></option>
-                                    <?php } ?>
+                                    <select id="chart" style="width: 100px" onchange="chart_change(this)" >
+                                        <?php foreach($data['chat_mode_arr_combine'] as $k_mode => $v_mode){ ?>
+                                            <option value="<?php echo $k_mode; ?>"><?php echo $v_mode; ?></option>
+                                        <?php } ?>
                                     </select>
-
                                 </label>
                                 <label style="padding-left: 5%">
                                     Unit :
@@ -1547,4 +1545,12 @@ document.getElementById('downlandpdf_combine').addEventListener('click', functio
 
     event.preventDefault();
 }, { passive: true });
+</script>
+<script>
+
+function chart444060_change(selectElement) {
+    var selectedValue = selectElement.value;
+    console.log("Selected value:", selectedValue);
+    // 在这里可以添加您想要执行的逻辑
+}
 </script>

@@ -386,6 +386,43 @@ function angle_change_combine(){
     xhttp.send();
 }
 
+function chart_change(selectElement) {
+    var selectedValue = selectElement.value; 
+    var currentUrl = window.location.href;
+    var unitIndex = currentUrl.indexOf('unit=');
+    var unitValue = '';
+    if (unitIndex !== -1) {
+        var nextAmpersandIndex = currentUrl.indexOf('&', unitIndex);
+        if (nextAmpersandIndex !== -1) {
+            unitValue = currentUrl.substring(unitIndex + 5, nextAmpersandIndex);
+        } else {
+            unitValue = currentUrl.substring(unitIndex + 5);
+        }
+    }
+
+    var chartIndex = currentUrl.indexOf('chart=');
+
+    var nextinfo_url;
+
+    if (chartIndex !== -1) {
+        var nextChartValue = 'chart=' + selectedValue;
+        nextinfo_url = currentUrl.substring(0, chartIndex) + nextChartValue;
+    } else {
+        var separator = currentUrl.indexOf('?') !== -1 ? '&' : '?';
+        nextinfo_url = currentUrl + separator + 'chart=' + selectedValue;
+    }
+    nextinfo_url += '&unit=' + unitValue;
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            window.location.assign(nextinfo_url);
+        }
+    };
+    xhttp.open("GET", nextinfo_url, true);
+    xhttp.send();
+}
+
 
 function unit_change_combine(){
     var selectElement = document.getElementById('unit');
