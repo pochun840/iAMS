@@ -444,7 +444,11 @@ function nopage(){
 
 //回到上一頁
 function goBack() {
-    window.history.back();
+    if (window.history.length > 1) {
+        window.history.back(); 
+    } else {
+        window.location.href = '?url=Historicals'; 
+    }
 }
 
 //勾選上下限
@@ -460,7 +464,6 @@ function check_limit(checkbox){
 
 }
 
-var lineCookieValue = getCookie('line_style');
 var chat_modeno = getCookie('chat_modeno');
 var limit_val = getCookie('limit_val');
 var chat_mode_change = getCookie('chat_mode_change');
