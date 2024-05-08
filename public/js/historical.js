@@ -385,6 +385,35 @@ function angle_change_combine(){
     xhttp.open("GET", nextinfo_url, true);
     xhttp.send();
 }
+
+
+function unit_change_combine(){
+    var selectElement = document.getElementById('unit');
+    var selectedOption = selectElement.options[selectElement.selectedIndex];
+    var selectedValue = selectedOption.value;
+    var selectedText = selectedOption.textContent;
+
+    var currentUrl = window.location.href;
+    var unitcombineIndex = currentUrl.lastIndexOf('unit=');
+
+    var nextinfo_url;
+
+    if (unitcombineIndex!== -1) {
+        nextinfo_url = currentUrl.substring(0, unitcombineIndex) + 'unit=' + selectedValue;
+    } else {
+        nextinfo_url = currentUrl + (currentUrl.indexOf('?') !== -1 ? '&' : '?') + 'unit=' + selectedValue;
+    }
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+
+            window.location.assign(nextinfo_url);
+        }
+    };
+    xhttp.open("GET", nextinfo_url, true);
+    xhttp.send();
+}
 //讀取cookie 
 function getCookie(cookieName) {
     var cookies = document.cookie.split(';');
@@ -397,8 +426,6 @@ function getCookie(cookieName) {
     }
     return '';
 }
-
-
 function nopage(){
     //0 =>不分頁 1=>分頁
     var currentValue = document.cookie.replace(/(?:(?:^|.*;\s*)nopage\s*\=\s*([^;]*).*$)|^.*$/, "$1");
