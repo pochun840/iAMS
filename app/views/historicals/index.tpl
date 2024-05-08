@@ -8,14 +8,8 @@
 <script src="<?php echo URLROOT; ?>js/flatpickr.js"></script>
 <script src="<?php echo URLROOT; ?>js/historical.js?v=202405051000"></script>
 
-
-
-<!---new echart.js-->
 <script src="<?php echo URLROOT; ?>js/echarts_min.js?v=202405080900"></script>
-
-<!-- 引入 HTML2Canvas 库 -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
-
+<script src="<?php echo URLROOT; ?>js/html2canvas_min.js?v=202405080900"></script>
 
 <?php if(isset($data['nav'])){
     echo $data['nav'];
@@ -534,9 +528,9 @@ if(!empty($_COOKIE['line_style'])){
                                 </label>-->
                                 <label style="padding-left: 5%">
                                     Unit :
-                                        <select id="unit" style="width: 100px" onchange="unit_change(this)" >
+                                        <select id="unit" style="width: 100px" onchange="unit_change_combine(this)" >
                                           <?php foreach($data['torque_mode_arr'] as $k_torque => $v_torque){?>
-                                                <option  value="<?php echo $k_torque;?>"  <?php if($unit_mode == $k_torque){echo "selected";}else{echo "";}?>  > <?php echo $v_torque;?> </option>
+                                                <option  value="<?php echo $k_torque;?>"  <?php if( $data['unit'] == $k_torque){echo "selected";}else{echo "";}?>  > <?php echo $v_torque;?> </option>
                                           <?php } ?>        
                                         </select>
                                 </label>
@@ -1465,7 +1459,7 @@ document.getElementById('downloadchartbtn').addEventListener('click', function()
     //下拉式選單disable 做反灰的動作
     document.getElementById('chartseting').disabled = true;
     document.getElementById('Torque-Unit').disabled = true;
-    document.getElementById('Angle').disabled = true;
+    //document.getElementById('Angle').disabled = true;
 
     var disabledSelects = document.querySelectorAll('select[disabled]');
     disabledSelects.forEach(function(select) {
@@ -1514,7 +1508,7 @@ document.getElementById('downlandpdf_combine').addEventListener('click', functio
         divToRemove2.parentNode.removeChild(divToRemove2);
     }
 
-    document.getElementById('angle').disabled = true;
+    document.getElementById('unit').disabled = true;
     var disabledSelects = document.querySelectorAll('select[disabled]');
     disabledSelects.forEach(function(select) {
         select.style.color = '#808080'; 
