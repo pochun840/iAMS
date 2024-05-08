@@ -410,16 +410,13 @@ class Historicals extends Controller
                 $data['statistics']['ng'] = json_encode($ng_counts);
                 $data['statistics']['ok'] = json_encode($ok_counts);
                 $data['statistics']['ok_all'] = json_encode($ok_all_counts);
-
-
-
             }
         }
 
 
         if(!empty($_GET['type'])){
-            if($_GET['type'] =="downland"){
-                $data['type'] = "downland";
+            if($_GET['type'] =="download"){
+                $data['type'] = "download";
             }
 
         }else{
@@ -432,11 +429,7 @@ class Historicals extends Controller
     }
 
 
-    #鎖附資料 圖表 
-    /*public function ddd(){
  
-        $this->view('historicals/index_test2');
-    }*/
 
 
     public function test_chart(){
@@ -457,10 +450,6 @@ class Historicals extends Controller
 
        
         //$this->view('historicals/index_test3');
-
-
-
-
     }
 
     public function nextinfo($index){
@@ -644,7 +633,14 @@ class Historicals extends Controller
         #透過 id 取得完整的鎖附資料
 
         #判斷有無cookie 
-        $chat_mode  = "1";//預設是torque/time 
+        if(!empty($_GET['chart'])){
+            $chat_mode = $_GET['chart'];
+
+        }else{
+            $chat_mode  = "1";
+        }
+
+
         if(!empty($_COOKIE['checkedsn'])){
             $checkedsn = $_COOKIE['checkedsn'];
             $pos = strpos($checkedsn, ',');
@@ -676,7 +672,7 @@ class Historicals extends Controller
 
             $id = rtrim($id,',');
             #二筆鎖附資料的圖表
-            $final_label = $this->Historicals_newModel->get_result($checked_sn_in,$id);     
+            $final_label = $this->Historicals_newModel->get_result($checked_sn_in,$id,$chat_mode);     
 
             #取得下拉選單的unit
             if(!empty($_GET['unit'])) {
@@ -739,10 +735,24 @@ class Historicals extends Controller
             3 => 'In.lbs',
         );
 
-        //
-        
-    
-        
+        $chat_mode_arr = array(
+            1=>'Torque/Time(MS)',
+            2=>'Angle/Time(MS)',
+            3=>'RPM/Time(MS)',
+            4=>'Power/Time(MS)',
+            5=>'Torque/Angle',
+            6=>'Torque&Angle/Time(MS)',
+        );
+
+
+        #曲線圖座標
+        $line_title = $chat_mode_arr[$chat_mode];
+        $line_title_arr = explode("/",$chat_mode_arr[$chat_mode]);
+
+        $data['chart_combine']['x_title'] = $line_title_arr[1];
+        $data['chart_combine']['y_title'] = $line_title_arr[0];
+
+      
         
         #扭力轉換
         $torque_arr = $this->Historicals_newModel->torque_change();
@@ -751,15 +761,19 @@ class Historicals extends Controller
         $status_arr = $this->Historicals_newModel->status_code_change();
 
 
-        
+
+        $data['chat_mode'] = $chat_mode;
         $data['torque_arr'] = $torque_arr;
         $data['status_arr'] = $status_arr;
         $data['torque_mode_arr'] = $torque_mode_arr;
-        //$data['angle_mode_arr'] = $angle_mode_arr;
+        $data['chat_mode_arr_combine'] = $chat_mode_arr;
         $data['nav'] = $this->NavsController->get_nav();
         $data['nopage'] = 0;
         $data['path'] = __FUNCTION__;
 
+
+        
+ 
         $this->view('historicals/index',$data);
     }
 }

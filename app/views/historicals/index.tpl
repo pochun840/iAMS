@@ -524,7 +524,7 @@ if(!empty($_COOKIE['line_style'])){
                                     Chart Setting : &nbsp;
                                     <select id="chart" style="width: 100px" onchange="chart_change(this)" >
                                         <?php foreach($data['chat_mode_arr_combine'] as $k_mode => $v_mode){ ?>
-                                            <option value="<?php echo $k_mode; ?>"><?php echo $v_mode; ?></option>
+                                            <option value="<?php echo $k_mode; ?>" <?php if($data['chat_mode'] == $k_mode){ echo "selected";}?>><?php echo $v_mode; ?></option>
                                         <?php } ?>
                                     </select>
                                 </label>
@@ -1291,6 +1291,10 @@ addMessage();
         var max_val_1 = <?php echo $data['chart2_ycoordinate_max'];?>;
 
 
+        var xtitle = '<?php echo $data['chart_combine']['x_title'];?>';
+        var ytitle = '<?php echo $data['chart_combine']['y_title'];?>';
+
+
         var job_info_1 ='<?php echo $data['info_final'][1]['job_name'];?>';
         var option = {
               tooltip: {
@@ -1313,13 +1317,13 @@ addMessage();
             xAxis: {
                 type: 'category',
                 boundaryGap: false,
-                name: 'Time(ms)',
+                name: xtitle,
                 data: x_data_val
             },
 
             yAxis: {
                 type: 'value',
-                name: 'Torque',
+                name: ytitle,
                 boundaryGap: [0, '100%']
             },
 
