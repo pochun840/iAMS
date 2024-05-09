@@ -117,7 +117,6 @@ function csv_download(){
     xhr.responseType = 'blob'; 
     xhr.onload = function() {
         if (xhr.status === 200) {
-            // 創建下載連結
             var blob = new Blob([xhr.response],{ type:'text/csv'});
             var link = document.createElement('a');
             link.href = window.URL.createObjectURL(blob);
@@ -360,7 +359,7 @@ function angle_change_combine(){
     xhttp.send();
 }
 
-function chart_change(selectElement) {
+function chart_change(selectElement){
     var selectedValue = selectElement.value; 
     var currentUrl = window.location.href;
     var unitIndex = currentUrl.indexOf('unit=');
@@ -373,7 +372,6 @@ function chart_change(selectElement) {
             unitValue = currentUrl.substring(unitIndex + 5);
         }
     }
-
     var chartIndex = currentUrl.indexOf('chart=');
 
     var nextinfo_url;
@@ -385,7 +383,7 @@ function chart_change(selectElement) {
         var separator = currentUrl.indexOf('?') !== -1 ? '&' : '?';
         nextinfo_url = currentUrl + separator + 'chart=' + selectedValue;
     }
-    nextinfo_url += '&unit=' + unitValue;
+    nextinfo_url += '&unit=' + "1";
 
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
