@@ -328,6 +328,34 @@ class Historical{
         return $result;
     }
 
+
+    public function details($mode){
+
+        if($mode =="chart_type"){
+
+            $details = array(
+                1=>'Torque/Time(MS)',
+                2=>'Angle/Time(MS)',
+                3=>'RPM/Time(MS)',
+                4=>'Power/Time(MS)',
+                5=>'Torque/Angle',
+                6=>'Torque&Angle/Time(MS)',
+            );
+        }
+
+        if($mode =="torque"){
+            $details  = array(
+                1 => 'N.m',
+                0 => 'Kgf.m',
+                2 => 'Kgf.cm',
+                3 => 'In.lbs',
+            );
+        }
+
+        return $details;
+
+    }
+
     public function get_task_id($job_id,$seq_id){
 
         $sql = "SELECT * FROM `fasten_data` WHERE job_id = '".$job_id."' AND sequence_id = '".$seq_id."' AND on_flag = '0' ";
@@ -472,14 +500,12 @@ class Historical{
     }
 
 
-    public function get_result($checked_sn_in,$id){
+    public function get_result($checked_sn_in,$id,$chat_mode){
 
         $file_arr = array('_0p5','_1p0','_2p0');#檔案格式
         $no_arr  = explode(',',$id);
 
-        // var_dump($checked_sn_in);
-        // var_dump($id);
-
+     
         foreach($no_arr as $key => $val){
             $name = 'data'.$key;
             if(!empty($val)){
@@ -495,15 +521,56 @@ class Historical{
             }
         }
         
-        foreach($csv_array as $key => &$innerarray) {
-            foreach($innerarray as $key1 => $va) {
-                if(empty($va[1])){
-                    unset($innerarray[$key1]);
-                }else{
-                    $innerarray[$key1] = $va[1];
+      
+        if(!empty($chat_mode)){
+            $position  = (int)$chat_mode;
+
+        } 
+
+        if ($position == 5) {
+            foreach ($csv_array as $key => &$innerarray) {
+                // 判断是否为索引数组并且第一个元素需要删除
+                if (is_array($innerarray) && count($innerarray) > 0 && empty($innerarray[0])) {
+                    // 删除第一个元素
+                    array_shift($innerarray);
+                }
+        
+                // 判断是否为关联数组并且第一个元素需要保留
+                if (is_array($innerarray) && count($innerarray) > 0 && !empty($innerarray[0])) {
+                    // 继续处理
+                    foreach ($innerarray as $key1 => $va) {
+                        if(empty($va[1])){
+                            unset($innerarray[$key1]);
+                        } else {
+                            $innerarray['torque'][$key1]= $va[1];
+                            $innerarray['angle'][$key1]= $va[2];
+                        }
+                    }
                 }
             }
+
+            /*echo "<pre>";
+            print_r($csv_array);
+            echo "</pre>";*/
         }
+
+        else if($position == 6){
+
+        }else{
+            foreach($csv_array as $key => &$innerarray) {
+                foreach($innerarray as $key1 => $va){
+                    if(empty($va[1])){
+                        unset($innerarray[$key1]);
+                    }else{
+                        $innerarray[$key1] = $va[$position];
+                    }
+                }
+            }
+
+        }
+ 
+    
+
         return $csv_array;
     }
 
@@ -533,6 +600,8 @@ class Historical{
             header("Location:?url=Historicals");
             die();
         }else{
+
+
             $resultarr = array();
             if($chat_mode =="5"){
                 $position  = (int)$chat_mode;#5
@@ -572,6 +641,8 @@ class Historical{
                     }
                 }
             }
+
+
             return $resultarr;
 
         }

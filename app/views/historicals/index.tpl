@@ -566,7 +566,7 @@ if(!empty($_COOKIE['line_style'])){
                                                 <div class="row t1">
                                                     <div class="col"> barcodeSN : <?php echo $val['cc_barcodesn'];?></div>
                                                     <div class="col"> Error Code : <?php echo  $data['status_arr']['error_msg'][$val['error_message']];?></div>
-                                                    <div class="col"> Actual Torque : <?php echo $val['fasten_torque'] ." ".$data['torque_arr'][$val['torque_unit']];?> </div>
+                                                    <div class="col"> Actual Torque : <?php echo $val['fasten_torque'] ." ".$data['torque_mode_arr'][$val['torque_unit']];?> </div>
                                                 </div>
                                                 <div class="row t1">
                                                     <div class="col"> Equipment : </div>
