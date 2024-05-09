@@ -352,6 +352,14 @@ class Historical{
             );
         }
 
+
+        if($mode =="angle"){
+            $angle_mode_arr = array(
+                1 =>'total angle',
+                2 =>'task angle'
+            );
+
+        }
         return $details;
 
     }
@@ -526,18 +534,12 @@ class Historical{
             $position  = (int)$chat_mode;
 
         } 
-
-        if ($position == 5) {
+        if ($position == 5 || $position == 6) {
             foreach ($csv_array as $key => &$innerarray) {
-                // 判断是否为索引数组并且第一个元素需要删除
                 if (is_array($innerarray) && count($innerarray) > 0 && empty($innerarray[0])) {
-                    // 删除第一个元素
                     array_shift($innerarray);
                 }
-        
-                // 判断是否为关联数组并且第一个元素需要保留
                 if (is_array($innerarray) && count($innerarray) > 0 && !empty($innerarray[0])) {
-                    // 继续处理
                     foreach ($innerarray as $key1 => $va) {
                         if(empty($va[1])){
                             unset($innerarray[$key1]);
@@ -548,15 +550,8 @@ class Historical{
                     }
                 }
             }
-
-            /*echo "<pre>";
-            print_r($csv_array);
-            echo "</pre>";*/
         }
-
-        else if($position == 6){
-
-        }else{
+        else{
             foreach($csv_array as $key => &$innerarray) {
                 foreach($innerarray as $key1 => $va){
                     if(empty($va[1])){
@@ -568,14 +563,10 @@ class Historical{
             }
 
         }
- 
-    
-
         return $csv_array;
     }
 
 
-    #nextinfo 
     public function get_info($no,$chat_mode){
         if(!empty($no)){
             $file_arr = array('_0p5','_1p0','_2p0');#檔案格式
@@ -600,8 +591,6 @@ class Historical{
             header("Location:?url=Historicals");
             die();
         }else{
-
-
             $resultarr = array();
             if($chat_mode =="5"){
                 $position  = (int)$chat_mode;#5
@@ -616,6 +605,8 @@ class Historical{
                     }
                         
                 }
+
+         
 
             }else if($chat_mode =="6"){
                 $position  = (int)$chat_mode;#6
@@ -641,8 +632,6 @@ class Historical{
                     }
                 }
             }
-
-
             return $resultarr;
 
         }
@@ -750,76 +739,9 @@ class Historical{
         $result = $statement->fetchall(PDO::FETCH_ASSOC);
 
         return $result; 
-
-
     }
 
     //扭力單位的轉換
-    function unit_change($torValue, $inputType, $TransType){
-
-        $torValue = floatval($torValue);
-        $inputType = (int)($inputType);
-        $TransType = (int)($TransType);
-
-        $TorqueUnit = [
-            "N_M" => 1,
-            "KGF_M" => 0,
-            "KGF_CM" => 2,
-            "LBF_IN" => 3
-        ];
-
-       
-        if ($inputType === $TorqueUnit["N_M"]) {
-            if ($TransType === $TorqueUnit["KGF_M"]) {
-                return round($torValue * 0.102, 4);
-            } elseif ($TransType === $TorqueUnit["KGF_CM"]) {
-                return round($torValue * 10.2, 2);
-            } elseif ($TransType === $TorqueUnit["LBF_IN"]) {
-                return round($torValue * 10.2 * 0.86805, 2);
-            } elseif ($TransType === $TorqueUnit["N_M"]) {
-                return round($torValue, 3);
-            }
-        }   
-        
-        elseif ($inputType === $TorqueUnit["KGF_M"]) {
-            if ($TransType === $TorqueUnit["KGF_M"]) {
-                return round($torValue, 4);
-            } elseif ($TransType === $TorqueUnit["KGF_CM"]) {
-                return round($torValue * 100, 2);
-            } elseif ($TransType === $TorqueUnit["LBF_IN"]) {
-                return round($torValue * 100 * 0.86805, 2);
-            } elseif ($TransType === $TorqueUnit["N_M"]) {
-                return round($torValue * 9.80392156, 3);
-            }
-        }
-
-        elseif ($inputType === $TorqueUnit["KGF_CM"]) {
-            if ($TransType === $TorqueUnit["KGF_M"]) {
-                return round($torValue * 0.01, 4);
-            } elseif ($TransType === $TorqueUnit["KGF_CM"]) {
-                return round($torValue, 2);
-            } elseif ($TransType === $TorqueUnit["LBF_IN"]) {
-                return round($torValue * 0.86805, 2);
-            } elseif ($TransType === $TorqueUnit["N_M"]) {
-                return round($torValue * 0.0980392156, 3);
-            }
-        }
-
-        elseif ($inputType === $TorqueUnit["LBF_IN"]) {
-            if ($TransType === $TorqueUnit["KGF_M"]) {
-                return round($torValue * 1.152 * 0.01, 4);
-            } elseif ($TransType === $TorqueUnit["KGF_CM"]) {
-                return round($torValue * 1.152, 2);
-            } elseif ($TransType === $TorqueUnit["LBF_IN"]) {
-                return round($torValue, 2);
-            } elseif ($TransType === $TorqueUnit["N_M"]) {
-                return round($torValue * 0.11294117637119998, 3);
-            }
-        }
-        
-    }
-
-
     public function unitarr_change($torValues, $inputType, $TransType){
         
         $inputType = (int)$inputType;
@@ -840,16 +762,16 @@ class Historical{
            
             if ($inputType == $TorqueUnit["N_M"]) {
                 if ($TransType == $TorqueUnit["KGF_M"]) {
-                    //echo "e1";//die();
+                
                     $convertedValues[] = round($torValue * 0.102, 4);
                 } elseif ($TransType == $TorqueUnit["KGF_CM"]) {
-                    //echo "e2";//die();
+                
                     $convertedValues[] = round($torValue * 10.2, 2);
                 } elseif ($TransType == $TorqueUnit["LBF_IN"]) {
-                    //echo "e3";//die();
+                  
                     $convertedValues[] = round($torValue * 10.2 * 0.86805, 2);
                 } elseif ($TransType == $TorqueUnit["N_M"]) {
-                    //echo "e4";//die();
+                  
                     $convertedValues[] = round($torValue, 3);
                 }
             } 
@@ -894,5 +816,13 @@ class Historical{
         }
 
         return $convertedValues;
+    }
+
+    public function extractXYTitles($titleString){
+        $titles = explode("/", $titleString);
+        return [
+            'x_title' => isset($titles[1]) ? $titles[1] : '',
+            'y_title' => isset($titles[0]) ? $titles[0] : ''
+        ];
     }
 }
