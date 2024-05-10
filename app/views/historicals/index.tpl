@@ -10,6 +10,7 @@
 
 <script src="<?php echo URLROOT; ?>js/echarts_min.js?v=202405080900"></script>
 <script src="<?php echo URLROOT; ?>js/html2canvas_min.js?v=202405080900"></script>
+<script src="<?php echo URLROOT; ?>js/chart_share.js?v=202405100900"></script>
 
 <?php if(isset($data['nav'])){
     echo $data['nav'];
@@ -78,27 +79,11 @@ if(!empty($_COOKIE['chat_mode'])){
     $chat_mode = '';
 }
 
-if(!empty($_COOKIE['chat_modeno'])){
-    $chat_modeno = $_COOKIE['chat_modeno'];
-}else{
-    $chat_modeno = '';
-}
-
 if(!empty($_COOKIE['chat_mode_change'])){
     $chat_mode_change= $_COOKIE['chat_mode_change'];
 }else{
     $chat_mode_change = '';
 }
-
-
-#曲線圖 是否要顯示上下限
-if(!empty($_COOKIE['line_style'])){
-    $line_style = $_COOKIE['line_style'];
-}else{
-    $line_style = '';
-}
-
-
 ?>
 
 <style>
@@ -985,6 +970,7 @@ function ClickNotification() {
 }
 
 addMessage();
+
 </script>
 
 <style type="text/css">
@@ -1010,18 +996,9 @@ addMessage();
 
     var x_title = '<?php echo $data['chart_info']['x_title'];?>';
     var y_title = '<?php echo $data['chart_info']['y_title'];?>';
-
-   
-    
     var option = {
-            //設置圖表的占容器的百分比
-            grid: {
-                width: '90%',  
-                height: '70%', 
-                left: '3%',  
-                top: '20%' 
-            },
-
+            
+            grid: GridConfig.generate('90%', '70%', '3%', '20%'),
             tooltip: {
                 trigger: 'axis',
                 position: function (pt) {
@@ -1034,10 +1011,7 @@ addMessage();
                 },
                 
             },
-            title: {
-                left: 'center',
-                text: '',
-            },
+            title: {left: 'center',text: '',},
             xAxis: {
                 type: 'category',
                 boundaryGap: false,
@@ -1049,31 +1023,11 @@ addMessage();
                 name: y_title,
                 boundaryGap: [0, '100%']
             },
-        dataZoom: [{
-                type: 'inside',
-                start: 0,
-                end: 100
-            }, 
-            {
-                show: false, 
-                type: 'slider',
-                start: 0,
-                end: 100,
-                handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
-                handleSize: '80%',
-                handleStyle: {
-                    color: '#fff',
-                    shadowBlur: 3,
-                    shadowColor: 'rgba(0, 0, 0, 0)',
-                    shadowOffsetX: 0,
-                    shadowOffsetY: 0
-                }
-        }],
+        dataZoom: generateDataZoom(),
         series: [
             {
                 name:'',
                 type:'line',
-                //smooth:true,
                 symbol: 'none',
                 sampling: 'average',
                 
@@ -1093,9 +1047,7 @@ addMessage();
                         }])
                     }
                 },
-                    lineStyle: {
-                        width: 0.75
-                },
+                lineStyle: {width: 0.75},
                 data: y_data_val
             }
         ]
@@ -1106,12 +1058,11 @@ addMessage();
     if (limit_val == 1) {
         option.series[0].markLine = {
             data: [
-                {yAxis: min_val, name: '',label: {position: 'middle',formatter: 'low torque'}}, // 下限
-                {yAxis: max_val, name: '',label: {position: 'middle',formatter: 'high torque'}}  // 上限
+                {yAxis: min_val, name: '',label: {position: 'middle',formatter: 'low torque'}}, 
+                {yAxis: max_val, name: '',label: {position: 'middle',formatter: 'high torque'}}  
             ],
             symbol: 'none',
             lineStyle: {
-            //type: 'solid' 
             } 
         };
     }
@@ -1136,14 +1087,7 @@ addMessage();
     var min_val_1 = <?php echo $data['chart_info']['min1']; ?>; // Y軸2的上限
 
     var option = {
-
-        //設置圖表的占容器的百分比
-        grid: {
-            width: '90%',  
-            height: '70%', 
-            left: '3%',  
-            top: '20%' 
-        },
+        grid: GridConfig.generate('90%', '70%', '3%', '20%'),
 
         tooltip: {
             trigger: 'axis',
@@ -1157,10 +1101,8 @@ addMessage();
                        '<span style="color:' + angleColor + '">Angle: ' + params[1].value + '</span>';
             }
         },
-        title: {
-            left: 'center',
-            text: ''
-        },
+
+        title: {left: 'center',text: ''},
         xAxis: {
             type: 'category',
             boundaryGap: false,
@@ -1183,26 +1125,7 @@ addMessage();
                 max: max_val_1
             }
         ],
-        dataZoom: [{
-                type: 'inside',
-                start: 0,
-                end: 100
-            }, 
-            {
-                show: false, 
-                type: 'slider',
-                start: 0,
-                end: 100,
-                handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
-                handleSize: '80%',
-                handleStyle: {
-                    color: '#fff',
-                    shadowBlur: 3,
-                    shadowColor: 'rgba(0, 0, 0, 0)',
-                    shadowOffsetX: 0,
-                    shadowOffsetY: 0
-                }
-        }],
+        dataZoom: generateDataZoom(), //曲線圖縮放
 
         series: [
             {
@@ -1214,9 +1137,7 @@ addMessage();
                 itemStyle: {
                     color: 'rgb(255,0,0)'
                 },
-                lineStyle: {
-                    width: 0.75
-                },
+                lineStyle: {width: 0.75},
                 data: y_data_val
             },
             {
@@ -1228,9 +1149,7 @@ addMessage();
                 itemStyle: {
                     color: 'rgb(44,55,82)'
                 },
-                lineStyle: {
-                    width: 0.75
-                },
+                lineStyle: {width: 0.75},
                 data: y_data_val_1
             }
         ]
@@ -1245,21 +1164,9 @@ addMessage();
                 symbol: 'none',
                 data: [
                     { yAxis: min_val,name: '',label: {position: 'middle',formatter: 'low torque'},lineStyle: { type: 'dashed', color: 'rgb(255, 0, 0)' } }, 
-                    { yAxis: max_val,name: '',label: {position: 'middle',formatter: 'high torque'}, lineStyle: { type: 'dashed', color: 'rgb(255, 0, 0)' } }   
-                ]
-            }
-        });
-    }
-
-    //第二條曲線的上下限
-    if (limit_val == 1) {
-        option.series.push({
-            type: 'line',
-            markLine: {
-                symbol: 'none',
-                data: [
+                    { yAxis: max_val,name: '',label: {position: 'middle',formatter: 'high torque'}, lineStyle: { type: 'dashed', color: 'rgb(255, 0, 0)' } },
                     { yAxis: min_val_1, name: '',label: {position: 'middle',formatter: 'low angle'}, lineStyle: { type: 'dashed', color: 'rgb(44,55,82)'  } },
-                    { yAxis: max_val_1, name: '',label: {position: 'middle',formatter: 'high angle'}, lineStyle: { type: 'dashed', color: 'rgb(44,55,82)'  } }    
+                    { yAxis: max_val_1, name: '',label: {position: 'middle',formatter: 'high angle'}, lineStyle: { type: 'dashed', color: 'rgb(44,55,82)'  } }       
                 ]
             }
         });
@@ -1272,7 +1179,7 @@ addMessage();
 
 <!----combine op----->
 
-<?php if ($path == "combinedata"){?>
+<?php if ($path == "combinedata" && $data['chat_mode'] != "6"){?>
 <script>
         var myChart_combine = echarts.init(document.getElementById('chart_combine'));
 
@@ -1296,22 +1203,14 @@ addMessage();
 
 
         var job_info_1 ='<?php echo $data['info_final'][1]['job_name'];?>';
+        
         var option = {
               tooltip: {
                 trigger: 'axis',
                 position: function (pt) {
                     return [pt[0], '10%'];
                 },
-               formatter: function (params) {
-                    var tooltipContent = ''; 
-                    for (var i = 0; i < params.length; i++) {
-                        var seriesName = params[i].seriesName; 
-                        var dataValue = params[i].value; 
-                        var color = params[i].color; 
-                        tooltipContent += '<span style="color:' + color + ';">' + job_info + ': ' + dataValue  +'</span><br>'; // 将曲线名称、数值和颜色拼接到tooltip内容中，并设置颜色样式
-                    }
-                    return tooltipContent; 
-                }
+                formatter: generateTooltipContent 
 
             },
             xAxis: {
@@ -1326,33 +1225,10 @@ addMessage();
                 name: ytitle,
                 boundaryGap: [0, '100%']
             },
-
-            dataZoom: [
-                {
-                    type: 'inside', 
-                    start: 0, 
-                    end: 100 
-                },
-                {
-                    show: false, // 顯示滑塊型的 dataZoom
-                    type: 'slider', // 滑塊型的 dataZoom 類型
-                    start: 0, // 初始的起始位置百分比
-                    end: 100, // 初始的結束位置百分比
-                    handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z', // 自定義滑塊的圖標
-                    handleSize: '80%', // 滑塊的大小
-                    handleStyle: {
-                        color: '#fff', // 滑塊的顏色
-                        shadowBlur: 3, // 滑塊的陰影模糊度
-                        shadowColor: 'rgba(0, 0, 0, 0)', // 滑塊的陰影顏色
-                        shadowOffsetX: 2, // 滑塊的陰影 X 方向偏移
-                        shadowOffsetY: 2 // 滑塊的陰影 Y 方向偏移
-                    }
-                }
-            ],
-
+            dataZoom: generateDataZoom(),//曲線圖的縮放設置
             series: [
                 {
-                    name: '', // 第一條曲線的名稱
+                    name: job_info, 
                     type: 'line',
                     symbol: 'none',
                     sampling: 'average',
@@ -1372,13 +1248,11 @@ addMessage();
                             }])
                         }
                     },
-                    lineStyle: {
-                        width: 0.75 
-                    },
+                    lineStyle: {width: 0.75},
                     data: y_data_val 
                 },
                 {
-                    name: '', 
+                    name: job_info_1, 
                     type: 'line',
                     symbol: 'none',
                     sampling: 'average',
@@ -1398,15 +1272,13 @@ addMessage();
                             }])
                         }
                     },
-                    lineStyle: {
-                        width: 0.75 
-                    },
+                    lineStyle: {width: 0.75},
                     data: y_data_val_1 
                 }
             ]
         };
 
-    //第一條曲線的上下限
+
     if (limit_val == 1) {
         option.series.push({
             type: 'line',
@@ -1414,29 +1286,160 @@ addMessage();
                 symbol: 'none',
                 data: [
                     { yAxis: min_val, name: '',label: {position: 'middle',formatter: 'low torque'},lineStyle: { type: 'dashed', color: 'rgb(255, 0, 0)' } }, 
-                    { yAxis: max_val, name: '',label: {position: 'middle',formatter: 'high torque'},lineStyle: { type: 'dashed', color: 'rgb(255, 0, 0)' } }   
-                ]
+                    { yAxis: max_val, name: '',label: {position: 'middle',formatter: 'high torque'},lineStyle: { type: 'dashed', color: 'rgb(255, 0, 0)' } },
+                    { yAxis: min_val_1, name: '',label: {position: 'middle',formatter: 'low torque'},lineStyle: { type: 'dashed', color: 'rgb(44,55,82)'  } },
+                    { yAxis: max_val_1, name: '',label: {position: 'middle',formatter: 'high torque'},lineStyle: { type: 'dashed', color: 'rgb(44,55,82)'  } }    
+                    
+                ]   
+                
             }
         });
     }
 
-    //第二條曲線的上下限
-    if (limit_val == 1) {
-        option.series.push({
-            type: 'line',
-            markLine: {
-                symbol: 'none',
-                data: [
-                    { yAxis: min_val_1, name: '',label: {position: 'middle',formatter: 'low torque'},lineStyle: { type: 'dashed', color: 'rgb(44,55,82)'  } },
-                    { yAxis: max_val_1, name: '',label: {position: 'middle',formatter: 'high torque'},lineStyle: { type: 'dashed', color: 'rgb(44,55,82)'  } }    
-                ]
-            }
-        });
-    }
     myChart_combine.setOption(option);
 
 </script>
-<?php } ?>
+<?php }else{?>
+<script>
+
+    //圖表1的資訊
+    var x_data_val         = <?php echo  $data['chart1_xcoordinate']; ?>;
+    var y_data_val         = <?php echo  $data['chart1_ycoordinate']; ?>;
+    var y_data_val_angle   = <?php echo  $data['chart1_ycoordinate_angle']; ?>;
+    var min_val = <?php echo $data['chart1_ycoordinate_min'];?>;
+    var max_val = <?php echo $data['chart1_ycoordinate_max'];?>;
+    var min_val_angle = <?php echo $data['chart1_ycoordinate_min_angle'];?>;
+    var max_val_angle = <?php echo $data['chart1_ycoordinate_max_angle'];?>;
+
+    //圖表2的資訊
+    var x_data_val_1 = <?php echo  $data['chart2_xcoordinate']; ?>;
+    var y_data_val_1 = <?php echo  $data['chart2_ycoordinate']; ?>;
+    var y_data_val_1_angle = <?php echo  $data['chart2_ycoordinate_angle']; ?>;
+    var min_val_1 = <?php echo $data['chart2_ycoordinate_min'];?>;
+    var max_val_1 = <?php echo $data['chart2_ycoordinate_max'];?>;
+
+    var min_val_1_angle = <?php echo $data['chart2_ycoordinate_min_angle'];?>;
+    var max_val_1_angle = <?php echo $data['chart2_ycoordinate_max_angle'];?>;
+
+
+    var job1 = '<?php echo $data['info_final'][0]['job_name'];?>';
+    var job2 = '<?php echo $data['info_final'][1]['job_name'];?>';
+
+    var myChart_combine = echarts.init(document.getElementById('chart_combine'));
+    var option = {
+    tooltip: {
+        trigger: 'axis',
+        position: function (pt) {
+            return [pt[0], '10%'];
+        },
+        formatter: generateTooltipContent 
+    },
+    xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        name: 'Time(Ms)', 
+        nameLocation: 'end', 
+        nameGap: 30, 
+        data: <?php echo $data['chart1_xcoordinate']; ?>
+    },
+    yAxis: [
+        {
+            type: 'value',
+            name: 'Torque',
+            position: 'left',
+            boundaryGap: [0, '100%']
+        },
+        {
+            type: 'value',
+            name: 'Angle',
+            position: 'right',
+            boundaryGap: [0, '100%']
+        }
+    ],
+    dataZoom: generateDataZoom(),//曲線圖的縮放設置
+    series: [
+        {
+            name: job1 + '_torque',
+            type: 'line',
+            yAxisIndex: 0, 
+            symbol: 'none',
+            sampling: 'average',
+            itemStyle: {
+                normal: {
+                    color: 'rgb(255, 0, 0)' 
+                }
+            },
+            data: <?php echo $data['chart1_ycoordinate']; ?>
+        },
+        {
+            name: job2 + '_torque',
+            type: 'line',
+            yAxisIndex: 0, 
+            symbol: 'none',
+            sampling: 'average',
+            itemStyle: {
+                normal: {
+                    color: 'rgb(44,55,82)'
+                }
+            },
+            data: <?php echo $data['chart2_ycoordinate']; ?>
+        },
+        {
+            name: job1 + '_angle',
+            type: 'line',
+            yAxisIndex: 1, 
+            symbol: 'none',
+            sampling: 'average',
+            itemStyle: {
+                normal: {
+                    color: 'rgb(255, 0, 0)' 
+                }
+            },
+            data: <?php echo $data['chart1_ycoordinate_angle']; ?>
+        },
+        {
+            name: job2 + '_angle',
+            type: 'line',
+            yAxisIndex: 1, 
+            symbol: 'none',
+            sampling: 'average',
+             itemStyle: {
+                normal: {
+                    color: 'rgb(44,55,82)' 
+                }
+            },
+            data: <?php echo $data['chart2_ycoordinate_angle']; ?>
+        }
+    ]
+};
+
+if (limit_val == 1) {
+    option.series.push({
+        type: 'line',
+        markLine: {
+            symbol: 'none',
+            data: [
+                { yAxis: min_val, name: '',label: {position: 'middle',formatter: 'low torque'},lineStyle: { type: 'dashed', color: 'rgb(255, 0, 0)' } }, 
+                { yAxis: max_val, name: '',label: {position: 'middle',formatter: 'high torque'},lineStyle: { type: 'dashed', color: 'rgb(255, 0, 0)' } },
+                { yAxis: min_val_1, name: '',label: {position: 'middle',formatter: 'low torque'},lineStyle: { type: 'dashed', color: 'rgb(44,55,82)'  } },
+                { yAxis: max_val_1, name: '',label: {position: 'middle',formatter: 'high torque'},lineStyle: { type: 'dashed', color: 'rgb(44,55,82)'  } },
+                { yAxis: min_val_angle, name: '',label: {position: 'middle',formatter: ''},lineStyle: { type: 'dashed', color: 'rgb(255, 0, 0)' } }, 
+                { yAxis: max_val_angle, name: '',label: {position: 'middle',formatter: ''},lineStyle: { type: 'dashed', color: 'rgb(255, 0, 0)' } },
+                { yAxis: min_val_1_angle, name: '',label: {position: 'middle',formatter: ''},lineStyle: { type: 'dashed', color: 'rgb(44,55,82)' } }, 
+                { yAxis: max_val_1_angle, name: '',label: {position: 'middle',formatter: ''},lineStyle: { type: 'dashed', color: 'rgb(44,55,82)' } }        
+                
+            ]   
+            
+        }
+    });
+}
+myChart_combine.setOption(option);
+
+    
+
+
+</script>
+<?php }?>
 <!----combine ed----->
 
 
@@ -1444,7 +1447,6 @@ addMessage();
 function chat_mode_change(selectOS){
     var selectElement = document.getElementById('chartseting');
     var selectedOptions = [];
-    // 獲取所有被選中的選項
     for (var i = 0; i < selectElement.options.length; i++) {
         var option = selectElement.options[i];
         if (option.selected) {
@@ -1468,7 +1470,6 @@ document.getElementById('downloadchartbtn').addEventListener('click', function()
     document.getElementById('chartseting').disabled = true;
     document.getElementById('Torque-Unit').disabled = true;
     document.getElementById('myCheckbox').disabled = true;
-    //document.getElementById('Angle').disabled = true;
 
     var disabledSelects = document.querySelectorAll('select[disabled]');
     disabledSelects.forEach(function(select) {
@@ -1503,58 +1504,5 @@ document.getElementById('downloadchartbtn').addEventListener('click', function()
     history.go(0);
 });
 
-document.getElementById('downlandpdf_combine').addEventListener('click', function(event) {
 
-    var divToRemove = document.getElementById('empty1');
-    var divToRemove2 = document.getElementById('chart-title');
-    
-    if(divToRemove) {
-        divToRemove.parentNode.removeChild(divToRemove);
-    }
-
-    if(divToRemove2) {
-        divToRemove2.parentNode.removeChild(divToRemove2);
-    }
-
-    document.getElementById('unit').disabled = true;
-    var disabledSelects = document.querySelectorAll('select[disabled]');
-    disabledSelects.forEach(function(select) {
-        select.style.color = '#808080'; 
-        select.style.backgroundColor = '#f0f0f0';
-    });
-
-    //取得圖表的base64編碼
-    var chartDataURL = myChart_combine.getDataURL({
-        pixelRatio: 2,
-        backgroundColor: '#fff' // 背景為白色
-    });
-
-    var divContent = document.getElementById('combinedata').outerHTML;
-    divContent = divContent.replace('force-overflow-Combine', 'photo');
-    var stylesheets = document.getElementsByTagName('link');
-    var cssString = Array.from(stylesheets)
-        .map(stylesheet => `<link rel="stylesheet" href="${stylesheet.href}">`)
-        .join('\n');
-    
-
-    // 取得圖表的base64編碼插入到HTML
-    var fullHTML = `<head>${cssString}</head>\n<body>${divContent}<img src="${chartDataURL}" alt="ECharts Chart" style="max-width: 100%; height: auto;"></body>`;
-    var blob = new Blob([fullHTML], { type: 'text/html' });
-
-    var link = document.createElement('a');
-    link.href = window.URL.createObjectURL(blob);
-    link.download = 'job_combine.html';
-    link.click();
-    history.go(0);
-
-    event.preventDefault();
-}, { passive: true });
-</script>
-<script>
-
-function chart444060_change(selectElement) {
-    var selectedValue = selectElement.value;
-    console.log("Selected value:", selectedValue);
-    // 在这里可以添加您想要执行的逻辑
-}
 </script>
