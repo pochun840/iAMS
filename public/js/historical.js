@@ -451,6 +451,7 @@ function nopage(){
     history.go(0);
 }
 
+
 //回到上一頁
 function goBack() {
     if (window.history.length > 1) {
