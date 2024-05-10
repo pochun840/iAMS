@@ -40,7 +40,7 @@ class Historicals extends Controller
         $res_status_arr = ['ALL', 'OK', 'OKALL', 'NG'];
         $res_controller_arr = ['GTCS', 'TCG'];
         $res_program = ['P1', 'P2', 'P3', 'P4'];
-        $torque_arr = $this->Historicals_newModel->torque_change();
+        $torque_arr = $this->Historicals_newModel->details('torque');
 
         #取得所有的job_id
         $job_arr = $this->Historicals_newModel->get_job_id();
@@ -88,7 +88,7 @@ class Historicals extends Controller
         $info = $this->Historicals_newModel->monitors_info($info_arr,$offset,$limit);
 
         #扭力轉換
-        $torque_arr = $this->Historicals_newModel->torque_change();
+        $torque_arr = $this->Historicals_newModel->details('torque');
 
         #STATUS轉換
         $status_arr = $this->Historicals_newModel->status_code_change();
@@ -155,7 +155,7 @@ class Historicals extends Controller
             $newKeys = range(0, 48); 
 
             #扭力轉換 
-            $torque_change = $this->Historicals_newModel->torque_change();
+            $torque_change = $this->Historicals_newModel->details('torque');
 
             #狀態轉換 
             $status_arr = $this->Historicals_newModel->status_code_change();
@@ -192,9 +192,6 @@ class Historicals extends Controller
         $mode_arr = array('ng_reason','fastening_status','job_info','statistics','bk');
 
         #NG REASON 
-
-        
-
         foreach($mode_arr as $key =>$val){
             
             if($val =="ng_reason"){
@@ -330,14 +327,10 @@ class Historicals extends Controller
                     $ok_all_counts[] = isset($ve1['ok_all_count']) ? $ve1['ok_all_count'] : 0;
                 }
 
-                
                 $ng_counts = array_map('intval', $ng_counts);
                 $ok_counts = array_map('intval', $ok_counts);
                 $ok_all_counts = array_map('intval', $ok_all_counts);
-
-
-                $data['statistics']['date'] = json_encode(array_keys($date_array)
-            );
+                $data['statistics']['date'] = json_encode(array_keys($date_array));
                 $data['statistics']['ng'] = json_encode($ng_counts);
                 $data['statistics']['ok'] = json_encode($ok_counts);
                 $data['statistics']['ok_all'] = json_encode($ok_all_counts);
@@ -469,7 +462,6 @@ class Historicals extends Controller
 
     public function combinedata(){
 
-        
         #取得下拉式選單的 chart
         $data['chat_mode'] = !empty($_GET['chart']) ? $_GET['chart'] : 1;
 
@@ -591,9 +583,7 @@ class Historicals extends Controller
                 $data['chart2_ycoordinate_min'] = floatval(min($temp_val1));
             }
 
-      
-
-
+    
             #設定曲線圖座標名稱
             $chartTypeDetails = $this->Historicals_newModel->details('chart_type');
             $data['chat_mode'] = (int)$data['chat_mode'];
@@ -639,8 +629,6 @@ class Historicals extends Controller
         return $ng_reason;
     }
 
-
-
     private function getMonitorsInfo($nopage, $offset, $limit){
         
         if($nopage == '0'){
@@ -650,7 +638,6 @@ class Historicals extends Controller
 
         return $this->Historicals_newModel->monitors_info("", $offset, $limit);
     }
-
 
     #nextinfo 整理曲線圖
     private function ChartData($chat_mode, $csvdata_arr, $unitvalue, $chat_mode_arr){

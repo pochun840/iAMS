@@ -114,8 +114,6 @@ class Historical{
 
     }
 
-    #查詢table 的所有欄位
-
 
     #刪除鎖附資料
     public function del_info($del_info_sn){
@@ -147,86 +145,89 @@ class Historical{
     #status 轉換
     public function status_code_change(){
 
-        $status_arr = array();
-        $status_arr[0] = 'INIT'; 
-        $status_arr[1] = 'READY';
-        $status_arr[2] = 'RUNNING';
-        $status_arr[3] = 'REVERSE';
-        $status_arr[4] = 'OK';
-        $status_arr[5] = 'OK-SEQ';
-        $status_arr[6] = 'OK-JOB';
-        $status_arr[7] = 'NG';
-        $status_arr[8] = 'NS';
-        $status_arr[9] = 'SETTING';
-        $status_arr[10] = 'EOC';
-        $status_arr[11] = 'C1';
-        $status_arr[12] = 'C1_ERR';
-        $status_arr[13] = 'C2';
-        $status_arr[14] = 'C2_ERR';
-        $status_arr[15] = 'C4';
-        $status_arr[16] = 'C4_ERR';
-        $status_arr[17] = 'C5';
-        $status_arr[18] = 'C5_ERR';
-        $status_arr[19] = 'BS';
+        $status_arr = array(
+            0 => 'INIT', 
+            1 => 'READY',
+            2 => 'RUNNING',
+            3 => 'REVERSE',
+            4 => 'OK',
+            5 => 'OK-SEQ',
+            6 => 'OK-JOB',
+            7 => 'NG',
+            8 => 'NS',
+            9 => 'SETTING',
+            10 => 'EOC',
+            11 => 'C1',
+            12 => 'C1_ERR',
+            13 => 'C2',
+            14 => 'C2_ERR',
+            15 => 'C4',
+            16 => 'C4_ERR',
+            17 => 'C5',
+            18 => 'C5_ERR',
+            19 => 'BS'
+        );
 
-        $status_arr_color = array();
-        $status_arr_color[0]= '';
-        $status_arr_color[1]= '';
-        $status_arr_color[2]= '';
-        $status_arr_color[3]= '#007AB8;';
-        $status_arr_color[4]= '#99CC66;'; 
-        $status_arr_color[5]= '#FFCC00;';
-        $status_arr_color[6]= '#FFCC00;';
-        $status_arr_color[7]= 'red;';
-        $status_arr_color[8]= 'red;';
-        $status_arr_color[9]= '';
-        $status_arr_color[10] = '';
-        $status_arr_color[11] = '';
-        $status_arr_color[12] = '';
-        $status_arr_color[13] = '';
-        $status_arr_color[14] = '';
-        $status_arr_color[15] = '';
-        $status_arr_color[16] = '';
-        $status_arr_color[17] = '';
-        $status_arr_color[18] = '';
-        $status_arr_color[19] = '';
+        $status_arr_color = array(
+            0 => '',
+            1 => '',
+            2 => '',
+            3 => '#007AB8;',
+            4 => '#99CC66;',
+            5 => '#FFCC00;',
+            6 => '#FFCC00;',
+            7 => 'red;',
+            8 => 'red;',
+            9 => '',
+            10 => '',
+            11 => '',
+            12 => '',
+            13 => '',
+            14 => '',
+            15 => '',
+            16 => '',
+            17 => '',
+            18 => '',
+            19 => ''
+        );
 
+        $error_msg = array(
+            0 => '',
+            1 => 'ERR-CONT-TEMP',
+            2 => 'ERR-MOT-TEMP',
+            3 => 'ERR-MOT-CURR',
+            4 => 'ERR-MOT-PEAK-CURR',
+            5 => 'ERR-HIGH-TORQUE',
+            6 => 'ERR-DEADLOCK',
+            7 => 'ERR-PROC-MINTIME',
+            8 => 'ERR-PROC-MAXTIME',
+            9 => 'ERR-ENCODER',
+            10 => 'ERR-HALL',
+            11 => 'ERR-BUSVOLT-HIGH',
+            12 => 'ERR-BUSVOLT-LOW',
+            13 => 'ERR-PROC-NA',
+            14 => 'ERR-STEP-NA',
+            15 => 'ERR-DMS-COMM',
+            16 => 'ERR-FLASH',
+            17 => 'ERR-FRAM',
+            18 => 'ERR-HIGH-ANGLE',
+            19 => 'ERR-PROTECT-CIRCUIT',
+            20 => 'ERR-SWITCH-CONFIG',
+            21 => 'ERR-STEP-NOT-REC',
+            22 => 'ERR-TMD-FRAM',
+            23 => 'ERR-LOW-TORQUE',
+            24 => 'ERR-LOW-ANGLE',
+            25 => 'ERR-PROC-NOT-FINISH',
+            26 => 'SEQ-COMPLETED',
+            27 => 'JOB-COMPLETED',
+            28 => 'WORKPIECE-RECOVERY'
+        );
 
-        $error_msg = array();
-        $error_msg[0] =  '';
-        $error_msg[1] = 'ERR-CONT-TEMP';
-        $error_msg[2] = 'ERR-MOT-TEMP';
-        $error_msg[3] = 'ERR-MOT-CURR';
-        $error_msg[4] = 'ERR-MOT-PEAK-CURR';
-        $error_msg[5] = 'ERR-HIGH-TORQUE';
-        $error_msg[6] = 'ERR-DEADLOCK';
-        $error_msg[7] = 'ERR-PROC-MINTIME';
-        $error_msg[8] = 'ERR-PROC-MAXTIME';
-        $error_msg[9] = 'ERR-ENCODER';
-        $error_msg[10] = 'ERR-HALL';
-        $error_msg[11] = 'ERR-BUSVOLT-HIGH';
-        $error_msg[12] = 'ERR-BUSVOLT-LOW';
-        $error_msg[13] = 'ERR-PROC-NA';
-        $error_msg[14] = 'ERR-STEP-NA';
-        $error_msg[15] = 'ERR-DMS-COMM';
-        $error_msg[16] = 'ERR-FLASH';
-        $error_msg[17] = 'ERR-FRAM';
-        $error_msg[18] = 'ERR-HIGH-ANGLE';
-        $error_msg[19] = 'ERR-PROTECT-CIRCUIT';
-        $error_msg[20] = 'ERR-SWITCH-CONFIG';
-        $error_msg[21] = 'ERR-STEP-NOT-REC';
-        $error_msg[22] = 'ERR-TMD-FRAM';
-        $error_msg[23] = 'ERR-LOW-TORQUE';
-        $error_msg[24] = 'ERR-LOW-ANGLE';
-        $error_msg[25] = 'ERR-PROC-NOT-FINISH';
-        $error_msg[26] = 'SEQ-COMPLETED';
-        $error_msg[27] = 'JOB-COMPLETED';
-        $error_msg[28] = 'WORKPIECE-RECOVERY';
-
-
-        $direction_arr = array();
-        $direction_arr[0] = "CW";
-        $direction_arr[1] = "CCW";
+   
+        $direction_arr = array(
+            0 => "CW",
+            1 => "CCW"
+        );
           
         $status_final = array();
         $status_final['status_type'] = $status_arr;
@@ -238,51 +239,6 @@ class Historical{
 
     }
 
-    # 扭力轉換
-    
-    public function torque_change(){
-        #0: 公斤米
-        #1: 牛頓米 起子預設是牛頓米
-        #2: 公斤公分
-        #3: 英鎊英寸
-
-
-        $torque = array();
-        $torque[0] = 'Kgf.m'; 
-        $torque[1] = 'N.m';
-        $torque[2] = 'Kgf.cm';
-        $torque[3] = 'In.lbs';
-    
-        return $torque;
-
-    }
-
-    public function unitConvert($value){
-        
-        #取出目前的單位 
-        #0: 公斤米
-        #1: 牛頓米
-        #2: 公斤公分
-        #3: 英鎊英寸
-        if(!empty($_COOKIE['unit_mode'])){
-            $unit_mode = $_COOKIE['unit_mode'];
-        }else{
-            $unit_mode = '';
-        }
-        
-
-
-        $torque = array();
-        $torque[0] = 'Kgf.m'; 
-        $torque[1] = 'N.m';
-        $torque[2] = 'Kgf.cm';
-        $torque[3] = 'In.lbs';
-    
-        return $torque;
-
-    }
-
-
     public function get_info_data($index){
         
         $sql = "SELECT * FROM `fasten_data` WHERE system_sn = ?";
@@ -293,27 +249,22 @@ class Historical{
         return  $res;
     }
 
-
     public function get_job_id(){
         
         $sql = "SELECT * FROM `fasten_data` WHERE job_id != '' AND on_flag = '0' ";
         $statement = $this->db->prepare($sql);
         $statement->execute();
         $result = $statement->fetchall(PDO::FETCH_ASSOC);
-
         return $result;
-
     }
     
     public function get_seq_id($job_id){
-      
+
         $sql = "SELECT * FROM `fasten_data` WHERE on_flag = '0' AND job_id = :job_id ";
         $params[':job_id'] = $job_id;
         $statement = $this->db->prepare($sql);
         $statement->execute($params);
-
         $result = $statement->fetchall(PDO::FETCH_ASSOC);
-
         return $result;
     }
 
@@ -354,7 +305,7 @@ class Historical{
 
 
     public function get_task_id($job_id, $seq_id) {
-        
+
         $sql = "SELECT * FROM `fasten_data` WHERE job_id = :job_id AND sequence_id = :sequence_id AND on_flag = '0'";
         $params[':job_id'] = $job_id;
         $params[':sequence_id'] = $seq_id;
@@ -624,8 +575,9 @@ class Historical{
     }
    
 
-    public function for_history($mode)
-    {
+    public function for_history($mode){
+        
+        
         $sql = '';
         $after_date = date('Ymd 23:59:59');
         $before_date = date('Ymd', strtotime('-7 days')) . ' 00:00:00';
@@ -749,6 +701,7 @@ class Historical{
         return $convertedValues;
     }
 
+    #處理chart的X軸&Y軸的座標
     public function extractXYTitles($titleString){
         $titles = explode("/", $titleString);
         return [
