@@ -306,7 +306,7 @@ class Historical{
     }
     
     public function get_seq_id($job_id){
-        //:sequence_id
+      
         $sql = "SELECT * FROM `fasten_data` WHERE on_flag = '0' AND job_id = :job_id ";
         $params[':job_id'] = $job_id;
         $statement = $this->db->prepare($sql);
@@ -352,17 +352,21 @@ class Historical{
 
     }
 
-    public function get_task_id($job_id,$seq_id){
 
-        $sql = "SELECT * FROM `fasten_data` WHERE job_id = '".$job_id."' AND sequence_id = '".$seq_id."' AND on_flag = '0' ";
+    public function get_task_id($job_id, $seq_id) {
+        
+        $sql = "SELECT * FROM `fasten_data` WHERE job_id = :job_id AND sequence_id = :sequence_id AND on_flag = '0'";
+        $params[':job_id'] = $job_id;
+        $params[':sequence_id'] = $seq_id;
         $statement = $this->db->prepare($sql);
-        $statement->execute();
-        $result = $statement->fetchall(PDO::FETCH_ASSOC);
+        $statement->execute($params);
 
+        $result = $statement->fetchall(PDO::FETCH_ASSOC);
         return $result;
     }
 
-    public function connected_ftp($no){
+
+    /*public function connected_ftp($no){
 
         #FTP連線相關資訊
         $ftp_server = "192.168.0.135";
@@ -435,7 +439,7 @@ class Historical{
 
         return $csvdata;
 
-    }
+    }*/
 
 
     public function chat_change($chat_mode)
@@ -495,8 +499,6 @@ class Historical{
 
         $file_arr = array('_0p5','_1p0','_2p0');#檔案格式
         $no_arr  = explode(',',$id);
-
-     
         foreach($no_arr as $key => $val){
             $name = 'data'.$key;
             if(!empty($val)){
