@@ -113,13 +113,11 @@ class Historical{
     #刪除鎖附資料
     public function del_info($del_info_sn){
         #20240401 修改成 update on_flag的資料(0:顯示 1:隱藏)
-
-        foreach($del_info_sn as $kk =>$vv){
-            $sql= "UPDATE fasten_data SET on_flag = '1' WHERE system_sn = ' ".$vv."' ";
+        foreach ($del_info_sn as $vv) {
+            $sql = "UPDATE fasten_data SET on_flag = '1' WHERE system_sn = ?";
             $statement = $this->db->prepare($sql);
-            $statement->execute();
-            $rows = $statement->fetchall(PDO::FETCH_ASSOC); 
-        } 
+            $statement->execute([$vv]);
+        }
         return $del_info_sn;
     }
     public function getTotalItemCount() {
@@ -298,10 +296,10 @@ class Historical{
 
     public function get_info_data($index){
         
-        $sql = "SELECT * FROM `fasten_data` WHERE    system_sn ='".$index."' ";
+        $sql = "SELECT * FROM `fasten_data` WHERE system_sn = ?";
         $statement = $this->db->prepare($sql);
-        $statement->execute();
-        $res = $statement->fetchall(PDO::FETCH_ASSOC);
+        $statement->execute([$index]);
+        $res = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         return  $res;
     }
@@ -450,58 +448,53 @@ class Historical{
     }
 
 
-    public function chat_change($chat_mode){
-
-        /*
-        $position = 1 (扭力)
-        $position = 2 (角度)
-        $position = 3 (轉速)
-        $position = 4 (功率)
-        $position = 5 (扭力) 
-        */ 
-        
+    public function chat_change($chat_mode)
+    {
         $chat_arr = array();
-        if($chat_mode =="1"){
-            $chat_name = "Torque/Time";
-            $position = 1;  
-            $yaxis_title = "Torque";
-            $xaxis_title = "Time(MS)";
-        }else if($chat_mode =="2"){
-            $chat_name = "Angle/Time";
-            $position = 2;  
-            $yaxis_title = "Angle";
-            $xaxis_title = "Time(MS)";
-        }else if($chat_mode =="3"){
-            $chat_name = "RPM/Time";
-            $position = 3;  
-            $yaxis_title = "RPM";
-            $xaxis_title = "Time(MS)";
-        }else if($chat_mode =="4"){
-            $chat_name = "Power/Time";
-            $position = 4;  
-            $yaxis_title = "Power";
-            $xaxis_title = "Time(MS)";
-        }else if($chat_mode =="5"){
-            $chat_name = "Torque/Angle";
-            $position = '5';  
-            $yaxis_title = "Torque";
-            $xaxis_title = "Angle";
-
-        }else{
-            $chat_name = "Torque&Angle/Time";
-            $position = '6';  
-            $yaxis_title = "Torque/Angle";
-            $xaxis_title = "Time(MS)";
-
-
+        switch ($chat_mode){
+            case "1":
+                $chat_name = "Torque/Time";
+                $position = 1;
+                $yaxis_title = "Torque";
+                $xaxis_title = "Time(MS)";
+                break;
+            case "2":
+                $chat_name = "Angle/Time";
+                $position = 2;
+                $yaxis_title = "Angle";
+                $xaxis_title = "Time(MS)";
+                break;
+            case "3":
+                $chat_name = "RPM/Time";
+                $position = 3;
+                $yaxis_title = "RPM";
+                $xaxis_title = "Time(MS)";
+                break;
+            case "4":
+                $chat_name = "Power/Time";
+                $position = 4;
+                $yaxis_title = "Power";
+                $xaxis_title = "Time(MS)";
+                break;
+            case "5":
+                $chat_name = "Torque/Angle";
+                $position = '5';
+                $yaxis_title = "Torque";
+                $xaxis_title = "Angle";
+                break;
+            default:
+                $chat_name = "Torque&Angle/Time";
+                $position = '6';
+                $yaxis_title = "Torque/Angle";
+                $xaxis_title = "Time(MS)";
+                break;
         }
 
-        if(!empty($chat_name)){
+        if (!empty($chat_name)) {
             $chat_arr['chat_name'] = $chat_name;
             $chat_arr['position']  = $position;
             $chat_arr['yaxis_title']  = $yaxis_title;
             $chat_arr['xaxis_title'] = $xaxis_title;
-
         }
 
         return $chat_arr;

@@ -226,29 +226,24 @@ class Historicals extends Controller
         }     
     }
 
-     #鎖附資料 圖表 
-     public function history_result(){
+  
+    #鎖附資料 圖表 
+    public function history_result(){
         
         $data = array();
         $status_arr = $this->Historicals_newModel->status_code_change();
-        $mode_arr = array('ng_reason','fastening_status','job_info','statistics');
+        $mode_arr = array('ng_reason','fastening_status','job_info','statistics','bk');
 
         #NG REASON 
 
-        foreach($mode_arr as $key =>$val){
+        
 
+        foreach($mode_arr as $key =>$val){
+            
             if($val =="ng_reason"){
                 $ng_reason_temp = $this->Historicals_newModel->for_api_test($val);
                 if(!empty($ng_reason_temp)){
-
-                    foreach($ng_reason_temp as $key1 =>$val1){
-                        $ng_reason_temp[$key1]['error_msg_name'] = $status_arr['error_msg'][$val1['error_message']];
-                    }
-        
-                    $ng_reason = array();
-                    foreach ($ng_reason_temp as $item) {
-                        $ng_reason[] = array('value' => $item['total'], 'name' => $item['error_msg_name']);
-                    }
+                    $ng_reason = $this->processNgReasonData($ng_reason_temp, $status_arr);
                     $data['ng_reason_json'] = json_encode($ng_reason);
                 }
             }
@@ -305,12 +300,18 @@ class Historicals extends Controller
                 $start_date = date('Y-m-d', strtotime('-7 days'));
                 $end_date = date('Y-m-d');
 
-                $date_array = array();
+                // 初始化日期陣列
+                $date_array = [];
                 for ($date = strtotime($start_date); $date <= strtotime($end_date); $date = strtotime('+1 day', $date)) {
                     $formatted_date = date('Ymd', $date);
-                    $date_array[$formatted_date] = null;
+                    $date_array[$formatted_date] = [
+                        'ng_count' => 0,
+                        'ok_count' => 0,
+                        'ok_all_count' => 0
+                    ];
                 }
-                $combined_statistics = [];
+
+
                 #OK
                 $statistics_ok_temp = $this->Historicals_newModel->for_api_test('statistics_ok'); 
                 if(!empty($statistics_ok_temp)){
@@ -342,71 +343,44 @@ class Historicals extends Controller
                 }     
              
                 $type_arr  = $statistics_ok_temp + $statistics_ng_temp + $statistics_okall_temp;
-                if(!empty($type_arr)){
-                    foreach($type_arr as $kd =>$vd){
-                        foreach($statistics_okall_temp as $kd1 =>$vd1)
-                        {
-                            if($kd1 == $kd){
-                                $type_arr[$kd]['ok_all_count'] = $vd1['ok_all_count'];
-                            }
-                        }
+                if (!empty($type_arr)) {
+                    foreach ($type_arr as $kd => &$vd) {
 
-                        if(empty($vd['ng_count'])){
-                            $type_arr[$kd]['ng_count'] = 0;
-                        }
-                        if(empty($vd['ok_count'])){
-                            $type_arr[$kd]['ok_count'] = 0;
-                        }  
-                        
-                        unset($type_arr[$kd]['fasten_status']);
-                        unset($type_arr[$kd]['status_count']);
-               
-                    } 
-
-                    foreach($type_arr as $kw =>$vw){
-                        if(empty($vw['ok_all_count'])){
-                            $type_arr[$kw]['ok_all_count'] = 0;
+                        $vd['ok_all_count'] = $statistics_okall_temp[$kd]['ok_all_count'] ?? 0;
+                        $vd['ng_count'] = $vd['ng_count'] ?? 0;
+                        $vd['ok_count'] = $vd['ok_count'] ?? 0;
+                        unset($vd['fasten_status']);
+                        unset($vd['status_count']);
+                    }
+                
+                    foreach ($type_arr as &$vd) {
+                        if (!isset($vd['ok_all_count'])) {
+                            $vd['ok_all_count'] = 0;
                         }
                     }
                 }
                 
-
                 #陣列合併
-                foreach($date_array as $ke1 =>$ve1){
-                    foreach($type_arr as $ke2 =>$ve2){
-                        if($ke1 == $ke2){
-                            $date_array[$ke1]=$ve2;
-                            unset($date_array[$ke1]['date']); 
+                foreach ($date_array as $ke1 => &$ve1) {
+                    foreach ($type_arr as $ke2 => $ve2) {
+                        if ($ke1 == $ke2) {
+                            $ve1 = array_merge($ve1, $ve2);
+                            unset($ve1['date']); 
                         }
                     }
+                    $ng_counts[] = isset($ve1['ng_count']) ? $ve1['ng_count'] : 0;
+                    $ok_counts[] = isset($ve1['ok_count']) ? $ve1['ok_count'] : 0;
+                    $ok_all_counts[] = isset($ve1['ok_all_count']) ? $ve1['ok_all_count'] : 0;
                 }
 
-                foreach($date_array as $k3 =>$v3){
-                     if(empty($v3['ng_count'])){
-                        $date_array[$k3]['ng_count'] = 0;
-                        $ng_counts[] = 0; 
-                     }else{
-                        $ng_counts[] = $v3['ng_count'];
-                     }
-
-                     if(empty($v3['ok_count'])){
-                        $date_array[$k3]['ok_count'] = 0;
-                        $ok_counts[] = 0;
-                     }else{
-                        $ok_counts[] = $v3['ok_count'];
-                     }
-
-                     if(empty($v3['ok_all_count'])){
-                        $date_array[$k3]['ok_all_count'] = 0;
-                        $ok_all_counts[] = 0;
-                     }else{
-                        $ok_all_counts[] = $v3['ok_all_count'];
-                     }
-                }
+                
                 $ng_counts = array_map('intval', $ng_counts);
                 $ok_counts = array_map('intval', $ok_counts);
                 $ok_all_counts = array_map('intval', $ok_all_counts);
-                $data['statistics']['date'] = json_encode(array_keys($date_array));
+
+
+                $data['statistics']['date'] = json_encode(array_keys($date_array)
+            );
                 $data['statistics']['ng'] = json_encode($ng_counts);
                 $data['statistics']['ok'] = json_encode($ok_counts);
                 $data['statistics']['ok_all'] = json_encode($ok_all_counts);
@@ -430,102 +404,52 @@ class Historicals extends Controller
 
 
  
-    public function nextinfo($index){
-        
-        if(!empty($index)){
+    public function nextinfo($index) {
+
+        if(!empty($index)) {
             $data = array();
-
-            #取得該筆的詳細資料
+    
+            #取得詳細資料
             $data['job_info'] = $this->Historicals_newModel->get_info_data($index);
-            #判斷 有無cookie chat_mode 
-            if(isset($_COOKIE['chat_mode_change'])) {
-                $chat_mode = $_COOKIE['chat_mode_change'];
-            }else{
-                $chat_mode = "1";
-            }
-
-
-            if(!empty($_GET['unitvalue'])){
-                $unitvalue = $_GET['unitvalue'];
-            }else{
-                $data['job_info'][0]['torque_unit'] = (int)$data['job_info'][0]['torque_unit'];
-                $unitvalue =  $data['job_info'][0]['torque_unit'];
-
-            }
-
+    
+            #檢查chat_mode cookie
+            $chat_mode = isset($_COOKIE['chat_mode_change']) ? $_COOKIE['chat_mode_change'] : "1";
+    
+            #取得unitvalue
+            $unitvalue = isset($_GET['unitvalue']) ? $_GET['unitvalue'] : $data['job_info'][0]['torque_unit'];
+    
             $data['unitvalue'] = $unitvalue;
-
+    
             #曲線圖模式
             $chat_mode_arr = $this->Historicals_newModel->details('chart_type');
-
+            $data['chat_mode_arr'] = $chat_mode_arr;
+    
+            #取得圖表模式
             $chat_arr = $this->Historicals_newModel->chat_change($chat_mode);
             $data['chat'] = $chat_arr;
-
-
-
+    
+            #取得完整的資料
             $no = "0533";
-            $csvdata_arr   = $this->Historicals_newModel->get_info($no,$chat_mode);//取得 完整的資料
+            $csvdata_arr = $this->Historicals_newModel->get_info($no, $chat_mode);
+            $data['chart_info'] = $this->ChartData($chat_mode, $csvdata_arr, $unitvalue, $chat_mode_arr);
+    
+
+            #狀態列表
             $status_arr = $this->Historicals_newModel->status_code_change();
+            $data['status_arr'] = $status_arr;
 
+            
+            $torque_mode_arr = $this->Historicals_newModel->details('torque');
+            $data['torque_mode_arr'] = $torque_mode_arr;
+    
 
-            #扭力的單位選擇
-            $torque_mode_arr = $this->Historicals_newModel->details('torque');          
-
-           
-            #整理曲線圖的資訊
-            if($chat_mode == "5"){
-
-                if(!empty($csvdata_arr['angle'])){
-
-                    $data['chart_info']['x_val'] = json_encode($csvdata_arr['angle']);
-                    $data['chart_info']['y_val'] = json_encode($csvdata_arr['torque']);
-                    $data['chart_info']['max'] = max($csvdata_arr['torque']);
-                    $data['chart_info']['min'] = min($csvdata_arr['torque']);
-                }
-
-            }elseif($chat_mode == "6"){
-
-                $data['chart_info']['x_val'] = json_encode(array_keys($csvdata_arr['torque']));
-                $data['chart_info']['y_val'] = json_encode($csvdata_arr['torque']);
-                $data['chart_info']['y_val_1'] = json_encode($csvdata_arr['angle']);
-                $data['chart_info']['max'] = max($csvdata_arr['torque']);
-                $data['chart_info']['min'] = min($csvdata_arr['torque']);
-                $data['chart_info']['max1'] = max($csvdata_arr['angle']);
-                $data['chart_info']['min1'] = min($csvdata_arr['angle']);
-
-            }else{
-
-                if(($chat_mode == "1" || $chat_mode == "3" || $chat_mode == "4") && $unitvalue != "1"){
-
-                    $TransType = $unitvalue;
-                    $torValues = $csvdata_arr;
-                    $temp_val = $this->Historicals_newModel->unitarr_change($torValues, 1, $TransType);
-                    $data['chart_info']['y_val'] = json_encode($temp_val);
-                    $data['chart_info']['max'] = max($temp_val);
-                    $data['chart_info']['min'] = min($temp_val);
-
-                }else{
-
-                    $data['chart_info']['y_val'] = json_encode($csvdata_arr);
-                    $data['chart_info']['max'] = max($csvdata_arr);
-                    $data['chart_info']['min'] = min($csvdata_arr);
-                }
-
-                $data['chart_info']['x_val'] = json_encode(array_keys($csvdata_arr));
-            }
-
-
-
+    
             #設定曲線圖的座標名稱
-            $chat_mode  = (int)$chat_mode;
-            $lineTitle = isset($chat_mode_arr[$chat_mode]) ? $chat_mode_arr[$chat_mode] : '';
-            $titles = $this->Historicals_newModel->extractXYTitles($lineTitle);
+            $titles = $this->Historicals_newModel->extractXYTitles($data['chart_info']['chat_title']);
             $data['chart_info']['x_title'] = $titles['x_title'];
             $data['chart_info']['y_title'] = $titles['y_title'];
-
-            $data['chat_mode_arr'] = $chat_mode_arr;
-            $data['torque_mode_arr'] = $torque_mode_arr;
-            $data['status_arr'] = $status_arr;
+    
+    
             $data['chart_info']['chat_mode'] = $chat_mode;
             $data['nav'] = $this->NavsController->get_nav();
             $data['nopage'] = 0;
@@ -595,7 +519,6 @@ class Historicals extends Controller
 
         #設置 TransType
         $TransType = $data['unit'];
-
 
         # 透過cookie 取得已被勾選的id
         if(!empty($_COOKIE['checkedsn'])){
@@ -746,5 +669,63 @@ class Historicals extends Controller
         } else {
             return $final_label_data;
         }
+    }
+
+    private function processNgReasonData($ng_reason_temp, $status_arr) {
+        $ng_reason = [];
+        foreach ($ng_reason_temp as $item) {
+            $error_msg_name = $status_arr['error_msg'][$item['error_message']];
+            $ng_reason[] = ['value' => $item['total'], 'name' => $error_msg_name];
+        }
+        return $ng_reason;
+    }
+
+
+    #nextinfo 整理曲線圖
+    private function ChartData($chat_mode, $csvdata_arr, $unitvalue, $chat_mode_arr){
+        $data = array();
+        
+        if($chat_mode == "5"){
+    
+            if(!empty($csvdata_arr['angle'])){
+
+                $data['x_val'] = json_encode($csvdata_arr['angle']);
+                $data['y_val'] = json_encode($csvdata_arr['torque']);
+                $data['max'] = max($csvdata_arr['torque']);
+                $data['min'] = min($csvdata_arr['torque']);
+            }
+
+        }else if($chat_mode == "6"){
+     
+            $data['x_val'] = json_encode(array_keys($csvdata_arr['torque']));
+            $data['y_val'] = json_encode($csvdata_arr['torque']);
+            $data['y_val_1'] = json_encode($csvdata_arr['angle']);
+            $data['max'] = max($csvdata_arr['torque']);
+            $data['min'] = min($csvdata_arr['torque']);
+            $data['max1'] = max($csvdata_arr['angle']);
+            $data['min1'] = min($csvdata_arr['angle']);
+
+        }else{
+
+            if(($chat_mode == "1" || $chat_mode == "3" || $chat_mode == "4") && $unitvalue != "1"){
+            
+                $TransType = $unitvalue;
+                $torValues = $csvdata_arr;
+                $temp_val = $this->Historicals_newModel->unitarr_change($torValues, 1, $TransType);
+                $data['y_val'] = json_encode($temp_val);
+                $data['max'] = max($temp_val);
+                $data['min'] = min($temp_val);
+
+            }else{
+
+                $data['y_val'] = json_encode($csvdata_arr);
+                $data['max'] = max($csvdata_arr);
+                $data['min'] = min($csvdata_arr);
+            }
+            $data['x_val'] = json_encode(array_keys($csvdata_arr));
+        }
+    
+        $data['chat_title'] = $chat_mode_arr[(int)$chat_mode] ?? '';
+        return $data;
     }
 }
