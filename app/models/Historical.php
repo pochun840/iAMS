@@ -33,27 +33,23 @@ class Historical{
     #取得鎖附的資料
     public function monitors_info($info_arr,$offset=0, $limit){
 
-
+        $params = array();
         $sql = "SELECT * FROM `fasten_data` WHERE    on_flag ='0' ";
-
         #barcodesn 
         if(!empty($info_arr['barcodesn'])){
-            $sql.=" AND  cc_barcodesn = '".$info_arr['barcodesn']."'";
+            $sql .= " AND cc_barcodesn = :barcodesn";
+            $params['barcodesn'] = $info_arr['barcodesn'];
         }
 
-
-        #systemsn 
-        if(!empty($info_arr['system_sn'])){
-            $sql.=" AND  system_sn = '".$info_arr['system_sn']."'";
-        }
 
         #日期
         if(!empty($info_arr['fromdate']) && !empty($info_arr['todate'])){
-
             $info_arr['fromdate'] = str_replace("-","",$info_arr['fromdate'])." 00:00:00";
             $info_arr['todate']   = str_replace("-","",$info_arr['todate'])." 23:59:59";
 
-            $sql.=" AND data_time BETWEEN  '".$info_arr['fromdate']."' AND  '".$info_arr['todate']."'  ";
+            $sql .= " AND data_time BETWEEN :fromdate AND :todate"; 
+            $params['fromdate'] = $info_arr['fromdate'];
+            $params['todate'] = $info_arr['todate'];
         }
 
         #鎖附狀態(ALL & OK & OKALL & NG)
@@ -77,30 +73,41 @@ class Historical{
         }
 
         #search_name(模糊搜尋)
-        if(!empty($info_arr['sname'])){
-            $sql.=" AND job_name  LIKE '%{$info_arr['sname']}%'  OR sequence_name LIKE '%{$info_arr['sname']}%' OR  cc_task_name LIKE '%{$info_arr['sname']}%' OR cc_barcodesn LIKE '%{$info_arr['sname']}%'";
+        if (!empty($info_arr['sname'])) {
+            $sql .= " AND (job_name LIKE :sname OR sequence_name LIKE :sname OR cc_task_name LIKE :sname OR cc_barcodesn LIKE :sname)";
+            $params[':sname'] = '%' . $info_arr['sname'] . '%';
         }
       
 
         #job_id && seq_id && task_id 
         if(!empty($info_arr['job_id'][0]) && empty($info_arr['sequence_id'][0]) && empty($info_arr['cc_task_id'][0])) {
 
-            $sql .=" AND job_id = '".$info_arr['job_id'][0]."' ";
+            $sql .= " AND job_id = :job_id";
+            $params[':job_id'] = $info_arr['job_id'][0];
         }
 
         if(!empty($info_arr['job_id'][0]) && !empty($info_arr['sequence_id'][0]) && empty($info_arr['cc_task_id'][0])) {
 
-            $sql .=" AND job_id = '".$info_arr['job_id'][0]."' AND sequence_id = '".$info_arr['sequence_id'][0]."' ";
+            $sql .= " AND job_id = :job_id AND sequence_id = :sequence_id";
+            $params[':job_id'] = $info_arr['job_id'][0];
+            $params[':sequence_id'] = $info_arr['sequence_id'][0];
         }
 
         if(!empty($info_arr['job_id'][0]) && !empty($info_arr['sequence_id'][0]) && !empty($info_arr['cc_task_id'][0])) {
-
-            $sql .=" AND job_id = '".$info_arr['job_id'][0]."' AND sequence_id = '".$info_arr['sequence_id'][0]."' AND  cc_task_id = '".$info_arr['cc_task_id'][0]."' ";
+            $sql .= " AND job_id = :job_id AND sequence_id = :sequence_id AND cc_task_id =:cc_task_id";
+            $params[':job_id'] = $info_arr['job_id'][0];
+            $params[':sequence_id'] = $info_arr['sequence_id'][0];
+            $params[':cc_task_id'] = $info_arr['cc_task_id'][0];
+        
         }
-        $sql.=" order by data_time desc limit '".$offset."','".$limit."' ";
+
+        $sql .= " ORDER BY data_time DESC LIMIT :offset, :limit";
+        $params[':offset'] = $offset;
+        $params[':limit'] = $limit;
 
         $statement = $this->db->prepare($sql);
-        $statement->execute();
+        $statement->execute($params);
+
         $rows = $statement->fetchall(PDO::FETCH_ASSOC);
 
         return $rows;
@@ -113,13 +120,16 @@ class Historical{
     #刪除鎖附資料
     public function del_info($del_info_sn){
         #20240401 修改成 update on_flag的資料(0:顯示 1:隱藏)
+        $sql = "UPDATE fasten_data SET on_flag = '1' WHERE system_sn = ?";
+        $statement = $this->db->prepare($sql);
+        
         foreach ($del_info_sn as $vv) {
-            $sql = "UPDATE fasten_data SET on_flag = '1' WHERE system_sn = ?";
-            $statement = $this->db->prepare($sql);
             $statement->execute([$vv]);
         }
+        
         return $del_info_sn;
     }
+
     public function getTotalItemCount() {
 
         $sql = "SELECT COUNT(*) as total_count FROM fasten_data order by data_time desc  ";
@@ -132,28 +142,7 @@ class Historical{
         return $total_count;
     }
 
-    #api
-    public function for_api($essential){
-        
-        
-
-        $sql = "SELECT * FROM `fasten_data` WHERE  on_flag = '0' ";
-        #列出所有error_message
-        if($essential['mode' ] == "ng_reason"){
-            //$sql = "SELECT error_message  FROM `fasten_data` WHERE  on_flag = '0' ";
-            $sql.= "AND fasten_status in('7','8')";
-        }
-
-        $sql.= " ORDER BY data_time DESC ";
-        $statement = $this->db->prepare($sql);
-        $statement->execute();
-        $result = $statement->fetchall(PDO::FETCH_ASSOC);
-
-        return $result; 
-
-
-    }
-
+    
 
     #status 轉換
     public function status_code_change(){
@@ -317,15 +306,16 @@ class Historical{
     }
     
     public function get_seq_id($job_id){
-
-        $sql = "SELECT * FROM `fasten_data` WHERE job_id = '".$job_id."' AND on_flag = '0' ";
+        //:sequence_id
+        $sql = "SELECT * FROM `fasten_data` WHERE on_flag = '0' AND job_id = :job_id ";
+        $params[':job_id'] = $job_id;
         $statement = $this->db->prepare($sql);
-        $statement->execute();
+        $statement->execute($params);
+
         $result = $statement->fetchall(PDO::FETCH_ASSOC);
 
         return $result;
     }
-
 
     public function details($mode){
 
@@ -632,107 +622,53 @@ class Historical{
     }
    
 
-    public function for_api_test($mode){
-        
-        //$sql = "SELECT * FROM `fasten_data` WHERE  on_flag = '0' ";
-        #列出所有error_message
-        if($mode == "ng_reason"){
-            $sql = "SELECT error_message,fasten_status,count(fasten_status)AS total   FROM `fasten_data` WHERE  on_flag = '0' ";
-            $sql.= "AND fasten_status in('7','8')";
-            $sql.= " GROUP BY error_message, fasten_status";
-            $sql.= " ORDER BY data_time DESC ";
-        }
+    public function for_history($mode)
+    {
+        $sql = '';
+        $after_date = date('Ymd 23:59:59');
+        $before_date = date('Ymd', strtotime('-7 days')) . ' 00:00:00';
 
-        if($mode == "fastening_status"){
-            $sql = "SELECT fasten_status,count(fasten_status)AS total   FROM `fasten_data` WHERE  on_flag = '0' ";
-            $sql.= "AND fasten_status !=''";
-            $sql.= " GROUP BY fasten_status";
-            $sql.= " ORDER BY data_time DESC ";
-        }
+        switch ($mode) {
 
-        if($mode =="job_info"){
-            $sql ="SELECT fasten_time, job_name FROM `fasten_data` WHERE on_flag='0' order by data_time DESC";
+            case "ng_reason":
+                $sql = "SELECT error_message,fasten_status,count(fasten_status) AS total FROM `fasten_data` WHERE on_flag = '0' AND fasten_status IN ('7','8') GROUP BY error_message, fasten_status ORDER BY data_time DESC";
+            break;
 
-        }
+            case "fastening_status":
+                $sql = "SELECT fasten_status,count(fasten_status) AS total FROM `fasten_data` WHERE on_flag = '0' AND fasten_status != '' GROUP BY fasten_status ORDER BY data_time DESC";
+            break;
 
-        if($mode =="statistics_ng"){
+            case "job_info":
+                $sql = "SELECT fasten_time, job_name FROM `fasten_data` WHERE on_flag = '0' ORDER BY data_time DESC";
+            break;
 
-            $after_date  = date('Ymd 23:59:59');
-            $before_date = date('Ymd', strtotime('-7 days')) . ' 00:00:00';
+            case "statistics_ng":
+                $sql = "SELECT substr(data_time, 1, 8) AS date, fasten_status, COUNT(*) AS status_count FROM fasten_data WHERE data_time BETWEEN '".$before_date."' AND '".$after_date."' AND on_flag = '0' AND fasten_status IN ('7','8') GROUP BY substr(data_time, 1, 10), fasten_status";
+            break;
 
-            $sql ="SELECT 
-                substr(data_time, 1, 8) AS date,
-                fasten_status,
-                COUNT(*) AS status_count
-            FROM fasten_data
-            WHERE data_time between '". $before_date."' AND '".$after_date."' 
-            AND on_flag = '0'  AND  fasten_status IN('7','8')
-            GROUP BY substr(data_time, 1, 10), fasten_status;";
-    
-        }
+            case "statistics_ok":
+                $sql = "SELECT substr(data_time, 1, 8) AS date, fasten_status, COUNT(*) AS status_count FROM fasten_data WHERE data_time BETWEEN '".$before_date."' AND '".$after_date."' AND on_flag = '0' AND fasten_status IN ('4') GROUP BY substr(data_time, 1, 10), fasten_status";
+            break;
 
-        if($mode =="statistics_ok"){
+            case "statistics_okall":
+                $sql = "SELECT substr(data_time, 1, 8) AS date, fasten_status, COUNT(*) AS status_count FROM fasten_data WHERE data_time BETWEEN '".$before_date."' AND '".$after_date."' AND on_flag = '0' AND fasten_status IN ('5','6') GROUP BY substr(data_time, 1, 10), fasten_status";
+            break;
 
-            $after_date  = date('Ymd 23:59:59');
-            $before_date = date('Ymd', strtotime('-7 days')) . ' 00:00:00';
-
-            $sql ="SELECT 
-                substr(data_time, 1, 8) AS date,
-                fasten_status,
-                COUNT(*) AS status_count
-            FROM fasten_data
-            WHERE data_time between '". $before_date."' AND '".$after_date."' 
-            AND on_flag = '0'  AND  fasten_status IN('4')
-            GROUP BY substr(data_time, 1, 10), fasten_status;";
-    
-        }
-
-        if($mode =="statistics_okall"){
-
-            $after_date  = date('Ymd 23:59:59');
-            $before_date = date('Ymd', strtotime('-7 days')) . ' 00:00:00';
-
-            $sql ="SELECT 
-                substr(data_time, 1, 8) AS date,
-                fasten_status,
-                COUNT(*) AS status_count
-            FROM fasten_data
-            WHERE data_time between '". $before_date."' AND '".$after_date."' 
-            AND on_flag = '0'  AND  fasten_status IN('5','6')
-            GROUP BY substr(data_time, 1, 10), fasten_status;";
-
-          
-    
-        }
-
-        if($mode =="job_time"){
-            $sql ="SELECT 
-            job_id, 
-            COUNT(job_id) AS duplicate_count,
-            job_name,
-            fasten_time,  
-            SUM(fasten_time) AS total_fasten_time,
-            AVG(fasten_time) AS average_fasten_time
-            FROM 
-                fasten_data 
-            WHERE 
-                on_flag = 0 
-                AND step_targettype IN ('1','2')
-            GROUP BY 
-                job_id 
-            HAVING 
-                COUNT(job_id) > 1 
-            ORDER BY 
-                data_time DESC ";
-        
+            case "job_time":
+                $sql = "SELECT job_id, COUNT(job_id) AS duplicate_count, job_name, fasten_time, SUM(fasten_time) AS total_fasten_time, AVG(fasten_time) AS average_fasten_time FROM fasten_data WHERE on_flag = 0 AND step_targettype IN ('1','2') GROUP BY job_id HAVING COUNT(job_id) > 1 ORDER BY data_time DESC";
+            break;
+            default:
+                
+            break;
         }
 
         $statement = $this->db->prepare($sql);
         $statement->execute();
-        $result = $statement->fetchall(PDO::FETCH_ASSOC);
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         return $result; 
     }
+
 
     //扭力單位的轉換
     public function unitarr_change($torValues, $inputType, $TransType){

@@ -15,77 +15,35 @@ class Historicals extends Controller
         $this->Historicals_newModel = $this->model('Historical');
     }
 
-    // 取得所有Jobs
-    public function index($page){
-        if (isset($_COOKIE["nopage"])){
-            $nopage = $_COOKIE["nopage"];
-        }else{
-            $nopage ="0";
+    public function index($page)
+    {
+        $nopage = isset($_COOKIE["nopage"]) ? $_COOKIE["nopage"] : "0";
+        $limit = 30;
+        $offset = 0;
+        $totalPages = 0;
 
-        }
-        //0 =>不分頁 1=>分頁
-        //檢查有無判斷分頁的cookie 
-        if ($nopage =="0") {
-            //不要分頁
-            $offset = 0;
-            $limit  = 100000000;
-            $nopage ='0';
-            $totalPages = 0;
-
-        } else {
-           
-            //要分頁
-            $nopage ='1';
-             
-            #當前的頁數，默認為第1頁
+        if($nopage == "1") {
             $page = isset($_GET['p']) ? $_GET['p'] : 1;
-
-            #每頁顯示的筆數
-            $limit = 30;
-
-            #計算數量
             $offset = ($page - 1) * $limit;
+            $totalItems = $this->Historicals_newModel->getTotalItemCount();
 
-            #取得總筆數
-            $totalItems  = "";
-            $totalItems  = $this->Historicals_newModel->getTotalItemCount();
-
-            #計算總頁數
-            if(!empty($totalItems)){
+            if (!empty($totalItems)) {
                 $totalPages = ceil($totalItems / $limit);
             }
-
         }
 
-       
-        #取得預設的鎖附資料
-        $info_arr = "";
-        $info = $this->Historicals_newModel->monitors_info($info_arr,$offset, $limit);
-
+        #資料取得
+        $info = $this->getMonitorsInfo($nopage, $offset, $limit);
         $isMobile = $this->isMobileCheck();
         $nav = $this->NavsController->get_nav();
-
-        #人員權限列表
-        $all_roles = $this->UserModel->GetAllRole();
-        $all_roles = array_slice($all_roles,0,3);
-    
-        #鎖附結果
-        $res_status_arr = array('ALL','OK','OKALL','NG');
-      
-        #Controller 分類
-        $res_controller_arr = array('GTCS','TCG');
-
-        #program 分類
-        $res_program = array('P1','P2','P3','P4');
-
-        #扭力轉換
+        $all_roles = array_slice($this->UserModel->GetAllRole(), 0, 3);
+        $res_status_arr = ['ALL', 'OK', 'OKALL', 'NG'];
+        $res_controller_arr = ['GTCS', 'TCG'];
+        $res_program = ['P1', 'P2', 'P3', 'P4'];
         $torque_arr = $this->Historicals_newModel->torque_change();
 
-
-        #取得還存在的job_id 
-        $job_arr    = $this->Historicals_newModel->get_job_id();
-
-        #STATUS轉換
+        #取得所有的job_id
+        $job_arr = $this->Historicals_newModel->get_job_id();
         $status_arr = $this->Historicals_newModel->status_code_change();
 
         $data = [
@@ -97,14 +55,13 @@ class Historicals extends Controller
             'res_program' => $res_program,
             'info' => $info,
             'totalPages' => $totalPages,
-            'nopage' =>$nopage,
+            'nopage' => $nopage,
             'page' => $page,
             'torque_arr' => $torque_arr,
             'status_arr' => $status_arr,
-            'job_arr' =>$job_arr
+            'job_arr' => $job_arr,
+            'path' => __FUNCTION__
         ];
-
-        $data['path'] = __FUNCTION__;
 
         $this->view('historicals/index', $data);
     }
@@ -241,7 +198,7 @@ class Historicals extends Controller
         foreach($mode_arr as $key =>$val){
             
             if($val =="ng_reason"){
-                $ng_reason_temp = $this->Historicals_newModel->for_api_test($val);
+                $ng_reason_temp = $this->Historicals_newModel->for_history($val);
                 if(!empty($ng_reason_temp)){
                     $ng_reason = $this->processNgReasonData($ng_reason_temp, $status_arr);
                     $data['ng_reason_json'] = json_encode($ng_reason);
@@ -249,7 +206,7 @@ class Historicals extends Controller
             }
 
             if($val =="fastening_status"){
-                $fastening_status_temp = $this->Historicals_newModel->for_api_test($val); 
+                $fastening_status_temp = $this->Historicals_newModel->for_history($val); 
                 if(!empty($fastening_status_temp)){
                     foreach($fastening_status_temp as $key2 =>$val2){
                         $fastening_status_temp[$key2]['status_type'] = $status_arr['status_type'][$val2['fasten_status']];
@@ -267,7 +224,7 @@ class Historicals extends Controller
             }
 
             if($val=="job_info"){
-                $job_info_temp = $this->Historicals_newModel->for_api_test($val); 
+                $job_info_temp = $this->Historicals_newModel->for_history($val); 
                 if(!empty($job_info_temp)){
                     $job_info = array();
                     $job_info = array_slice($job_info_temp,0,6);
@@ -287,7 +244,7 @@ class Historicals extends Controller
 
                     #圓餅圖
                     $job_time = array();
-                    $job_time_temp = $this->Historicals_newModel->for_api_test('job_time'); 
+                    $job_time_temp = $this->Historicals_newModel->for_history('job_time'); 
                     foreach($job_time_temp as $k_time =>$v_time){
                         $job_time[] = array('value' => $v_time['duplicate_count'], 'name' => "JOB-".$v_time['job_id']); 
                     } 
@@ -313,7 +270,7 @@ class Historicals extends Controller
 
 
                 #OK
-                $statistics_ok_temp = $this->Historicals_newModel->for_api_test('statistics_ok'); 
+                $statistics_ok_temp = $this->Historicals_newModel->for_history('statistics_ok'); 
                 if(!empty($statistics_ok_temp)){
                     foreach($statistics_ok_temp  as $kk1 =>$vv1){
                         unset($statistics_ok_temp[$kk1]);
@@ -323,7 +280,7 @@ class Historicals extends Controller
                 }
 
                 #NG
-                $statistics_ng_temp = $this->Historicals_newModel->for_api_test('statistics_ng'); 
+                $statistics_ng_temp = $this->Historicals_newModel->for_history('statistics_ng'); 
                 if(!empty($statistics_ng_temp)){
                     foreach($statistics_ng_temp as $kk =>$vv){
                         unset($statistics_ng_temp[$kk]);
@@ -333,7 +290,7 @@ class Historicals extends Controller
                 }
 
                 #OKALL 
-                $statistics_okall_temp = $this->Historicals_newModel->for_api_test('statistics_okall'); 
+                $statistics_okall_temp = $this->Historicals_newModel->for_history('statistics_okall'); 
                 if(!empty($statistics_okall_temp)){
                     foreach($statistics_okall_temp as $kk2 =>$vv2){
                         unset($statistics_okall_temp[$kk2]);
@@ -467,6 +424,8 @@ class Historicals extends Controller
         if(!empty($_POST['job_id'][0])  && empty($_POST['seq_id'][0])){
             $job_id = $_POST['job_id'][0];
             $info_seq = $this->Historicals_newModel->get_seq_id($job_id);
+
+         
 
             #組checkbox的html_code(seq)
             if(!empty($info_seq)){
@@ -678,6 +637,18 @@ class Historicals extends Controller
             $ng_reason[] = ['value' => $item['total'], 'name' => $error_msg_name];
         }
         return $ng_reason;
+    }
+
+
+
+    private function getMonitorsInfo($nopage, $offset, $limit){
+        
+        if($nopage == '0'){
+            $offset = 0;
+            $limit = 100000000;
+        }
+
+        return $this->Historicals_newModel->monitors_info("", $offset, $limit);
     }
 
 
