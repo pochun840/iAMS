@@ -414,36 +414,36 @@ class Historicals extends Controller
         }
     }
 
-    #利用job_id 及 seq_id 找到對應的task_id 
+    #利用job_id 找到對應的seq_id && task_id 
     #並組成 html的checkbox 格式
     public function get_correspond_val(){
         $val  = array();
     
-        // 檢查 $_POST['job_id'] 和 $_POST['seq_id'] 是否存在且不為空
+        #檢查 $_POST['job_id'] 和 $_POST['seq_id'] 是否存在且不為空
         if(isset($_POST['job_id'][0]) && !empty($_POST['job_id'][0])) {
             $job_id = $_POST['job_id'][0];
     
-            // 取得對應的seq_id
+            #取得對應的seq_id
             if(empty($_POST['seq_id'][0])) {
                 $info_seq = $this->Historicals_newModel->get_seq_id($job_id);
     
-                // 組checkbox的html_code(seq)
+                #組checkbox的seq的html
                 if(!empty($info_seq)){
                     foreach($info_seq as $k_seq => $v_seq){
-                        echo $this->generateCheckboxHtml($v_seq['sequence_id'], $v_seq['sequence_name'], 'seqid', 'JobCheckbox_seq');
+                        echo $this->generatecheckboxhtml($v_seq['sequence_id'], $v_seq['sequence_name'], 'seqid', 'JobCheckbox_seq');
                     }
                 }
             }
     
-            // 透過job_id 及 seq_id 取得對應的task_id
+            #透過job_id 及 seq_id 取得對應的task_id
             if(isset($_POST['seq_id'][0]) && !empty($_POST['seq_id'][0])) {
                 $seq_id = $_POST['seq_id'][0];
                 $info_task = $this->Historicals_newModel->get_task_id($job_id, $seq_id);
     
-                // 組checkbox的html_code(task)
+                #組checkbox的task的html
                 if(!empty($info_task)){
                     foreach($info_task as $k_task => $v_task){
-                        echo $this->generateCheckboxHtml($v_task['cc_task_id'], $v_task['cc_task_name'], 'taskid', 'JobCheckbox_task');
+                        echo $this->generatecheckboxhtml($v_task['cc_task_id'], $v_task['cc_task_name'], 'taskid', 'JobCheckbox_task');
                     }
                 }
             }
@@ -451,11 +451,11 @@ class Historicals extends Controller
     }
 
     
-    private function generateCheckboxHtml($value, $label, $name, $onClickFunction) {
+    private function generatecheckboxhtml($value, $label, $name, $onClickFunction) {
         $checkbox_html = '<div class="row t1">';
         $checkbox_html .= '<div class="col t5 form-check form-check-inline">';
-        $checkbox_html .= '<input class="form-check-input" type="checkbox" name="' . $name . '" id="' . $name . '" value="' . $value . '" onclick="' . $onClickFunction . '()" style="zoom:1.0; vertical-align: middle;">&nbsp;';
-        $checkbox_html .= '<label class="form-check-label" for="">' . $label . '</label>';
+        $checkbox_html .= '<input class="form-check-input" type="checkbox" name="' .$name. '" id="' .$name. '" value="' .$value. '" onclick="' .$onClickFunction.'()" style="zoom:1.0; vertical-align: middle;">&nbsp;';
+        $checkbox_html .= '<label class="form-check-label" for="">'.$label.'</label>';
         $checkbox_html .= '</div>';
         $checkbox_html .= '</div>';
         return $checkbox_html;
