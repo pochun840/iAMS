@@ -5,11 +5,11 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/print-history-excel.css">
+<link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/print-history-excel.css?v=202405131030">
 <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/datatables.min.css">
 
 <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
-<!--<script src="<?php echo URLROOT; ?>js/echarts_min_history.js?v=202405131000"></script>-->
+
 
 <script src="<?php echo URLROOT; ?>js/historical.js?v=202405021000"></script>
 
