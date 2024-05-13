@@ -448,138 +448,104 @@ class Historical{
     }
 
 
-    public function get_result($checked_sn_in,$id,$chat_mode){
-
-        $file_arr = array('_0p5','_1p0','_2p0');#檔案格式
-        $no_arr  = explode(',',$id);
-        foreach($no_arr as $key => $val){
-            $name = 'data'.$key;
-            if(!empty($val)){
+    public function get_result($checked_sn_in, $id, $chat_mode){
+        $file_arr = array('_0p5', '_1p0', '_2p0');
+        $no_arr = explode(',', $id);
+        $csv_array = array();
+    
+        foreach ($no_arr as $key => $val) {
+            if (!empty($val)) {
                 foreach ($file_arr as $file_suffix) {
-                    $infile = "..\public\data\DATALOG_000000".$val.$file_suffix.".csv";
+                    $infile = "../public/data/DATALOG_000000" . $val . $file_suffix . ".csv";
                     if (file_exists($infile)) {
                         $csvdata = file_get_contents($infile);
                         $rows = explode("\n", $csvdata);
-                        $csv_array[$name] = array_map('str_getcsv', $rows);
-                        break; #找到了檔案，就中斷迴圈
+                        $csv_array['data' . $key] = array_map('str_getcsv', $rows);
+                        break; // 找到了檔案，就中斷迴圈
                     }
                 }
             }
         }
         
-      
-        if(!empty($chat_mode)){
-            $position  = (int)$chat_mode;
-
+        if (is_null($csv_array)) {
+            $csv_array = null;
         } 
-        if ($position == 5 || $position == 6) {
-            foreach ($csv_array as $key => &$innerarray) {
-                if (is_array($innerarray) && count($innerarray) > 0 && empty($innerarray[0])) {
-                    array_shift($innerarray);
-                }
-                if (is_array($innerarray) && count($innerarray) > 0 && !empty($innerarray[0])) {
-                    foreach ($innerarray as $key1 => $va) {
-                        if(empty($va[1])){
-                            unset($innerarray[$key1]);
-                        } else {
-                            $innerarray['torque'][$key1]= $va[1];
-                            $innerarray['angle'][$key1]= $va[2];
-                        }
-                    }
-                }
-            }
-        }
         else{
-            foreach($csv_array as $key => &$innerarray) {
-                foreach($innerarray as $key1 => $va){
-                    if(empty($va[1])){
+            if (!empty($chat_mode)){
+                $position = (int)$chat_mode;
+            }else{
+                $position = null;
+            }
+    
+            foreach($csv_array as &$innerarray) {
+                foreach($innerarray as $key1 => $va) {
+                    if(!isset($va[1]) || empty($va[1])){
                         unset($innerarray[$key1]);
+                    } elseif($position === 5 || $position === 6){
+                        $innerarray['torque'][$key1] = $va[1];
+                        $innerarray['angle'][$key1] = $va[2];
                     }else{
                         $innerarray[$key1] = $va[$position];
                     }
                 }
             }
-
         }
+    
         return $csv_array;
     }
+    
+    
 
 
-    public function get_info($no,$chat_mode){
+    public function get_info($no, $chat_mode){
+        $resultarr = array();
+    
         if(!empty($no)){
-            $file_arr = array('_0p5','_1p0','_2p0');#檔案格式
-            foreach ($file_arr as $k_f => $v_f) {
-                if (!empty($v_f)) {
-                    $infile = "../public/data/DATALOG_000000".$no.$v_f.".csv";
-                    if (file_exists($infile)) {
-                        $csvdata_tmp = file_get_contents($infile);
-                        if (!empty($csvdata_tmp)) {
-                            $csvdata = $csvdata_tmp;
-                            $lines = explode("\n", $csvdata); 
-                            $csv_array = array_map('str_getcsv', $lines); 
-                            break; 
+            #檔案類型
+            $file_arr  = array('_0p5','_1p0','_2p0');
+            $csv_array = array();
+            $resultarr = array();
+            foreach ($file_arr as $v_f) {
+                $infile = "../public/data/DATALOG_000000".$no.$v_f.".csv";
+                if (file_exists($infile)) {
+                    $csvdata_tmp = file_get_contents($infile);
+                    if (!empty($csvdata_tmp)) {
+                        $csvdata = $csvdata_tmp;
+                        $lines = explode("\n", $csvdata); 
+                        $csv_array = array_map('str_getcsv', $lines); 
+                        break; 
+                    }
+                }
+            }
+    
+            if(empty($csv_array)){
+                $resultarr = null;
+            } else {
+                $position = (int)$chat_mode;
+    
+                foreach ($csv_array as $subarray) {
+                    if(isset($subarray[$position])){
+                        if($chat_mode =="5" || $chat_mode =="6"){
+                            if($chat_mode =="6" && $position == 6) {
+                                $resultarr['torque'][] = $subarray[1];
+                            } else {
+                                $resultarr['torque'][] = $subarray[$position];
+                            }
+                        } else {
+                            $resultarr[] = $subarray[$position];
                         }
                     }
                 }
             }
         }
-
-        if(empty($csv_array)){
-            echo '<script>alert("查無該筆的鎖附資料");</script>';
-            header("Location:?url=Historicals");
-            die();
-        }else{
-            $resultarr = array();
-            if($chat_mode =="5"){
-                $position  = (int)$chat_mode;#5
-                foreach($csv_array as $subarray){
-                    
-                    if(isset($subarray[1])){
-                        $resultarr['torque'][] = $subarray[1];
-                    }
-
-                    if(isset($subarray[2])){
-                        $resultarr['angle'][] = $subarray[2];
-                    }
-                        
-                }
-
-         
-
-            }else if($chat_mode =="6"){
-                $position  = (int)$chat_mode;#6
-                $position  = 1;
-                foreach ($csv_array as $subarray) {
-                    if(isset($subarray[$position])){
-                        $resultarr['torque'][] = $subarray[$position];
-                    }
-                }
-
-                foreach($csv_array as $subarray){
-                    if(isset($subarray[2])){
-                        $resultarr['angle'][] = $subarray[2];
-                    }
-                }
-
-            }else{
-                $position = (int)$chat_mode;
-                foreach ($csv_array as $subarray) {
-
-                    if(isset($subarray[$position])){
-                        $resultarr[] = $subarray[$position];
-                    }
-                }
-            }
-            return $resultarr;
-
-        }
         
+        return $resultarr;
     }
+    
    
-
     public function for_history($mode){
         
-        
+
         $sql = '';
         $after_date = date('Ymd 23:59:59');
         $before_date = date('Ymd', strtotime('-7 days')) . ' 00:00:00';

@@ -467,27 +467,28 @@ if(!empty($_COOKIE['chat_mode_change'])){
                         </tr>
                     </table>
 
-                    <div>
-                        <div style="text-align: center">
-                            <label style="float: left" id='DiagramDisplay'><b>Diagram Display</b></label>
-                            <label><?php echo $data['chat']['chat_name'];?></label>
-                        </div>
-                       
+                    <?php if(!empty($data['chart_info'])){?>
+                        <div>
+                            <div style="text-align: center">
+                                <label style="float: left" id='DiagramDisplay'><b>Diagram Display</b></label>
+                                <label><?php echo $data['chat']['chat_name'];?></label>
+                            </div>
+                        
 
-                       <div id="chart-setting">
-                            <div class="chart-container">
-                                <div class="menu-chart"  id="menu-chart" onclick="toggleMenu()">
-                                    <i class="fa fa-bars" style="font-size: 26px"></i>
-                                    <div class="menu-content" id="myMenu">
-                                        <a  id="downloadchartbtn">Download HTML</a>
+                            <div id="chart-setting">
+                                <div class="chart-container">
+                                    <div class="menu-chart"  id="menu-chart" onclick="toggleMenu()">
+                                        <i class="fa fa-bars" style="font-size: 26px"></i>
+                                        <div class="menu-content" id="myMenu">
+                                            <a  id="downloadchartbtn">Download HTML</a>
+                                        </div> 
                                     </div>
-                                    
+                                    <div id="chartinfo" style="width: 1500px; height: 400px;"></div>
                                 </div>
-                                <div id="chartinfo" style="width: 1500px; height: 400px;"></div>
-                                
                             </div>
                         </div>
-                    </div>
+                    <?php } ?>
+
                     </div>
                 </div>
 
@@ -984,7 +985,7 @@ addMessage();
 
 
 <!----nextinfo op----->
-<?php  if($path =="nextinfo" &&  $data['chart_info']['chat_mode'] != "6") {?>
+<?php if ($path == "nextinfo" && isset($data['chart_info']['chat_mode']) && $data['chart_info']['chat_mode'] != "6") { ?>
 <script>
     var myChart = echarts.init(document.getElementById('chartinfo'));
 
@@ -1072,7 +1073,7 @@ addMessage();
 </script>
 <?php } ?>
 
-<?php  if($path =="nextinfo" &&  $data['chart_info']['chat_mode'] == "6") {?>
+<?php if ($path == "nextinfo" && isset($data['chart_info']['chat_mode']) && $data['chart_info']['chat_mode'] == "6") { ?>
 <script>
     var myChart = echarts.init(document.getElementById('chartinfo'));
 

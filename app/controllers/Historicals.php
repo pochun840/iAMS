@@ -489,6 +489,8 @@ class Historicals extends Controller
             #取得該筆的所有完整詳細資料
             $info_final = $this->Historicals_newModel->csv_info($checked_sn_in);  
 
+            $data['chat_mode_arr_combine'] = $this->Historicals_newModel->details('chart_type');
+
             $data['info_final'] = $info_final;
 
             #取得曲線圖的ID
@@ -502,113 +504,116 @@ class Historicals extends Controller
             #二筆鎖附資料的圖表
             $final_label = $this->Historicals_newModel->get_result($checked_sn_in,$id,$data['chat_mode']);
             if(empty($final_label)){
-                #找不到對應的圖檔時 回到Historicals搜尋頁面
-                echo '<script>alert("not found");</script>';
-                header('Location:?url=Historicals');
-                exit;
-            }
-            
-            #整理曲線圖的資料
-            if($data['chat_mode'] == 5) {
-             
-                $x_coordinate_key_data0 = array_keys($final_label['data0']['angle']);
-                $x_coordinate_key_data1 = array_keys($final_label['data1']['angle']);
-                $data['chart1_xcoordinate'] = json_encode($x_coordinate_key_data0);
-                $data['chart2_xcoordinate'] = json_encode($x_coordinate_key_data1);
-            
-                $final_label['data0'] = $final_label['data0']['torque'];
-                $final_label['data1'] = $final_label['data1']['torque'];
-
-            }else if($data['chat_mode'] == 6){
-
-                $data['chart1_xcoordinate'] = json_encode(array_keys($final_label['data0']));
-                $data['chart2_xcoordinate'] = json_encode(array_keys($final_label['data1']));
-
-            
-                $data0_torque = $final_label['data0']['torque'];
-                $data1_torque = $final_label['data1']['torque'];
-
-                $data0_angle = $final_label['data0']['angle'];
-                $data1_angle = $final_label['data1']['angle'];
-
-                #進行資料轉換
-                $temp_val0 = $this->prepareChartData($data0_torque, $TransType, $data['unit']);
-                $temp_val1 = $this->prepareChartData($data1_torque, $TransType, $data['unit']);
-
-                #角度資料不需要轉換
-                $temp_val0_angle = $this->prepareChartData($data0_angle, '', ''); 
-                $temp_val1_angle = $this->prepareChartData($data1_angle, '', ''); 
-
+                $final_label = null;
             }else{
-               
-                $data['chart1_xcoordinate'] = json_encode(array_keys($final_label['data0']));
-                $data['chart2_xcoordinate'] = json_encode(array_keys($final_label['data1']));
-            
-                #單位轉換只針對torque資料
-                $final_label['data0'] = $this->prepareChartData($final_label['data0'], $TransType, $data['unit']);
-                $final_label['data1'] = $this->prepareChartData($final_label['data1'], $TransType, $data['unit']);
-            }
-            
-            
-            if($data['chat_mode'] == 6){
 
-                $data['chart1_xcoordinate'] = json_encode(array_keys($final_label['data0']));
-                $data['chart2_xcoordinate'] = json_encode(array_keys($final_label['data1']));
-                $data['chart1_ycoordinate'] = json_encode($temp_val0);
-                $data['chart1_ycoordinate_max'] = floatval(max($temp_val0));
-                $data['chart1_ycoordinate_min'] = floatval(min($temp_val0));
-    
-                $data['chart2_ycoordinate'] = json_encode($temp_val1);
-                $data['chart2_ycoordinate_max'] = floatval(max($temp_val1));
-                $data['chart2_ycoordinate_min'] = floatval(min($temp_val1));
+                #整理曲線圖的資料
+                if($data['chat_mode'] == 5) {
                 
-                $data['chart1_ycoordinate_angle'] = json_encode($temp_val0_angle);
-                $data['chart1_ycoordinate_max_angle'] = floatval(max($temp_val0_angle));
-                $data['chart1_ycoordinate_min_angle'] = floatval(min($temp_val0_angle));
+                    $x_coordinate_key_data0 = array_keys($final_label['data0']['angle']);
+                    $x_coordinate_key_data1 = array_keys($final_label['data1']['angle']);
+                    $data['chart1_xcoordinate'] = json_encode($x_coordinate_key_data0);
+                    $data['chart2_xcoordinate'] = json_encode($x_coordinate_key_data1);
+                
+                    $final_label['data0'] = $final_label['data0']['torque'];
+                    $final_label['data1'] = $final_label['data1']['torque'];
 
-                $data['chart2_ycoordinate_angle'] = json_encode($temp_val1_angle);
-                $data['chart2_ycoordinate_max_angle'] = floatval(max($temp_val1_angle));
-                $data['chart2_ycoordinate_min_angle'] = floatval(min($temp_val1_angle));
+                }else if($data['chat_mode'] == 6){
 
-            }else{
+                    $data['chart1_xcoordinate'] = json_encode(array_keys($final_label['data0']));
+                    $data['chart2_xcoordinate'] = json_encode(array_keys($final_label['data1']));
 
-                $temp_val0 = $this->prepareChartData($final_label['data0'], $TransType, $data['unit']);
-                $temp_val1 = $this->prepareChartData($final_label['data1'], $TransType, $data['unit']);
+                
+                    $data0_torque = $final_label['data0']['torque'];
+                    $data1_torque = $final_label['data1']['torque'];
+
+                    $data0_angle = $final_label['data0']['angle'];
+                    $data1_angle = $final_label['data1']['angle'];
+
+                    #進行資料轉換
+                    $temp_val0 = $this->prepareChartData($data0_torque, $TransType, $data['unit']);
+                    $temp_val1 = $this->prepareChartData($data1_torque, $TransType, $data['unit']);
+
+                    #角度資料不需要轉換
+                    $temp_val0_angle = $this->prepareChartData($data0_angle, '', ''); 
+                    $temp_val1_angle = $this->prepareChartData($data1_angle, '', ''); 
+
+                }else{
+                
+                    $data['chart1_xcoordinate'] = json_encode(array_keys($final_label['data0']));
+                    $data['chart2_xcoordinate'] = json_encode(array_keys($final_label['data1']));
+                
+                    #單位轉換只針對torque資料
+                    $final_label['data0'] = $this->prepareChartData($final_label['data0'], $TransType, $data['unit']);
+                    $final_label['data1'] = $this->prepareChartData($final_label['data1'], $TransType, $data['unit']);
+                }
+                
+                
+                if($data['chat_mode'] == 6){
+
+                    $data['chart1_xcoordinate'] = json_encode(array_keys($final_label['data0']));
+                    $data['chart2_xcoordinate'] = json_encode(array_keys($final_label['data1']));
+                    $data['chart1_ycoordinate'] = json_encode($temp_val0);
+                    $data['chart1_ycoordinate_max'] = floatval(max($temp_val0));
+                    $data['chart1_ycoordinate_min'] = floatval(min($temp_val0));
+        
+                    $data['chart2_ycoordinate'] = json_encode($temp_val1);
+                    $data['chart2_ycoordinate_max'] = floatval(max($temp_val1));
+                    $data['chart2_ycoordinate_min'] = floatval(min($temp_val1));
+                    
+                    $data['chart1_ycoordinate_angle'] = json_encode($temp_val0_angle);
+                    $data['chart1_ycoordinate_max_angle'] = floatval(max($temp_val0_angle));
+                    $data['chart1_ycoordinate_min_angle'] = floatval(min($temp_val0_angle));
+
+                    $data['chart2_ycoordinate_angle'] = json_encode($temp_val1_angle);
+                    $data['chart2_ycoordinate_max_angle'] = floatval(max($temp_val1_angle));
+                    $data['chart2_ycoordinate_min_angle'] = floatval(min($temp_val1_angle));
+
+                }else{
+
+                    $temp_val0 = $this->prepareChartData($final_label['data0'], $TransType, $data['unit']);
+                    $temp_val1 = $this->prepareChartData($final_label['data1'], $TransType, $data['unit']);
 
 
-                $data['chart1_ycoordinate'] = json_encode($temp_val0);
-                $data['chart1_ycoordinate_max'] = floatval(max($temp_val0));
-                $data['chart1_ycoordinate_min'] = floatval(min($temp_val0));
-    
-                $data['chart2_ycoordinate'] = json_encode($temp_val1);
-                $data['chart2_ycoordinate_max'] = floatval(max($temp_val1));
-                $data['chart2_ycoordinate_min'] = floatval(min($temp_val1));
+                    $data['chart1_ycoordinate'] = json_encode($temp_val0);
+                    $data['chart1_ycoordinate_max'] = floatval(max($temp_val0));
+                    $data['chart1_ycoordinate_min'] = floatval(min($temp_val0));
+        
+                    $data['chart2_ycoordinate'] = json_encode($temp_val1);
+                    $data['chart2_ycoordinate_max'] = floatval(max($temp_val1));
+                    $data['chart2_ycoordinate_min'] = floatval(min($temp_val1));
+                }
+
+                
+                #設定曲線圖座標名稱
+                $chartTypeDetails = $this->Historicals_newModel->details('chart_type');
+                $data['chat_mode'] = (int)$data['chat_mode'];
+                $lineTitle = isset($chartTypeDetails[$data['chat_mode']]) ? $chartTypeDetails[$data['chat_mode']] : '';
+                $titles = $this->Historicals_newModel->extractXYTitles($lineTitle);
+                
+                $data['chart_combine']['x_title'] = $titles['x_title'];
+                $data['chart_combine']['y_title'] = $titles['y_title'];
+
+                
             }
-
-    
-            #設定曲線圖座標名稱
-            $chartTypeDetails = $this->Historicals_newModel->details('chart_type');
-            $data['chat_mode'] = (int)$data['chat_mode'];
-            $lineTitle = isset($chartTypeDetails[$data['chat_mode']]) ? $chartTypeDetails[$data['chat_mode']] : '';
-            $titles = $this->Historicals_newModel->extractXYTitles($lineTitle);
             
-            $data['chart_combine']['x_title'] = $titles['x_title'];
-            $data['chart_combine']['y_title'] = $titles['y_title'];
 
             #取得目前的扭力單位
             $torque_mode_arr = $this->Historicals_newModel->details('torque');
 
             #STATUS轉換
             $status_arr = $this->Historicals_newModel->status_code_change();
+
+            
         
         }
        
         $data['status_arr'] = $status_arr;
         $data['torque_mode_arr'] = $torque_mode_arr;
-        $data['chat_mode_arr_combine'] = $chartTypeDetails ;
         $data['nav'] = $this->NavsController->get_nav();
         $data['nopage'] = 0;
         $data['path'] = __FUNCTION__;
+        $data['final_label'] = $final_label;
 
         $this->view('historicals/index',$data);
     }
