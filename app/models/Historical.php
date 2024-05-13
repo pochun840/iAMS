@@ -128,6 +128,7 @@ class Historical{
         return $del_info_sn;
     }
 
+    
     public function getTotalItemCount() {
 
         $sql = "SELECT COUNT(*) as total_count FROM fasten_data order by data_time desc  ";
@@ -258,16 +259,6 @@ class Historical{
         return $result;
     }
     
-    public function get_seq_id($job_id){
-
-        $sql = "SELECT * FROM `fasten_data` WHERE on_flag = '0' AND job_id = :job_id ";
-        $params[':job_id'] = $job_id;
-        $statement = $this->db->prepare($sql);
-        $statement->execute($params);
-        $result = $statement->fetchall(PDO::FETCH_ASSOC);
-        return $result;
-    }
-
     public function details($mode){
 
         if($mode =="chart_type"){
@@ -303,7 +294,18 @@ class Historical{
 
     }
 
+    #用job_id 找出對應的sequence_id
+    public function get_seq_id($job_id){
 
+        $sql = "SELECT * FROM `fasten_data` WHERE on_flag = '0' AND job_id = :job_id ";
+        $params[':job_id'] = $job_id;
+        $statement = $this->db->prepare($sql);
+        $statement->execute($params);
+        $result = $statement->fetchall(PDO::FETCH_ASSOC);
+        return $result;
+    }
+
+    #用job_id及sequence_id 找出對應的task_id
     public function get_task_id($job_id, $seq_id) {
 
         $sql = "SELECT * FROM `fasten_data` WHERE job_id = :job_id AND sequence_id = :sequence_id AND on_flag = '0'";

@@ -347,13 +347,10 @@ class Historicals extends Controller
             $data['type'] = '';
         }
         
-
-        #取出 各種的NG狀態
         $this->view('historicals/index_report_history',$data);
     }
 
 
- 
     public function nextinfo($index) {
 
         if(!empty($index)) {
@@ -361,6 +358,11 @@ class Historicals extends Controller
     
             #取得詳細資料
             $data['job_info'] = $this->Historicals_newModel->get_info_data($index);
+
+            echo "<pre>";
+            print_r($data['job_info'][0]['id']);
+            echo "</pre>";
+            
     
             #檢查chat_mode cookie
             $chat_mode = isset($_COOKIE['chat_mode_change']) ? $_COOKIE['chat_mode_change'] : "1";
@@ -379,28 +381,35 @@ class Historicals extends Controller
             $data['chat'] = $chat_arr;
     
             #取得完整的資料
-            $no = "0533";
-            $csvdata_arr = $this->Historicals_newModel->get_info($no, $chat_mode);
-            $data['chart_info'] = $this->ChartData($chat_mode, $csvdata_arr, $unitvalue, $chat_mode_arr);
-    
+            $length = strlen($data['job_info'][0]['id']);
+            if ($length < 4) {
+                $no = sprintf("%04d", $data['job_info'][0]['id']);
+            } else {
+                $no = $data['job_info'][0]['id'];
+            }
 
+            $csvdata_arr = $this->Historicals_newModel->get_info($no, $chat_mode);
+
+            if(!empty($csvdata_arr)){
+
+            
+                $data['chart_info'] = $this->ChartData($chat_mode, $csvdata_arr, $unitvalue, $chat_mode_arr);
+    
+                #設定曲線圖的座標名稱
+                $titles = $this->Historicals_newModel->extractXYTitles($data['chart_info']['chat_title']);
+                $data['chart_info']['x_title'] = $titles['x_title'];
+                $data['chart_info']['y_title'] = $titles['y_title'];
+                $data['chart_info']['chat_mode'] = $chat_mode;
+            }
+
+             
             #狀態列表
             $status_arr = $this->Historicals_newModel->status_code_change();
             $data['status_arr'] = $status_arr;
 
-            
             $torque_mode_arr = $this->Historicals_newModel->details('torque');
             $data['torque_mode_arr'] = $torque_mode_arr;
-    
-
-    
-            #設定曲線圖的座標名稱
-            $titles = $this->Historicals_newModel->extractXYTitles($data['chart_info']['chat_title']);
-            $data['chart_info']['x_title'] = $titles['x_title'];
-            $data['chart_info']['y_title'] = $titles['y_title'];
-    
-    
-            $data['chart_info']['chat_mode'] = $chat_mode;
+        
             $data['nav'] = $this->NavsController->get_nav();
             $data['nopage'] = 0;
             $data['path'] = __FUNCTION__;
@@ -419,7 +428,6 @@ class Historicals extends Controller
             $info_seq = $this->Historicals_newModel->get_seq_id($job_id);
 
          
-
             #組checkbox的html_code(seq)
             if(!empty($info_seq)){
                 $info_seq_detailed = ''; 
@@ -529,11 +537,11 @@ class Historicals extends Controller
                 $data0_angle = $final_label['data0']['angle'];
                 $data1_angle = $final_label['data1']['angle'];
 
-                // 進行資料轉換
+                #進行資料轉換
                 $temp_val0 = $this->prepareChartData($data0_torque, $TransType, $data['unit']);
                 $temp_val1 = $this->prepareChartData($data1_torque, $TransType, $data['unit']);
 
-                // 角度資料不需要轉換
+                #角度資料不需要轉換
                 $temp_val0_angle = $this->prepareChartData($data0_angle, '', ''); 
                 $temp_val1_angle = $this->prepareChartData($data1_angle, '', ''); 
 
@@ -542,7 +550,7 @@ class Historicals extends Controller
                 $data['chart1_xcoordinate'] = json_encode(array_keys($final_label['data0']));
                 $data['chart2_xcoordinate'] = json_encode(array_keys($final_label['data1']));
             
-                // 單位轉換只針對資料集0的扭矩（torque）資料
+                #單位轉換只針對torque資料
                 $final_label['data0'] = $this->prepareChartData($final_label['data0'], $TransType, $data['unit']);
                 $final_label['data1'] = $this->prepareChartData($final_label['data1'], $TransType, $data['unit']);
             }
@@ -629,6 +637,8 @@ class Historicals extends Controller
         return $ng_reason;
     }
 
+
+    #search 資料處理
     private function getMonitorsInfo($nopage, $offset, $limit){
         
         if($nopage == '0'){
