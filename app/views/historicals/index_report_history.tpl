@@ -9,6 +9,8 @@
 <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/datatables.min.css">
 
 <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+<!--<script src="<?php echo URLROOT; ?>js/echarts_min_history.js?v=202405131000"></script>-->
+
 <script src="<?php echo URLROOT; ?>js/historical.js?v=202405021000"></script>
 
 </head>
@@ -269,10 +271,8 @@
 </script>
 
 <script>
-
-//var isDownloaded = localStorage.getItem('downloaded');
-
 if ("<?php echo $data['type']; ?>" == "download") {
+
         var today = new Date();
         var day = String(today.getDate()).padStart(2, '0');
         var month = String(today.getMonth() + 1).padStart(2, '0'); 
@@ -294,11 +294,15 @@ if ("<?php echo $data['type']; ?>" == "download") {
 
     
         var images = document.getElementsByTagName('img');
-
+        var baseUrl = window.location.origin;
 
         var imagesHTML = Array.from(images)
-            .map(image => image.outerHTML)
+            .map(image => {
+                var src = image.src.startsWith(baseUrl) ? image.src : baseUrl + image.src;
+                return `<img src="${src}" alt="${image.alt}">`;
+            })
             .join('\n');
+            
 
 
         var stylesheets = document.getElementsByTagName('link');
@@ -321,10 +325,10 @@ if ("<?php echo $data['type']; ?>" == "download") {
         link.download = 'history_chart_' + today + '.html';
         link.click();
 
-        // 設置標誌，表示已經下載過
         //localStorage.setItem('downloaded', 'true');
 }
 </script>
+
 
 <style>
     #jobtime{
