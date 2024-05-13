@@ -359,10 +359,6 @@ class Historicals extends Controller
             #取得詳細資料
             $data['job_info'] = $this->Historicals_newModel->get_info_data($index);
 
-            echo "<pre>";
-            print_r($data['job_info'][0]['id']);
-            echo "</pre>";
-            
     
             #檢查chat_mode cookie
             $chat_mode = isset($_COOKIE['chat_mode_change']) ? $_COOKIE['chat_mode_change'] : "1";
@@ -388,13 +384,13 @@ class Historicals extends Controller
                 $no = $data['job_info'][0]['id'];
             }
 
+
+            
+
             $csvdata_arr = $this->Historicals_newModel->get_info($no, $chat_mode);
 
             if(!empty($csvdata_arr)){
-
-            
                 $data['chart_info'] = $this->ChartData($chat_mode, $csvdata_arr, $unitvalue, $chat_mode_arr);
-    
                 #設定曲線圖的座標名稱
                 $titles = $this->Historicals_newModel->extractXYTitles($data['chart_info']['chat_title']);
                 $data['chart_info']['x_title'] = $titles['x_title'];
@@ -422,49 +418,47 @@ class Historicals extends Controller
     #並組成 html的checkbox 格式
     public function get_correspond_val(){
         $val  = array();
-        #取得對應的seq_id
-        if(!empty($_POST['job_id'][0])  && empty($_POST['seq_id'][0])){
+    
+        // 檢查 $_POST['job_id'] 和 $_POST['seq_id'] 是否存在且不為空
+        if(isset($_POST['job_id'][0]) && !empty($_POST['job_id'][0])) {
             $job_id = $_POST['job_id'][0];
-            $info_seq = $this->Historicals_newModel->get_seq_id($job_id);
-
-         
-            #組checkbox的html_code(seq)
-            if(!empty($info_seq)){
-                $info_seq_detailed = ''; 
-                foreach($info_seq  as $k_seq =>$v_seq){
-                    $info_seq_detailed  = '<div class="row t1">';
-                    $info_seq_detailed .= '<div class="col t5 form-check form-check-inline">';
-                    $info_seq_detailed .= '<input class="form-check-input" type="checkbox" name="seqid" id="seqid" value='.$v_seq['sequence_id'].'   onclick="JobCheckbox_seq()"  style="zoom:1.0; vertical-align: middle;">&nbsp;';
-                    $info_seq_detailed .= '<label class="form-check-label" for="">'.$v_seq['sequence_name'].'</label>';
-                    $info_seq_detailed .= '</div>';
-                    $info_seq_detailed .= '</div>';
-                    echo $info_seq_detailed;
-                }   
-
-            }
-        }
-
-        #透過job_id 及 seq_id 取得對應的task_id
-        if(!empty($_POST['seq_id'][0]) && !empty($_POST['job_id'][0])){
-            $job_id = $_POST['job_id'][0];
-            $seq_id = $_POST['seq_id'][0];
-            $info_task = $this->Historicals_newModel->get_task_id($job_id,$seq_id);
-
-            #組checkbox的html_code(task)
-            if(!empty($info_task)){
-                $info_task_detailed = ''; 
-                foreach($info_task  as $k_task => $v_task){
-                    $info_task_detailed  = '<div class="row t1">';
-                    $info_task_detailed .= '<div class="col t5 form-check form-check-inline">';
-                    $info_task_detailed .= '<input class="form-check-input" type="checkbox" name="taskid" id="taskid" value='.$v_task['cc_task_id'].'   onclick="JobCheckbox_task()"  style="zoom:1.0; vertical-align: middle;">&nbsp;';
-                    $info_task_detailed .= '<label class="form-check-label" for="">'.$v_task['cc_task_name'].'</label>';
-                    $info_task_detailed .= '</div>';
-                    $info_task_detailed .= '</div>';
-                    echo $info_task_detailed;
+    
+            // 取得對應的seq_id
+            if(empty($_POST['seq_id'][0])) {
+                $info_seq = $this->Historicals_newModel->get_seq_id($job_id);
+    
+                // 組checkbox的html_code(seq)
+                if(!empty($info_seq)){
+                    foreach($info_seq as $k_seq => $v_seq){
+                        echo $this->generateCheckboxHtml($v_seq['sequence_id'], $v_seq['sequence_name'], 'seqid', 'JobCheckbox_seq');
+                    }
                 }
             }
-
+    
+            // 透過job_id 及 seq_id 取得對應的task_id
+            if(isset($_POST['seq_id'][0]) && !empty($_POST['seq_id'][0])) {
+                $seq_id = $_POST['seq_id'][0];
+                $info_task = $this->Historicals_newModel->get_task_id($job_id, $seq_id);
+    
+                // 組checkbox的html_code(task)
+                if(!empty($info_task)){
+                    foreach($info_task as $k_task => $v_task){
+                        echo $this->generateCheckboxHtml($v_task['cc_task_id'], $v_task['cc_task_name'], 'taskid', 'JobCheckbox_task');
+                    }
+                }
+            }
         }
+    }
+
+    
+    private function generateCheckboxHtml($value, $label, $name, $onClickFunction) {
+        $checkbox_html = '<div class="row t1">';
+        $checkbox_html .= '<div class="col t5 form-check form-check-inline">';
+        $checkbox_html .= '<input class="form-check-input" type="checkbox" name="' . $name . '" id="' . $name . '" value="' . $value . '" onclick="' . $onClickFunction . '()" style="zoom:1.0; vertical-align: middle;">&nbsp;';
+        $checkbox_html .= '<label class="form-check-label" for="">' . $label . '</label>';
+        $checkbox_html .= '</div>';
+        $checkbox_html .= '</div>';
+        return $checkbox_html;
     }
 
 
