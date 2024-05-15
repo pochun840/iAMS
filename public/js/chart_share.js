@@ -64,51 +64,6 @@ function generateChartInfo(data, chartIndex) {
 }
 
 
-//combine download html
-document.getElementById('downlandpdf_combine').addEventListener('click', function(event) {
-
-    var divToRemove = document.getElementById('empty1');
-    var divToRemove2 = document.getElementById('chart-title');
-    
-    if(divToRemove) {
-        divToRemove.parentNode.removeChild(divToRemove);
-    }
-
-    if(divToRemove2) {
-        divToRemove2.parentNode.removeChild(divToRemove2);
-    }
-
-    document.getElementById('unit').disabled = true;
-    var disabledSelects = document.querySelectorAll('select[disabled]');
-    disabledSelects.forEach(function(select) {
-        select.style.color = '#808080'; 
-        select.style.backgroundColor = '#f0f0f0';
-    });
-
-    var chartDataURL = myChart_combine.getDataURL({
-        pixelRatio: 2,
-        backgroundColor: '#fff' 
-    });
-
-    var divContent = document.getElementById('combinedata').outerHTML;
-    divContent = divContent.replace('force-overflow-Combine', 'photo');
-    var stylesheets = document.getElementsByTagName('link');
-    var cssString = Array.from(stylesheets)
-        .map(stylesheet => `<link rel="stylesheet" href="${stylesheet.href}">`)
-        .join('\n');
-    
-    var fullHTML = `<head>${cssString}</head>\n<body>${divContent}<img src="${chartDataURL}" alt="ECharts Chart" style="max-width: 100%; height: auto;"></body>`;
-    var blob = new Blob([fullHTML], { type: 'text/html' });
-
-    var link = document.createElement('a');
-    link.href = window.URL.createObjectURL(blob);
-    link.download = 'job_combine.html';
-    link.click();
-    history.go(0);
-
-    event.preventDefault();
-}, { passive: true });
-
 
 
 

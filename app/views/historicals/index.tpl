@@ -10,7 +10,6 @@
 
 <script src="<?php echo URLROOT; ?>js/echarts_min.js?v=202405080900"></script>
 <script src="<?php echo URLROOT; ?>js/html2canvas_min.js?v=202405080900"></script>
-<script src="<?php echo URLROOT; ?>js/chart_share.js?v=202405100900"></script>
 
 <?php if(isset($data['nav'])){
     echo $data['nav'];
@@ -39,6 +38,8 @@ if ($path == "combinedata") {
         });
     </script>
     ";
+    echo "<script src='" . URLROOT . "js/chart_share.js?v=202405151200'></script>";
+
 }
 
 if($path == "nextinfo"){
@@ -57,6 +58,8 @@ if($path == "nextinfo"){
         });
     </script>
     ";
+    echo "<script src='" . URLROOT . "js/chart_share.js?v=202405151200'></script>";
+
 
 }
 
@@ -525,7 +528,7 @@ if(!empty($_COOKIE['chat_mode_change'])){
                             </div>
                             <div class="col t2">
                                 <!--<button id="Export-Excel-data" type="button" class="ExportButton">Export Excel</button>-->
-                                <button id="downlandpdf_combine" type="button" class="ExportButton">Export HTML</button>
+                                <button id="downland_combine" type="button" class="ExportButton">Export HTML</button>
                             </div>
                         </div>
                     </div>
@@ -1300,7 +1303,7 @@ addMessage();
     myChart_combine.setOption(option);
 
 </script>
-<?php }else{?>
+<?php }else if($path == "combinedata" && $data['chat_mode'] == "6"){?>
 <script>
 
     //圖表1的資訊
@@ -1458,9 +1461,9 @@ function chat_mode_change(selectOS){
     document.cookie = "chat_mode_change=" + selectedOptions + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
     history.go(0);
 }
-
-//nextinfo
-
+</script>
+<?php if($path == "nextinfo" ){?>
+<script>
 document.getElementById('downloadchartbtn').addEventListener('click', function() {
     var menuChartDiv = document.getElementById('menu-chart');
     menuChartDiv.style.display = 'none';
@@ -1504,6 +1507,50 @@ document.getElementById('downloadchartbtn').addEventListener('click', function()
     link.click();
     history.go(0);
 });
+</script>
+<?php } ?>
 
+<script>
+//combine download html
+document.getElementById('downland_combine').addEventListener('click', function() {
+    var divToRemove = document.getElementById('empty1');
+    var divToRemove2 = document.getElementById('chart-title');
+    
+    if(divToRemove) {
+        divToRemove.parentNode.removeChild(divToRemove);
+    }
 
+    if(divToRemove2) {
+        divToRemove2.parentNode.removeChild(divToRemove2);
+    }
+
+    document.getElementById('unit').disabled = true;
+    var disabledSelects = document.querySelectorAll('select[disabled]');
+    disabledSelects.forEach(function(select) {
+        select.style.color = '#808080'; 
+        select.style.backgroundColor = '#f0f0f0';
+    });
+
+    var chartDataURL = myChart_combine.getDataURL({
+        pixelRatio: 2,
+        backgroundColor: '#fff' 
+    });
+
+    var divContent = document.getElementById('combinedata').outerHTML;
+    divContent = divContent.replace('force-overflow-Combine', 'photo');
+    var stylesheets = document.getElementsByTagName('link');
+    var cssString = Array.from(stylesheets)
+        .map(stylesheet => `<link rel="stylesheet" href="${stylesheet.href}">`)
+        .join('\n');
+    
+    var fullHTML = `<head>${cssString}</head>\n<body>${divContent}<img src="${chartDataURL}" alt="ECharts Chart" style="max-width: 100%; height: auto;"></body>`;
+    var blob = new Blob([fullHTML], { type: 'text/html' });
+
+    var link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = 'job_combine.html';
+    link.click();
+    history.go(0);
+
+});
 </script>

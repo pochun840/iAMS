@@ -104,9 +104,9 @@
                         <div class="col-4 t1" style="padding-left: 7%; font-size: 18px">Torque Meter :</div>
                         <div class="custom-select">
                             <select id="TorqueMeter">
-                                <option value="KTM-150"> KTM-150</option>
-                                <option value="KTM-50"> KTM-50</option>
-                                <option value="KTM-100"> KTM-100</option>
+                                <?php foreach($data['res_Torquemeter_arr'] as $k_t => $v_t){?>
+                                    <option value="<?php echo $k_t;?>"><?php echo $v_t;?></option>
+                                <?php } ?>
                             </select>
                         </div>
                     </div>
@@ -115,8 +115,9 @@
                         <div class="col-4 t1" style="padding-left: 7%; font-size: 18px">Controlle :</div>
                         <div class="custom-select">
                             <select class="selectem">
-                                <option value="GTCS"> GTCS</option>
-                                <option value="TCG"> TCG</option>
+                                 <?php foreach($data['res_controller_arr'] as $k_c =>$v_c){?>
+                                    <option value="<?php echo $k_c;?>"><?php echo $v_c;?></option>
+                                <?php } ?>
                             </select>
                         </div>
                     </div>
@@ -707,17 +708,7 @@ function toggleMenu()
     menuContent.style.display = (menuContent.style.display === "block") ? "none" : "block";
 }
 
-function printChart() {
 
-}
-
-function downloadPng() {
-
-}
-
-function downloadJpeg() {
-
-}
 
 // Change the color of a row in a table
     $(document).ready(function () {

@@ -383,11 +383,12 @@ class Historicals extends Controller
             } else {
                 $no = $data['job_info'][0]['id'];
             }
-
+          
 
             
 
             $csvdata_arr = $this->Historicals_newModel->get_info($no, $chat_mode);
+        
 
             if(!empty($csvdata_arr)){
                 $data['chart_info'] = $this->ChartData($chat_mode, $csvdata_arr, $unitvalue, $chat_mode_arr);
@@ -397,7 +398,7 @@ class Historicals extends Controller
                 $data['chart_info']['y_title'] = $titles['y_title'];
                 $data['chart_info']['chat_mode'] = $chat_mode;
             }
-
+            
              
             #狀態列表
             $status_arr = $this->Historicals_newModel->status_code_change();
