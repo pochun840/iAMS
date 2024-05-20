@@ -1193,7 +1193,7 @@ addMessage();
         var min_val = <?php echo $data['chart1_ycoordinate_min'];?>;
         var max_val = <?php echo $data['chart1_ycoordinate_max'];?>;
 
-        var job_info ='<?php echo $data['info_final'][0]['job_name'];?>';
+        var job_info ='<?php echo $data['info_final'][0]['system_sn'];?>';
 
         //圖表2的資訊
         var x_data_val_1 = <?php echo  $data['chart2_xcoordinate']; ?>;
@@ -1206,7 +1206,7 @@ addMessage();
         var ytitle = '<?php echo $data['chart_combine']['y_title'];?>';
 
 
-        var job_info_1 ='<?php echo $data['info_final'][1]['job_name'];?>';
+        var job_info_1 ='<?php echo $data['info_final'][1]['system_sn'];?>';
         
         var option = {
               tooltip: {
@@ -1326,8 +1326,8 @@ addMessage();
     var max_val_1_angle = <?php echo $data['chart2_ycoordinate_max_angle'];?>;
 
 
-    var job1 = '<?php echo $data['info_final'][0]['job_name'];?>';
-    var job2 = '<?php echo $data['info_final'][1]['job_name'];?>';
+    var job1 = '<?php echo $data['info_final'][0]['system_sn'];?>';
+    var job2 = '<?php echo $data['info_final'][1]['system_sn'];?>';
 
     var myChart_combine = echarts.init(document.getElementById('chart_combine'));
     var option = {
