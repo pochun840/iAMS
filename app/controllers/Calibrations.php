@@ -17,23 +17,31 @@ class Calibrations extends Controller
     // 取得所有Jobs
     public function index(){
 
-        //require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
-        //$modbus = new ModbusMaster('192.168.1.75', "TCP");
-
-
         $isMobile = $this->isMobileCheck();
 
+        
+        $info = $this->CalibrationModel->datainfo();
         $data = [
             'isMobile' => $isMobile,
             'nav' => $this->NavsController->get_nav(),
             'res_controller_arr' => $this->CalibrationModel->details('controller'),
             'res_Torquemeter_arr' => $this->CalibrationModel->details('torquemeter'),
-        
-
+            'res_Torquetype' => $this->CalibrationModel->details('torque'),
+            'info' => $info,
+            
         ];
+
+
+
         $this->view('calibration/index', $data);
 
     }
+
+
+    
+
+
+    
 
     
 }

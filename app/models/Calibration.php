@@ -30,10 +30,35 @@ class Calibration{
                 1 => 'KTM-50',
                 2 => 'KTM-100'
             );
+
+
         }
 
+        if($mode =="torque"){
+            $details  = array(
+                1 => 'N.m',
+                0 => 'Kgf.m',
+                2 => 'Kgf.cm',
+                3 => 'In.lbs',
+            );
+    
+        }
+
+   
 
         return $details;
+    }
+
+
+    public function datainfo(){
+
+        $sql =" SELECT * FROM calibrations ORDER BY id desc ";
+        $statement = $this->db->prepare($sql);
+        $statement->execute();
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+
     }
 
    

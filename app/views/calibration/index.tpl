@@ -103,7 +103,7 @@
                     <div class="row t1">
                         <div class="col-4 t1" style="padding-left: 7%; font-size: 18px">Torque Meter :</div>
                         <div class="custom-select">
-                            <select id="TorqueMeter">
+                            <select id="TorqueMeter" >
                                 <?php foreach($data['res_Torquemeter_arr'] as $k_t => $v_t){?>
                                     <option value="<?php echo $k_t;?>"><?php echo $v_t;?></option>
                                 <?php } ?>
@@ -114,7 +114,7 @@
                     <div class="row t1">
                         <div class="col-4 t1" style="padding-left: 7%; font-size: 18px">Controlle :</div>
                         <div class="custom-select">
-                            <select class="selectem">
+                            <select class="selectem" id="controller">
                                  <?php foreach($data['res_controller_arr'] as $k_c =>$v_c){?>
                                     <option value="<?php echo $k_c;?>"><?php echo $v_c;?></option>
                                 <?php } ?>
@@ -258,146 +258,36 @@
                                         <th>Tool S/N</th>
                                         <th>Torque</th>
                                         <th>Unit</th>
-                                        <th>Clutch<br>Scale</th>
-                                        <th>ScaleI<br>Index</th>
-                                        <th>Test<br>No</th>
+
                                         <th>Max<br>Torque</th>
                                         <th>Min<br>Torque</th>
                                         <th>Avg<br>Torque</th>
                                         <th>+ %</th>
                                         <th>- %</th>
                                         <th>Customize</th>
-                                        <th>Angle</th>
+                                   
                                     </tr>
                                 </thead>
 
                                 <tbody style="background-color:#F5F5F5;">
-                                    <tr style="text-align: center; vertical-align: middle;">
-                                        <td>1</td>
-                                        <td>2024/01/22 10:20:31</td>
-                                        <td>User111</td>
-                                        <td>00000-00000</td>
-                                        <td>0.17</td>
-                                        <td>N.m</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>1</td>
-                                        <td>0.17</td>
-                                        <td>0.17</td>
-                                        <td>0.170</td>
-                                        <td>0.000</td>
-                                        <td>0.000</td>
-                                        <td>---</td>
-                                        <td>0</td>
-                                    </tr>
-                                    <tr style="text-align: center; vertical-align: middle;">
-                                        <td>2</td>
-                                        <td>2024/01/22 10:20:31</td>
-                                        <td>User111</td>
-                                        <td>00000-00000</td>
-                                        <td>0.16</td>
-                                        <td>N.m</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>2</td>
-                                        <td>0.17</td>
-                                        <td>0.16</td>
-                                        <td>0.165</td>
-                                        <td>3.030</td>
-                                        <td>3.030</td>
-                                        <td>---</td>
-                                        <td>0</td>
-                                    </tr>
-                                    <tr style="text-align: center; vertical-align: middle;">
-                                        <td>3</td>
-                                        <td>2024/01/22 10:20:31</td>
-                                        <td>User111</td>
-                                        <td>00000-00000</td>
-                                        <td>0.12</td>
-                                        <td>N.m</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>3</td>
-                                        <td>0.17</td>
-                                        <td>0.12</td>
-                                        <td>0.150</td>
-                                        <td>13.333</td>
-                                        <td>20.000</td>
-                                        <td>---</td>
-                                        <td>0</td>
-                                    </tr>
-                                    <tr style="text-align: center; vertical-align: middle;">
-                                        <td>4</td>
-                                        <td>2024/01/22 10:20:31</td>
-                                        <td>User111</td>
-                                        <td>00000-00000</td>
-                                        <td>0.12</td>
-                                        <td>N.m</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>4</td>
-                                        <td>0.17</td>
-                                        <td>0.12</td>
-                                        <td>0.143</td>
-                                        <td>19.298</td>
-                                        <td>15.789</td>
-                                        <td>---</td>
-                                        <td>0</td>
-                                    </tr>
-                                    <tr style="text-align: center; vertical-align: middle;">
-                                        <td>5</td>
-                                        <td>2024/01/22 10:20:31</td>
-                                        <td>User111</td>
-                                        <td>00000-00000</td>
-                                        <td>0.12</td>
-                                        <td>N.m</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>4</td>
-                                        <td>0.17</td>
-                                        <td>0.12</td>
-                                        <td>0.143</td>
-                                        <td>19.298</td>
-                                        <td>15.789</td>
-                                        <td>---</td>
-                                        <td>0</td>
-                                    </tr>
-                                    <tr style="text-align: center; vertical-align: middle;">
-                                        <td>6</td>
-                                        <td>2024/01/22 10:20:31</td>
-                                        <td>User111</td>
-                                        <td>00000-00000</td>
-                                        <td>0.12</td>
-                                        <td>N.m</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>4</td>
-                                        <td>0.17</td>
-                                        <td>0.12</td>
-                                        <td>0.143</td>
-                                        <td>19.298</td>
-                                        <td>15.789</td>
-                                        <td>---</td>
-                                        <td>0</td>
-                                    </tr>
-                                    <tr style="text-align: center; vertical-align: middle;">
-                                        <td>7</td>
-                                        <td>2024/01/22 10:20:31</td>
-                                        <td>User111</td>
-                                        <td>00000-00000</td>
-                                        <td>0.12</td>
-                                        <td>N.m</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>4</td>
-                                        <td>0.17</td>
-                                        <td>0.12</td>
-                                        <td>0.143</td>
-                                        <td>19.298</td>
-                                        <td>15.789</td>
-                                        <td>---</td>
-                                        <td>0</td>
-                                    </tr>
+
+                                    <?php foreach($data['info'] as $key => $val){ ?>
+                                        <tr style="text-align: center; vertical-align: middle;">
+                                            <td><?php echo $val['id'];?></td>
+                                            <td><?php echo $val['datatime'];?></td>
+                                            <td><?php echo $val['operator'];?></td>
+                                            <td><?php echo $val['toolsn'];?></td>
+                                            <td><?php echo $val['torque'];?></td>
+                                            <td><?php echo $data['res_Torquetype'][$val['unit']];?></td>
+                                            <td><?php echo $val['max_torque'];?></td>
+                                            <td><?php echo $val['min_torque'];?></td>
+                                            <td><?php echo $val['avg_torque'];?></td>
+                                            <td><?php echo $val['high_percent'];?></td>
+                                            <td><?php echo $val['low_percent'];?></td>
+                                            <td><?php echo $val['customize'];?></td>
+                                        </tr>
+                                    
+                                    <?php } ?>  
                                 </tbody>
                             </table>
                         </div>
@@ -410,8 +300,8 @@
                             <div class="menu-chart" onclick="toggleMenu()">
                                 <i class="fa fa-bars" style="font-size: 26px"></i>
                                 <div class="menu-content" id="myMenu">
-                                    <a href="#" onclick="viewFullScreen()">View in full screen</a>
-                                    <a href="#" onclick="printChart()">Print chart</a>
+                                    <!--<a href="#" onclick="viewFullScreen()">View in full screen</a>-->
+                                    <!--<a href="#" onclick="printChart()">Print chart</a>-->
                                     <a href="#" onclick="downloadPng()">Download PNG</a>
                                     <a href="#" onclick="downloadJpeg()">Download JPEG</a>
                                 </div>
@@ -668,23 +558,33 @@ function exportCSV(modalId)
     var pageSize = document.getElementById("pageSize" + modalId[5]).value;
 
 
-    console.log("Modal ID:", modalId);
-    console.log("Calibration file name:", fileName);
-    console.log("Page Size:", pageSize);
-
-
     closeModal(modalId);
 }
 
 
 function NextToAnalysisSystemKTM()
 {
+
+    var dropdown1 = document.getElementById('TorqueMeter');
+    var selectedValue1 = dropdown1.options[dropdown1.selectedIndex].value;
+
+    var dropdown2 = document.getElementById('controller');
+    var selectedValue2 = dropdown2.options[dropdown2.selectedIndex].value;
+
+    // 將下拉式選單的值存儲到 Cookie 中
+    document.cookie = 'selectedValue1=' + encodeURIComponent(selectedValue1);
+    document.cookie = 'selectedValue2=' + encodeURIComponent(selectedValue2);
+}
+
+
     // Show analysis-system-KTM
     document.getElementById('analysis-system-KTM').style.display = 'block';
 
     // Hide Torque-Collection
     document.getElementById('Torque-Collection').style.display = 'none';
-}
+
+
+ 
 
 function backSetting()
 {
