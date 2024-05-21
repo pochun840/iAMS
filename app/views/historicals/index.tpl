@@ -1515,6 +1515,9 @@ document.getElementById('downloadchartbtn').addEventListener('click', function()
 document.getElementById('downland_combine').addEventListener('click', function() {
     var divToRemove = document.getElementById('empty1');
     var divToRemove2 = document.getElementById('chart-title');
+
+    var job1 = '<?php echo $data['info_final'][0]['system_sn'];?>';
+    var job2 = '<?php echo $data['info_final'][1]['system_sn'];?>';
     
     if(divToRemove) {
         divToRemove.parentNode.removeChild(divToRemove);
@@ -1538,10 +1541,23 @@ document.getElementById('downland_combine').addEventListener('click', function()
 
     var divContent = document.getElementById('combinedata').outerHTML;
     divContent = divContent.replace('force-overflow-Combine', 'photo');
+
+    var additionalInfo = '\
+     <div id="additional-info"> \
+                            <span style="color: rgb(255, 0, 0);">第一組曲線圖:' + job1 + '的完整紀錄。</span><br> \
+                            <br> \
+                            <span style="color: rgb(44,55,82);">第二組曲線圖:' + job2 + '的完整紀錄。</span><br> \
+                            <br> \
+                      </div>';
+
+
+    
     var stylesheets = document.getElementsByTagName('link');
     var cssString = Array.from(stylesheets)
         .map(stylesheet => `<link rel="stylesheet" href="${stylesheet.href}">`)
         .join('\n');
+    
+    divContent += additionalInfo;
     
     var fullHTML = `<head>${cssString}</head>\n<body>${divContent}<img src="${chartDataURL}" alt="ECharts Chart" style="max-width: 100%; height: auto;"></body>`;
     var blob = new Blob([fullHTML], { type: 'text/html' });
@@ -1553,4 +1569,5 @@ document.getElementById('downland_combine').addEventListener('click', function()
     history.go(0);
 
 });
+
 </script>
