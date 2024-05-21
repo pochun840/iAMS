@@ -26,8 +26,8 @@ class Calibrations extends Controller
         $echart_data = $this->CalibrationModel->echarts_data();
         if(!empty($echart_data)){
             #整理圖表所需要的資料
-            $tmp['echart']['x_val'] = json_encode(array_column($echart_data, 'id'));
-            $tmp['echart']['y_val'] = json_encode(array_column($echart_data, 'torque'));
+            $tmp['x_val'] = json_encode(array_column($echart_data, 'id'));
+            $tmp['y_val'] = json_encode(array_column($echart_data, 'torque'));
 
         }
 

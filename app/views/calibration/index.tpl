@@ -5,19 +5,15 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/datatables.min.css">
 
 <script defer src="<?php echo URLROOT; ?>/js/chart.min.js"></script>
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/calibration.css" type="text/css">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>css/calibration.css?v=202405211300" type="text/css">
 
 <script src="<?php echo URLROOT; ?>js/echarts_min.js?v=202405080900"></script>
 <script src="<?php echo URLROOT; ?>js/html2canvas_min.js?v=202405080900"></script>
 <script src="<?php echo URLROOT; ?>js/chart_share.js?v=202405151200"></script>
-
+<script src="<?php echo URLROOT; ?>js/calibrations.js?v=202405210900"></script>
 
 <?php echo $data['nav']; ?>
 
-<style>
-.t1{font-size: 17px; margin: 2px 0px; display: flex; align-items: center;}
-.t2{font-size: 17; margin: 2px 0px; height: 25px}
-</style>
 
 <div class="container-ms">
 
@@ -274,7 +270,7 @@
                                     </tr>
                                 </thead>
 
-                                <tbody style="background-color:#F5F5F5;">
+                                <tbody style="background-color:#F5F5F5;" id="datainfo">
 
                                     <?php foreach($data['info'] as $key => $val){ ?>
                                         <tr style="text-align: center; vertical-align: middle;">
@@ -301,7 +297,9 @@
 
                 <div id="chart-setting">
                     <div class="column column-chart">
-                        <div class="chart-container">
+                        <div class="chart-container" id='chart_block'>
+                         <!--曲線圖--->
+                         <div  align='center' id="mychart" style="width: 800px;height:300px;">
                             <!--<div class="menu-chart" onclick="toggleMenu()">
                                 <i class="fa fa-bars" style="font-size: 26px"></i>
                                 <div class="menu-content" id="myMenu">
@@ -312,8 +310,8 @@
                                 </div>
                             </div>-->
 
-                            <!--曲線圖--->
-                            <div align="center" id="mychart" style="width: 600px;height:300px;">
+                       
+                           
                         </div>
                     </div>
 
@@ -422,7 +420,7 @@
                 <div class="row t1">
                     <div class="col-4 t1" for="fileName1">Calibration file name:</div>
                     <div class="col-8 t1">
-                        <input id="fileName1" type="text" class="t1 form-control" value="torque mete model_operator_tool S/N_year.month.date_hour.min.sec.DAT">
+                        <input id="fileName1" type="text" class="t1 form-control" value="">
                     </div>
                 </div>
                 <div class="row t1">
@@ -442,9 +440,9 @@
                             <option value="Letter">Letter</option>
                         </select>
                     </div>
-                </div>
+                </div>-->
                 <div class="modal-footer justify-content-center">
-                    <button id="ExportCSV" class="style-button" onclick="openModal('Export_CSV')">Export</button>
+                    <button id="ExportCSV" class="style-button" onclick="csv_download()">Export</button>
                     <button class="style-button" onclick="closeModal('Export_CSV')">Cancel</button>
                 </div>
             </div>
@@ -544,8 +542,6 @@ function NextToAnalysisSystemKTM()
     // 將下拉式選單的值存儲到 Cookie 中
     document.cookie = 'selectedValue1=' + encodeURIComponent(selectedValue1);
     document.cookie = 'selectedValue2=' + encodeURIComponent(selectedValue2);
-}
-
 
     // Show analysis-system-KTM
     document.getElementById('analysis-system-KTM').style.display = 'block';
@@ -553,8 +549,7 @@ function NextToAnalysisSystemKTM()
     // Hide Torque-Collection
     document.getElementById('Torque-Collection').style.display = 'none';
 
-
- 
+}
 
 function backSetting()
 {
@@ -578,16 +573,11 @@ function toggleMenu()
     menuContent.style.display = (menuContent.style.display === "block") ? "none" : "block";
 }
 
+$(document).ready(function () {
+    highlight_row('table');
+});
 
-
-// Change the color of a row in a table
-    $(document).ready(function () {
-        highlight_row('table');
-        //highlight_row('barcode-table');
-    });
-
-    function highlight_row(tableId)
-{
+function highlight_row(tableId){
     var table = document.getElementById(tableId);
     var cells = table.getElementsByTagName('td');
 
@@ -633,66 +623,61 @@ addMessage();
 
 </script>
 
-<style type="text/css">
-    .selected{
-        background-color: #9AC0CD !important;
-    }
 
-
-    #mychart {
-        margin: 0 auto; 
-        display: block; 
-    }
-
-</style>
 </div>
 
 <?php require APPROOT . 'views/inc/footer.tpl'; ?>
 
 <script>
 
-        var myChart = echarts.init(document.getElementById('mychart'));
-        var option = {
-            title: {
-                text: ''
-            },
-            tooltip: {
-                trigger: 'axis'
-            },
-            xAxis: {
-                type: 'category',
-                data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月']
-            },
-            yAxis: {
-                type: 'value'
-            },
-            dataZoom: generateDataZoom(),
-            series: [{
-                name: 'Torque',
-                type:'line',
-                symbol: 'none',
-                sampling: 'average',
-                lineStyle: {width: 0.75},
-                itemStyle: {
-                    normal: {
-                        color: 'rgb(255,0,0)'
-                    }
-                },
-                areaStyle: {
-                    normal: {
-                        color: new echarts.graphic.LinearGradient(0, 0, 0, 0, [{
-                            offset: 0,
-                            color: 'rgb(255,255,255)'
-                        }, {
-                            offset: 0,
-                            color: 'rgb(255,255,255)'
-                        }])
-                    }
-                },
+    var myChart = echarts.init(document.getElementById('mychart'));
 
-                data: [150, 230, 224, 218, 135, 147, 260]
-            }]
-        };
+    var x_val = <?php echo $data['echart']['x_val'];?>;
+    var y_val = <?php echo $data['echart']['y_val'];?>;
 
-        myChart.setOption(option);
-    </script>
+    var option = {
+        title: {
+            text: ''
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        xAxis: {
+            type: 'category',
+            name :'Count',
+            data: x_val,
+        },
+        yAxis: {
+            type: 'value',
+             name :'Torque',
+        },
+        dataZoom: generateDataZoom(),
+        series: [{
+            name: 'Torque',
+            type:'line',
+            symbol: 'none',
+            sampling: 'average',
+            lineStyle: {width: 0.75},
+            itemStyle: {
+                normal: {
+                    color: 'rgb(255,0,0)'
+                }
+            },
+            areaStyle: {
+                normal: {
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 0, [{
+                        offset: 0,
+                        color: 'rgb(255,255,255)'
+                    }, {
+                        offset: 0,
+                        color: 'rgb(255,255,255)'
+                    }])
+                }
+            },
+
+            data: y_val,
+        }]
+    };
+
+    myChart.setOption(option);
+</script>
