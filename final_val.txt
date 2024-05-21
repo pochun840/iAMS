@@ -1,0 +1,9 @@
+array (
+  0 => NULL,
+));
+array (
+  'data' => NULL,
+)
+array (
+  'data' => '    +  2.2 kgf*cm',
+)

@@ -7,6 +7,11 @@
 <script defer src="<?php echo URLROOT; ?>/js/chart.min.js"></script>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/calibration.css" type="text/css">
 
+<script src="<?php echo URLROOT; ?>js/echarts_min.js?v=202405080900"></script>
+<script src="<?php echo URLROOT; ?>js/html2canvas_min.js?v=202405080900"></script>
+<script src="<?php echo URLROOT; ?>js/chart_share.js?v=202405151200"></script>
+
+
 <?php echo $data['nav']; ?>
 
 <style>
@@ -238,7 +243,7 @@
                         <input type="text" class="form-control" style="margin-right: 5px">
 
                         <button id="Save-btn" type="button" class="btn-save-reset-undo" style="margin-right: 5%">Save</button>
-                        <button id="Reset" type="button" class="btn-save-reset-undo">Reset</button>
+                        <button id="Reset" type="button" class="btn-save-reset-undo" onclick="reset()">Reset</button>
                         <button id="Undo" type="button" class="btn-save-reset-undo">Undo</button>
 
                         <span class="input-group-text">Received Time:</span>
@@ -297,53 +302,18 @@
                 <div id="chart-setting">
                     <div class="column column-chart">
                         <div class="chart-container">
-                            <div class="menu-chart" onclick="toggleMenu()">
+                            <!--<div class="menu-chart" onclick="toggleMenu()">
                                 <i class="fa fa-bars" style="font-size: 26px"></i>
                                 <div class="menu-content" id="myMenu">
-                                    <!--<a href="#" onclick="viewFullScreen()">View in full screen</a>-->
-                                    <!--<a href="#" onclick="printChart()">Print chart</a>-->
+                                    <a href="#" onclick="viewFullScreen()">View in full screen</a>
+                                    <a href="#" onclick="printChart()">Print chart</a>
                                     <a href="#" onclick="downloadPng()">Download PNG</a>
                                     <a href="#" onclick="downloadJpeg()">Download JPEG</a>
                                 </div>
-                            </div>
+                            </div>-->
 
-                            <svg viewBox="0 0 500 300">
-                                <!-- Draw X and Y axes -->
-                                <line class="axis-x" x1="50" y1="215" x2="500" y2="215" />
-                                <line class="axis-y" x1="50" y1="215" x2="50" y2="40" />
-
-                                <!-- Draw grid lines on Y-axis -->
-                                <line class="grid-line" x1="50" y1="190" x2="500" y2="190" />
-                                <line class="grid-line" x1="50" y1="160" x2="500" y2="160" />
-                                <line class="grid-line" x1="50" y1="130" x2="500" y2="130" />
-                                <line class="grid-line" x1="50" y1="100" x2="500" y2="100" />
-                                <line class="grid-line" x1="50" y1="70" x2="500" y2="70" />
-                                <line class="grid-line" x1="50" y1="40" x2="500" y2="40" />
-
-                                <!-- Draw Torque values -->
-                                <text x="60" y="20" text-anchor="end">Torques</text>
-
-                                <text x="40" y="40" text-anchor="end">0.17</text>
-                                <text x="40" y="70" text-anchor="end">0.16</text>
-                                <text x="40" y="100" text-anchor="end">0.13</text>
-                                <text x="40" y="130" text-anchor="end">0.12</text>
-                                <text x="40" y="160" text-anchor="end">0.12</text>
-                                <text x="40" y="190" text-anchor="end">0.12</text>
-
-                                <!-- Draw Count values -->
-                                <text x="50" y="233" text-anchor="middle">0</text>
-                                <text x="115" y="233" text-anchor="middle">1</text>
-                                <text x="185" y="233" text-anchor="middle">2</text>
-                                <text x="245" y="233" text-anchor="middle">3</text>
-                                <text x="305" y="233" text-anchor="middle">4</text>
-                                <text x="365" y="233" text-anchor="middle">5</text>
-                                <text x="435" y="233" text-anchor="middle">6</text>
-                                <text x="495" y="233" text-anchor="middle">7</text>
-
-                                <text x="480" y="245" text-anchor="middle">Count</text>
-                                <!-- Draw the line chart -->
-                                <path class="line" d="M50 190 L150 180 L240 130 L350 158 L420 100 L530 60" />
-                            </svg>
+                            <!--曲線圖--->
+                            <div align="center" id="mychart" style="width: 600px;height:300px;">
                         </div>
                     </div>
 
@@ -668,10 +638,61 @@ addMessage();
         background-color: #9AC0CD !important;
     }
 
-    ./*selected :hover{
-        background-color: #9AC0CD;
-    }*/
+
+    #mychart {
+        margin: 0 auto; 
+        display: block; 
+    }
+
 </style>
 </div>
 
 <?php require APPROOT . 'views/inc/footer.tpl'; ?>
+
+<script>
+
+        var myChart = echarts.init(document.getElementById('mychart'));
+        var option = {
+            title: {
+                text: ''
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            xAxis: {
+                type: 'category',
+                data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            dataZoom: generateDataZoom(),
+            series: [{
+                name: 'Torque',
+                type:'line',
+                symbol: 'none',
+                sampling: 'average',
+                lineStyle: {width: 0.75},
+                itemStyle: {
+                    normal: {
+                        color: 'rgb(255,0,0)'
+                    }
+                },
+                areaStyle: {
+                    normal: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 0, [{
+                            offset: 0,
+                            color: 'rgb(255,255,255)'
+                        }, {
+                            offset: 0,
+                            color: 'rgb(255,255,255)'
+                        }])
+                    }
+                },
+
+                data: [150, 230, 224, 218, 135, 147, 260]
+            }]
+        };
+
+        myChart.setOption(option);
+    </script>
