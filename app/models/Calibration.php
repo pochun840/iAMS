@@ -44,8 +44,6 @@ class Calibration{
     
         }
 
-   
-
         return $details;
     }
 
@@ -61,7 +59,6 @@ class Calibration{
 
     }
 
-
     public function echarts_data(){
 
         $sql =" SELECT * FROM calibrations ORDER BY id ASC ";
@@ -69,29 +66,60 @@ class Calibration{
         $statement->execute();
         
         $result_charts = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-
-        return $result_charts;
-
-        /*if(!empty($result)){
-            $id_json = json_encode(array_column($result, 'id'));
-            $torque_json = json_encode(array_column($torque, 'id'));
-            echo $id_json;
-        }*/
-
-        
-
-
-
-
-        
+        return $result_charts;        
     }
+
+    public function getjobid(){
+
+        $sql =" SELECT * FROM job  ORDER BY job_id DESC ";
+        $statement = $this->db->prepare($sql);
+        $statement->execute();
+        
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $result;        
+    }
+
+    public function get_job_name($job_id){
+
+        $sql = "SELECT * FROM `job` WHERE  job_id = :job_id ";
+        $params[':job_id'] = $job_id;
+        $statement = $this->db->prepare($sql);
+        $statement->execute($params);
+        $result = $statement->fetchall(PDO::FETCH_ASSOC);
+        return $result;
+    }
+
+    public function get_seq_id($job_id){
+
+        $sql = "SELECT * FROM `sequence` WHERE  job_id = :job_id ";
+        $params[':job_id'] = $job_id;
+        $statement = $this->db->prepare($sql);
+        $statement->execute($params);
+        $result = $statement->fetchall(PDO::FETCH_ASSOC);
+        return $result;
+    }
+
+     #用job_id及sequence_id 找出對應的task_id
+     public function get_task_id($job_id, $seq_id) {
+
+        $sql = "SELECT * FROM `task` WHERE job_id = :job_id AND seq_id = :seq_id ";
+        $params[':job_id'] = $job_id;
+        $params[':seq_id'] = $seq_id;
+        $statement = $this->db->prepare($sql);
+        $statement->execute($params);
+
+        $result = $statement->fetchall(PDO::FETCH_ASSOC);
+        return $result;
+    }
+
+
+
 
 
     public function tidy_data($final){
 
         #從資料庫找出最大 最小 平均 扭力 high_percent low_percent
-        $sql =" SELECT  MAX(torque) AS max_torque, MIN(torque) AS min_torque   FROM  calibrations ORDER BY id DESC LIMIT 1 ";
+        $sql =" SELECT  MAX(torque) AS max_torque, MIN(torque) AS min_torque,SUM(torque) AS total_torque    FROM  calibrations ORDER BY id DESC LIMIT 1 ";
         $statement = $this->db->prepare($sql);
         $statement->execute();
         $result = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -105,10 +133,11 @@ class Calibration{
 
         $count = (int)$result_total[0]['total_records'] + 1;
         if(isset($result[0])){
-            //新增資料 
 
             $max_torque = floatval($result[0]['max_torque']);
             $min_torque = floatval($result[0]['min_torque']);
+
+            $total_torque = floatval($result[0]['total_torque']);
            
             if($final > $max_torque){
                 $max_torque = $final;
@@ -119,28 +148,54 @@ class Calibration{
                 $min_torque = $final;
             }
 
-            $avg_torque = $max_torque + $final / $count; 
+            #平均值
+            $average_torque = round(($total_torque + $max_torque) / $count, 2);
+
+            $high_percent = round((($max_torque - $average_torque) / $average_torque) * 100, 2);
+            $low_percent  = round((($min_torque - $average_torque) / $average_torque) * 100, 2);
 
 
-            $high_percent = "(C42-C43)/C43)";
-            $low_percent  = "(C42-C43)/C43)";
-
-            
             $datatime = date("Ymd H:i:s");
 
-            echo $max_torque;
-            echo "<br>";
-            echo $min_torque;
-            echo "<br>";
-            echo $avg_torque;
+
+            $sql_in = "INSERT INTO `calibrations` ('id','operator','toolsn','torque','unit','max_torque','min_torque','avg_torque','high_percent','low_percent','customize','datatime' )
+                    VALUES (:id,:operator,:toolsn,:torque,:unit,:max_torque,:min_torque,:avg_torque,:high_percent,:low_percent,:customize,:datatime)";
+
+            $statement = $this->db->prepare($sql_in);
 
 
+
+            $statement->bindValue(':id', $count);
+            $statement->bindValue(':operator', 'User111');
+            $statement->bindValue(':toolsn', '00000-00000');
+            $statement->bindValue(':torque', $final);
+            $statement->bindValue(':unit', '1');
+            $statement->bindValue(':max_torque', $max_torque);
+            $statement->bindValue(':min_torque', $min_torque);
+            $statement->bindValue(':avg_torque', $average_torque);
+            $statement->bindValue(':high_percent', $high_percent);
+            $statement->bindValue(':low_percent', $low_percent);
+            $statement->bindValue(':customize', '');
+            $statement->bindValue(':datatime', $datatime);
+
+    
+            $results = $statement->execute();
+
+
+
+            var_dump($results);
+            die();
+             //"(C42-C43)/C43)";
+            //$low_percent  = "(C42-C43)/C43)";
+
+            
 
 
         }
     
 
     }
+
 
 
    
