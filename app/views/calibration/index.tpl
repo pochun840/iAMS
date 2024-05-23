@@ -5,15 +5,15 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/datatables.min.css">
 
 <script defer src="<?php echo URLROOT; ?>/js/chart.min.js"></script>
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/calibration.css?v=202405211300" type="text/css">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>css/calibration.css?v=202405221200" type="text/css">
 
 <script src="<?php echo URLROOT; ?>js/echarts_min.js?v=202405080900"></script>
 <script src="<?php echo URLROOT; ?>js/html2canvas_min.js?v=202405080900"></script>
 <script src="<?php echo URLROOT; ?>js/chart_share.js?v=202405151200"></script>
 <script src="<?php echo URLROOT; ?>js/calibrations.js?v=202405210900"></script>
 
-<?php echo $data['nav']; ?>
 
+<?php echo $data['nav']; ?>
 
 <div class="container-ms">
 
@@ -104,7 +104,7 @@
                     <div class="row t1">
                         <div class="col-4 t1" style="padding-left: 7%; font-size: 18px">Torque Meter :</div>
                         <div class="custom-select">
-                            <select id="TorqueMeter" >
+                            <select id="TorqueMeter">
                                 <?php foreach($data['res_Torquemeter_arr'] as $k_t => $v_t){?>
                                     <option value="<?php echo $k_t;?>"><?php echo $v_t;?></option>
                                 <?php } ?>
@@ -113,9 +113,9 @@
                     </div>
 
                     <div class="row t1">
-                        <div class="col-4 t1" style="padding-left: 7%; font-size: 18px">Controlle :</div>
+                        <div class="col-4 t1" style="padding-left: 7%; font-size: 18px">Controller :</div>
                         <div class="custom-select">
-                            <select class="selectem" id="controller">
+                            <select class="selectem">
                                  <?php foreach($data['res_controller_arr'] as $k_c =>$v_c){?>
                                     <option value="<?php echo $k_c;?>"><?php echo $v_c;?></option>
                                 <?php } ?>
@@ -143,11 +143,11 @@
             </div>
         </div>
 
-        <div class="container-fluid">
+        <div class="container-fluid" id="container-fluid" >
             <!-- Left -->
             <div class="column column-left">
                 <div class="row t1" style=" padding-left: 45%">
-                    <button id="call-job" type="button" class="btn-calljob" style="font-size: 18px; color: #000;">Call Job</button>
+                    <button id="call-job" type="button" class="btn-calljob" style="font-size: 18px; color: #000;"  onclick="calljoball()" >Call Job</button>
                 </div>
                 <div class="border-bottom">
                     <div class="row t1">
@@ -222,6 +222,11 @@
                         <input id="tolerance" type="text" class="t2 form-control" value="+ 0.5">
                     </div>
                 </div>
+
+                <div class="row t1">
+                   <br><br>
+                   <button id="Connect" type="button" class="btn-calljob" style="font-size: 18px; color: #000;" onclick="Connect()">Connect</button>
+                </div>
             </div>
 
 
@@ -252,7 +257,7 @@
                         <div class="force-overflow-table">
                             <table class="table table-bordered table-hover" id="table">
                                 <thead id="header-table" style="text-align: center; vertical-align: middle">
-                                    <tr>
+                                       <tr>
                                         <th>Recv<br>No</th>
                                         <th>Recv. Time</th>
                                         <th>Operator</th>
@@ -297,20 +302,10 @@
 
                 <div id="chart-setting">
                     <div class="column column-chart">
-                        <div class="chart-container" id='chart_block'>
-                         <!--曲線圖--->
-                         <div  align='center' id="mychart" style="width: 800px;height:300px;">
-                            <!--<div class="menu-chart" onclick="toggleMenu()">
-                                <i class="fa fa-bars" style="font-size: 26px"></i>
-                                <div class="menu-content" id="myMenu">
-                                    <a href="#" onclick="viewFullScreen()">View in full screen</a>
-                                    <a href="#" onclick="printChart()">Print chart</a>
-                                    <a href="#" onclick="downloadPng()">Download PNG</a>
-                                    <a href="#" onclick="downloadJpeg()">Download JPEG</a>
-                                </div>
-                            </div>-->
-
-                       
+                         <div class="chart-container" id='chart_block'>
+                            <!---曲線圖---->
+                            <div  id="mychart" width="500px" height="300px"></div>
+                        
                            
                         </div>
                     </div>
@@ -432,7 +427,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="row t1">
+                <!--<div class="row t1">
                     <div class="col-4 t1" for="pageSize1">Page Size:</div>
                     <div class="col t1">
                         <select id="pageSize1" style="width: 200px; height: 30px">
@@ -442,7 +437,7 @@
                     </div>
                 </div>-->
                 <div class="modal-footer justify-content-center">
-                    <button id="ExportCSV" class="style-button" onclick="csv_download()">Export</button>
+                    <button id="ExportCSV" class="style-button" onclick="file_download()">Export</button>
                     <button class="style-button" onclick="closeModal('Export_CSV')">Cancel</button>
                 </div>
             </div>
@@ -470,7 +465,7 @@
                     </div>
                 </div>
                 <div class="modal-footer justify-content-center">
-                    <button id="ExportChart" class="style-button" onclick="openModal('Export_Chart')">Export</button>
+                    <button id="ExportChart" class="style-button" onclick="pic_download()">Export</button>
                     <button class="style-button" onclick="closeModal('Export_Chart')">Cancel</button>
                 </div>
             </div>
@@ -498,12 +493,60 @@
                     </div>
                 </div>
                 <div class="modal-footer justify-content-center">
-                    <button id="Exportreport" class="style-button" onclick="openModal('Export_Report')">Export</button>
+                    <!--<button id="Exportreport" class="style-button" onclick="openModal('Export_Report')">Export</button>-->
+                    <button id="Exportreport" class="style-button" onclick="html_download()">Export</button>
                     <button class="style-button" onclick="closeModal('Export_Report')">Cancel</button>
                 </div>
             </div>
         </div>
     </div>
+
+
+
+    <div id="get_joball" class="lmodal" style="top: 10%" >
+        <div class="lmodal-dialog modal-lg">
+            <div class="lmodal-content" style="top: 150px; width: 710px">
+                <span class="lclose-btn" onclick="closeModal_job()">&times;</span>
+                <div class="lmodal-column modalselect">
+                    <h4>Job</h4>
+                    <div class="scrollbar-jobselect" id="style-jobselect">
+                        <div class="force-overflow-jobselect">
+
+                            <?php foreach($data['job_arr'] as $k_job =>$v_job){?>
+                                    <div class="row t1">
+                                        <div class="col t5 form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" name="jobid" id="jobid" value="<?php echo $v_job['job_id'];?>" onclick="JobCheckbox()" style="zoom:1.0; vertical-align: middle;">&nbsp;
+                                            <label class="form-check-label" for="Job-1"><?php echo $v_job['job_name'];?></label>
+                                        </div>
+                                    </div>
+
+                            <?php }?>
+                        </div>
+                    </div>
+                </div>
+                <div class="lmodal-column modalselect">
+                    <h4>Sequence</h4>
+                    <div class="scrollbar-jobselect" id="style-jobselect">
+                        <div class="force-overflow-jobselect">
+                            <div id="Seq-list" style="display: none">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lmodal-column modalselect">
+                    <h4>Task</h4>
+                    <div class="scrollbar-jobselect" id="style-jobselect">
+                        <div class="force-overflow-jobselect">
+                            <div id="Task-list" style="display: none">
+                              
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 <script>
 
@@ -532,23 +575,11 @@ function exportCSV(modalId)
 
 function NextToAnalysisSystemKTM()
 {
-
-    var dropdown1 = document.getElementById('TorqueMeter');
-    var selectedValue1 = dropdown1.options[dropdown1.selectedIndex].value;
-
-    var dropdown2 = document.getElementById('controller');
-    var selectedValue2 = dropdown2.options[dropdown2.selectedIndex].value;
-
-    // 將下拉式選單的值存儲到 Cookie 中
-    document.cookie = 'selectedValue1=' + encodeURIComponent(selectedValue1);
-    document.cookie = 'selectedValue2=' + encodeURIComponent(selectedValue2);
-
     // Show analysis-system-KTM
     document.getElementById('analysis-system-KTM').style.display = 'block';
 
     // Hide Torque-Collection
     document.getElementById('Torque-Collection').style.display = 'none';
-
 }
 
 function backSetting()
@@ -573,11 +604,16 @@ function toggleMenu()
     menuContent.style.display = (menuContent.style.display === "block") ? "none" : "block";
 }
 
-$(document).ready(function () {
-    highlight_row('table');
-});
 
-function highlight_row(tableId){
+
+// Change the color of a row in a table
+    $(document).ready(function () {
+        highlight_row('table');
+        //highlight_row('barcode-table');
+    });
+
+function highlight_row(tableId)
+{
     var table = document.getElementById(tableId);
     var cells = table.getElementsByTagName('td');
 
@@ -621,16 +657,27 @@ function ClickNotification() {
 
 addMessage();
 
+function closeModal_job() {
+    document.getElementById("get_joball").style.display = "none";
+    var job_id = "<?php echo $_COOKIE['job_id'] ?? '' ?>"; 
+    var job_name = "<?php echo $_COOKIE['job_name'] ?? '' ?>"; 
+    document.getElementById("job-id").value = job_id;
+    document.getElementById("job-name").value = job_name;
+
+}
+
 </script>
 
-
-</div>
 
 <?php require APPROOT . 'views/inc/footer.tpl'; ?>
 
 <script>
 
-    var myChart = echarts.init(document.getElementById('mychart'));
+    var myChart = echarts.init(document.getElementById('mychart'), null, {
+        width: '500px',
+        height: '300px',
+        //marginTop: 50 
+    });
 
     var x_val = <?php echo $data['echart']['x_val'];?>;
     var y_val = <?php echo $data['echart']['y_val'];?>;
