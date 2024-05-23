@@ -5,15 +5,14 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/datatables.min.css">
 
 <script defer src="<?php echo URLROOT; ?>/js/chart.min.js"></script>
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/calibration.css?v=202405221200" type="text/css">
-
-<script src="<?php echo URLROOT; ?>js/echarts_min.js?v=202405080900"></script>
-<script src="<?php echo URLROOT; ?>js/html2canvas_min.js?v=202405080900"></script>
-<script src="<?php echo URLROOT; ?>js/chart_share.js?v=202405151200"></script>
-<script src="<?php echo URLROOT; ?>js/calibrations.js?v=202405210900"></script>
-
+<link rel="stylesheet" href="<?php echo URLROOT; ?>css/calibration.css" type="text/css">
 
 <?php echo $data['nav']; ?>
+
+<style>
+.t1{font-size: 17px; margin: 2px 0px; display: flex; align-items: center;}
+.t2{font-size: 17; margin: 2px 0px; height: 25px}
+</style>
 
 <div class="container-ms">
 
@@ -113,7 +112,7 @@
                     </div>
 
                     <div class="row t1">
-                        <div class="col-4 t1" style="padding-left: 7%; font-size: 18px">Controller :</div>
+                        <div class="col-4 t1" style="padding-left: 7%; font-size: 18px">Controlle :</div>
                         <div class="custom-select">
                             <select class="selectem">
                                  <?php foreach($data['res_controller_arr'] as $k_c =>$v_c){?>
@@ -143,11 +142,11 @@
             </div>
         </div>
 
-        <div class="container-fluid" id="container-fluid" >
+        <div class="container-fluid">
             <!-- Left -->
             <div class="column column-left">
                 <div class="row t1" style=" padding-left: 45%">
-                    <button id="call-job" type="button" class="btn-calljob" style="font-size: 18px; color: #000;"  onclick="calljoball()" >Call Job</button>
+                    <button id="call-job" type="button" class="btn-calljob" style="font-size: 18px; color: #000;">Call Job</button>
                 </div>
                 <div class="border-bottom">
                     <div class="row t1">
@@ -222,11 +221,6 @@
                         <input id="tolerance" type="text" class="t2 form-control" value="+ 0.5">
                     </div>
                 </div>
-
-                <div class="row t1">
-                   <br><br>
-                   <button id="Connect" type="button" class="btn-calljob" style="font-size: 18px; color: #000;" onclick="Connect()">Connect</button>
-                </div>
             </div>
 
 
@@ -244,7 +238,7 @@
                         <input type="text" class="form-control" style="margin-right: 5px">
 
                         <button id="Save-btn" type="button" class="btn-save-reset-undo" style="margin-right: 5%">Save</button>
-                        <button id="Reset" type="button" class="btn-save-reset-undo" onclick="reset()">Reset</button>
+                        <button id="Reset" type="button" class="btn-save-reset-undo">Reset</button>
                         <button id="Undo" type="button" class="btn-save-reset-undo">Undo</button>
 
                         <span class="input-group-text">Received Time:</span>
@@ -257,43 +251,153 @@
                         <div class="force-overflow-table">
                             <table class="table table-bordered table-hover" id="table">
                                 <thead id="header-table" style="text-align: center; vertical-align: middle">
-                                       <tr>
+                                    <tr>
                                         <th>Recv<br>No</th>
                                         <th>Recv. Time</th>
                                         <th>Operator</th>
                                         <th>Tool S/N</th>
                                         <th>Torque</th>
                                         <th>Unit</th>
-
+                                        <th>Clutch<br>Scale</th>
+                                        <th>ScaleI<br>Index</th>
+                                        <th>Test<br>No</th>
                                         <th>Max<br>Torque</th>
                                         <th>Min<br>Torque</th>
                                         <th>Avg<br>Torque</th>
                                         <th>+ %</th>
                                         <th>- %</th>
                                         <th>Customize</th>
-                                   
+                                        <th>Angle</th>
                                     </tr>
                                 </thead>
 
-                                <tbody style="background-color:#F5F5F5;" id="datainfo">
-
-                                    <?php foreach($data['info'] as $key => $val){ ?>
-                                        <tr style="text-align: center; vertical-align: middle;">
-                                            <td><?php echo $val['id'];?></td>
-                                            <td><?php echo $val['datatime'];?></td>
-                                            <td><?php echo $val['operator'];?></td>
-                                            <td><?php echo $val['toolsn'];?></td>
-                                            <td><?php echo $val['torque'];?></td>
-                                            <td><?php echo $data['res_Torquetype'][$val['unit']];?></td>
-                                            <td><?php echo $val['max_torque'];?></td>
-                                            <td><?php echo $val['min_torque'];?></td>
-                                            <td><?php echo $val['avg_torque'];?></td>
-                                            <td><?php echo $val['high_percent'];?></td>
-                                            <td><?php echo $val['low_percent'];?></td>
-                                            <td><?php echo $val['customize'];?></td>
-                                        </tr>
-                                    
-                                    <?php } ?>  
+                                <tbody style="background-color:#F5F5F5;">
+                                    <tr style="text-align: center; vertical-align: middle;">
+                                        <td>1</td>
+                                        <td>2024/01/22 10:20:31</td>
+                                        <td>User111</td>
+                                        <td>00000-00000</td>
+                                        <td>0.17</td>
+                                        <td>N.m</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td>1</td>
+                                        <td>0.17</td>
+                                        <td>0.17</td>
+                                        <td>0.170</td>
+                                        <td>0.000</td>
+                                        <td>0.000</td>
+                                        <td>---</td>
+                                        <td>0</td>
+                                    </tr>
+                                    <tr style="text-align: center; vertical-align: middle;">
+                                        <td>2</td>
+                                        <td>2024/01/22 10:20:31</td>
+                                        <td>User111</td>
+                                        <td>00000-00000</td>
+                                        <td>0.16</td>
+                                        <td>N.m</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td>2</td>
+                                        <td>0.17</td>
+                                        <td>0.16</td>
+                                        <td>0.165</td>
+                                        <td>3.030</td>
+                                        <td>3.030</td>
+                                        <td>---</td>
+                                        <td>0</td>
+                                    </tr>
+                                    <tr style="text-align: center; vertical-align: middle;">
+                                        <td>3</td>
+                                        <td>2024/01/22 10:20:31</td>
+                                        <td>User111</td>
+                                        <td>00000-00000</td>
+                                        <td>0.12</td>
+                                        <td>N.m</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td>3</td>
+                                        <td>0.17</td>
+                                        <td>0.12</td>
+                                        <td>0.150</td>
+                                        <td>13.333</td>
+                                        <td>20.000</td>
+                                        <td>---</td>
+                                        <td>0</td>
+                                    </tr>
+                                    <tr style="text-align: center; vertical-align: middle;">
+                                        <td>4</td>
+                                        <td>2024/01/22 10:20:31</td>
+                                        <td>User111</td>
+                                        <td>00000-00000</td>
+                                        <td>0.12</td>
+                                        <td>N.m</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td>4</td>
+                                        <td>0.17</td>
+                                        <td>0.12</td>
+                                        <td>0.143</td>
+                                        <td>19.298</td>
+                                        <td>15.789</td>
+                                        <td>---</td>
+                                        <td>0</td>
+                                    </tr>
+                                    <tr style="text-align: center; vertical-align: middle;">
+                                        <td>5</td>
+                                        <td>2024/01/22 10:20:31</td>
+                                        <td>User111</td>
+                                        <td>00000-00000</td>
+                                        <td>0.12</td>
+                                        <td>N.m</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td>4</td>
+                                        <td>0.17</td>
+                                        <td>0.12</td>
+                                        <td>0.143</td>
+                                        <td>19.298</td>
+                                        <td>15.789</td>
+                                        <td>---</td>
+                                        <td>0</td>
+                                    </tr>
+                                    <tr style="text-align: center; vertical-align: middle;">
+                                        <td>6</td>
+                                        <td>2024/01/22 10:20:31</td>
+                                        <td>User111</td>
+                                        <td>00000-00000</td>
+                                        <td>0.12</td>
+                                        <td>N.m</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td>4</td>
+                                        <td>0.17</td>
+                                        <td>0.12</td>
+                                        <td>0.143</td>
+                                        <td>19.298</td>
+                                        <td>15.789</td>
+                                        <td>---</td>
+                                        <td>0</td>
+                                    </tr>
+                                    <tr style="text-align: center; vertical-align: middle;">
+                                        <td>7</td>
+                                        <td>2024/01/22 10:20:31</td>
+                                        <td>User111</td>
+                                        <td>00000-00000</td>
+                                        <td>0.12</td>
+                                        <td>N.m</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td>4</td>
+                                        <td>0.17</td>
+                                        <td>0.12</td>
+                                        <td>0.143</td>
+                                        <td>19.298</td>
+                                        <td>15.789</td>
+                                        <td>---</td>
+                                        <td>0</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -302,11 +406,54 @@
 
                 <div id="chart-setting">
                     <div class="column column-chart">
-                         <div class="chart-container" id='chart_block'>
-                            <!---曲線圖---->
-                            <div  id="mychart" width="500px" height="300px"></div>
-                        
-                           
+                        <div class="chart-container">
+                            <div class="menu-chart" onclick="toggleMenu()">
+                                <i class="fa fa-bars" style="font-size: 26px"></i>
+                                <div class="menu-content" id="myMenu">
+                                    <a href="#" onclick="viewFullScreen()">View in full screen</a>
+                                    <a href="#" onclick="printChart()">Print chart</a>
+                                    <a href="#" onclick="downloadPng()">Download PNG</a>
+                                    <a href="#" onclick="downloadJpeg()">Download JPEG</a>
+                                </div>
+                            </div>
+
+                            <svg viewBox="0 0 500 300">
+                                <!-- Draw X and Y axes -->
+                                <line class="axis-x" x1="50" y1="215" x2="500" y2="215" />
+                                <line class="axis-y" x1="50" y1="215" x2="50" y2="40" />
+
+                                <!-- Draw grid lines on Y-axis -->
+                                <line class="grid-line" x1="50" y1="190" x2="500" y2="190" />
+                                <line class="grid-line" x1="50" y1="160" x2="500" y2="160" />
+                                <line class="grid-line" x1="50" y1="130" x2="500" y2="130" />
+                                <line class="grid-line" x1="50" y1="100" x2="500" y2="100" />
+                                <line class="grid-line" x1="50" y1="70" x2="500" y2="70" />
+                                <line class="grid-line" x1="50" y1="40" x2="500" y2="40" />
+
+                                <!-- Draw Torque values -->
+                                <text x="60" y="20" text-anchor="end">Torques</text>
+
+                                <text x="40" y="40" text-anchor="end">0.17</text>
+                                <text x="40" y="70" text-anchor="end">0.16</text>
+                                <text x="40" y="100" text-anchor="end">0.13</text>
+                                <text x="40" y="130" text-anchor="end">0.12</text>
+                                <text x="40" y="160" text-anchor="end">0.12</text>
+                                <text x="40" y="190" text-anchor="end">0.12</text>
+
+                                <!-- Draw Count values -->
+                                <text x="50" y="233" text-anchor="middle">0</text>
+                                <text x="115" y="233" text-anchor="middle">1</text>
+                                <text x="185" y="233" text-anchor="middle">2</text>
+                                <text x="245" y="233" text-anchor="middle">3</text>
+                                <text x="305" y="233" text-anchor="middle">4</text>
+                                <text x="365" y="233" text-anchor="middle">5</text>
+                                <text x="435" y="233" text-anchor="middle">6</text>
+                                <text x="495" y="233" text-anchor="middle">7</text>
+
+                                <text x="480" y="245" text-anchor="middle">Count</text>
+                                <!-- Draw the line chart -->
+                                <path class="line" d="M50 190 L150 180 L240 130 L350 158 L420 100 L530 60" />
+                            </svg>
                         </div>
                     </div>
 
@@ -340,60 +487,63 @@
                                     <div class="row t1">
                                         <div class="col-5 t1" style=" padding-left: 5%; color: #000">Hi Limit Torque:</div>
                                         <div class="col-5 t1">
-                                            <input id="high-limit-torque" type="text" class="t2 form-control" value="<?php echo $data['meter']['hi_limit_torque'];?>">
+                                            <input id="high-limit-torque" type="text" class="t2 form-control" value="0.6">
                                         </div>
                                     </div>
                                     <div class="row t1">
                                         <div class="col-5 t1" style=" padding-left: 5%; color: #000">Lo Limit Torque:</div>
                                         <div class="col-5 t1">
-                                            <input id="low-limit-torque" type="text" class="t2 form-control" value="<?php echo $data['meter']['low_limit_torque'];?>">
+                                            <input id="low-limit-torque" type="text" class="t2 form-control" value="0.4">
                                         </div>
                                     </div>
                                     <div class="row t1">
                                         <div class="col-5 t1" style=" padding-left: 5%; color: #000">Max Torque:</div>
                                         <div class="col-5 t1">
-                                            <input id="max-torque" type="text" class="t2 form-control" value="<?php echo $data['meter']['max_torque'];?>">
+                                            <input id="max-torque" type="text" class="t2 form-control" value="0.22">
                                         </div>
                                     </div>
                                     <div class="row t1">
                                         <div class="col-5 t1" style=" padding-left: 5%; color: #000">Min Torque:</div>
                                         <div class="col-5 t1">
-                                            <input id="min-torque" type="text" class="t2 form-control" value="<?php echo $data['meter']['min_torque'];?>">
+                                            <input id="min-torque" type="text" class="t2 form-control" value="0.12">
                                         </div>
                                     </div>
                                     <div class="row t1">
                                         <div class="col-5 t1" style=" padding-left: 5%; color: #000">Ave Torque:</div>
                                         <div class="col-5 t1">
-                                            <input id="ave-torque" type="text" class="t2 form-control" value="<?php echo $data['meter']['avg_torque'];?>">
+                                            <input id="ave-torque" type="text" class="t2 form-control" value="0.15">
                                         </div>
                                     </div>
                                     <div class="row t1">
                                         <div class="col-5 t1" style=" padding-left: 5%; color: #000">Standard Deviation:</div>
                                         <div class="col-5 t1">
-                                            <input id="standard-deviation" type="text" class="t2 form-control" value="<?php  echo $data['meter']['stddev1'];?>">
+                                            <input id="standard-deviation" type="text" class="t2 form-control" value="0.04">
                                         </div>
                                     </div>
                                     <div class="row t1">
                                         <div class="col-5 t1" style=" padding-left: 5%; color: #000">CM:</div>
                                         <div class="col-5 t1">
-                                            <input id="cm" type="text" class="t2 form-control" value="<?php  echo $data['meter']['cm'];?>">
+                                            <input id="cm" type="text" class="t2 form-control" value="5.15">
                                         </div>
                                     </div>
                                     <div class="row t1">
                                         <div class="col-5 t1" style=" padding-left: 5%; color: #000">CMK:</div>
                                         <div class="col-5 t1">
-                                            <input id="cmk" type="text" class="t2 form-control" value="<?php  echo $data['meter']['cmk'];?>">
+                                            <input id="cmk" type="text" class="t2 form-control" value="45.06">
                                         </div>
                                     </div>
-                                    <?php for($i=1; $i<= 5 ;$i++){?>
-                                        <div class="row t1">
-                                            <div class="col-5 t1" style=" padding-left: 5%; color: #000"><?php echo $i;?>:</div>
-                                            <div class="col-5 t1">
-                                                <input id="1" type="text" class="t2 form-control" value="<?php echo $data['meter']['res_total'][$i-1]['torque'];?>">
-                                            </div>
+                                    <div class="row t1">
+                                        <div class="col-5 t1" style=" padding-left: 5%; color: #000">1:</div>
+                                        <div class="col-5 t1">
+                                            <input id="1" type="text" class="t2 form-control" value="0.17">
                                         </div>
-                                    <?php } ?>
-                                   
+                                    </div>
+                                    <div class="row t1">
+                                        <div class="col-5 t1" style=" padding-left: 5%; color: #000">2:</div>
+                                        <div class="col-5 t1">
+                                            <input id="2" type="text" class="t2 form-control" value="0.16">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -412,7 +562,7 @@
                 <div class="row t1">
                     <div class="col-4 t1" for="fileName1">Calibration file name:</div>
                     <div class="col-8 t1">
-                        <input id="fileName1" type="text" class="t1 form-control" value="">
+                        <input id="fileName1" type="text" class="t1 form-control" value="torque mete model_operator_tool S/N_year.month.date_hour.min.sec.DAT">
                     </div>
                 </div>
                 <div class="row t1">
@@ -424,7 +574,7 @@
                         </select>
                     </div>
                 </div>
-                <!--<div class="row t1">
+                <div class="row t1">
                     <div class="col-4 t1" for="pageSize1">Page Size:</div>
                     <div class="col t1">
                         <select id="pageSize1" style="width: 200px; height: 30px">
@@ -432,9 +582,9 @@
                             <option value="Letter">Letter</option>
                         </select>
                     </div>
-                </div>-->
+                </div>
                 <div class="modal-footer justify-content-center">
-                    <button id="ExportCSV" class="style-button" onclick="file_download()">Export</button>
+                    <button id="ExportCSV" class="style-button" onclick="openModal('Export_CSV')">Export</button>
                     <button class="style-button" onclick="closeModal('Export_CSV')">Cancel</button>
                 </div>
             </div>
@@ -462,7 +612,7 @@
                     </div>
                 </div>
                 <div class="modal-footer justify-content-center">
-                    <button id="ExportChart" class="style-button" onclick="pic_download()">Export</button>
+                    <button id="ExportChart" class="style-button" onclick="openModal('Export_Chart')">Export</button>
                     <button class="style-button" onclick="closeModal('Export_Chart')">Cancel</button>
                 </div>
             </div>
@@ -490,60 +640,12 @@
                     </div>
                 </div>
                 <div class="modal-footer justify-content-center">
-                    <!--<button id="Exportreport" class="style-button" onclick="openModal('Export_Report')">Export</button>-->
-                    <button id="Exportreport" class="style-button" onclick="html_download()">Export</button>
+                    <button id="Exportreport" class="style-button" onclick="openModal('Export_Report')">Export</button>
                     <button class="style-button" onclick="closeModal('Export_Report')">Cancel</button>
                 </div>
             </div>
         </div>
     </div>
-
-
-
-    <div id="get_joball" class="lmodal" style="top: 10%" >
-        <div class="lmodal-dialog modal-lg">
-            <div class="lmodal-content" style="top: 150px; width: 710px">
-                <span class="lclose-btn" onclick="closeModal_job()">&times;</span>
-                <div class="lmodal-column modalselect">
-                    <h4>Job</h4>
-                    <div class="scrollbar-jobselect" id="style-jobselect">
-                        <div class="force-overflow-jobselect">
-
-                            <?php foreach($data['job_arr'] as $k_job =>$v_job){?>
-                                    <div class="row t1">
-                                        <div class="col t5 form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" name="jobid" id="jobid" value="<?php echo $v_job['job_id'];?>" onclick="JobCheckbox()" style="zoom:1.0; vertical-align: middle;">&nbsp;
-                                            <label class="form-check-label" for="Job-1"><?php echo $v_job['job_name'];?></label>
-                                        </div>
-                                    </div>
-
-                            <?php }?>
-                        </div>
-                    </div>
-                </div>
-                <div class="lmodal-column modalselect">
-                    <h4>Sequence</h4>
-                    <div class="scrollbar-jobselect" id="style-jobselect">
-                        <div class="force-overflow-jobselect">
-                            <div id="Seq-list" style="display: none">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="lmodal-column modalselect">
-                    <h4>Task</h4>
-                    <div class="scrollbar-jobselect" id="style-jobselect">
-                        <div class="force-overflow-jobselect">
-                            <div id="Task-list" style="display: none">
-                              
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
 
 <script>
 
@@ -654,74 +756,17 @@ function ClickNotification() {
 
 addMessage();
 
-function closeModal_job() {
-    document.getElementById("get_joball").style.display = "none";
-    var job_id = "<?php echo $_COOKIE['job_id'] ?? '' ?>"; 
-    var job_name = "<?php echo $_COOKIE['job_name'] ?? '' ?>"; 
-    document.getElementById("job-id").value = job_id;
-    document.getElementById("job-name").value = job_name;
-
-}
-
 </script>
 
+<style type="text/css">
+    .selected{
+        background-color: #9AC0CD !important;
+    }
+
+    ./*selected :hover{
+        background-color: #9AC0CD;
+    }*/
+</style>
+</div>
 
 <?php require APPROOT . 'views/inc/footer.tpl'; ?>
-
-<script>
-
-    var myChart = echarts.init(document.getElementById('mychart'), null, {
-        width: '500px',
-        height: '300px',
-        //marginTop: 50 
-    });
-
-    var x_val = <?php echo $data['echart']['x_val'];?>;
-    var y_val = <?php echo $data['echart']['y_val'];?>;
-
-    var option = {
-        title: {
-            text: ''
-        },
-        tooltip: {
-            trigger: 'axis'
-        },
-        xAxis: {
-            type: 'category',
-            name :'Count',
-            data: x_val,
-        },
-        yAxis: {
-            type: 'value',
-             name :'Torque',
-        },
-        dataZoom: generateDataZoom(),
-        series: [{
-            name: 'Torque',
-            type:'line',
-            symbol: 'none',
-            sampling: 'average',
-            lineStyle: {width: 0.75},
-            itemStyle: {
-                normal: {
-                    color: 'rgb(255,0,0)'
-                }
-            },
-            areaStyle: {
-                normal: {
-                    color: new echarts.graphic.LinearGradient(0, 0, 0, 0, [{
-                        offset: 0,
-                        color: 'rgb(255,255,255)'
-                    }, {
-                        offset: 0,
-                        color: 'rgb(255,255,255)'
-                    }])
-                }
-            },
-
-            data: y_val,
-        }]
-    };
-
-    myChart.setOption(option);
-</script>

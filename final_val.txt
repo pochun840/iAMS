@@ -7,3 +7,9 @@ array (
 array (
   'data' => '    +  2.2 kgf*cm',
 )
+array (
+  'data' => '    +  3.3 kgf*cm',
+)
+array (
+  'data' => '    +  3.7 kgf*cm',
+)

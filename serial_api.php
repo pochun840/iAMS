@@ -7,6 +7,8 @@ function communicateWithCOMPort($port, $baudRate, $dataBits, $stopBits, $parity)
     $fd = dio_open("$port:", O_RDWR);
     if ($fd === false) {
         die("Failed to open COM port".$port);
+    }else{
+        echo "連線成功";
     }
     
 
@@ -37,6 +39,8 @@ function communicateWithCOMPort($port, $baudRate, $dataBits, $stopBits, $parity)
     
     dio_close($fd);
 }
+
+
 $final_val= communicateWithCOMPort('COM4', 19200, 8, 2, 'n');
 
 

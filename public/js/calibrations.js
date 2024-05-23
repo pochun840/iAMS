@@ -44,7 +44,9 @@ function file_download(){
 
     } else if(save_type == "Notepad"){
 
-        // 如果是Notepad，將資料存成txt格式
+        var header ='id,datatime,operator,toolsn,torque,unit,max_torque,min_torque,avg_torque,high_percent,low_percent,customize';
+        data.unshift(header.split(',')); 
+
         var txtContent = data.map(row => row.join("\t")).join("\n");
 
         var encodedUri = encodeURI("data:text/plain;charset=utf-8," + txtContent);
@@ -54,8 +56,6 @@ function file_download(){
         document.body.appendChild(link); 
         link.click(); 
     } else {
-
-        // 其他情況，可以進行錯誤處理或者提示
         console.log("Unsupported save type.");
     }
 } 
@@ -67,27 +67,7 @@ function html_download(){
     var save_type3 = document.getElementById('Save-as3').value;
 
     if(save_type3 =="html"){
-        // 取得圖表的base64編碼
-        var chartDataURL = myChart.getDataURL({
-            pixelRatio: 2,
-            backgroundColor: '#fff' // 背景為白色
-        });
-
-        var divContent = document.getElementById('container-fluid').outerHTML;
-        var stylesheets = document.getElementsByTagName('link');
-        var cssString = Array.from(stylesheets)
-            .map(stylesheet => `<link rel="stylesheet" href="${stylesheet.href}">`)
-            .join('\n');
-
-  
-            var fullHTML=`<!DOCTYPE html><html><head>${cssString}</head><body>${divContent}<img src="${chartDataURL}" alt="ECharts Chart" style="width:500px;height:300px;"></body></html>`;
-
-        var blob = new Blob([fullHTML], { type: 'text/html' });
-     
-        var link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.download = fileName3 + '.html';
-        link.click();
+       
     } 
     if(save_type3 =="xml"){
      
@@ -243,5 +223,25 @@ function JobCheckbox_seq(){
     }
 }
 
+function  Connect() {
+  fetch('your_php_api_url_here')
+    .then(response => response.json())
+    .then(data => {
+      // 处理从 PHP API 返回的数据
+      console.log(data);
+      
+      // 例如，将数据显示在页面上
+      document.body.innerHTML += `<p>Name: ${data.name}</p>`;
+      document.body.innerHTML += `<p>Age: ${data.age}</p>`;
+      document.body.innerHTML += `<p>City: ${data.city}</p>`;
+    })
+    .catch(error => {
+      // 处理错误
+      console.error('Error:', error);
+    });
+}
+
+// 在页面加载时调用函数
+callPHPAPI();
 
 

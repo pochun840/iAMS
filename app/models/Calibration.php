@@ -50,7 +50,7 @@ class Calibration{
 
     public function datainfo(){
 
-        $sql =" SELECT * FROM calibrations ORDER BY id desc ";
+        $sql =" SELECT * FROM calibrations ORDER BY id ASC ";
         $statement = $this->db->prepare($sql);
         $statement->execute();
         $result = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -113,6 +113,43 @@ class Calibration{
     }
 
 
+    public function meter_info(){
+
+        $temp = array();
+
+        $a = 0.6;
+        $b = 0.06;
+
+        $sql ="SELECT 
+                (SELECT MAX(torque) FROM calibrations) AS max_torque,
+                (SELECT MIN(torque) FROM calibrations) AS min_torque,
+                (SELECT SUM(torque) FROM calibrations) AS total_torque,
+                *
+            FROM
+                calibrations
+            ORDER BY
+                id ASC;
+            ";
+        $statement = $this->db->prepare($sql);
+        $statement->execute();
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+
+        #依照KTM 文件裡的算式 
+        $hi_limit_torque =  $a+$b;
+
+
+        $temp['hi_limit_torque'] = $a + $b;
+        $temp['low_limit_torque'] = $a - $b;
+        $temp['max_torque'] = $result[0]['max_torque'];
+        $temp['min_torque'] = $result[0]['min_torque'];
+        $temp['avg_torque'] = $result[0]['avg_torque'];
+
+        return  $result;
+
+    } 
+
+
 
 
 
@@ -124,12 +161,10 @@ class Calibration{
         $statement->execute();
         $result = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-
         $sql_total ="SELECT COUNT(*) AS total_records  FROM calibrations";
         $statement = $this->db->prepare($sql_total);
         $statement->execute();
         $result_total = $statement->fetchAll(PDO::FETCH_ASSOC);
-
 
         $count = (int)$result_total[0]['total_records'] + 1;
         if(isset($result[0])){
