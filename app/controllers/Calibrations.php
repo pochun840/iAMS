@@ -146,6 +146,11 @@ class Calibrations extends Controller
                 if ($key == 'unit') {
                     $value = $torque_type[$value];
                 }
+
+                if ($key == 'high_percent' ||  $key == 'low_percent') {
+                    $value = $value ." % ";
+                }
+
                 $xml->writeCData($value);
                 $xml->endElement();
             }
