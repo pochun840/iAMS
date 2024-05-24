@@ -134,10 +134,8 @@ class Calibration{
         $statement->execute();
         $result = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-
         #依照KTM 文件裡的算式 
         $hi_limit_torque =  $a+$b;
-
 
         $temp['hi_limit_torque'] = $a + $b;
         $temp['low_limit_torque'] = $a - $b;
@@ -149,14 +147,10 @@ class Calibration{
 
     } 
 
-
-
-
-
     public function tidy_data($final){
 
         #從資料庫找出最大 最小 平均 扭力 high_percent low_percent
-        $sql =" SELECT  MAX(torque) AS max_torque, MIN(torque) AS min_torque,SUM(torque) AS total_torque    FROM  calibrations ORDER BY id DESC LIMIT 1 ";
+        $sql =" SELECT  MAX(torque) AS max_torque, MIN(torque) AS min_torque,SUM(torque) AS total_torque,(SELECT id FROM calibrations ORDER BY id DESC LIMIT 1) AS latest_id    FROM  calibrations ORDER BY id DESC LIMIT 1 ";
         $statement = $this->db->prepare($sql);
         $statement->execute();
         $result = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -166,7 +160,8 @@ class Calibration{
         $statement->execute();
         $result_total = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        $count = (int)$result_total[0]['total_records'] + 1;
+        $count = (int)$result[0]['latest_id'] + 1;
+        
         if(isset($result[0])){
 
             $max_torque = floatval($result[0]['max_torque']);
@@ -176,7 +171,6 @@ class Calibration{
            
             if($final > $max_torque){
                 $max_torque = $final;
-
             }
 
             if($final < $min_torque){
@@ -185,20 +179,14 @@ class Calibration{
 
             #平均值
             $average_torque = round(($total_torque + $max_torque) / $count, 2);
-
             $high_percent = round((($max_torque - $average_torque) / $average_torque) * 100, 2);
             $low_percent  = round((($min_torque - $average_torque) / $average_torque) * 100, 2);
-
-
             $datatime = date("Ymd H:i:s");
-
 
             $sql_in = "INSERT INTO `calibrations` ('id','operator','toolsn','torque','unit','max_torque','min_torque','avg_torque','high_percent','low_percent','customize','datatime' )
                     VALUES (:id,:operator,:toolsn,:torque,:unit,:max_torque,:min_torque,:avg_torque,:high_percent,:low_percent,:customize,:datatime)";
 
             $statement = $this->db->prepare($sql_in);
-
-
 
             $statement->bindValue(':id', $count);
             $statement->bindValue(':operator', 'User111');
@@ -213,22 +201,34 @@ class Calibration{
             $statement->bindValue(':customize', '');
             $statement->bindValue(':datatime', $datatime);
 
-    
             $results = $statement->execute();
+            if (!$results) {
+                /*$errorInfo = $statement->errorInfo();
+                $sql = $statement->queryString;
+                echo "SQL error: " . $errorInfo[2] . "<br>";
+                echo "SQL select: " . $sql . "<br>";*/
+                $res = false;
+            }else{
 
-
-
-            var_dump($results);
-            die();
-             //"(C42-C43)/C43)";
-            //$low_percent  = "(C42-C43)/C43)";
-
-            
-
-
+                $res = true;
+            }
+            return $res;
         }
     
 
+    }
+
+
+    public function del_info($lastid){
+
+        $sql = "DELETE FROM `calibrations` WHERE id = :id ";
+        $statement = $this->db_gtcs->prepare($sql);
+        $statement->bindValue(':id', $lastid);
+        $statement->execute();
+
+
+        #已刪除資訊  針對剩餘的欄位做處理
+        
     }
 
 

@@ -60,8 +60,6 @@ function file_download(){
     }
 } 
 
-
-
 function html_download(){
     var fileName3 = document.getElementById('fileName3').value;
     var save_type3 = document.getElementById('Save-as3').value;
@@ -91,7 +89,6 @@ function html_download(){
     }
 
 }
-
 
 function pic_download(){
 
@@ -140,7 +137,6 @@ function dataURLToBlob(dataURL) {
 }
 
 function calljoball(){
-
     document.getElementById("get_joball").style.display = "block";
 }
 
@@ -223,25 +219,70 @@ function JobCheckbox_seq(){
     }
 }
 
-function  Connect() {
-  fetch('your_php_api_url_here')
-    .then(response => response.json())
+//test connect
+function Connect() {
+    $.ajax({
+        url: 'http://192.168.0.152/imas/api/serial_api.php',
+        type: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            console.log('Response received:', response);
+        },
+        error: function(xhr, status, error) {
+            console.error('AJAX Error:', error);
+        }
+    })
     .then(data => {
-      // 处理从 PHP API 返回的数据
-      console.log(data);
-      
-      // 例如，将数据显示在页面上
-      document.body.innerHTML += `<p>Name: ${data.name}</p>`;
-      document.body.innerHTML += `<p>Age: ${data.age}</p>`;
-      document.body.innerHTML += `<p>City: ${data.city}</p>`;
+        console.log('Data received:', data);
+        alert(JSON.stringify(data));
+
+        $.ajax({
+            url: 'http://192.168.0.152/imas/public/index.php?url=Calibrations/tidy_data',
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                console.log('API response:', response);
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error:', error);
+            }
+        });
     })
     .catch(error => {
-      // 处理错误
-      console.error('Error:', error);
+        //console.error('Error:', error);
     });
 }
 
-// 在页面加载时调用函数
-callPHPAPI();
+function undo(){
 
+    var lastRowData = getLastRowData('datainfo');
+    if (lastRowData) {
+        var lastid = lastRowData[0];
+        //透過ajax 去進行資料庫的移除
+        
+    }
+
+}
+
+ function getLastRowData(tableId) {
+    var table = document.getElementById(tableId);
+
+    if(!table){
+        console.error("Table with ID " + tableId + " not found.");
+        return null;
+    }
+
+    var lastrow = table.querySelector('tbody tr:last-child');
+
+    if(lastrow){
+        var rowdata = [];
+        lastrow.querySelectorAll('td').forEach(function(cell) {
+            rowdata.push(cell.textContent.trim());
+        });
+        return rowdata;
+    } else {
+        console.warn("No rows found in the table with ID " + tableId);
+        return null;
+    }
+}
 

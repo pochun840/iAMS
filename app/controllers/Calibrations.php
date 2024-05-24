@@ -38,9 +38,6 @@ class Calibrations extends Controller
         }
 
         
-
-    
-
         $data = array(
             'isMobile' => $isMobile,
             'nav' => $this->NavsController->get_nav(),
@@ -55,23 +52,18 @@ class Calibrations extends Controller
             
         );
 
-
-
-
         $this->view('calibration/index', $data);
 
     }
 
-    // 
+    //取得KTM 回傳數值 寫入到DB
     public function  tidy_data(){
-        $fileContent = file_get_contents("../final_val.txt");
-        preg_match_all("/'data' => '([^']+)'/", $fileContent, $matches);
-        $dataArray = $matches[1];
-        $dataArray = preg_replace('/[\s+]/', '', $dataArray);
-        
-        if(!empty($dataArray)){
+        $file_path = "../api/final_val.txt";
+        $fileContent = file_get_contents($file_path);
+        eval("\$array = $fileContent;");
+        if(!empty($array)){
             $cleanedDataArray = [];
-            foreach ($dataArray as $data) {
+            foreach($array as $data) {
                 $cleanedDataArray[] = str_replace(['+ ', 'kgf*cm'], '', $data);
             }
           
@@ -79,8 +71,23 @@ class Calibrations extends Controller
             $cleanedDataArray = end($cleanedDataArray);
             $cleanedDataArray = preg_replace('/[^0-9.]/', '', $cleanedDataArray); 
             $final = (float)$cleanedDataArray;
-            $this->CalibrationModel->tidy_data($final);
-         
+            
+            $res = $this->CalibrationModel->tidy_data($final);
+
+            if($res == true){
+                $response = array(
+                    'success' => true,
+                    'message' => 'Data tidied successfully'
+                );
+            }else{
+                $response = array(
+                    'success' => false,
+                    'message' => 'No data found1111002'
+                );
+            }
+
+            //var_dump($response);die();
+            echo json_encode($response);
         }
     }
 
@@ -180,7 +187,6 @@ class Calibrations extends Controller
 
 
     public function val_traffic(){
-
         
         $a = 0.6;
         $b = 0.06;
@@ -233,32 +239,4 @@ class Calibrations extends Controller
         return min($part1, $part2);
     }
     
-    
-    
-    function call_job($serialnumber,$length){
-
-        $error_message = '';
-        if (!empty($serialnumber) && !empty($length)) {
-            require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
-            $modbus = new ModbusMaster(CONTROLLER_IP, "TCP");
-            try {
-                $modbus->port = 502;
-                $modbus->timeout_sec = 10;
-                $data = $modbus->readMultipleRegisters(1, $serialnumber , $length);
-                $res = json_encode(array('result' => $data[1],'error' => $error_message));
-
-            } catch (Exception $e) {
-                $res =  json_encode(array('error' => $modbus->status));
-            }
-
-        }
-
-        return $res;
-     
-
-    }
-
-
-
-
 }

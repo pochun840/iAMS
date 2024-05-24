@@ -245,7 +245,7 @@
 
                         <button id="Save-btn" type="button" class="btn-save-reset-undo" style="margin-right: 5%">Save</button>
                         <button id="Reset" type="button" class="btn-save-reset-undo" onclick="reset()">Reset</button>
-                        <button id="Undo" type="button" class="btn-save-reset-undo">Undo</button>
+                        <button id="Undo" type="button" class="btn-save-reset-undo" onclick="undo()" >Undo</button>
 
                         <span class="input-group-text">Received Time:</span>
                         <input type="text" class="form-control">
@@ -385,7 +385,7 @@
                                             <input id="cmk" type="text" class="t2 form-control" value="<?php  echo $data['meter']['cmk'];?>">
                                         </div>
                                     </div>
-                                    <?php for($i=1; $i<= 5 ;$i++){?>
+                                    <?php for($i=1; $i<= $data['count']; $i++){?>
                                         <div class="row t1">
                                             <div class="col-5 t1" style=" padding-left: 5%; color: #000"><?php echo $i;?>:</div>
                                             <div class="col-5 t1">
