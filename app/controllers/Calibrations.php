@@ -55,6 +55,32 @@ class Calibrations extends Controller
         $this->view('calibration/index', $data);
 
     }
+    public function del_info(){
+        $input_check = true;
+        if(isset($_POST['chicked_id']) && !empty($_POST['chicked_id'])) {
+            $click_id = $_POST['chicked_id'];
+        }else{
+            $input_check = false;
+        }
+        if($input_check){
+            $res = $this->CalibrationModel->del_info($click_id);
+            if($res == true){
+                $response = array(
+                    'success' => true,
+                    'message' => 'Data delete success'
+                );
+            }else{
+                $response = array(
+                    'success' => false,
+                    'message' => 'Data delete fail'
+                );
+            }
+            echo json_encode($response);
+
+        }
+
+
+    }
 
     //取得KTM 回傳數值 寫入到DB
     public function  tidy_data(){
@@ -82,7 +108,7 @@ class Calibrations extends Controller
             }else{
                 $response = array(
                     'success' => false,
-                    'message' => 'No data found1111002'
+                    'message' => 'No data found'
                 );
             }
 
