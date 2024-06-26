@@ -203,10 +203,6 @@ class Calibration{
 
             $results = $statement->execute();
             if (!$results) {
-                /*$errorInfo = $statement->errorInfo();
-                $sql = $statement->queryString;
-                echo "SQL error: " . $errorInfo[2] . "<br>";
-                echo "SQL select: " . $sql . "<br>";*/
                 $res = false;
             }else{
 
@@ -221,20 +217,36 @@ class Calibration{
 
     public function del_info($lastid){
 
-        $sql = "DELETE FROM `calibrations` WHERE id = :id ";
-        $statement = $this->db_gtcs->prepare($sql);
-        $statement->bindValue(':id', $lastid);
-        $statement->execute();
-
-
-        #已刪除資訊  針對剩餘的欄位做處理
+        #Step 1: 使用指定的 id 刪除 calibrations 表中的記錄
+        $sql_delete = "DELETE FROM `calibrations` WHERE id = :id";
+        $statement_delete = $this->db->prepare($sql_delete);
+        $statement_delete->bindValue(':id', $lastid);
+        $statement_delete->execute();
         
-    }
+
+        #Step 2: 更新所有大於被刪除 id 的記錄的 id
+        $sql_update_ids = "UPDATE `calibrations` SET id = id - 1 WHERE id > :lastid";
+        $statement_update_ids = $this->db->prepare($sql_update_ids);
+        $statement_update_ids->bindValue(':lastid', $lastid);
+        $statement_update_ids->execute();
+
+        
+        #Step 3: 計算並更新資料庫中的 max_torque 和 min_torque
+        $sql_select = "SELECT MAX(torque) AS max_torque, MIN(torque) AS min_torque FROM calibrations";
+        $stmt_select =  $this->db->query($sql_select);
+        $result = $stmt_select->fetch(PDO::FETCH_ASSOC);
 
 
+        #Step 4: 更新 max_torque 和 min_torque
+        $new_max_torque = $result['max_torque'];
+        $new_min_torque = $result['min_torque'];
+        $sql_update = "UPDATE calibrations SET max_torque = :new_max_torque, min_torque = :new_min_torque";
+        $stmt_update = $this->db->prepare($sql_update);
+        $stmt_update->bindParam(':new_max_torque', $new_max_torque, PDO::PARAM_STR);
+        $stmt_update->bindParam(':new_min_torque', $new_min_torque, PDO::PARAM_STR);
+        $stmt_update->execute();
 
-   
+        return $result;
   
-
-
+    }
 }

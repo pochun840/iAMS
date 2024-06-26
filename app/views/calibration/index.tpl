@@ -10,7 +10,7 @@
 <script src="<?php echo URLROOT; ?>js/echarts_min.js?v=202405080900"></script>
 <script src="<?php echo URLROOT; ?>js/html2canvas_min.js?v=202405080900"></script>
 <script src="<?php echo URLROOT; ?>js/chart_share.js?v=202405151200"></script>
-<script src="<?php echo URLROOT; ?>js/calibrations.js?v=202405210900"></script>
+<script src="<?php echo URLROOT; ?>js/calibrations.js?v=202406251300"></script>
 
 
 <?php echo $data['nav']; ?>
@@ -278,7 +278,7 @@
                                 <tbody style="background-color:#F5F5F5;" id="datainfo">
 
                                     <?php foreach($data['info'] as $key => $val){ ?>
-                                        <tr style="text-align: center; vertical-align: middle;">
+                                        <tr style="text-align: center; vertical-align: middle;"  data-id ='<?php echo $val['id'];?>'>
                                             <td><?php echo $val['id'];?></td>
                                             <td><?php echo $val['datatime'];?></td>
                                             <td><?php echo $val['operator'];?></td>

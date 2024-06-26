@@ -1,3 +1,45 @@
+
+document.addEventListener('DOMContentLoaded', function() {
+    // 等待DOM完全加載
+    var datainfo = document.getElementById('datainfo');
+    if (datainfo) {
+        datainfo.addEventListener('click', function(event) {
+            var target = event.target.closest('tr');
+            if (target) {
+                var id = target.getAttribute('data-id');
+                localStorage.setItem('chicked_id', id ); 
+                
+            }
+        });
+    } else {
+        //console.error('Unable to find element with ID "datainfo"');
+    }
+});
+
+function undo(){
+    var chicked_id = localStorage.getItem('chicked_id');
+    console.log(chicked_id);
+    if(chicked_id){
+        $.ajax({
+            url: "?url=Calibrations/del_info",
+            method: "POST",
+            data:{ 
+                chicked_id: chicked_id
+
+            },
+            success: function(response) {
+                console.log( response);
+                alert(response);
+            },
+            error: function(xhr, status, error) {
+                
+            }
+        });    
+    }
+
+}
+
+
 function reset(){
     //搜尋區塊
     document.getElementById('datainfo').style.display = 'none';
@@ -251,38 +293,5 @@ function Connect() {
     .catch(error => {
         //console.error('Error:', error);
     });
-}
-
-function undo(){
-
-    var lastRowData = getLastRowData('datainfo');
-    if (lastRowData) {
-        var lastid = lastRowData[0];
-        //透過ajax 去進行資料庫的移除
-        
-    }
-
-}
-
- function getLastRowData(tableId) {
-    var table = document.getElementById(tableId);
-
-    if(!table){
-        console.error("Table with ID " + tableId + " not found.");
-        return null;
-    }
-
-    var lastrow = table.querySelector('tbody tr:last-child');
-
-    if(lastrow){
-        var rowdata = [];
-        lastrow.querySelectorAll('td').forEach(function(cell) {
-            rowdata.push(cell.textContent.trim());
-        });
-        return rowdata;
-    } else {
-        console.warn("No rows found in the table with ID " + tableId);
-        return null;
-    }
 }
 
