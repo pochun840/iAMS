@@ -49,29 +49,56 @@ function reset(){
     
 }
 
-//下載CSV檔案 及TXT檔案
-function file_download(){
-    //檔名
-    var fileName1 = document.getElementById('fileName1').value;
-    //Save-as1
-    var save_type = document.getElementById('Save-as1').value;
+function html_download() {
+    var fileName3 = document.getElementById('fileName3').value;
+    var save_type3 = document.getElementById('Save-as3').value;
 
-    var table = document.getElementById('datainfo'); 
-    var data = []; 
-    for (var i = 0; i < table.rows.length; i++) {
-        var row = table.rows[i]; 
-        var rowData = []; 
-       
-        for (var j = 0; j < row.cells.length; j++) {
-            rowData.push(row.cells[j].innerText); 
+    var chartDataURL = myChart.getDataURL({
+        pixelRatio: 2,
+        backgroundColor: '#fff' // 背景為白色
+    });
+
+
+    if (save_type3 === "html") {
+        
+        var today = new Date();
+        var day = String(today.getDate()).padStart(2, '0');
+        var month = String(today.getMonth() + 1).padStart(2, '0'); 
+        var year = today.getFullYear();
+
+        today = year + month + day;
+    
+
+
+    } else if (save_type3 === "xml") {
+        // 下載 XML 檔案
+        fetch('/imas/public/index.php?url=Calibrations/get_xml')
+            .then(response => response.text())
+            .then(xmlData => {
+                var blob = new Blob([xmlData], { type: 'text/xml' });
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = fileName3 + '.xml';
+                link.click();
+            })
+            .catch(error => {
+                console.error('获取 XML 数据时出错:', error);
+            });
+    } else if (save_type3 === "csv") {
+        var table = document.getElementById('datainfo'); 
+        var data = []; 
+        for (var i = 0; i < table.rows.length; i++) {
+            var row = table.rows[i]; 
+            var rowData = []; 
+           
+            for (var j = 0; j < row.cells.length; j++) {
+                rowData.push(row.cells[j].innerText); 
+            }
+    
+            data.push(rowData); 
         }
 
-        data.push(rowData); 
-    }
-
-    if(save_type == "Excel"){
-
-        // 如果是Excel，將資料存成CSV格式
+    
         var header ='id,datatime,operator,toolsn,torque,unit,max_torque,min_torque,avg_torque,high_percent,low_percent,customize';
         data.unshift(header.split(','));
 
@@ -84,76 +111,29 @@ function file_download(){
         document.body.appendChild(link); 
         link.click(); 
 
-    } else if(save_type == "Notepad"){
+    } else if(save_type3 === "jpg"){
+        downloadChartAsImage(chartDataURL, fileName3, 'jpg');
 
-        var header ='id,datatime,operator,toolsn,torque,unit,max_torque,min_torque,avg_torque,high_percent,low_percent,customize';
-        data.unshift(header.split(',')); 
-
-        var txtContent = data.map(row => row.join("\t")).join("\n");
-
-        var encodedUri = encodeURI("data:text/plain;charset=utf-8," + txtContent);
-        var link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", fileName1 + ".txt");
-        document.body.appendChild(link); 
-        link.click(); 
-    } else {
-        console.log("Unsupported save type.");
+    }else if(save_type3 === "png"){
+        downloadChartAsImage(chartDataURL, fileName3, 'png');
+    }else {
+        console.log("不支持的保存類型.");
     }
-} 
-
-function html_download(){
-    var fileName3 = document.getElementById('fileName3').value;
-    var save_type3 = document.getElementById('Save-as3').value;
-
-    if(save_type3 =="html"){
-       
-    } 
-    if(save_type3 =="xml"){
-     
-        fetch('/imas/public/index.php?url=Calibrations/get_xml')
-          .then(response => response.text())
-          .then(xmlData => {
-
-              var blob = new Blob([xmlData], { type: 'text/xml' });
-              var link = document.createElement('a');
-              link.href = window.URL.createObjectURL(blob);
-              link.download = fileName3 + '.xml';
-              link.click();
-          })
-          .catch(error => {
-              console.error('Error fetching XML data:', error);
-          });
-
-    }
-    else {
-        console.log("Unsupported save type.");
-    }
-
 }
 
-function pic_download(){
-
-    var fileName2 = document.getElementById('fileName2').value;
-    var save_type2 = document.getElementById('Save-as2').value;
-
-
-    var chartDataURL = myChart.getDataURL({
-        pixelRatio: 2,
-        backgroundColor: '#fff' // 背景為白色
-    });
-
-    if(save_type2 === "png"){
-        downloadChartAsImage(chartDataURL, fileName2, 'png');
-    } 
-    else if(save_type2 === "jpg"){
-        downloadChartAsImage(chartDataURL, fileName2, 'jpg');
-    } 
-    else{
-        console.log("Unsupported save type.");
+// 將 Data URI 轉換為 Blob 物件的輔助函式
+function dataURItoBlob(dataURI) {
+    var byteString = atob(dataURI.split(',')[1]);
+    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+    var ab = new ArrayBuffer(byteString.length);
+    var ia = new Uint8Array(ab);
+    for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
     }
-
+    return new Blob([ab], { type: mimeString });
 }
+
+
 
 function downloadChartAsImage(chartDataURL, fileName, format) {
  
@@ -183,27 +163,28 @@ function calljoball(){
 }
 
 
-function JobCheckbox()
-{
-    //取得 job被checked的值
-    var checked_jobid = document.querySelectorAll('input[type="checkbox"][name="jobid"]:checked');
-    var checkedjobidarr = [];
-    checked_jobid.forEach(function(checkbox) {
-        checkedjobidarr.push(checkbox.value);
+function JobCheckbox() {
+    var checked_jobid = document.querySelector('input[type="checkbox"][name="jobid"]:checked');
+    
+      // 取消其他复选框的选中状态
+      checkboxes.forEach(function(checkbox) {
+        if (checkbox !== clickedCheckbox) {
+            checkbox.checked = false;
+        }
     });
+    
 
-
-    //checkedjobidarr 不等於空值 要取得對應的seq_id
-    if(checkedjobidarr != '' ) {
+    // 如果有选中的复选框
+    if (checked_jobid !== null) {
+        checkedjobidarr.push(checked_jobid.value);
         $.ajax({
             type: "POST",
-            data: {job_id: checkedjobidarr},
+            data: { job_id: checkedjobidarr },
             url: '?url=Calibrations/get_correspond_val',
             success: function(response) {
                 if (response.trim() === '') {
                     alert('查無資料');
                     window.location.href = '?url=Calibrations';
-
                 } else {
                     var seqListElement = document.getElementById('Seq-list');
                     seqListElement.style.display = 'block';
@@ -211,13 +192,12 @@ function JobCheckbox()
                 }
             },
             error: function(error) {
+                console.error('Error:', error);
             }
-        }).fail(function () {
         });
-
     }
-
 }
+
 
 function JobCheckbox_seq(){
 
@@ -294,4 +274,3 @@ function Connect() {
         //console.error('Error:', error);
     });
 }
-

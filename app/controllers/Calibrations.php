@@ -18,6 +18,9 @@ class Calibrations extends Controller
     // 取得所有Jobs
     public function index(){
 
+        
+
+        //找到COOKIE 
         $isMobile = $this->isMobileCheck();
 
         #select
@@ -245,6 +248,46 @@ class Calibrations extends Controller
 
     }
 
+    public function export_excel(){
+        $isMobile = $this->isMobileCheck();
+
+        #select
+        $info = $this->CalibrationModel->datainfo();
+
+        $job_arr = $this->CalibrationModel->getjobid();
+
+        #echarts
+        $echart_data = $this->CalibrationModel->echarts_data();
+
+        $meter = $this->val_traffic();
+
+        if(!empty($echart_data)){
+            #整理圖表所需要的資料
+            $tmp['x_val'] = json_encode(array_column($echart_data, 'id'));
+            $tmp['y_val'] = json_encode(array_column($echart_data, 'torque'));
+
+        }
+
+        
+        $data = array(
+            'isMobile' => $isMobile,
+            'nav' => $this->NavsController->get_nav(),
+            'res_controller_arr' => $this->CalibrationModel->details('controller'),
+            'res_Torquemeter_arr' => $this->CalibrationModel->details('torquemeter'),
+            'res_Torquetype' => $this->CalibrationModel->details('torque'),
+            'info' => $info,
+            'echart'=> $tmp,
+            'job_arr' => $job_arr,
+            'meter' =>$meter,
+            'count' =>count($meter['res_total']),
+            
+        );
+
+        $this->view('calibration/excel',$data);
+
+
+    }
+
 
     private function standard_deviation($torque_array) {
         $n = count($torque_array);
@@ -264,5 +307,7 @@ class Calibrations extends Controller
         
         return min($part1, $part2);
     }
+
+
     
 }

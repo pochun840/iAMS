@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/nav.css" type="text/css">
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/datatables.min.css">
 
-<script defer src="<?php echo URLROOT; ?>/js/chart.min.js"></script>
+<script defer src="<?php echo URLROOT; ?>js/chart.min.js"></script>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/calibration.css?v=202405221200" type="text/css">
 
 <script src="<?php echo URLROOT; ?>js/echarts_min.js?v=202405080900"></script>
@@ -138,8 +138,8 @@
                 </button>
 
                 <button class="btn" id="export-report" type="button" onclick="openModal('Export_Report')">Export Report</button>
-                <button class="btn" id="export-chart" type="button" onclick="openModal('Export_Chart')">Export Chart</button>
-                <button class="btn" id="export-excel" type="button" onclick="openModal('Export_CSV')">Export CSV</button>
+                <!--<button class="btn" id="export-chart" type="button" onclick="openModal('Export_Chart')">Export Chart</button>-->
+                <button class="btn" id="export-excel" type="button"  onclick="window.location.href = '?url=Calibrations/export_excel';">Export Data</button>
             </div>
         </div>
 
@@ -403,46 +403,12 @@
         </div>
     </div>
 
-<!-- Export Modal -->
-    <!-- Modal Export CSV -->
-    <div id="Export_CSV" class="modal" style="top: 10%;">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content w3-animate-zoom">
-                <h4>Export CSV</h4>
-                <div class="row t1">
-                    <div class="col-4 t1" for="fileName1">Calibration file name:</div>
-                    <div class="col-8 t1">
-                        <input id="fileName1" type="text" class="t1 form-control" value="">
-                    </div>
-                </div>
-                <div class="row t1">
-                    <div class="col-4 t1" for="Save-as1">Save as type:</div>
-                    <div class="col t1">
-                        <select id="Save-as1" style="width: 200px; height: 30px">
-                            <option value="Excel">Excel</option>
-                            <option value="Notepad">Notepad</option>
-                        </select>
-                    </div>
-                </div>
-                <!--<div class="row t1">
-                    <div class="col-4 t1" for="pageSize1">Page Size:</div>
-                    <div class="col t1">
-                        <select id="pageSize1" style="width: 200px; height: 30px">
-                            <option value="A4">A4</option>
-                            <option value="Letter">Letter</option>
-                        </select>
-                    </div>
-                </div>-->
-                <div class="modal-footer justify-content-center">
-                    <button id="ExportCSV" class="style-button" onclick="file_download()">Export</button>
-                    <button class="style-button" onclick="closeModal('Export_CSV')">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Export Modal -->
+
+   
 
     <!-- Modal Export Chart -->
-    <div id="Export_Chart" class="modal" style="top: 10%">
+    <div id="Export_Chart" class="modal" style="top: 10%" >
         <div class="modal-dialog modal-lg">
             <div class="modal-content w3-animate-zoom">
                 <h4>Export Chart</h4>
@@ -486,11 +452,13 @@
                         <select id="Save-as3" style="width: 184px; height: 30px">
                             <option value="html">html</option>
                             <option value="xml">xml</option>
+                            <option value="csv">excel</option>
+                            <option value="png">png</option>
+                            <option value="jpg">jpg</option>
                         </select>
                     </div>
                 </div>
                 <div class="modal-footer justify-content-center">
-                    <!--<button id="Exportreport" class="style-button" onclick="openModal('Export_Report')">Export</button>-->
                     <button id="Exportreport" class="style-button" onclick="html_download()">Export</button>
                     <button class="style-button" onclick="closeModal('Export_Report')">Cancel</button>
                 </div>
@@ -498,26 +466,24 @@
         </div>
     </div>
 
-
-
-    <div id="get_joball" class="lmodal" style="top: 10%" >
-        <div class="lmodal-dialog modal-lg">
-            <div class="lmodal-content" style="top: 150px; width: 710px">
+       
+    <!-- Modal Call Job Select -->
+    <div id="get_joball" class="lmodal">
+        <div class="modal-lg" style="padding-left: 5%">
+            <div class="lmodal-content" style="top: 140px; width: 670px;">
                 <span class="lclose-btn" onclick="closeModal_job()">&times;</span>
                 <div class="lmodal-column modalselect">
                     <h4>Job</h4>
                     <div class="scrollbar-jobselect" id="style-jobselect">
                         <div class="force-overflow-jobselect">
-
                             <?php foreach($data['job_arr'] as $k_job =>$v_job){?>
-                                    <div class="row t1">
-                                        <div class="col t5 form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" name="jobid" id="jobid" value="<?php echo $v_job['job_id'];?>" onclick="JobCheckbox()" style="zoom:1.0; vertical-align: middle;">&nbsp;
-                                            <label class="form-check-label" for="Job-1"><?php echo $v_job['job_name'];?></label>
-                                        </div>
-                                    </div>
-
-                            <?php }?>
+                            <div class="row t1"  style="padding-left: 5%">
+                                <div class="col t2 form-check form-check-inline">
+                                   <input class="form-check-input" type="checkbox" name="jobid" id="jobid" value="<?php echo $v_job['job_id'];?>" onclick="JobCheckbox()" style="zoom:1.0; vertical-align: middle;">&nbsp;
+                                   <label class="form-check-label" for="Job-1"><?php echo $v_job['job_name'];?></label>
+                                </div>
+                            </div>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
@@ -535,14 +501,15 @@
                     <div class="scrollbar-jobselect" id="style-jobselect">
                         <div class="force-overflow-jobselect">
                             <div id="Task-list" style="display: none">
-                              
                             </div>
                         </div>
                     </div>
                 </div>
+                <button onclick="submit_calljob()">Submit</button>
             </div>
         </div>
     </div>
+
 
 
 <script>
@@ -656,12 +623,17 @@ addMessage();
 
 function closeModal_job() {
     document.getElementById("get_joball").style.display = "none";
+
+}
+
+function submit_calljob(){
     var job_id = "<?php echo $_COOKIE['job_id'] ?? '' ?>"; 
     var job_name = "<?php echo $_COOKIE['job_name'] ?? '' ?>"; 
     document.getElementById("job-id").value = job_id;
     document.getElementById("job-name").value = job_name;
-
+    document.getElementById("get_joball").style.display = "none";
 }
+
 
 </script>
 

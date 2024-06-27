@@ -50,6 +50,7 @@ class Calibration{
 
     public function datainfo(){
 
+        # 需要job_id 
         $sql =" SELECT * FROM calibrations ORDER BY id ASC ";
         $statement = $this->db->prepare($sql);
         $statement->execute();
@@ -149,6 +150,11 @@ class Calibration{
 
     public function tidy_data($final){
 
+
+        if(isset($_COOKIE['job_id'])) {
+            $job_id = $_COOKIE['job_id'];  
+        }
+
         #從資料庫找出最大 最小 平均 扭力 high_percent low_percent
         $sql =" SELECT  MAX(torque) AS max_torque, MIN(torque) AS min_torque,SUM(torque) AS total_torque,(SELECT id FROM calibrations ORDER BY id DESC LIMIT 1) AS latest_id    FROM  calibrations ORDER BY id DESC LIMIT 1 ";
         $statement = $this->db->prepare($sql);
@@ -183,12 +189,13 @@ class Calibration{
             $low_percent  = round((($min_torque - $average_torque) / $average_torque) * 100, 2);
             $datatime = date("Ymd H:i:s");
 
-            $sql_in = "INSERT INTO `calibrations` ('id','operator','toolsn','torque','unit','max_torque','min_torque','avg_torque','high_percent','low_percent','customize','datatime' )
-                    VALUES (:id,:operator,:toolsn,:torque,:unit,:max_torque,:min_torque,:avg_torque,:high_percent,:low_percent,:customize,:datatime)";
+            $sql_in = "INSERT INTO `calibrations` ('id','job_id','operator','toolsn','torque','unit','max_torque','min_torque','avg_torque','high_percent','low_percent','customize','datatime' )
+                    VALUES (:id,:job_id,:operator,:toolsn,:torque,:unit,:max_torque,:min_torque,:avg_torque,:high_percent,:low_percent,:customize,:datatime)";
 
             $statement = $this->db->prepare($sql_in);
 
             $statement->bindValue(':id', $count);
+            $statement->bindValue(':job_id', $job_id);
             $statement->bindValue(':operator', 'User111');
             $statement->bindValue(':toolsn', '00000-00000');
             $statement->bindValue(':torque', $final);
