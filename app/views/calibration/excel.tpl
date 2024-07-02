@@ -220,16 +220,7 @@ if ("<?php echo $data['type']; ?>" == "download") {
         var year = today.getFullYear();
 
         today = year + month + day;
-
-        //document.getElementById('fastening_status_chart').style.marginLeft = "auto";
-        //document.getElementById('fastening_status_chart').style.marginRight = "auto";
-
-        //document.getElementById('main').style.marginLeft = "auto";
-        //document.getElementById('main').style.marginRight = "auto";
-
-        //document.getElementById('jobtime').style.marginLeft  = "auto";
-        //document.getElementById('jobtime').style.marginRight = "auto";
-
+        
         document.getElementById('mychart').style.marginLeft  = "auto";
         document.getElementById('mychart').style.marginRight = "auto";
 
