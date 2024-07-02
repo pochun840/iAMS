@@ -39,18 +39,15 @@ function html_download() {
 
     var chartDataURL = myChart.getDataURL({
         pixelRatio: 2,
-        backgroundColor: '#fff' // 背景為白色
+        backgroundColor: '#fff'
     });
 
 
     if (save_type3 === "html") {
-
-       
-        
+ 
         document.getElementById('mychart').style.marginLeft  = "auto";
         document.getElementById('mychart').style.marginRight = "auto";
 
-    
         var images = document.getElementsByTagName('img');
         var baseUrl = window.location.origin;
 
@@ -82,10 +79,7 @@ function html_download() {
         link.href = window.URL.createObjectURL(blob);
         link.download =  fileName3 + '.html';
         link.click();
-    
-
-
-         
+             
     }else if(save_type3 === "xml") {
         // 下載 XML 檔案
         fetch('/imas/public/index.php?url=Calibrations/get_xml')
@@ -304,11 +298,11 @@ function getCookie(cookieName) {
     return '';
 }
 
-function waitForECharts() {
+/*function waitForECharts() {
     return new Promise(function(resolve, reject) {
-        // 假设 myChart 是您的 echarts 实例
+  
         if (typeof myChart !== 'undefined') {
-            // 确保 myChart 已经渲染完成
+
             myChart.on('finished', function() {
                 resolve();
             });
@@ -317,4 +311,4 @@ function waitForECharts() {
             setTimeout(waitForECharts, 1000); // 等待 1 秒钟再检查
         }
     });
-}
+}*/
