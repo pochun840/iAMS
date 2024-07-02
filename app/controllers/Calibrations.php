@@ -168,6 +168,8 @@ class Calibrations extends Controller
 
         $info = $this->CalibrationModel->datainfo();
         $torque_type = $this->CalibrationModel->details('torque');
+        $controller_type = $this->CalibrationModel->details('controller');
+        $ktm_type = $this->CalibrationModel->details('torquemeter');
 
         $xml = new XMLWriter();
         $xml->openMemory();
@@ -186,6 +188,12 @@ class Calibrations extends Controller
                 if ($key == 'high_percent' ||  $key == 'low_percent') {
                     $value = $value ." % ";
                 }
+                if($key == 'controller_type'){
+                    $value = $controller_type[$value];
+                }   
+                if($key == 'ktm_type'){
+                    $value = $ktm_type[$value];
+                }  
 
                 $xml->writeCData($value);
                 $xml->endElement();
@@ -286,6 +294,49 @@ class Calibrations extends Controller
         $this->view('calibration/excel',$data);
 
 
+    }
+
+    public function csv_download(){
+        
+        $input_check = true;
+        if (!empty($_POST['job_id']) && isset($_POST['job_id'])) {
+            $job_id = $_POST['job_id'];
+        } else {
+            $input_check = false;
+        }
+
+        if($input_check){
+            $dataset = $this->CalibrationModel->datainfo_search($job_id);
+            if(!empty($dataset)){
+
+                $torque_type = $this->CalibrationModel->details('torque');
+                $controller = $this->CalibrationModel->details('controller');
+                $ktm = $this->CalibrationModel->details('torquemeter');
+
+                #資料整理 
+                foreach($dataset as $key =>$val){
+                    $dataset[$key]['unit'] = $torque_type[$val['unit']];
+                    $dataset[$key]['high_percent'] = $val['high_percent']."%";
+                    $dataset[$key]['low_percent'] = $val['low_percent']."%";
+                    $dataset[$key]['controller_type'] = $controller[$val['controller_type']];
+                    $dataset[$key]['ktm_type'] = $ktm[$val['ktm_type']];
+                }
+             
+                $csv_headers = array_keys($dataset[0]);
+                header('Content-Type: text/csv; charset=utf-8');
+                header('Content-Disposition: attachment; filename=data.csv');
+    
+                $output = fopen('php://output', 'w');
+                fputcsv($output, $csv_headers);
+    
+                foreach ($dataset as $row) {
+                    fputcsv($output, $row);
+                }
+    
+                fclose($output);
+                exit();
+            }
+        }
     }
 
 

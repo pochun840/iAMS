@@ -60,14 +60,12 @@ function html_download() {
 
 
     if (save_type3 === "html") {
-        
-        var today = new Date();
-        var day = String(today.getDate()).padStart(2, '0');
-        var month = String(today.getMonth() + 1).padStart(2, '0'); 
-        var year = today.getFullYear();
-
-        today = year + month + day;
-    
+         var htmlContent = document.documentElement.outerHTML;
+         var blob = new Blob([htmlContent], { type: 'text/html' });
+         var link = document.createElement('a');
+         link.href = window.URL.createObjectURL(blob);
+         link.download = fileName3 + '.html';
+         link.click();
 
 
     } else if (save_type3 === "xml") {
@@ -82,34 +80,38 @@ function html_download() {
                 link.click();
             })
             .catch(error => {
-                console.error('获取 XML 数据时出错:', error);
+                //console.error('获取 XML 数据时出错:', error);
             });
     } else if (save_type3 === "csv") {
-        var table = document.getElementById('datainfo'); 
-        var data = []; 
-        for (var i = 0; i < table.rows.length; i++) {
-            var row = table.rows[i]; 
-            var rowData = []; 
-           
-            for (var j = 0; j < row.cells.length; j++) {
-                rowData.push(row.cells[j].innerText); 
-            }
+        var job_id = getCookie('job_id');
+        if (job_id) {
+            $.ajax({
+                type: "POST",
+                data: { job_id: job_id },
+                xhrFields: {
+                    responseType: 'blob'
+                },
+                url: '?url=Calibrations/csv_download',
+                success: function (response) {
+                    var filename = fileName3 + '.csv';
+                    var blob = new Blob([response], { type: 'text/csv' });
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.setAttribute('download', filename);
     
-            data.push(rowData); 
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                },
+                error: function (error) {
+                    //console.error('下载 CSV 数据时出错:', error);
+                    //alert('下载 CSV 数据时出错，请稍后重试');
+                }
+            });
+        } else {
+            //alert('未找到有效的 job_id，请检查您的设置。');
         }
 
-    
-        var header ='id,datatime,operator,toolsn,torque,unit,max_torque,min_torque,avg_torque,high_percent,low_percent,customize';
-        data.unshift(header.split(','));
-
-        var csvContent = "data:text/csv;charset=utf-8," + data.map(row => row.join(",")).join("\n");
-
-        var encodedUri = encodeURI(csvContent);
-        var link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", fileName1 + ".csv");
-        document.body.appendChild(link); 
-        link.click(); 
 
     } else if(save_type3 === "jpg"){
         downloadChartAsImage(chartDataURL, fileName3, 'jpg');
@@ -117,7 +119,7 @@ function html_download() {
     }else if(save_type3 === "png"){
         downloadChartAsImage(chartDataURL, fileName3, 'png');
     }else {
-        console.log("不支持的保存類型.");
+        //console.log("不支持的保存類型.");
     }
 }
 
@@ -163,28 +165,26 @@ function calljoball(){
 }
 
 
-function JobCheckbox() {
-    var checked_jobid = document.querySelector('input[type="checkbox"][name="jobid"]:checked');
-    
-      // 取消其他复选框的选中状态
-      checkboxes.forEach(function(checkbox) {
-        if (checkbox !== clickedCheckbox) {
-            checkbox.checked = false;
-        }
+function JobCheckbox()
+{
+    //取得 job被checked的值
+    var checked_jobid = document.querySelectorAll('input[type="checkbox"][name="jobid"]:checked');
+    var checkedjobidarr = [];
+    checked_jobid.forEach(function(checkbox) {
+        checkedjobidarr.push(checkbox.value);
     });
-    
 
-    // 如果有选中的复选框
-    if (checked_jobid !== null) {
-        checkedjobidarr.push(checked_jobid.value);
+    //checkedjobidarr 不等於空值 要取得對應的seq_id
+    if(checkedjobidarr != '' ) {
         $.ajax({
             type: "POST",
-            data: { job_id: checkedjobidarr },
+            data: {job_id: checkedjobidarr},
             url: '?url=Calibrations/get_correspond_val',
             success: function(response) {
                 if (response.trim() === '') {
                     alert('查無資料');
                     window.location.href = '?url=Calibrations';
+
                 } else {
                     var seqListElement = document.getElementById('Seq-list');
                     seqListElement.style.display = 'block';
@@ -192,12 +192,13 @@ function JobCheckbox() {
                 }
             },
             error: function(error) {
-                console.error('Error:', error);
             }
+        }).fail(function () {
         });
-    }
-}
 
+    }
+
+}
 
 function JobCheckbox_seq(){
 
@@ -273,4 +274,16 @@ function Connect() {
     .catch(error => {
         //console.error('Error:', error);
     });
+}
+
+function getCookie(cookieName) {
+    var cookies = document.cookie.split(';');
+    
+    for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].trim(); 
+        if (cookie.startsWith(cookieName + '=')) {
+            return cookie.substring(cookieName.length + 1); 
+        }
+    }
+    return '';
 }

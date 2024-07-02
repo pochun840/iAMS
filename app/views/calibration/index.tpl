@@ -115,7 +115,7 @@
                     <div class="row t1">
                         <div class="col-4 t1" style="padding-left: 7%; font-size: 18px">Controller :</div>
                         <div class="custom-select">
-                            <select class="selectem">
+                            <select id="controller_info">
                                  <?php foreach($data['res_controller_arr'] as $k_c =>$v_c){?>
                                     <option value="<?php echo $k_c;?>"><?php echo $v_c;?></option>
                                 <?php } ?>
@@ -472,18 +472,20 @@
         <div class="modal-lg" style="padding-left: 5%">
             <div class="lmodal-content" style="top: 140px; width: 670px;">
                 <span class="lclose-btn" onclick="closeModal_job()">&times;</span>
+                <span class="lclose-btn" onclick="closeModal_job()">&times;</span>
+                <span class="lclose-btn" onclick="closeModal_job()">&times;</span>
                 <div class="lmodal-column modalselect">
                     <h4>Job</h4>
                     <div class="scrollbar-jobselect" id="style-jobselect">
                         <div class="force-overflow-jobselect">
-                            <?php foreach($data['job_arr'] as $k_job =>$v_job){?>
+                             <?php foreach($data['job_arr'] as $k_job =>$v_job){?>
                             <div class="row t1"  style="padding-left: 5%">
                                 <div class="col t2 form-check form-check-inline">
-                                   <input class="form-check-input" type="checkbox" name="jobid" id="jobid" value="<?php echo $v_job['job_id'];?>" onclick="JobCheckbox()" style="zoom:1.0; vertical-align: middle;">&nbsp;
-                                   <label class="form-check-label" for="Job-1"><?php echo $v_job['job_name'];?></label>
+                                    <input class="form-check-input" type="checkbox" name="jobid" id="jobid" value="<?php echo $v_job['job_id'];?>" onclick="JobCheckbox()" style="zoom:1.0; vertical-align: middle;">&nbsp;
+                                    <label class="form-check-label" for="jobid"><?php echo $v_job['job_name'];?></label>
                                 </div>
                             </div>
-                            <?php } ?>
+                            <?php }?>
                         </div>
                     </div>
                 </div>
@@ -505,7 +507,7 @@
                         </div>
                     </div>
                 </div>
-                <button onclick="submit_calljob()">Submit</button>
+                <button id='submit_check' onclick='submit_check()'>submit</button>
             </div>
         </div>
     </div>
@@ -539,6 +541,18 @@ function exportCSV(modalId)
 
 function NextToAnalysisSystemKTM()
 {
+
+    //紀錄ktm  及 controller 型號
+
+    var meter = document.getElementById("TorqueMeter").value;
+    var controller_type = document.getElementById("controller_info").value;
+
+
+    document.cookie = "meter=" + meter + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+    document.cookie = "controller_type =" + controller_type  + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+
+      
+
     // Show analysis-system-KTM
     document.getElementById('analysis-system-KTM').style.display = 'block';
 
@@ -546,6 +560,17 @@ function NextToAnalysisSystemKTM()
     document.getElementById('Torque-Collection').style.display = 'none';
 }
 
+function submit_check(){
+
+    //job-id
+    var job_id = "<?php echo $_COOKIE['job_id'] ?? '' ?>"; 
+    var job_name = "<?php echo $_COOKIE['job_name'] ?? '' ?>"; 
+    document.getElementById("job-id").value = job_id;
+    document.getElementById("job-name").value = job_name;
+    document.getElementById("get_joball").style.display = "none";
+
+
+}
 function backSetting()
 {
     var TorqueCollection = document.getElementById('Torque-Collection');
@@ -625,16 +650,6 @@ function closeModal_job() {
     document.getElementById("get_joball").style.display = "none";
 
 }
-
-function submit_calljob(){
-    var job_id = "<?php echo $_COOKIE['job_id'] ?? '' ?>"; 
-    var job_name = "<?php echo $_COOKIE['job_name'] ?? '' ?>"; 
-    document.getElementById("job-id").value = job_id;
-    document.getElementById("job-name").value = job_name;
-    document.getElementById("get_joball").style.display = "none";
-}
-
-
 </script>
 
 

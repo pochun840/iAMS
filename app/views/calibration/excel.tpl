@@ -1,3 +1,7 @@
+
+<?php if( !empty($_GET['type'])){
+    $type = $_GET['type'];
+}?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +15,8 @@
     <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>/css/datatables.min.css">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/datatables.min.css">
 
-    <script defer src="<?php echo URLROOT; ?>js/chart.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
 
 
     <script src="<?php echo URLROOT; ?>js/echarts_min.js?v=202405080900"></script>
@@ -28,7 +33,7 @@
 
     <div class="excel-sheet">
         <header class="border-bottom">
-            <h2><img src="./img/logo.jpg" alt="Logo"></h2>
+            <h2><img src="http://192.168.0.152/imas/public/img/logo.jpg" alt="Logo"></h2>
             <p  style="font-weight: bold; font-size: 34px; padding-bottom: 5px">Certificate of Calibration</p>
             <p>Kilews Industrial Co., Ltd.</p>
             <p>No. 30, Lane 83, Hwa Cheng Rd., Hsin Chuang Dist., New Taipei City, Taiwan, R.O.C</p>
@@ -80,9 +85,9 @@
             </div>
 
             <div class="column column-right">
-                <div id="chart-img" style="padding-bottom: 10px">
+               
                     <div  id="mychart" width="600px" height="300px"></div>
-                </div>
+              
 
                 <div id="">
                     <table class="table-bordered">
@@ -205,4 +210,50 @@
     };
 
     myChart.setOption(option);
+</script>
+
+<script>
+    if (<?php echo !empty($type) ? 'true' : 'false'; ?>) {
+        var today = new Date();
+        var day = String(today.getDate()).padStart(2, '0');
+        var month = String(today.getMonth() + 1).padStart(2, '0'); 
+        var year = today.getFullYear();
+        today = year + month + day;
+
+        document.getElementById('mychart').style.marginLeft = "auto";
+        document.getElementById('mychart').style.marginRight = "auto";
+
+
+        var images = document.getElementsByTagName('img');
+        var baseUrl = window.location.origin;
+        var imagesHTML = Array.from(images)
+            .map(image => {
+                var src = image.src.startsWith(baseUrl) ? image.src : baseUrl + image.src;
+                return `<img src="${src}" alt="${image.alt}">`;
+            })
+            .join('\n');
+
+        // 收集页面上的样式表
+        var stylesheets = document.getElementsByTagName('link');
+        var cssString = Array.from(stylesheets)
+            .map(stylesheet => `<link rel="stylesheet" href="${stylesheet.href}">`)
+            .join('\n');
+        
+        // 构建导出的 HTML 内容
+        var newContent = ["<!DOCTYPE html><html><head>"];
+        newContent.push(cssString); // 添加样式表链接到 head 中
+        
+        newContent.push("</head><body>");
+        newContent.push(document.documentElement.innerHTML); // 将当前页面的 HTML 添加到 body 中
+        newContent.push("</body></html>");
+
+        // 创建一个包含导出内容的 Blob 对象
+        var blob = new Blob([newContent.join('\n')], { type: 'text/html' });
+        
+        // 创建一个下载链接并触发下载
+        var link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = 'calibrations_chart_' + today + '.html';
+        link.click();
+    }
 </script>

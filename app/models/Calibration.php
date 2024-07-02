@@ -60,6 +60,16 @@ class Calibration{
 
     }
 
+    public function datainfo_search($job_id){
+
+        $sql = "SELECT * FROM `calibrations` WHERE  job_id = :job_id  ORDER BY id ASC  ";
+        $params[':job_id'] = $job_id;
+        $statement = $this->db->prepare($sql);
+        $statement->execute($params);
+        $result = $statement->fetchall(PDO::FETCH_ASSOC);
+        return $result;
+    }
+
     public function echarts_data(){
 
         $sql =" SELECT * FROM calibrations ORDER BY id ASC ";

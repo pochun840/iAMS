@@ -507,6 +507,8 @@ class Historical{
             $resultarr = array();
             foreach ($file_arr as $v_f) {
                 $infile = "../public/data/DATALOG_000000".$no.$v_f.".csv";
+
+                
                 if (file_exists($infile)) {
                     $csvdata_tmp = file_get_contents($infile);
                     if (!empty($csvdata_tmp)) {
