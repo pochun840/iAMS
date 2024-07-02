@@ -291,6 +291,16 @@ class Calibrations extends Controller
             
         );
 
+        if(!empty($_GET['type'])){
+            if($_GET['type'] =="download"){
+                $data['type'] = "download";
+            }
+
+        }else{
+            $data['type'] = '';
+        }
+        
+
         $this->view('calibration/excel',$data);
 
 

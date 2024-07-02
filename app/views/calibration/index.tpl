@@ -4,12 +4,12 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/nav.css" type="text/css">
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/datatables.min.css">
 
-<script defer src="<?php echo URLROOT; ?>js/chart.min.js"></script>
+
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/calibration.css?v=202405221200" type="text/css">
 
-<script src="<?php echo URLROOT; ?>js/echarts_min.js?v=202405080900"></script>
-<script src="<?php echo URLROOT; ?>js/html2canvas_min.js?v=202405080900"></script>
-<script src="<?php echo URLROOT; ?>js/chart_share.js?v=202405151200"></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+
+  
 <script src="<?php echo URLROOT; ?>js/calibrations.js?v=202406251300"></script>
 
 
@@ -453,7 +453,6 @@
                             <option value="html">html</option>
                             <option value="xml">xml</option>
                             <option value="csv">excel</option>
-                            <option value="png">png</option>
                             <option value="jpg">jpg</option>
                         </select>
                     </div>
@@ -561,8 +560,6 @@ function NextToAnalysisSystemKTM()
 }
 
 function submit_check(){
-
-    //job-id
     var job_id = "<?php echo $_COOKIE['job_id'] ?? '' ?>"; 
     var job_name = "<?php echo $_COOKIE['job_name'] ?? '' ?>"; 
     document.getElementById("job-id").value = job_id;
@@ -682,7 +679,7 @@ function closeModal_job() {
             type: 'value',
              name :'Torque',
         },
-        dataZoom: generateDataZoom(),
+   
         series: [{
             name: 'Torque',
             type:'line',

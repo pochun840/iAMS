@@ -1,20 +1,4 @@
 
-document.addEventListener('DOMContentLoaded', function() {
-    // 等待DOM完全加載
-    var datainfo = document.getElementById('datainfo');
-    if (datainfo) {
-        datainfo.addEventListener('click', function(event) {
-            var target = event.target.closest('tr');
-            if (target) {
-                var id = target.getAttribute('data-id');
-                localStorage.setItem('chicked_id', id ); 
-                
-            }
-        });
-    } else {
-        //console.error('Unable to find element with ID "datainfo"');
-    }
-});
 
 function undo(){
     var chicked_id = localStorage.getItem('chicked_id');
@@ -60,15 +44,49 @@ function html_download() {
 
 
     if (save_type3 === "html") {
-         var htmlContent = document.documentElement.outerHTML;
-         var blob = new Blob([htmlContent], { type: 'text/html' });
-         var link = document.createElement('a');
-         link.href = window.URL.createObjectURL(blob);
-         link.download = fileName3 + '.html';
-         link.click();
+
+       
+        
+        document.getElementById('mychart').style.marginLeft  = "auto";
+        document.getElementById('mychart').style.marginRight = "auto";
+
+    
+        var images = document.getElementsByTagName('img');
+        var baseUrl = window.location.origin;
+
+        var imagesHTML = Array.from(images)
+            .map(image => {
+                var src = image.src.startsWith(baseUrl) ? image.src : baseUrl + image.src;
+                return `<img src="${src}" alt="${image.alt}">`;
+            })
+            .join('\n');
+            
 
 
-    } else if (save_type3 === "xml") {
+        var stylesheets = document.getElementsByTagName('link');
+        var cssString = Array.from(stylesheets)
+            .map(stylesheet => `<link rel="stylesheet" href="${stylesheet.href}">`)
+            .join('\n');
+        var newContent = ["<head>"];
+
+        Array.from(stylesheets).forEach(function(stylesheet) {
+            newContent.push(`<link rel="stylesheet" href="${stylesheet.href}">`);
+        });
+
+        newContent.push("</head><body>");
+        newContent.push(document.documentElement.innerHTML);
+
+        newContent.push("</body>");
+        var blob = new Blob([newContent.join('\n')], { type: 'text/html' });
+        var link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download =  fileName3 + '.html';
+        link.click();
+    
+
+
+         
+    }else if(save_type3 === "xml") {
         // 下載 XML 檔案
         fetch('/imas/public/index.php?url=Calibrations/get_xml')
             .then(response => response.text())
@@ -82,7 +100,7 @@ function html_download() {
             .catch(error => {
                 //console.error('获取 XML 数据时出错:', error);
             });
-    } else if (save_type3 === "csv") {
+    }else if(save_type3 === "csv") {
         var job_id = getCookie('job_id');
         if (job_id) {
             $.ajax({
@@ -108,16 +126,14 @@ function html_download() {
                     //alert('下载 CSV 数据时出错，请稍后重试');
                 }
             });
-        } else {
+        }else{
             //alert('未找到有效的 job_id，请检查您的设置。');
         }
 
 
-    } else if(save_type3 === "jpg"){
+    }else if(save_type3 === "jpg"){
         downloadChartAsImage(chartDataURL, fileName3, 'jpg');
 
-    }else if(save_type3 === "png"){
-        downloadChartAsImage(chartDataURL, fileName3, 'png');
     }else {
         //console.log("不支持的保存類型.");
     }
@@ -286,4 +302,19 @@ function getCookie(cookieName) {
         }
     }
     return '';
+}
+
+function waitForECharts() {
+    return new Promise(function(resolve, reject) {
+        // 假设 myChart 是您的 echarts 实例
+        if (typeof myChart !== 'undefined') {
+            // 确保 myChart 已经渲染完成
+            myChart.on('finished', function() {
+                resolve();
+            });
+        } else {
+            // 如果 myChart 未定义，等待一段时间再尝试
+            setTimeout(waitForECharts, 1000); // 等待 1 秒钟再检查
+        }
+    });
 }
