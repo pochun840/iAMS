@@ -263,9 +263,8 @@ if ("<?php echo $data['type']; ?>" == "download") {
         var blob = new Blob([newContent.join('\n')], { type: 'text/html' });
         var link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
-        link.download = 'history_chart_' + today + '.html';
+        link.download = 'calibrations_chart_' + today + '.html';
         link.click();
 
-        //localStorage.setItem('downloaded', 'true');
 }
 </script>
