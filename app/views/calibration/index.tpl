@@ -3,16 +3,9 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/w3.css" type="text/css">
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/nav.css" type="text/css">
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/datatables.min.css">
-
-
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/calibration.css?v=202405221200" type="text/css">
-
-  <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
-
-  
+<script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
 <script src="<?php echo URLROOT; ?>js/calibrations.js?v=202406251300"></script>
-
-
 <?php echo $data['nav']; ?>
 
 <div class="container-ms">
@@ -277,23 +270,7 @@
 
                                 <tbody style="background-color:#F5F5F5;" id="datainfo">
 
-                                    <?php foreach($data['info'] as $key => $val){ ?>
-                                        <tr style="text-align: center; vertical-align: middle;"  data-id ='<?php echo $val['id'];?>'>
-                                            <td><?php echo $val['id'];?></td>
-                                            <td><?php echo $val['datatime'];?></td>
-                                            <td><?php echo $val['operator'];?></td>
-                                            <td><?php echo $val['toolsn'];?></td>
-                                            <td><?php echo $val['torque'];?></td>
-                                            <td><?php echo $data['res_Torquetype'][$val['unit']];?></td>
-                                            <td><?php echo $val['max_torque'];?></td>
-                                            <td><?php echo $val['min_torque'];?></td>
-                                            <td><?php echo $val['avg_torque'];?></td>
-                                            <td><?php echo $val['high_percent'];?></td>
-                                            <td><?php echo $val['low_percent'];?></td>
-                                            <td><?php echo $val['customize'];?></td>
-                                        </tr>
-                                    
-                                    <?php } ?>  
+                                  
                                 </tbody>
                             </table>
                         </div>
@@ -565,6 +542,28 @@ function submit_check(){
     document.getElementById("job-id").value = job_id;
     document.getElementById("job-name").value = job_name;
     document.getElementById("get_joball").style.display = "none";
+
+    if(job_id){
+        //透過ajax 
+        $.ajax({
+            url: "?url=Calibrations/copy_step",
+            method: "POST",
+            data:{ 
+                jobid: jobid,
+                //seqid: seqid,
+                //stepid:stepid,
+                //stepid_new: stepid_new
+            },
+            success: function(response) {
+                //console.log( response);
+                //alert(response);
+                //history.go(0);
+            },
+            error: function(xhr, status, error) {
+                
+            }
+        });
+    }
 
 
 }

@@ -58,6 +58,46 @@ class Calibrations extends Controller
         $this->view('calibration/index', $data);
 
     }
+
+    public function get_data(){
+        $input_check = true;
+        if (!empty($_POST['job_id']) && isset($_POST['job_id'])) {
+            $job_id = $_POST['job_id'];
+        } else {
+            $input_check = false;
+        }
+
+        if($input_check){
+            $dataset = $this->CalibrationModel->datainfo_search($job_id);
+            if(!empty($dataset)){
+
+                $torque_type = $this->CalibrationModel->details('torque');
+                $controller = $this->CalibrationModel->details('controller');
+                $ktm = $this->CalibrationModel->details('torquemeter');
+
+                $datalist = '';
+                foreach($dataset as $key =>$val){
+                    $datalist  = '<tr style="text-align: center; vertical-align: middle;"  data-id="' .$val['id'].'">';
+                    $datalist .= "<td>".$val['id']."</td>";
+                    $datalist .= "<td>".$val['datatime']."</td>";
+                    $datalist .= "<td>".$val['operator']."</td>";
+                    $datalist .= "<td>".$val['toolsn']."</td>";
+                    $datalist .= "<td>".$val['torque']."</td>";
+                    $datalist .= "<td>".$val['max_torque']."</td>";
+                    $datalist .= "<td>".$val['min_torque']."</td>";
+                    $datalist .= "<td>".$val['avg_torque']."</td>";
+                    $datalist .= "<td>".$val['high_percent']." % "."</td>";
+                    $datalist .= "<td>".$val['low_percent']." % "."</td>";
+                    $datalist .= "<td>".$val['customize']."</td>";
+                    $datalist .= "</tr>";
+
+                }
+             
+          
+            }
+        }
+
+    }
     public function del_info(){
         $input_check = true;
         if(isset($_POST['chicked_id']) && !empty($_POST['chicked_id'])) {
