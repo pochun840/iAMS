@@ -33,7 +33,7 @@ function connectcomport($port, $baudRate, $dataBits, $stopBits, $parity) {
                 $fileContent = var_export($dataArray, true);
                 $file_path = "../api/final_val.txt";
                 file_put_contents($file_path, $fileContent, LOCK_EX); 
-                
+
                 $response['success'] = true;
                 $response['message'] = "get data";
             }
