@@ -269,8 +269,6 @@
                                 </thead>
 
                                 <tbody style="background-color:#F5F5F5;" id="datainfo">
-
-                                  
                                 </tbody>
                             </table>
                         </div>
@@ -536,37 +534,38 @@ function NextToAnalysisSystemKTM()
     document.getElementById('Torque-Collection').style.display = 'none';
 }
 
-function submit_check(){
+
+function submit_check() {
     var job_id = "<?php echo $_COOKIE['job_id'] ?? '' ?>"; 
     var job_name = "<?php echo $_COOKIE['job_name'] ?? '' ?>"; 
+
+    // 將作業 ID 和名稱設置到對應的 input 欄位中
     document.getElementById("job-id").value = job_id;
     document.getElementById("job-name").value = job_name;
-    document.getElementById("get_joball").style.display = "none";
-
-    if(job_id){
-        //透過ajax 
+    
+    // 如果 job_id 存在，則發送 AJAX 請求
+    if (job_id) {
         $.ajax({
-            url: "?url=Calibrations/copy_step",
+            url: "?url=Calibrations/get_data",
             method: "POST",
-            data:{ 
-                jobid: jobid,
-                //seqid: seqid,
-                //stepid:stepid,
-                //stepid_new: stepid_new
+            data: {
+                job_id: job_id 
             },
             success: function(response) {
-                //console.log( response);
-                //alert(response);
-                //history.go(0);
+                document.getElementById("datainfo").innerHTML = response;
+                document.getElementById("get_joball").style.display = "none";
             },
             error: function(xhr, status, error) {
-                
+                //console.error("Ajax request error:", error); 
             }
         });
+    } else {
+        //console.warn("job_id is empty or undefined.");
     }
-
-
 }
+
+
+
 function backSetting()
 {
     var TorqueCollection = document.getElementById('Torque-Collection');

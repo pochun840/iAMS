@@ -33,23 +33,9 @@ function connectcomport($port, $baudRate, $dataBits, $stopBits, $parity) {
                 $fileContent = var_export($dataArray, true);
                 $file_path = "../api/final_val.txt";
                 file_put_contents($file_path, $fileContent, LOCK_EX); 
-
-
+                
                 $response['success'] = true;
                 $response['message'] = "get data";
-
-                /*if (!empty($data)) {
-                    $api_url = 'http://'.$_SERVER['HTTP_HOST'].'/imas/public/index.php?url=Calibrations/tidy_data';
-                    $api_data = array('data' => $data);
-                    $ch = curl_init($api_url);
-                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                    curl_setopt($ch, CURLOPT_POST, true);
-                    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($api_data));
-                    $api_response = curl_exec($ch);
-                    curl_close($ch);
-                    
-                    return $api_response;
-                }*/
             }
         }
     }
