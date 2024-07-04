@@ -157,10 +157,10 @@ class Calibrations extends Controller
                 );
             }
 
-            //var_dump($response);die();
             echo json_encode($response);
         }
     }
+
 
     public function get_correspond_val(){
         $val  = array();
@@ -249,8 +249,6 @@ class Calibrations extends Controller
         echo $xml->outputMemory();
     }
     
-    
-
     
     private function generatecheckboxhtml($value, $label, $name, $onClickFunction = '') {
 
