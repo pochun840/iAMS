@@ -252,6 +252,7 @@ function JobCheckbox_seq(){
     }
 }
 
+
 //test connect
 function Connect() {
     $.ajax({

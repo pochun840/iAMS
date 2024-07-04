@@ -18,9 +18,6 @@ class Calibrations extends Controller
     // 取得所有Jobs
     public function index(){
 
-        
-
-        //找到COOKIE 
         $isMobile = $this->isMobileCheck();
 
         #select
@@ -40,7 +37,6 @@ class Calibrations extends Controller
 
         }
 
-        
         $data = array(
             'isMobile' => $isMobile,
             'nav' => $this->NavsController->get_nav(),
@@ -60,6 +56,7 @@ class Calibrations extends Controller
     }
 
     public function get_data(){
+        
         $input_check = true;
         if (!empty($_POST['job_id']) && isset($_POST['job_id'])) {
             $job_id = $_POST['job_id'];
@@ -83,6 +80,7 @@ class Calibrations extends Controller
                     $datalist .= "<td>".$val['operator']."</td>";
                     $datalist .= "<td>".$val['toolsn']."</td>";
                     $datalist .= "<td>".$val['torque']."</td>";
+                    $datalist .= "<td>".$torque_type[$val['unit']]."</td>";
                     $datalist .= "<td>".$val['max_torque']."</td>";
                     $datalist .= "<td>".$val['min_torque']."</td>";
                     $datalist .= "<td>".$val['avg_torque']."</td>";
@@ -90,14 +88,18 @@ class Calibrations extends Controller
                     $datalist .= "<td>".$val['low_percent']." % "."</td>";
                     $datalist .= "<td>".$val['customize']."</td>";
                     $datalist .= "</tr>";
+                    echo $datalist;
 
                 }
-             
-          
-            }
+            }else {
+                echo "No data found for job_id: " . $job_id;
+            }         
+        }else {
+            echo "Invalid job_id received.";
         }
 
     }
+
     public function del_info(){
         $input_check = true;
         if(isset($_POST['chicked_id']) && !empty($_POST['chicked_id'])) {
@@ -187,7 +189,7 @@ class Calibrations extends Controller
                 #組checkbox的task的html
                 if(!empty($info_task)){
                     foreach($info_task as $k_task => $v_task){
-                        echo $this->generatecheckboxhtml($v_task['task_id'], $v_task['task_id'], 'taskid', 'JobCheckbox_task');
+                        echo $this->generatecheckboxhtml($v_task['task_id'], $v_task['task_id'], 'taskid');
                     }
                 }
             }
@@ -250,12 +252,18 @@ class Calibrations extends Controller
     
 
     
-    private function generatecheckboxhtml($value, $label, $name, $onClickFunction) {
+    private function generatecheckboxhtml($value, $label, $name, $onClickFunction = '') {
 
         $checkbox_html = '<div class="row t1">';
         $checkbox_html .= '<div class="col t5 form-check form-check-inline">';
-        $checkbox_html .= '<input class="form-check-input" type="checkbox" name="' .$name. '" id="' .$name. '" value="' .$value. '" onclick="' .$onClickFunction.'()" style="zoom:1.0; vertical-align: middle;">&nbsp;';
-        $checkbox_html .= '<label class="form-check-label" for="">'.$label.'</label>';
+        $checkbox_html .= '<input class="form-check-input" type="checkbox" name="' .$name. '" id="' .$name. '" value="' .$value. '"';
+        
+        if (!empty($onClickFunction)) {
+            $checkbox_html .= ' onclick="' . $onClickFunction . '()"';
+        }
+        
+        $checkbox_html .= ' style="zoom:1.0; vertical-align: middle;">&nbsp;';
+        $checkbox_html .= '<label class="form-check-label" for="">' . $label . '</label>';
         $checkbox_html .= '</div>';
         $checkbox_html .= '</div>';
         
