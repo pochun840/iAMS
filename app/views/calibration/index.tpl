@@ -442,7 +442,7 @@
 
        
     <!-- Modal Call Job Select -->
-    <div id="get_joball" class="lmodal">
+    <div id="get_joball" class="lmodal" style="display: none">
         <div class="modal-lg" style="padding-left: 5%">
             <div class="lmodal-content" style="top: 140px; width: 670px;">
                 <span class="lclose-btn" onclick="closeModal_job()">&times;</span>

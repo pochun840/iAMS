@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../public/img/cc_icon.png" type="image/x-icon">
@@ -21,8 +22,15 @@
     <script src="<?php echo URLROOT; ?>/js/jquery-3.7.1.min.js"></script>
     <script src="<?php echo URLROOT; ?>/js/sweetalert2.js"></script>
     <script src="<?php echo URLROOT; ?>/js/moment.min.js"></script>
+
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>css/w3.css" type="text/css">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>css/nav.css" type="text/css">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/datatables.min.css">
+
     
     <title><?php echo SITENAME; ?></title>
+
+    
 </head>
 <body>
 

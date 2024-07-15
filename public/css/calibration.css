@@ -633,6 +633,12 @@ svg
     height: 40vh;
 }
 
+#mychart
+{
+    margin: 0 auto; 
+    display: block; 
+}
+
 .axis-x,
 .axis-y
 {
@@ -752,6 +758,16 @@ svg
     padding-top: 0px;
 }
 
+.modal-content
+{
+    background-color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #888;
+    text-align: center;
+    box-shadow: 1px 2px 3px 0px rgba(0,0,0,0.2);
+}
+
 #Export_CSV .modal-dialog
 {
     width: 700px !important; /* You can adjust the percentage or use a specific width value */
@@ -765,16 +781,6 @@ svg
 #Export_Report .modal-dialog
 {
     width: 500px !important; /* You can adjust the percentage or use a specific width value */
-}
-
-.modal-content
-{
-    background-color: #fff;
-    padding: 5px;
-    border-radius: 5px;
-    border: 1px solid #888;
-    text-align: center;
-    box-shadow: 1px 2px 3px 0px rgba(0,0,0,0.2);
 }
 
 .style-button
@@ -792,7 +798,121 @@ svg
     box-shadow: 1px 2px 3px 0px rgba(0,0,0,0.2);
 }
 
+#mychart {
+    width: 500px; 
+    height: 300px; 
+}
+
+.selected{
+    background-color: #9AC0CD !important;
+}
+
+.t1{font-size: 17px; margin: 2px 0px; display: flex; align-items: center;}
+.t2{font-size: 17; margin: 2px 0px; height: 25px}
 
 
+/* Call Job Modal */
+.lmodal
+{
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 100; /* Sit on top */
+    left:0px;
+    top: 0px;
+    width: 100%; /* Full width */
+    padding-top: 0px;
+}
 
+.lmodal-content
+{
+    background-color: #fff;
+    padding: 5px;
+    padding-bottom: 2%;
+    border-radius: 5px;
+    border: 1px solid #BABABA;
+    box-shadow: 1px 2px 3px 0px rgba(0,0,0,0.2);
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    position: relative;
+}
 
+.lclose-btn {
+    color: #aaaaaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute; /* Use absolute positioning */
+    top: 0px; /* Adjust as necessary */
+    right: 8px; /* Adjust as necessary */
+}
+
+.lclose-btn:hover,
+.lclose-btn:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.lmodal-column
+{
+    padding: 0px 5px;
+    width: 200px;
+    border: 0px solid #ccc;
+    border-radius: 5px;
+}
+
+.lmodal-column p
+{
+    text-align: center;
+}
+
+.modalselect
+{
+    padding: 0px 5px;
+    width:180px;
+    padding-bottom: 2%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* scrollbar style */
+.scrollbar-jobselect
+{
+    float: left;
+    height: calc(100vh - 500px);
+    width: 100%;
+    overflow-y: scroll;
+}
+
+.force-overflow-jobselect
+{
+    min-height: 40vh;
+}
+
+/**  STYLE job select */
+#style-jobselect::-webkit-scrollbar
+{
+    display: none;
+    width: 12px;
+    background-color: #F5F5F5;
+}
+
+#style-jobselect::-webkit-scrollbar-thumb
+{
+    border-radius: 10px;
+    background: linear-gradient(left, #96A6BF, #63738C);
+    box-shadow: inset 0 0 1px 1px #5C6670;
+}
+
+#style-jobselect::-webkit-scrollbar-track
+{
+    border-radius: 10px;
+    background: #eee;
+    box-shadow: 0 0 1px 1px #bbb, inset 0 0 7px rgba(0,0,0,0.3)
+}
+
+#style-jobselect::-webkit-scrollbar-thumb:hover
+{
+    background: linear-gradient(left, #8391A6, #536175);
+}

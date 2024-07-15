@@ -10,8 +10,8 @@
     <link rel="icon" sizes="192x192" href="../public/img/192.png">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>/css/print-styles.css">
-    <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>/css/datatables.min.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/print-styles.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/datatables.min.css">
     <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
 
 
@@ -31,7 +31,7 @@
 
     <div class="excel-sheet">
         <header class="border-bottom">
-            <h2><img src="http://192.168.0.152/imas/public/img/logo.jpg" alt="Logo"></h2>
+            <h2><img src="/imas/public/img/logo.jpg" alt="Logo"></h2>
             <p style="font-weight: bold; font-size: 34px; padding-bottom: 5px">Certificate of Calibration</p>
             <p>Kilews Industrial Co., Ltd.</p>
             <p>No. 30, Lane 83, Hwa Cheng Rd., Hsin Chuang Dist., New Taipei City, Taiwan, R.O.C</p>
@@ -227,6 +227,8 @@ if ("<?php echo $data['type']; ?>" == "download") {
     
         var images = document.getElementsByTagName('img');
         var baseUrl = window.location.origin;
+        //console.log(baseUrl);
+        //exit();
 
         var imagesHTML = Array.from(images)
             .map(image => {
