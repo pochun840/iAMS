@@ -1531,7 +1531,7 @@ async function force_switch_tool(status) {
         data.cc_seq_id = document.getElementById('seq_id').value;
         data.cc_task_id = document.getElementById('task_id').value;
         data.cc_equipment = '';
-        data.cc_barcodesn = '';
+        data.cc_barcodesn = document.getElementById('barcode').value;
         data.cc_station = '';
         data.cc_operator = '<?php echo $_SESSION['user']; ?>';
 
