@@ -22,6 +22,17 @@ class Sequence{
     }
 
     // 取得所有Sequence
+    public function getSequences_enable($job_id)
+    {
+        $sql = "SELECT * FROM `sequence` WHERE job_id = :job_id AND sequence_enable = 1";
+        $statement = $this->db->prepare($sql);
+        $statement->bindValue(':job_id', $job_id);
+        $statement->execute();
+
+        return $statement->fetchall(PDO::FETCH_ASSOC);
+    }
+
+    // 取得所有Sequence
     public function getJob($job_id)
     {
         $sql = "SELECT * FROM `job` WHERE job_id = :job_id";

@@ -3,11 +3,13 @@
 class Products extends Controller
 {
     private $ProductModel;
+    private $SequenceModel;
     private $NavsController;
     // 在建構子中將 Post 物件（Model）實例化
     public function __construct()
     {
         $this->ProductModel = $this->model('Product');
+        $this->SequenceModel = $this->model('Sequence');
         $this->NavsController = $this->controller_new('Navs');
     }
 
@@ -134,12 +136,7 @@ class Products extends Controller
                 $input_check = false;
                 $error_message .= "reverse_Force,";
             }
-            if(  !empty($data_array['reverse_count']) && isset($data_array['reverse_count'])  ){
-                if($data_array['reverse_count'] == 'true'){
-                    $data_array['reverse_count'] = 1;
-                }else{
-                    $data_array['reverse_count'] = 0;
-                }
+            if(  isset($data_array['reverse_count'])  ){
             }else{ 
                 $input_check = false;
                 $error_message .= "reverse_count,";
@@ -268,6 +265,110 @@ class Products extends Controller
             exit();
         }
 
+        echo json_encode($result);
+        exit();
+    }
+
+    //get job seq list
+    public function get_seq_list_by_job_id($value='')
+    {
+        $input_check = true;
+        $error_message = '';
+        if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
+            $job_id = $_POST['job_id'];
+        }else{ 
+            $input_check = false;
+            $error_message .= "job_id,";
+        }
+
+        if ($input_check) {
+            $result = $this->SequenceModel->getSequences($job_id);
+        }else{
+            echo json_encode(array('error' => $error_message));
+            exit();
+        }
+        
+        echo json_encode($result);
+        exit();
+    }
+
+
+    // add & edit barcode
+    // barcode + match from + match to 組成key
+    // key 重複的話就跳出提醒 不要直接覆蓋
+    public function Edit_Barcode($value='')
+    {
+        $input_check = true;
+        $error_message = '';
+        if( !empty($_POST['barcode']) && isset($_POST['barcode'])  ){
+            $barcode = $_POST['barcode'];
+        }else{ 
+            $input_check = false;
+            $error_message .= "barcode,";
+        }
+        if( !empty($_POST['match_from']) && isset($_POST['match_from'])  ){
+            $match_from = $_POST['match_from'];
+        }else{ 
+            $input_check = false;
+            $error_message .= "match_from,";
+        }
+        if( !empty($_POST['match_to']) && isset($_POST['match_to'])  ){
+            $match_to = $_POST['match_to'];
+        }else{ 
+            $input_check = false;
+            $error_message .= "match_to,";
+        }
+        if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
+            $job_id = $_POST['job_id'];
+        }else{ 
+            $input_check = false;
+            $error_message .= "job_id,";
+        }
+        if( !empty($_POST['seq_id']) && isset($_POST['seq_id'])  ){
+            $seq_id = $_POST['seq_id'];
+        }else{ 
+            $input_check = false;
+            $error_message .= "seq_id,";
+        }
+
+        if ($input_check) {
+            $result = $this->ProductModel->EditBarcode($barcode,$match_from,$match_to,$job_id,$seq_id);
+        }else{
+            echo json_encode(array('result' => '', 'error' => $error_message));
+            exit();
+        }
+
+        echo json_encode(array('result' => $result, 'error' => $error_message));
+        exit();
+    }
+
+    // delete barcode
+    public function Delete_Barcode($value='')
+    {
+        $input_check = true;
+        $error_message = '';
+        if( !empty($_POST['id']) && isset($_POST['id'])  ){
+            $id = $_POST['id'];
+        }else{ 
+            $input_check = false;
+            $error_message .= "id,";
+        }
+        
+        if ($input_check) {
+            $result = $this->ProductModel->DeleteBarcode($id);
+        }else{
+            echo json_encode(array('result' => '', 'error' => $error_message));
+            exit();
+        }
+
+        echo json_encode(array('result' => $result, 'error' => $error_message));
+        exit();
+    }
+
+    // load barcode list
+    public function Get_All_Barcode($value='')
+    {
+        $result = $this->ProductModel->getBarcodes();
         echo json_encode($result);
         exit();
     }

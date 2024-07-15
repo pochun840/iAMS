@@ -19,14 +19,14 @@
 
     <header>
         <div class="identification">
-            <img id="header-img " src="./img/user-head.svg"> Identification
+            <img id="header-img " src="./img/user-head.svg"> <?php echo $text['main_user_text']; ?>
         </div>
 
         <div class="notification">
             <i style="width:auto; height:40px" class="fa fa-bell" onclick="ClickNotification()"></i>
             <span id="messageCount" class="badge"></span>
         </div>
-        <div class="personnel"><i style="width:auto; height: 40px;font-size: 26px" class="fa fa-user"></i> Esther</div>
+        <div class="personnel"><i style="width:auto; height: 40px;font-size: 26px" class="fa fa-user"></i> <?php echo $_SESSION['user']; ?></div>
     </header>
 
     <!-- Notification -->
@@ -98,33 +98,33 @@
         <div class="center-content">
             <div class="wrapper">
                 <div class="navbutton active" onclick="handleButtonClick(this, 'member')">
-                    <span data-content="Member List" onclick="showContent('member')"></span>Member List
+                    <span data-content="<?php echo $text['Member_List_text']; ?>" onclick="showContent('member')"></span><?php echo $text['Member_List_text']; ?>
                 </div>
                 <div class="navbutton" onclick="handleButtonClick(this, 'role')">
-                    <span data-content="Role Setting" onclick="showContent('role')"></span>Role Setting
+                    <span data-content="<?php echo $text['Role_Setting_text']; ?>" onclick="showContent('role')"></span><?php echo $text['Role_Setting_text']; ?>
                 </div>
                 <div class="navbutton" onclick="handleButtonClick(this, 'station')">
-                    <span data-content="Station Setting" onclick="showContent('station')"></span>Station Setting
+                    <span data-content="<?php echo $text['Station_Setting_text']; ?>" onclick="showContent('station')"></span><?php echo $text['Station_Setting_text']; ?>
                 </div>
             </div>
 
             <!-- Member List -->
             <div id="memberContent" class="content">
                 <div class="w3-panel alert-light">
-                    <label type="text" style="font-size: 22px; margin: 10px; color: #000"><b>Member List</b></label>
+                    <label type="text" style="font-size: 22px; margin: 10px; color: #000"><b><?php echo $text['Member_List_text']; ?></b></label>
 
                     <button id="button-menulist" type="button"><img id="img-menulist" src="./img/dots-30.png" alt=""></button>
 
                     <button id="delete-member" type="button" onclick="delete_user();">
-                        <img id="img-delete-member" src="./img/delete.svg" alt=""> Delete
+                        <img id="img-delete-member" src="./img/delete.svg" alt=""> <?php echo $text['Delete_text']; ?>
                     </button>
 
                     <button id="add-memberlist" type="button" onclick="add_user_div();">
-                        <img id="img-add-member" src="./img/add-member.svg" alt=""> Add member
+                        <img id="img-add-member" src="./img/add-member.svg" alt=""> <?php echo $text['Add_member_text']; ?>
                     </button>
 
                     <button id="Filter" type="button">
-                        <img id="img-filter" src="./img/filter.svg" alt=""> Filter
+                        <img id="img-filter" src="./img/filter.svg" alt=""> <?php echo $text['Filter_text']; ?>
                     </button>
                 </div>
 
@@ -138,12 +138,12 @@
                                             <input type="checkbox" id="selectAll1" class="form-check-input" value="0" style="zoom:1.3">
                                         </th>
                                         <th style="width:10%;display: none;">ID</th>
-                                        <th style="width:15%;">Account</th>
-                                        <th style="width:20%;">User Name</th>
-                                        <th style="width:10%;">Role</th>
+                                        <th style="width:15%;"><?php echo $text['account_text']; ?></th>
+                                        <th style="width:20%;"><?php echo $text['User_Name_text']; ?></th>
+                                        <th style="width:10%;"><?php echo $text['Role_text']; ?></th>
                                         <!-- <th style="width:10%;">Group</th> -->
-                                        <th style="width:25%;">Created Date (UTC)</th>
-                                        <th style="width:5%;">Edit</th>
+                                        <th style="width:25%;"><?php echo $text['Created_Date_text']; ?> (UTC)</th>
+                                        <th style="width:5%;"><?php echo $text['Edit_text']; ?></th>
                                     </tr>
                                 </thead>
 
@@ -180,7 +180,7 @@
                 <header class="w3-container modal-header">
                     <span onclick="document.getElementById('AddMember').style.display='none'"
                         class="w3-button w3-red w3-xxlarge w3-display-topright" style="padding: 7px; width: 60px">&times;</span>
-                    <h3 id='modal_title'>Add New Member</h3>
+                    <h3 id='modal_title'><?php echo $text['Add_member_text']; ?></h3>
                 </header>
 
                 <div class="modal-body">
@@ -192,34 +192,40 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="user-name" class="col-4 t1">Name :</div>
+                            <div for="user-name" class="col-4 t1"><?php echo $text['Name_text']; ?> :</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="user-name" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="account" class="col-4 t1">Account :</div>
+                            <div for="account" class="col-4 t1"><?php echo $text['account_text']; ?> :</div>
                             <div class="col-4 t2" >
                                 <input type="text" class="form-control input-ms" id="user-account" maxlength="12" required>
                             </div>
                         </div>
                         <div class="row">
-                            <div for="user-password" class="col-4 t1">Password :</div>
+                            <div for="user-password" class="col-4 t1"><?php echo $text['password_text']; ?> :</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="user-password" maxlength="12" required>
                             </div>
                         </div>
                         <div class="row">
-                            <div for="employee-number" class="col-4 t1">Employee Number :</div>
+                            <div for="employee-number" class="col-4 t1"><?php echo $text['Employee_Number_text']; ?> :</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="employee-number" maxlength="">
                             </div>
                         </div>
                         <div class="row">
-                            <div for="authority" class="col-4 t1">Authority :</div>
+                            <div for="employee-number" class="col-4 t1"><?php echo $text['Card_text']; ?> :</div>
+                            <div class="col-4 t2">
+                                <input type="text" class="form-control input-ms" id="user-card" maxlength="100">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="authority" class="col-4 t1"><?php echo $text['Authority_text']; ?> :</div>
                             <div class="col t2">
                                 <select id="user-role" style="width: 169px">
-               					    <option value="-1" disabled selected>Choose a role</option>
+               					    <option value="-1" disabled selected><?php echo $text['Choose_text']; ?></option>
                                     <?php foreach ($data['all_roles'] as $key => $value) {
                                         echo '<option value="'.$value['ID'].'">'.$value['Title'].'</option>';
                                     } ?>
@@ -230,8 +236,8 @@
                 </div>
 
                 <div class="modal-footer justify-content-center">
-                    <button id="button1" class="button button3" onclick="add_member_user()" >Save</button>
-                    <button id="button2" class="button button3" onclick="document.getElementById('AddMember').style.display='none'" class="cancelbtn">Cancel</button>
+                    <button id="button1" class="button button3" onclick="add_member_user()" ><?php echo $text['Save_text']; ?></button>
+                    <button id="button2" class="button button3" onclick="document.getElementById('AddMember').style.display='none'" class="cancelbtn"><?php echo $text['Cancel_text']; ?></button>
                 </div>
             </div>
         </div>
@@ -400,7 +406,7 @@ addMessage();
         document.getElementById('user-role').value = -1;
 
         document.getElementById('user-account').disabled = false;
-        document.getElementById('modal_title').innerText = 'Add New Member';
+        document.getElementById('modal_title').innerText = '<?php echo $text['Add_member_text']; ?>';
         document.getElementById('user-id').style.display='none';
         document.getElementById('AddMember').style.display='block';
     }
@@ -412,6 +418,7 @@ addMessage();
         let user_password = document.getElementById('user-password').value;
         let user_employee_number = document.getElementById('employee-number').value;
         let user_role = document.getElementById('user-role').value;
+        let user_card = document.getElementById('user-card').value;
 
         let result = validate_adduser(user_id);
 
@@ -426,6 +433,7 @@ addMessage();
                         'user_password': user_password,
                         'user_employee_number': user_employee_number,
                         'user_role': user_role,
+                        'user_card': user_card,
                         'add_user': true,
                          },
                     dataType: "json",
@@ -453,6 +461,7 @@ addMessage();
                             'user_password': user_password,
                             'user_employee_number': user_employee_number,
                             'user_role': user_role,
+                            'user_card': user_card,
                             },
                         dataType: "json",
                         url: "?url=Users/edit_user",
@@ -528,9 +537,10 @@ addMessage();
                 document.getElementById('user-account').value = data.account;
                 document.getElementById('employee-number').value = data.employee_number;
                 document.getElementById('user-role').value = data.RoleID;
+                document.getElementById('user-card').value = data.card;
 
                 document.getElementById('user-account').disabled = true;
-                document.getElementById('modal_title').innerText = 'Edit Member';
+                document.getElementById('modal_title').innerText = '<?php echo $text['Edit_member_text']; ?>';
                 document.getElementById('user-id').style.display='flex'
                 document.getElementById('AddMember').style.display='block'
             }

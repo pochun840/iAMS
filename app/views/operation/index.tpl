@@ -11,29 +11,31 @@
 <?php echo $data['nav']; ?>
 <style>
 .t1{color: #14A800; background-color: #E8F9F1; border-radius: 10px; padding-right: 5%; padding: 0 5px;}
-
-
 .t2{color: #555555; background-color: #DDDDDD; border-radius: 10px; padding: 0 5px}
 
+.t3{font-size: 5vmin; margin-top: 3%; padding-left: 5%}                 /* target_torque */
+.t4{height: 18px; width: 21px; margin-top: 5px; margin-right: 80px;}    /* img hi lo */
+.t5{margin-right: 2px;margin-top: 5px}                                 /* Hi Torque & Hi Angle */
+
+.t6{float: left; height: 25px; width: 25px; margin-right: 5px; margin-top: 5px}  /* Sensor icon */
 
 </style>
 <div class="container-ms">
 
     <header>
         <div class="operation">
-            <img id="header-img" src="./img/operation-head.svg">Operation
+            <img id="header-img" src="./img/operation-head.svg"><?php echo $text['main_operation_text']; ?>
         </div>
 
         <div class="notification">
             <i style=" width:auto; height: 40px;" class="fa fa-bell" onclick="ClickNotification()"></i>
             <span id="messageCount" class="badge"></span>
         </div>
-        <div class="personnel"><i style=" width:auto; height: 40px" class="fa fa-user"></i> Esther</div>
+        <div class="personnel"><i style=" width:auto; height: 40px" class="fa fa-user"></i> <?php echo $_SESSION['user']; ?></div>
 
         <div class="ipconnection">
-            <i style=" width:auto; height: 40px" class="fa fa-desktop"></i> 192.168.51.22
+            <i style=" width:auto; height: 40px" class="fa fa-desktop"></i> <?php echo $_SERVER['SERVER_ADDR']; ?>
         </div>
-
 
         <div style="display: none;">
             <input id="job_id" value="<?php echo $data['job_id']; ?>" disabled>
@@ -41,30 +43,39 @@
             <input id="task_id" value="<?php echo $data['task_id']; ?>" disabled>
             <input id="task_count" value="<?php echo $data['task_count']; ?>" disabled>
             <input id="total_seq_count" value="<?php echo $data['total_seq']; ?>" disabled>
+            <input id="max_seq_id" value="<?php echo $data['max_seq_id']; ?>" disabled>
             <input id="modbus_switch" value="1" >
-            <input id="tool_status" value="1" > 
+            <input id="tool_status" value="-1" > 
         </div>
         <div id="task_coordinate" style="display:none;">
             <?php foreach ($data['task_list'] as $key => $task){
+                echo '<input id="task_'.$task['task_id'].'_enable_arm" value="'.$task['enable_arm'].'">';
                 echo '<input id="task_'.$task['task_id'].'_x" value="'.$task['position_x'].'">';
                 echo '<input id="task_'.$task['task_id'].'_y" value="'.$task['position_y'].'">';
                 echo '<input id="task_'.$task['task_id'].'_tolerance" value="'.$task['tolerance'].'">';
                 echo '<input id="task_'.$task['task_id'].'_gtcs_job_id" value="'.$task['gtcs_job_id'].'">';
-                
+                echo '<input id="task_'.$task['task_id'].'_hole_id" value="'.$task['hole_id'].'">';
+
                 echo '<input id="task_'.$task['task_id'].'_targettype" value="'.$task['last_targettype'].'">'; //targettype
                 if($task['last_targettype'] == 1){// angle
                     echo '<input id="task_'.$task['task_id'].'_target_value" value="'.$task['last_step_targetangle'].'">'; //target torque
                     echo '<input id="task_'.$task['task_id'].'_target_hi" value="'.$task['last_step_highangle'].'">'; //hi angle
                     echo '<input id="task_'.$task['task_id'].'_target_lo" value="'.$task['last_step_lowangle'].'">'; //lo angle
                 }else{// torque
-                    echo '<input id="task_'.$task['task_id'].'_target_value" value="'.$task['program']['step_targettorque'].'">'; //target torque
-                    echo '<input id="task_'.$task['task_id'].'_target_hi" value="'.$task['program']['step_hightorque'].'">'; //hi torque
-                    echo '<input id="task_'.$task['task_id'].'_target_lo" value="'.$task['program']['step_lowtorque'].'">'; //lo torque
                     echo '<input id="task_'.$task['task_id'].'_target_value" value="'.$task['last_step_targettorque'].'">'; //target torque
                     echo '<input id="task_'.$task['task_id'].'_target_hi" value="'.$task['last_step_hightorque'].'">'; //hi torque
                     echo '<input id="task_'.$task['task_id'].'_target_lo" value="'.$task['last_step_lowtorque'].'">'; //lo torque
+                    echo '<input id="task_'.$task['task_id'].'_last_target_value" value="'.$task['last_step_targettorque'].'">'; //target torque
+                    echo '<input id="task_'.$task['task_id'].'_last_target_hi" value="'.$task['last_step_hightorque'].'">'; //hi torque
+                    echo '<input id="task_'.$task['task_id'].'_last_target_lo" value="'.$task['last_step_lowtorque'].'">'; //lo torque
                 }
             }?>
+            <?php foreach ($data['button_auth'] as $key => $value) {
+                echo '<input id="button_auth_'.$key.'" value="'.$value.'">';
+            }?>
+            <?php 
+                echo '<input id="stop_on_ng" value="'.$data['seq_data']['ng_stop'].'">';
+            ?>
 
         </div>
         <!-- for sensor position or status -->
@@ -173,115 +184,335 @@
     <!-- Identity Verify -->
     <div id="IdentityVerify" class="identity-verify" style="display: none;vertical-align: middle;">
         <div class="topnav">
-            <label type="text" style="font-size: 20px; padding-left: 3%; margin: 7px 0"><b>Identity verify</b></label>
+            <label type="text" style="font-size: 20px; padding-left: 3%; margin: 7px 0"><b><?php echo $text['Identity_verify_text']; ?></b></label>
             <span class="close w3-display-topright" onclick="toggleIdentityVerify()">&times;</span>
         </div>
         <div class="w3-center identity-input">
-            <label style="text-align: center; font-size: 18px">Enter identity verification</label>
-            <input type="text" class="form-control" id="Operator" maxlength="" value="">
+            <input id="verify_action" type="text" name="" value="" style="display:none;">
+            <form id="verify_form" action="javascript:void(0);" onsubmit="call_job_check()">
+            <label style="text-align: center; font-size: 18px"><?php echo $text['Enter_identity_text']; ?></label>
+            <input type="password" class="form-control" id="id_verify" maxlength="" value="">
+            <input class="VerifyButton" type="submit" name="" value="<?php echo $text['Verify_text']; ?>" style="width:auto;float: right;">
+            </form>
         </div>
-        <button class="VerifyButton" id="VerifyButton">Verify</button>
+        <!-- <button class="VerifyButton" id="VerifyButton">Verify</button> -->
     </div>
 
-
-        <div class="input-group mb-1">
-            <span class="input-group-text" style="background-color: #F2F1F1; font-size: 2vmin">Barcode</span>
-            <input id="barcode" type="text" class="form-control"  style="font-size: 2vmin; background-color: #fff;">&nbsp;&nbsp;
-
-            <span class="input-group-text" style="background-color: #F2F1F1; font-size: 2vmin">Job name</span>
-            <input id="job_name" type="text" class="form-control"  disabled="disabled" style="font-size: 2vmin; background-color: #DDDDDD;">
-            <button class="btn btn-secondary" type="button" style="vertical-align: sub;font-size: 2vmin;" onclick="document.getElementById('change_job').style.display='block'">Call Job</button>&nbsp;&nbsp;
-
-            <span class="input-group-text" style="background-color: #F2F1F1; font-size: 2vmin">Seq name</span>
-            <input id="seq_name" type="text" class="form-control"  disabled="disabled" style="font-size: 2vmin; background-color: #DDDDDD;">&nbsp;&nbsp;
-
-            <span class="input-group-text" style="background-color: #F2F1F1; font-size: 2vmin">Task time</span>
-            <input id="task_time" type="text" class="form-control"  disabled="disabled" style="font-size: 2vmin; background-color: #DDDDDD;">
-            <span class="input-group-text" style="font-size: 2vmin">sec</span>
-        </div>
-
     <div class="main-content">
-        <div class="left">
-            <div class="highlight" style="font-size: 2vmin">Tightening Status</div>
-            <div class="container  my-1 custom-border">
-                <div id="tightening_status" class="container center-text"></div>
-                <div class="input-group mb-2">
-                    <span class="input-group-text" style="font-size: 1.8vmin">TR</span>
-                    <input id="tightening_repeat" type="text" class="form-control" placeholder="" style="font-size: 1.8vmin">
-                    <button class="btn btn-secondary" type="submit" style="font-size: 1.8vmin">&#8635;</button>
+        <div class="operation_setting">
+            <div class="img_task">
+                <div class="column" style="width: 60%;">
+                    <div class="center-content">
+                        <div id="img-container" class="img">
+                            <?php
+                                if( !empty($data['task_list'] )){
+                                    // echo $data['task_list'][count($data['task_list'])-1]['circle_div'];
+
+                                    echo '<img id="imgId" src="'.$data['seq_img'].'">';
+                                    foreach ($data['task_list'] as $key => $value) {
+                                        echo '<div class="circle" data-id="'.($key+1).'" '.$value['circle_div'].'>';
+                                        echo '<span class="">'.($key+1).'</span>';
+                                        echo '<div class="circle-border"></div>';
+                                        echo '</div>';
+                                    }
+                                }
+
+                            ?>
+                        </div>
+                        <div class="btn-menu">
+                            <button id="" class="btn-previous" onclick="function_auth_check('back_seq')">&#10094;</button>
+                            <button id="" class="btn-seq-list" onclick="function_auth_check('change_seq')">&#9776;</button>
+                            <button id="" class="btn-next" onclick="function_auth_check('skip_seq')">&#10095;</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="input-group mb-2">
-                    <span class="input-group-text" style="font-size: 1.8vmin">Time</span>
-                    <input id="tightening_time" type="text" class="form-control" placeholder="" style="font-size: 1.8vmin">
-                    <span class="input-group-text" style="font-size: 1.5vmin">sec</span>
+
+                <div class="column" style="width: 40%">
+                    <div id="task-setting" style=" height: 445px">
+                        <div class="row" style="padding: 0 20px">
+                            <label class="col-3" style="margin: 2px 2px"><?php echo $text['Job_Name_text']; ?>:</label>
+                            <div class="col-6" style="margin: 2px 2px">
+                                <input id="job_name" type="text" class="form-control" disabled="disabled" style="font-size: 1.8vmin; background-color: #DDDDDD; height: 28px; border: 0">
+                            </div>
+                            <div class="col" style="margin: 2px 2px">
+                                <button class="btn-calljob" type="button" style="vertical-align: sub;font-size: 1.5vmin;" onclick="function_auth_check('change_job')"><?php echo $text['Call_Job_text']; ?></button>
+                            </div>
+                            <label class="col-3" style="margin: 2px 2px"><?php echo $text['Seq_Name_text']; ?>:</label>
+                            <div class="col-6" style="margin: 2px 2px">
+                                <input id="seq_name" type="text" class="form-control"  disabled="disabled" style="font-size: 1.8vmin; background-color: #DDDDDD; height: 28px; border: 0" >
+                            </div>
+
+                        </div>
+                        <div class="row" style="padding: 0 20px">
+                            <label class="col-3" style="margin: 2px 2px"><?php echo $text['barcode_text']; ?>:</label>
+                            <div class="col" style="margin: 2px 2px">
+                                <input id="barcode" type="password" class="form-control" placeholder="<?php echo $data['barcode']; ?>" style="font-size: 1.5vmin;height: 28px;">
+                            </div>
+                        </div>
+
+                        <div class="scrollbar-tasklist" id="style-tasklist">
+                            <div class="force-overflow-tasklist">
+                                <div id="task_list" class="tasklist">
+                                    <?php
+                                        echo '<ol class="ol">';
+                                        foreach ($data['task_list'] as $key => $value) {
+                                            // echo '<ol>';
+                                            echo '<div>';
+                                            if($value['last_targettype'] == 1){//angle
+                                                echo '<a id="step'.$value['task_id'].'" ><img src="./img/angle.png" alt="" style="height: 25px; width: 25px; float: left"> | SGT-CS303 | '.$text['Step_text'].$value['last_step_count'].' | '.$value['last_step_name'].' | '.$value['last_step_targetangle'].'&ordm;</a>';
+                                                echo '<div class="dropdown-content" id="target_torque-'.$value['task_id'].'" style="display:none;" step-id="'.$value['task_id'].'">';
+
+                                                if($value['last_job_type'] == 'normal'){
+                                                    echo '<div id="">Step1 '. $value['last_step_name'] .' | <span>'.$value['last_step_targetangle'].'&ordm;| Hi '.$value['last_step_highangle'].' | Lo '.$value['last_step_lowangle'].'</span></div>';
+                                                }else{
+                                                    foreach ($value['program'] as $key => $value) {
+                                                        if($value['step_targettype'] == 1 ){//angle
+                                                            echo '<div id="">'.$text['Step_text'].($key+1).' '. $value['step_name'] .' | <span>'.$value['step_targetangle'].'&ordm;| Hi '.$value['step_highangle'].' | Lo '.$value['step_lowangle'].'</span></div>';
+                                                        }else{
+                                                            echo '<div id="">'.$text['Step_text'].($key+1).' '. $value['step_name'] .' | <span>'.$value['step_targettorque'].'-Nm| Hi '.$value['step_hightorque'].' | Lo '.$value['step_lowtorque'].'</span></div>';
+                                                        }
+                                                    }
+                                                }
+
+
+                                            }else{//torque
+                                                echo '<a id="step'.$value['task_id'].'" ><img src="./img/torque.png" alt="" style="height: 25px; width: 25px; float: left"> | SGT-CS303 | '.$text['Step_text'].$value['last_step_count'].' | '.$value['last_step_name'].' | '.$value['last_step_targettorque'].'-Nm</a>';
+                                                echo '<div class="dropdown-content" id="target_torque-'.$value['task_id'].'" style="display:none;" step-id="'.$value['task_id'].'">';
+
+                                                if($value['last_job_type'] == 'normal'){
+                                                    echo   '<div id="">'.$text['Step_text'].'1 '. $value['last_step_name'] .' | <span>'.$value['last_step_targettorque'].'-Nm| Hi '.$value['last_step_hightorque'].' | Lo '.$value['last_step_lowtorque'].'</span></div>';
+                                                }else{
+                                                    foreach ($value['program'] as $key => $value) {
+                                                        if($value['step_targettype'] == 1 ){//angle
+                                                            echo '<div id="">'.$text['Step_text'].($key+1).' '. $value['step_name'] .' | <span>'.$value['step_targetangle'].'&ordm;| Hi '.$value['step_highangle'].' | Lo '.$value['step_lowangle'].'</span></div>';
+                                                        }else{
+                                                            echo '<div id="">'.$text['Step_text'].($key+1).' '. $value['step_name'] .' | <span>'.$value['step_targettorque'].'-Nm| Hi '.$value['step_hightorque'].' | Lo '.$value['step_lowtorque'].'</span></div>';
+                                                        }
+                                                    }
+                                                }
+
+                                            }
+                                            echo    '</div>';
+                                            echo '</div>';
+                                            // echo '</ol>';
+                                        }
+                                        echo '</ol>';
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="font-size: 18px;padding: 0 20px;">
+                            <div class="col-6" style="padding-left: 40%; margin: 3px"><?php echo $text['Task_text']; ?></div>
+                                <div class="col-4">
+                                    <input id="task_serail" type="text" class="form-control" placeholder="" disabled>
+                                    <input id="task_time" type="text" class="form-control" hidden="hidden" style="font-size: 2vmin; background-color: #DDDDDD;">
+                                </div>
+                                <div class="col">
+                                    <button class="btn-secondary" type="submit" onclick="function_auth_check('reset_task')">&#8635;</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            <div class="target_sensor">
+                <!-- Target Setting -->
+                <div class="column column-target">
+                    <div class="row target_style">
+                        <div id="Torque" class="w3-display-container" style="font-size: 18px">
+                            <div id="target_torque2" class="t3 w3-display-topleft text-black"></div>
+                            <div class="w3-display-left text-black" style="font-size: 18px; margin-top: 7%; padding-left: 7%">Nm</div>
+
+                            <div class="t4 w3-display-topright"><img src="./img/hi.png"></div>
+                            <div class="w3-display-right"><img src="./img/Ellipse.png" style="height: 20px; width: 20px; margin-right: 80px"></div>
+                            <div class="w3-display-bottomright"><img src="./img/lo.png" style="margin-bottom: 5px;margin-right: 80px"></div>
+
+                            <div class="t5 w3-display-topright">
+                                <input id="high_torque" type="text" size="4" placeholder="" value="" disabled="disabled" style="background-color: #B5BBBE; border: none; text-align: right">
+                            </div>
+                            <div class="t5 w3-display-right">
+                                <input id="target_torque" type="text" size="4" placeholder="" value="" disabled="disabled" style="background-color: #B5BBBE; border: none; text-align: right">
+                            </div>
+                            <div class="t5 w3-display-bottomright">
+                                <input id="low_torque" type="text" size="4" placeholder="" value="" disabled="disabled" style="background-color: #B5BBBE; border: none; text-align: right">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row target_style">
+                        <div id="Thread" class="w3-display-container" style="font-size: 18px">
+                            <div id="target_angle2" class="t3 w3-display-topleft text-black"></div>
+                            <div class="w3-display-left text-black" style="font-size: 18px; margin-top: 7%; padding-left: 7%">deg</div>
+
+                            <div class="t4 w3-display-topright"><img src="./img/hi.png"></div>
+                            <div class="w3-display-right"><img src="./img/Ellipse.png" style="height: 20px; width: 20px; margin-right: 80px"></div>
+                            <div class="w3-display-bottomright"><img src="./img/lo.png" style="margin-bottom: 5px;margin-right: 80px"></div>
+
+                            <div type="text" class="t5 w3-display-topright">
+                                <input id="high_angle" size="4" type="text" placeholder="" disabled="disabled" style="background-color: #B5BBBE; border: none; text-align: right">
+                            </div>
+                            <div class="t5 w3-display-right">
+                                <input id="target_angle" size="4" type="text" placeholder="" value="" disabled="disabled" style="background-color: #B5BBBE; border: none; text-align: right">
+                            </div>
+                            <div class="t5 w3-display-bottomright">
+                                <input id="low_angle" size="4" type="text" placeholder="" disabled="disabled" style="background-color: #B5BBBE; border: none; text-align: right">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column column-target" style="margin-right: 20px">
+                    <div id="tightening_status_div" class="row target_style" style="background-color: #7ECA86;">
+                        <div class="w3-display-container" style="font-size: 5vmin">
+                            <div id="tightening_status" class="w3-display-middle">OK</div>
+                        </div>
+                    </div>
+                    <div class="row target_style">
+                        <div class="">
+                            <span><?php echo $text['TR_text']; ?> :</span>&nbsp;
+                            <input id="tightening_repeat" size="3" type="text" placeholder="" disabled="disabled" style="background-color: #B5BBBE; border: none; text-align: center">
+                        </div>
+                        <div class="">
+                            <span><?php echo $text['Job_Time_text']; ?> :</span>&nbsp;
+                            <input id="tightening_time" size="5" type="text" placeholder="" disabled="disabled" style="background-color: #B5BBBE; border: none; text-align: center"> ms
+                        </div>
+                        <div id="error1" class=""><?php echo $text['Error_text']; ?> : </div>
+                        <div id="error2" class=""><?php echo $text['Error_text']; ?> :</div>
+                    </div>
+                </div>
+
+                <!-- Sensor Setting -->
+                <div class="column column-sensor" style="margin-left: 3%">
+                    <div class="row">
+                        <div id="screw_info_div" class="row sensor_style">
+                            <h5 style="font-size: 2.3vmin; line-height: 30px; text-align: left"><?php echo $text['Screw_info_text']; ?></h5>
+                            <label style="color: green; font-size: 2.5vmin;">
+                                <b><span id="screw_info" style="margin-bottom: 10px">9/12</span></b>
+                                <span onclick="function_auth_check('stop_on_ng')"><img src="./img/screw-reset.png" style="margin-left: 10%; height: 25px; width: 25px; margin-bottom: 10px"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="tool_div" class="row sensor_style">
+                            <h5 style="font-size: 2.3vmin; text-align: left;">
+                                <img class="t6 images" src="./img/torque.png"><?php echo $text['Tool_text']; ?> :<span id="tool_name" style="padding-left:5%">SGT-CS303</span>
+                            </h5>
+                            <div id="completedIcon" style="display:block; text-align: left;padding-left: 31px">
+                                <span id="tool_task_id" style="color: #000"></span>
+                                <span id="tool_status_icon"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="picking module" class="row sensor_style">
+                            <h5 style="font-size: 2.3vmin; line-height: 30px; text-align: left"><?php echo $text['Picking_Module_text']; ?></h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="column column-sensor">
+                    <div class="row">
+                        <div id="arm_div" class="row sensor_style">
+                            <h5 style="font-size: 2.3vmin; line-height: 30px; text-align: left">
+                                <img class="t6 images" src="./img/operation-arm.svg" style="">
+                                <?php echo $text['Arm_text']; ?>
+                            </h5>
+                            <label style="color: #FFFF00; font-size: 2.5vmin; text-align: left; padding-left: 25px">
+                                <b><span id="coordinate"></span></b>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="socket_tray_div" class="row sensor_style">
+                            <h5 style="font-size: 2.3vmin; line-height: 30px; text-align: left">
+                                <img class="t6 images" src="./img/socket-tray.png"><?php echo $text['Socket_Tray_text']; ?>
+                            </h5>
+                            <div class="row">
+                                <div>
+                                    <input id="socket_hole_number" size="1" style="text-align: center; border-radius: 40%; border: 1px solid;border-color: green;" value="" disabled >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="screw_feeder" class="row sensor_style">
+                            <h5 style="font-size: 2.3vmin; line-height: 30px; text-align: left">
+                                <?php echo $text['Screw_Feeder_text']; ?>
+                            </h5>
+                            <label style="font-size: 1.8vmin; text-align: left; padding-left: 25px">
+                                <span id="screwfeeder_count"><?php echo $text['Count_text']; ?> : 100</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="column column-sensor">
+                    <div class="row">
+                        <div id="recycle_box" class="row sensor_style">
+                            <h5 style="font-size: 2.3vmin; line-height: 30px; text-align: left">
+                                <?php echo $text['Recycle_box_text']; ?>
+                            </h5>
+                            <label style="font-size: 1.8vmin; text-align: left; padding-left: 25px">
+                                <span id="recyclebox_count"><?php echo $text['Count_text']; ?> : 100</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="" class="row sensor_style">
+                            <h5 style="font-size: 2.3vmin; line-height: 30px; text-align: left">
+                                <?php echo $text['Button_text']; ?>
+                            </h5>
+                            <div class="custom-checkbox">
+                                <input type="checkbox" id="" name="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="row sensor_style">
+                            <div id="" class=""></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="container my-1 custom-border">
-                <div class="highlight" style="margin-bottom: 3%; font-size: 2vmin">Target Torque</div>
-                <div class="container row" id="Torque"  style="margin-left: 1px">
-                    <div id="target_torque" class="col text-black" style="font-size: 4vmin"></div>
-                    <div class="col text-black" style="font-size: 1.5vmin">Nm</div>
-                </div>
-                <div class="input-group mb-2">
-                    <span class="input-group-text" style="font-size: 1.8vmin">Hi Q</span>
-                    <input id="high_torque" type="text" class="form-control" placeholder="" style="font-size: 1.8vmin">
-                </div>
-                <div class="input-group mb-2">
-                    <span class="input-group-text" style="font-size: 1.8vmin">Lo Q</span>
-                    <input id="low_torque" type="text" class="form-control" placeholder="" style="font-size: 1.8vmin">
-                </div>
-            </div>
-
-            <div class="container my-1">
-                <div class="highlight" style="margin-bottom: 3%; font-size: 2vmin">Target Angle</div>
-                <div class="container row" id="Thread" style="margin-left: 1px">
-                    <div id="target_angle" class="col text-black" style="font-size: 4vmin"></div>
-                    <div class="col text-black" style="font-size: 1.5vmin">deg</div>
-                </div>
-                <div class="input-group mb-2">
-                    <span class="input-group-text" style="font-size: 1.8vmin">Hi A</span>
-                    <input id="high_angle" type="text" class="form-control" placeholder="" style="font-size: 1.8vmin">
-                </div>
-                <div class="input-group mb-2">
-                    <span class="input-group-text" style="font-size: 1.8vmin">Lo A</span>
-                    <input id="low_angle" type="text" class="form-control" placeholder="" style="font-size: 1.8vmin">
-                </div>
-            </div>
-        </div>
-
-        <div class="center">
-            <div class="center-content">
-                <div id="img-container" class="img">
-                    <?php
-                        if( !empty($data['task_list'] )){
-                            // echo $data['task_list'][count($data['task_list'])-1]['circle_div'];
-
-                            echo '<img id="imgId" src="'.$data['seq_img'].'">';
-                            foreach ($data['task_list'] as $key => $value) {
-                                echo '<div class="circle" data-id="'.($key+1).'" '.$value['circle_div'].'>';
-                                echo '<span class="">'.($key+1).'</span>';
-                                echo '<div class="circle-border"></div>';
-                                echo '</div>';
-                            }
-                        }
-
-                    ?>
-                </div>
+            <!-- Call Job -->
+            <div id="change_job" class="modal" style="top: 12%; left: 40%">
+                <form class="w3-modal-content w3-animate-zoom" action="" style="width: 250px;box-shadow: 0 3px 7px 1px #AAA; ">
+                    <div class=" w3-light-grey">
+                        <header class=" w3-container modal-header">
+                            <span onclick="document.getElementById('change_job').style.display='none'"
+                            class="w3-button w3-dark-grey w3-display-topright" style="margin: 0px; height: 48px; width: 45px">&times;</span>
+                            <div style="text-align:center; font-size: 20px; color: #000"><?php echo $text['Job_List_text']; ?></div>
+                        </header>
+                        <table id="job_list" style="margin: 5px 10px 0px;width: 100%; height: 80px">
+                            <tr>
+                                <td style=" text-align: center; ">
+                                    <select style="font-size: larger; width: 180px" id="Change_Job_Id">
+                                    <?php
+                                        foreach ($data['job_list'] as $key => $job) {
+                                            echo '<option value="'.$job['job_id'].'">'.$job['job_name'].'</option>';
+                                        }
+                                    ?>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-primary" onclick="change_job(1);"><?php echo $text['OK_text']; ?></button>
+                        </div>
+                    </div>
+                </form>
             </div>
 
             <!-- Sequence Select Modal -->
-            <div id="SeqSelect" class="modal" style="top: 34%; left: 18%">
+            <div id="SeqSelect" class="modal" style="top: 28%; left: 10%">
                 <form class="w3-modal-content w3-animate-zoom" action="" style="width:280px; height: 150px">
                     <div class=" w3-light-grey">
                         <header class=" w3-container modal-header">
                             <span onclick="document.getElementById('SeqSelect').style.display='none'"
                             class="w3-button w3-dark-grey w3-display-topright" style="margin: 0px; height: 48px; width: 45px">&times;</span>
-                            <div style="text-align:center; font-size: 20px; color: #000">Seq List</div>
+                            <div style="text-align:center; font-size: 20px; color: #000"><?php echo $text['Seq_List_text']; ?></div>
                         </header>
                         <table id="seq_list" style="margin: 5px 10px 0px">
                             <tr>
-                                <td align="left">Total Seq :
+                                <td align="left"><?php echo $text['Total_Seq_text']; ?> :
                                     <input style="text-align: center; margin-bottom: 2%" id="RecordCnt" name="RecordCnt" readonly="readonly" disabled size="3" maxlength="3" value="<?php echo $data['total_seq']; ?>">
                                 </td>
                             </tr>
@@ -296,106 +527,16 @@
                             </tr>
                         </table>
                         <div class="modal-footer justify-content-center">
-                             <button type="button" class="btn btn-primary" onclick="change_seq('')" >OK</button>
+                             <button type="button" class="btn btn-primary" onclick="change_seq('')" ><?php echo $text['OK_text']; ?></button>
                         </div>
                     </div>
                 </form>
             </div>
-
-            <div class="btn-menu">
-                <button id="" class="btn-previous" onclick="change_seq('previous')">&#10094;</button>
-                <button id="" class="btn-seq-list" onclick="document.getElementById('SeqSelect').style.display='block'">&#9776;</button>
-                <button id="" class="btn-next" onclick="change_seq('next')">&#10095;</button>
-            </div>
         </div>
 
-        <!-- Call Job -->
-        <div id="change_job" class="modal" style="top: 15%; ">
-            <form class="w3-modal-content w3-animate-zoom" action="" style="width: 250px;">
-                <div class=" w3-light-grey">
-                    <header class=" w3-container modal-header">
-                        <span onclick="document.getElementById('change_job').style.display='none'"
-                        class="w3-button w3-dark-grey w3-display-topright" style="margin: 0px; height: 48px; width: 45px">&times;</span>
-                        <div style="text-align:center; font-size:20px; color: #000">Job List</div>
-                    </header>
-                    <table id="job_list" style="margin: 5px 10px 0px;width: 100%; height: 80px">
-                        <tr>
-                            <td style=" text-align: center; ">
-                                <select style="font-size: larger; width: 180px" id="Change_Job_Id">
-                                <?php
-                                    foreach ($data['job_list'] as $key => $job) {
-                                    echo '<option value="'.$job['job_id'].'">'.$job['job_name'].'</option>';
-                                }
-                                ?>
-                                </select>
-                            </td>
-                        </tr>
-                    </table>
-                    <div class="modal-footer justify-content-center">
-                        <button type="button" class="btn btn-primary" onclick="change_job(1);">OK</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-
-        <div class="right">
-            <div id="task-setting" class="container my-3">
-                <div class="input-group mb-3">
-                    <span class="input-group-text"  style="font-size: 1.8vmin">Task</span>
-                    <input id="task_serail" type="text" class="form-control" placeholder=""  style="font-size: 1.8vmin">
-                    <button class="btn btn-secondary" type="submit"  style="font-size: 1.8vmin">&#8635;</button>
-                </div>
-                <div id="task_list" class="tasklist">
-                    <?php
-                        echo '<ol>';
-                        foreach ($data['task_list'] as $key => $value) {
-                            // echo '<ol>';
-                            echo '<div>';
-                            if($value['last_targettype'] == 1){//angle
-                                echo '<a id="step'.$value['task_id'].'" ><img src="./img/angle.png" alt="" style="height: 25px; width: 25px; float: left"> | SGT-CS303 | step'.$value['last_step_count'].' | '.$value['last_step_name'].' | '.$value['last_step_targetangle'].'&ordm;</a>';
-                                echo '<div class="dropdown-content" id="target_torque-'.$value['task_id'].'" style="display:none;" step-id="'.$value['task_id'].'">';
-
-                                if($value['last_job_type'] == 'normal'){
-                                    echo '<div id="">Step1 '. $value['last_step_name'] .' | <span>'.$value['last_step_targetangle'].'&ordm;| Hi '.$value['last_step_highangle'].' | Lo '.$value['last_step_lowangle'].'</span></div>';
-                                }else{
-                                    foreach ($value['program'] as $key => $value) {
-                                        if($value['step_targettype'] == 1 ){//angle
-                                            echo '<div id="">Step'.($key+1).' '. $value['step_name'] .' | <span>'.$value['step_targetangle'].'&ordm;| Hi '.$value['step_highangle'].' | Lo '.$value['step_lowangle'].'</span></div>';
-                                        }else{
-                                            echo '<div id="">Step'.($key+1).' '. $value['step_name'] .' | <span>'.$value['step_targettorque'].'-Nm| Hi '.$value['step_hightorque'].' | Lo '.$value['step_lowtorque'].'</span></div>';
-                                        }
-                                    }
-                                }
-
-                                
-                            }else{//torque
-                                echo '<a id="step'.$value['task_id'].'" ><img src="./img/torque.png" alt="" style="height: 25px; width: 25px; float: left"> | SGT-CS303 | step'.$value['last_step_count'].' | '.$value['last_step_name'].' | '.$value['last_step_targettorque'].'-Nm</a>';
-                                echo '<div class="dropdown-content" id="target_torque-'.$value['task_id'].'" style="display:none;" step-id="'.$value['task_id'].'">';
-
-                                if($value['last_job_type'] == 'normal'){
-                                    echo   '<div id="">Step1 '. $value['last_step_name'] .' | <span>'.$value['last_step_targettorque'].'-Nm| Hi '.$value['last_step_hightorque'].' | Lo '.$value['last_step_lowtorque'].'</span></div>';
-                                }else{
-                                    foreach ($value['program'] as $key => $value) {
-                                        if($value['step_targettype'] == 1 ){//angle
-                                            echo '<div id="">Step'.($key+1).' '. $value['step_name'] .' | <span>'.$value['step_targetangle'].'&ordm;| Hi '.$value['step_highangle'].' | Lo '.$value['step_lowangle'].'</span></div>';
-                                        }else{
-                                            echo '<div id="">Step'.($key+1).' '. $value['step_name'] .' | <span>'.$value['step_targettorque'].'-Nm| Hi '.$value['step_hightorque'].' | Lo '.$value['step_lowtorque'].'</span></div>';
-                                        }
-                                    }
-                                }
-                                
-                            }
-                            echo    '</div>';
-                            echo '</div>';
-                            // echo '</ol>';
-                        }
-                        echo '</ol>';
-                    ?>
-                </div>
-            </div>
-        </div>
     </div>
 
+<!--
     <footer class="footer">
         <div id="screw_info_div" class="column">
             <div class="zoom">
@@ -419,10 +560,6 @@
                 <div id="completedIcon" style="display:block; text-align: left;padding-left: 31px">
                     <span id="tool_task_id" style="color: #000"></span>
                     <span id="tool_status_icon">
-                    <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="green">
-                        <path d="M0 0h24v24H0z" fill="none"/>
-                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
-                    </svg> -->
                     </span>
                 </div>
             </div>
@@ -446,7 +583,7 @@
             </div>
         </div>
     </footer>
-
+-->
 </div>
 <style>
 #completedIcon
@@ -545,20 +682,34 @@ window.onclick = function(event) {
         console.log(target_value.value);
         if(targettype.value == 1){//angle
             document.getElementById('target_angle').innerHTML = target_value.value;
+            document.getElementById('target_angle').value = target_value.value;
             document.getElementById('high_angle').value = target_hi.value;
             document.getElementById('low_angle').value = target_lo.value;
             document.getElementById('target_torque').innerHTML = 0;
+            document.getElementById('target_torque').value = '';
         }else{//torque
             document.getElementById('target_torque').innerHTML = target_value.value;
+            document.getElementById('target_torque').value = target_value.value;
             document.getElementById('high_torque').value = target_hi.value;
             document.getElementById('low_torque').value = target_lo.value;
             document.getElementById('target_angle').innerHTML = 0;
+            document.getElementById('target_angle').value = '';
             document.getElementById('high_angle').value = 999999;
             document.getElementById('low_angle').value = 0;
         }
 
         document.getElementById('tool_task_id').innerHTML = 'Task'+index;
+        // arm_status
+        document.getElementById('arm_status').value = document.getElementById('task_'+index+'_enable_arm').value;
 
+        //socket hole div
+        if(document.getElementById('task_'+index+'_hole_id').value == '-1'){
+            document.getElementById('socket_tray_div').classList.add('gray-out');
+            document.getElementById('socket_hole_number').value = '';
+        }else{
+            document.getElementById('socket_hole_number').value = document.getElementById('task_'+index+'_hole_id').value;
+            document.getElementById('socket_tray_div').classList.remove('gray-out');
+        }
 
     }
 
@@ -569,6 +720,7 @@ window.onclick = function(event) {
 let isSendingRequest = false;
 let isFulfilled = false; //前置條件是否滿足
 let light_signal = false;
+let right_position = false;
 
 $(document).ready(function () {
     initail();
@@ -592,7 +744,7 @@ function initail() {
     document.getElementById('high_angle').value = '<?php echo  $data['task_list'][0]['last_step_highangle']; ?>';
     document.getElementById('low_angle').value = '<?php echo  $data['task_list'][0]['last_step_lowangle']; ?>';
     // document.getElementById('screw_info_div').value = '';
-    document.getElementById('screw_info').innerHTML = ' - ';
+    document.getElementById('screw_info').innerHTML = ' - / ' + document.getElementById('stop_on_ng').value;
     // document.getElementById('arm_div').value = '';
     // document.getElementById('coordinate').innerHTML = '';
     // document.getElementById('tool_div').value = '';
@@ -608,14 +760,17 @@ function initail() {
     aa.childNodes[1].classList.add('running');
     call_job();
     document.getElementById('Change_Job_Id').value = document.getElementById('job_id').value;
+    document.getElementById('socket_hole_number').style.backgroundColor = 'transparent';
 }
    
 </script>
 
 <!-- arm socket link -->
 <script type="text/javascript">
-    const wsServer = 'ws://192.168.0.115:9527';
+    // const wsServer = 'ws://192.168.0.115:9527';
+    const wsServer = 'ws://localhost:9527';
     const websocket = new WebSocket(wsServer);
+
     
     websocket.onopen = function (evt) {
         console.log("Connected to WebSocket server.");
@@ -675,29 +830,37 @@ function initail() {
         // console.log(target_x)
         // console.log(target_y)
         // console.log(bias)
+        let arm_status = +document.getElementById('arm_status').value
+        if (arm_status == 0) {
+            right_position = true;
+            return;
+        }
 
         let modbus_switch = document.getElementById('modbus_switch').value;
         let current_tool_status = document.getElementById('tool_status').value;
 
         if(round_x >= target_x-bias && round_x<= target_x+bias && round_y >= target_y-bias && round_y<= target_y+bias){
             document.getElementById('coordinate').style.backgroundColor = 'green';
-            
-            if(modbus_switch == 1 && current_tool_status == 0 && isSendingRequest == false){ //目前起子與要改變的狀態相反才發送
-                // isSendingRequest = true;
-                // websocket.send('enable');
-                // isSendingRequest = false;
-                console.log('send enable');
-                switch_tool(1);
-            }
+            right_position = true;
+            // if(modbus_switch == 1 && current_tool_status == 0 && isSendingRequest == false){ //目前起子與要改變的狀態相反才發送
+            //     // isSendingRequest = true;
+            //     // websocket.send('enable');
+            //     // isSendingRequest = false;
+            //     console.log('send enable');
+            //     right_position = true;
+            //     // switch_tool(1);
+            // }
         }else{
             document.getElementById('coordinate').style.backgroundColor = 'red';
-            if(modbus_switch == 1 && current_tool_status == 1 && isSendingRequest == false){ //目前起子與要改變的狀態相反才發送
-                // isSendingRequest = true;
-                // websocket.send('disable');
-                // isSendingRequest = false;
-                console.log('send disable');
-                switch_tool(0);
-            }
+            right_position = false;
+            // if(modbus_switch == 1 && current_tool_status == 1 && isSendingRequest == false){ //目前起子與要改變的狀態相反才發送
+            //     // isSendingRequest = true;
+            //     // websocket.send('disable');
+            //     // isSendingRequest = false;
+            //     console.log('send disable');
+            //     right_position = false;
+            //     // switch_tool(0);
+            // }
         }
     }
 
@@ -728,9 +891,48 @@ function initail() {
           { index: 14, status: "C5", color: "" },
           { index: 15, status: "BS", color: "" },
         ];
+
+    const error_message = [
+        { index: 0, status: "NO Error", color: "" },
+        { index: 1, status: "<?php echo $error_message['ERR_CONT_TEMP'] ?>", color: "" },
+        { index: 2, status: "<?php echo $error_message['ERR_MOT_TEMP'] ?>", color: "" },
+        { index: 3, status: "<?php echo $error_message['ERR_MOT_CURR'] ?>", color: "" },
+        { index: 4, status: "<?php echo $error_message['ERR_MOT_PEAK_CURR'] ?>", color: "" },
+        { index: 5, status: "<?php echo $error_message['ERR_HIGH_TORQUE'] ?>", color: "" },
+        { index: 6, status: "<?php echo $error_message['ERR_DEADLOCK'] ?>", color: "" },
+        { index: 7, status: "<?php echo $error_message['ERR_PROC_MINTIME'] ?>", color: "" },
+        { index: 8, status: "<?php echo $error_message['ERR_PROC_MAXTIME'] ?>", color: "" },
+        { index: 9, status: "<?php echo $error_message['ERR_ENCODER'] ?>", color: "" },
+        { index: 10, status: "<?php echo $error_message['ERR_HALL'] ?>", color: "" },
+        { index: 11, status: "<?php echo $error_message['ERR_BUSVOLT_HIGH'] ?>", color: "" },
+        { index: 12, status: "<?php echo $error_message['ERR_BUSVOLT_LOW'] ?>", color: "" },
+        { index: 13, status: "<?php echo $error_message['ERR_PROC_NA'] ?>", color: "" },
+        { index: 14, status: "<?php echo $error_message['ERR_STEP_NA'] ?>", color: "" },
+        { index: 15, status: "<?php echo $error_message['ERR_DMS_COMM'] ?>", color: "" },
+        { index: 16, status: "<?php echo $error_message['ERR_FLASH'] ?>", color: "" },
+        { index: 17, status: "<?php echo $error_message['ERR_FRAM'] ?>", color: "" },
+        { index: 18, status: "<?php echo $error_message['ERR_HIGH_ANGLE'] ?>", color: "" },
+        { index: 19, status: "<?php echo $error_message['ERR_PROTECT_CIRCUIT'] ?>", color: "" },
+        { index: 20, status: "<?php echo $error_message['ERR_SWITCH_CONFIG'] ?>", color: "" },
+        { index: 21, status: "<?php echo $error_message['ERR_STEP_NOT_REC'] ?>", color: "" },
+        { index: 22, status: "<?php echo $error_message['ERR_TMD_FRAM'] ?>", color: "" },
+        { index: 23, status: "<?php echo $error_message['ERR_LOW_TORQUE'] ?>", color: "" },
+        { index: 24, status: "<?php echo $error_message['ERR_LOW_ANGLE'] ?>", color: "" },
+        { index: 25, status: "<?php echo $error_message['ERR_PROC_NOT_FINISH'] ?>", color: "" },
+        { index: 26, status: "", color: "" },
+        { index: 27, status: "", color: "" },
+        { index: 28, status: "", color: "" },
+        { index: 29, status: "", color: "" },
+        { index: 30, status: "", color: "" },
+        { index: 31, status: "", color: "" },
+        { index: 32, status: "<?php echo $error_message['SEQ_COMPLETED'] ?>", color: "" },
+        { index: 33, status: "<?php echo $error_message['JOB_COMPLETED'] ?>", color: "" },
+        { index: 34, status: "<?php echo $error_message['WORKPIECE_RECOVERY'] ?>", color: "" },
+    ];
+
   //----------------------------------------
   let socket; // WebSocket对象
-  const server_ip = '<?php echo CONTROLLER_IP; ?>';
+  const server_ip = '<?php echo $data['controller_ip']; ?>';
   const serverUrl = 'ws://'+server_ip+':9501';
 
   const ipToTableRow = new Map();
@@ -754,7 +956,7 @@ function initail() {
       socket.addEventListener('close', (event) => {
           console.log('WebSocket连接已关闭');
           // 连接关闭时，设置定时器以尝试重新连接
-          setTimeout(connectWebSocket, 5000); // 2秒后重新连接
+          // setTimeout(connectWebSocket, 5000); // 2秒后重新连接
       });
 
       socket.addEventListener('error', (event) => {
@@ -801,8 +1003,9 @@ tt.set('start_time',new Date())
               let task_count = document.getElementById('task_count').value;
               let start_time = tt.get('start_time');
 
-              // console.log(start_time)
-              // console.log(date)
+              console.log(start_time)
+              console.log(date)
+              console.log(data.job_id,gtcs_job_id,data.system_sn)
 
               if(date > start_time){//紀錄比開啟網頁的時間還新
 
@@ -817,6 +1020,7 @@ tt.set('start_time',new Date())
 
                     document.getElementById('tightening_status').innerHTML = fasten_status[data.fasten_status].status;
                     document.getElementById('tightening_status').style.backgroundColor = fasten_status[data.fasten_status].color;
+                    document.getElementById('tightening_status').style.width = 'max-content';
                     document.getElementById('tightening_repeat').value = ' 1 / 1';
                     document.getElementById('tightening_time').value = data.fasten_time;
                     let ttime = +document.getElementById('task_time').value
@@ -825,7 +1029,30 @@ tt.set('start_time',new Date())
                     document.getElementById('task_time').value = ttime;
                     document.getElementById('screw_info').value = data.fasten_torque;
 
-                    if(task_id <= task_count){ 
+                    let stop_on_ng = document.getElementById('stop_on_ng').value;
+
+                    //顯示最終鎖附扭力/角度
+                    document.getElementById('target_torque2').innerHTML = data.fasten_torque;
+                    document.getElementById('target_angle2').innerHTML = data.fasten_angle;
+                    document.getElementById('error1').innerHTML = 'Error : '
+                    document.getElementById('error2').innerHTML = 'Error : '
+                    if(data.step_targettype == 1){// target = angle
+                        document.getElementById('high_torque').value = data.step_hightorque;
+                        document.getElementById('target_torque').value = 0;
+                        document.getElementById('low_torque').value = data.step_lowtorque;
+                        document.getElementById('high_angle').value = data.step_highangle;
+                        document.getElementById('target_angle').value = data.step_targetangle;
+                        document.getElementById('low_angle').value = data.step_lowangle;
+                    }else{// target = torque
+                        document.getElementById('high_torque').value = data.step_hightorque;
+                        document.getElementById('target_torque').value = data.step_targettorque;
+                        document.getElementById('low_torque').value = data.step_lowtorque;
+                        document.getElementById('high_angle').value = data.step_highangle;
+                        document.getElementById('target_angle').value = 0;
+                        document.getElementById('low_angle').value = data.step_lowangle;
+                    }
+
+                    if(task_id <= task_count){
                         let current_circle = document.querySelector("div[data-id='"+task_id+"']");
                         current_circle.childNodes[1].classList.remove('running')
                         // current_circle.classList.remove('running')
@@ -835,7 +1062,7 @@ tt.set('start_time',new Date())
                             //OK、OK-JOB、OK-SEQ
                             save_result(data);
                             retry_time = 0;//retry測試歸零
-                            document.getElementById('screw_info').innerHTML = retry_time + ' / '+ '-';
+                            document.getElementById('screw_info').innerHTML = retry_time + ' / '+ stop_on_ng;
                             current_circle.classList.add('finished')
                             current_circle.childNodes[1].classList.remove('circle-border')
                             // current_circle.childNodes[0].classList.remove('inner-text');
@@ -854,6 +1081,10 @@ tt.set('start_time',new Date())
                                 // next_circle.childNodes[0].classList.add('inner-text');
                                 document.getElementById('task_serail').value = task_id+' / '+task_count;
 
+                                document.getElementById('tightening_status').innerHTML = 'OK';
+                                document.getElementById('tightening_status').style.backgroundColor = 'green';
+                                document.getElementById('tightening_status_div').style.backgroundColor = 'green';
+
                                 light_signal = 'ok';
                                 console.log('aaa')
                                 afterward();
@@ -864,6 +1095,7 @@ tt.set('start_time',new Date())
                                 document.getElementById('step'+(task_id-1)).style.borderColor = 'green';
                                 document.getElementById('tightening_status').innerHTML = 'OK-ALL';
                                 document.getElementById('tightening_status').style.backgroundColor = 'yellow';
+                                document.getElementById('tightening_status_div').style.backgroundColor = 'yellow';
                                 // document.getElementById('step'+task_id);
                                 // isSendingRequest = false;
                                 // setTimeout(() => { force_switch_tool(0); }, 1000);
@@ -875,11 +1107,11 @@ tt.set('start_time',new Date())
                                 
                                 // isSendingRequest = true;
                                 let current_seq_id = +document.getElementById('seq_id').value;
-                                let total_seq_count = +document.getElementById('total_seq_count').value;
-                                if(current_seq_id < total_seq_count){
-                                    //change to next seq
+                                let max_seq_id = +document.getElementById('max_seq_id').value;
+                                if(current_seq_id < max_seq_id){
+                                    // change to next seq
                                     // change_job(current_seq_id + 1);
-                                    setTimeout(() => { change_job(current_seq_id + 1); }, 500);
+                                    setTimeout(() => { change_job(current_seq_id + 1,'next'); }, 500);
                                 }else{
                                     setTimeout(() => { force_switch_tool(0); }, 1000);
                                     document.getElementById('modbus_switch').value = 0;
@@ -895,14 +1127,25 @@ tt.set('start_time',new Date())
                             current_circle.classList.add('ng');
                             retry_time = retry_time + 1;
                             document.getElementById('step'+task_id).style.backgroundColor = 'red';
+                            document.getElementById('tightening_status_div').style.backgroundColor = 'red';
 
-                            document.getElementById('screw_info').innerHTML = retry_time + ' / '+ '-';
+                            document.getElementById('screw_info').innerHTML = retry_time + ' / '+ stop_on_ng;
                             document.getElementById('modbus_switch').value = 1;
+
+                            document.getElementById('error1').innerHTML = 'Error : ' + fasten_status[data.fasten_status].status;
+                            document.getElementById('error2').innerHTML = 'Error : ' + error_message[data.error_message].status;
+
+                            console.log(data.error_message)
 
                             light_signal = 'ng';
                             afterward();
-                        }
 
+                            if( +retry_time == +stop_on_ng && +stop_on_ng != 0 ){
+                                // force_switch_tool(0);
+                                switch_tool(0);
+                                // function_auth_check('stop_on_ng')
+                            }
+                        }
                     }
                 }
 
@@ -926,6 +1169,7 @@ function call_job() {
     setTimeout(() => {
         $.ajax({
             type: "POST",
+            timeout: 3000, 
             url: url,
             data: { 'job_id': gtcs_job_id },
             // dataType: "json",
@@ -934,21 +1178,22 @@ function call_job() {
             // alert(123)
             document.getElementById('modbus_switch').value = 1;
         });
-    }, 666);
+    }, 333);
 
     
 }
 
-function change_job(seq_id){
+function change_job(seq_id,direction=''){
     let job_id = document.getElementById('Change_Job_Id').value
     // let seq_id = 1;
     $.ajax({
         type: "POST",
         url: '?url=Operations/Change_Job',
-        data: { 'job_id': job_id,'seq_id': seq_id },
+        timeout: 3000,
+        data: { 'job_id': job_id,'seq_id': seq_id ,'direction': direction },
     }).done(function(response) { //成功且有回傳值才會執行
         // alert(123)
-        console.log(response);
+        // console.log(response);
         history.go(0);
     });
 }
@@ -956,7 +1201,7 @@ function change_job(seq_id){
 function change_seq(direction) {
 
     let seq_id = document.getElementById('seq_id').value;
-    let total_seq = document.getElementById('total_seq_count').value;
+    let total_seq = document.getElementById('max_seq_id').value;
     if (direction == 'previous') {
         seq_id = +seq_id - 1; 
     }else if(direction == 'next'){
@@ -976,7 +1221,7 @@ function change_seq(direction) {
         return 0;
     }
 
-    change_job(seq_id)
+    change_job(seq_id,direction)
 }
 
 
@@ -1057,8 +1302,7 @@ async function switch_tool(status) {
 }
 
 
-function force_switch_tool(status) {
-    console.log(666)
+async function force_switch_tool(status) {
     let done = true;
     while(done){
 
@@ -1076,14 +1320,16 @@ function force_switch_tool(status) {
         // isSendingRequest = true;
         $.ajax({
             url: '?url=Operations/Switch_Tool_Status', // 指向服務器端檢查更新的 PHP 腳本
+            async: false,
             method: 'POST',
             data: { 'tool_status': status },
             dataType: "json",
             success: function(response) {
                 // 處理服務器返回的響應
                 // document.getElementById('tool_status').value = response.result;
-                document.getElementById('tool_status_icon').innerHTML = '<svg width="24px" height="24px" viewBox="0 0 1024 1024" fill="red" class="icon" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="red"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M512 897.6c-108 0-209.6-42.4-285.6-118.4-76-76-118.4-177.6-118.4-285.6 0-108 42.4-209.6 118.4-285.6 76-76 177.6-118.4 285.6-118.4 108 0 209.6 42.4 285.6 118.4 157.6 157.6 157.6 413.6 0 571.2-76 76-177.6 118.4-285.6 118.4z m0-760c-95.2 0-184.8 36.8-252 104-67.2 67.2-104 156.8-104 252s36.8 184.8 104 252c67.2 67.2 156.8 104 252 104 95.2 0 184.8-36.8 252-104 139.2-139.2 139.2-364.8 0-504-67.2-67.2-156.8-104-252-104z" fill=""></path><path d="M707.872 329.392L348.096 689.16l-31.68-31.68 359.776-359.768z" fill=""></path><path d="M328 340.8l32-31.2 348 348-32 32z" fill=""></path></g></svg>';
+                // document.getElementById('tool_status_icon').innerHTML = '<svg width="24px" height="24px" viewBox="0 0 1024 1024" fill="red" class="icon" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="red"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M512 897.6c-108 0-209.6-42.4-285.6-118.4-76-76-118.4-177.6-118.4-285.6 0-108 42.4-209.6 118.4-285.6 76-76 177.6-118.4 285.6-118.4 108 0 209.6 42.4 285.6 118.4 157.6 157.6 157.6 413.6 0 571.2-76 76-177.6 118.4-285.6 118.4z m0-760c-95.2 0-184.8 36.8-252 104-67.2 67.2-104 156.8-104 252s36.8 184.8 104 252c67.2 67.2 156.8 104 252 104 95.2 0 184.8-36.8 252-104 139.2-139.2 139.2-364.8 0-504-67.2-67.2-156.8-104-252-104z" fill=""></path><path d="M707.872 329.392L348.096 689.16l-31.68-31.68 359.776-359.768z" fill=""></path><path d="M328 340.8l32-31.2 348 348-32 32z" fill=""></path></g></svg>';
                 isSendingRequest = false;
+                return 0;
                 // document.getElementById('modbus_switch').value = 0;
             },
             complete: function(XHR, TS) {
@@ -1104,147 +1350,346 @@ function force_switch_tool(status) {
 
 <script>
 
-$(document).ready(async function () {
-    // setInterval(main_workflow, 300);
-    // 设置循环条件
-    let loop_condition = true;
-    let loop_count = 0;
+    $(document).ready(async function () {
+        // setInterval(main_workflow, 300);
+        // 设置循环条件
+        let loop_condition = true;
+        let loop_count = 0;
 
-    // while 循环
-    while (loop_condition) {
-        // console.log(`Loop ${loop_count + 1}`);
-        await main_workflow(); // 调用 main_workflow 函数
+        await switch_tool(1);//預設先讓起子enable
 
-        // 检查循环结束条件
-        // 此处需要根据具体情况设置条件
-        if (loop_count >= 10) {
-            // loop_condition = false; // 当循环达到指定次数时结束
+        // while 循环
+        while (loop_condition) {
+            // console.log(`Loop ${loop_count + 1}`);
+            await main_workflow(); // 调用 main_workflow 函数
+
+            // 检查循环结束条件
+            // 此处需要根据具体情况设置条件
+            if (loop_count >= 10) {
+                // loop_condition = false; // 当循环达到指定次数时结束
+            }
+
+            // 模拟等待一段时间后再次执行循环
+            await new Promise(resolve => setTimeout(resolve, 300)); // 等待 1 秒
+            loop_count++;
+        }
+    });
+    // main_workflow();
+
+    // setInterval(main_workflow, 3000); // 每隔x秒發送一次請求，可以根據需要調整時間間隔
+
+    //operation main workflow
+    async function main_workflow(argument) {
+        // body...
+        // prerequisite ，判斷時否達到當前task的前置條件 ex: arm、socket tray、...等等
+        // console.log('-----start prerequisite------');
+        let aa = await prerequisite();
+        // console.log('-----end prerequisite------');
+
+        // console.log('-----start tool enable or disable------');
+        // await ;
+        // await switch_tool(0)
+        console.log(aa)
+        if( aa == true ){
+            await switch_tool(1)
+            // force_switch_tool(1)
+            isFulfilled = true;
+        }else{
+            await switch_tool(0)
+            isFulfilled = false;
         }
 
-        // 模拟等待一段时间后再次执行循环
-        await new Promise(resolve => setTimeout(resolve, 300)); // 等待 1 秒
-        loop_count++;
-    }
-});
-// main_workflow();
+        // await switch_tool(1)
+        // console.log('-----end tool enable or disable------');
 
-// setInterval(main_workflow, 3000); // 每隔x秒發送一次請求，可以根據需要調整時間間隔
+        // console.log('-----start afterward------');
+         // afterward();
+        // console.log('-----end afterward------');
 
-//operation main workflow
-async function main_workflow(argument) {
-    // body...
-    // prerequisite ，判斷時否達到當前task的前置條件 ex: arm、socket tray、...等等
-    // console.log('-----start prerequisite------');
-    let aa = await prerequisite();
-    // console.log('-----end prerequisite------');
+        // receive fasten result，接收控制器的鎖附結果產生對應的NG或OK等訊息
+        // afterward ，如果鎖附結果OK，進行當前task對應的後續資訊 ex:三色燈、message、video、audio、...等等
 
-    // console.log('-----start tool enable or disable------');
-    // await ;
-    // await switch_tool(0)
-    // console.log(aa)
-    if( aa == true ){
-        await switch_tool(1)
-        isFulfilled = true;
-    }else{
-        await switch_tool(0)
-        isFulfilled = false;
+
     }
 
-    // await switch_tool(1)
-    // console.log('-----end tool enable or disable------');
+    async function prerequisite(arguments) {
+        //get arm status
+        let arm_status = +document.getElementById('arm_status').value
+        //get socket tray status
+        let socket_tray_status = +document.getElementById('socket_tray_status').value
+        // console.log(arm_status,socket_tray_status)
+        let task_id = document.getElementById('task_id').value;
+        let hole_id = document.getElementById('task_'+task_id+'_hole_id').value;
+        console.log(hole_id);
 
-    // console.log('-----start afterward------');
-     // afterward();
-    // console.log('-----end afterward------');
+        let flag = false;
 
-    // receive fasten result，接收控制器的鎖附結果產生對應的NG或OK等訊息
-    // afterward ，如果鎖附結果OK，進行當前task對應的後續資訊 ex:三色燈、message、video、audio、...等等
+        let stop_on_ng = document.getElementById('stop_on_ng').value;
+        if( +retry_time == +stop_on_ng && +stop_on_ng != 0 ){
+            console.log('ng stop')
+            return false;
+        }
 
-
-}
-
-async function prerequisite(arguments) {
-    //get arm status
-    let arm_status = +document.getElementById('arm_status').value
-    //get socket tray status
-    let socket_tray_status = +document.getElementById('socket_tray_status').value
-    // console.log(arm_status,socket_tray_status)
-
-    let flag_ = false;
-
-    if (arm_status != 0) {
-    }
-
-    if (socket_tray_status != 0) {
-        $.ajax({
-            url: '?url=Operations/Get_IO_Signal', // 指向服務器端檢查更新的 PHP 腳本
-            async: false,
-            method: 'GET',
-            dataType: "json",
-            success: function(response) {
-                // 處理服務器返回的響應
-                // document.getElementById('tool_status').value = response.result;
-                // console.log(response);
-                // console.log(response.result);
-                // console.log(response.result[3]);
-                if( response.result[3] != true ){//tool enable
-                    flag = false;
-                }else{//tool disable
-                    flag = true;
+        if (hole_id != '' &&  hole_id != '-1') {
+            //先set io的input  來顯示目標hole
+            $.ajax({
+                url: '?url=Operations/Set_Socket_Hole', // 指向服務器端檢查更新的 PHP 腳本
+                async: false,
+                method: 'POST',
+                data: { 'hole_id': hole_id, 'Socket_Hole': true  },
+                dataType: "json",
+                complete: function(XHR, TS) {
+                    XHR = null;
+                },
+                error: function(xhr, status, error) {
                 }
+            });
+            //在get io的output 來確認user是否有拿對
+            $.ajax({
+                url: '?url=Operations/Get_Socket_Hole', // 指向服務器端檢查更新的 PHP 腳本
+                async: false,
+                method: 'GET',
+                timeout: 500,
+                data: { 'hole_id': hole_id },
+                dataType: "json",
+                success: function(response) {
+                    // 處理服務器返回的響應
 
-                isSendingRequest = false;
-            },
-            complete: function(XHR, TS) {
-                XHR = null;
-                // console.log("执行一次"); 
-            },
-            error: function(xhr, status, error) {
-                // console.log("fail");
-            }
-        });
+                    if(response.result == 'yes'){
+                        flag = true;
+                        document.getElementById('socket_hole_number').style.backgroundColor = '#7ECA86';
+
+                        //把arm判斷放在socket tray之後
+                        if (arm_status != 0 && !right_position) { //task有啟用arm 且 arm不在正確位置
+                            console.log('ng position')
+                            flag = false;
+                        }
+                        
+                    }else{
+                        console.log('ng socket tray')
+                        flag = false;
+                        document.getElementById('socket_hole_number').style.backgroundColor = '#f63e3e';
+                    }
+                    //find task hole id then 
+
+                    isSendingRequest = false;
+                },
+                complete: function(XHR, TS) {
+                    XHR = null;
+                    // console.log("执行一次"); 
+                },
+                error: function(xhr, status, error) {
+                    // console.log("fail");
+                }
+            });
+        }else{//沒有設定socket hole
+            flag = true;
+        }
+
+        // //把arm判斷放在socket tray之後
+        // if (arm_status != 0 && !right_position) { //task有啟用arm 且 arm不在正確位置
+        //     // if(!right_position){
+        //     console.log('ng position')
+        //     return false;
+        //     // }
+        // }
+
+        return flag;
+
+        // return sleep(1000);
     }
 
-    return flag;
+    function afterward(arguments) {
+        //關閉所有output
+        // $.ajax({
+        //     url: '?url=Operations/Set_IO_Signal', // 指向服務器端檢查更新的 PHP 腳本
+        //     async: true, // 將此設置為 true 表示請求是非同步的
+        //     method: 'GET',
+        //     data: { 'light_signal': 'stop' },
+        //     dataType: "json"
+        // });
 
-    // return sleep(1000);
-}
 
- function afterward(arguments) {
-    if(light_signal != false){
+        if(light_signal != false){
+            $.ajax({
+                url: '?url=Operations/Set_IO_Signal', // 指向服務器端檢查更新的 PHP 腳本
+                async: true, // 將此設置為 true 表示請求是非同步的
+                method: 'GET',
+                data: { 'light_signal': light_signal },
+                dataType: "json"
+            });
+        }
+    }
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function save_result(data) {
+        // console.log(data);
+        data.cc_job_id = document.getElementById('job_id').value;
+        data.cc_seq_id = document.getElementById('seq_id').value;
+        data.cc_task_id = document.getElementById('task_id').value;
+        data.cc_equipment = '';
+        data.cc_barcodesn = '';
+        data.cc_station = '';
+        data.cc_operator = '<?php echo $_SESSION['user']; ?>';
+
+        
         $.ajax({
-            url: '?url=Operations/Set_IO_Signal', // 指向服務器端檢查更新的 PHP 腳本
-            async: true, // 將此設置為 true 表示請求是非同步的
+            url: '?url=Operations/Save_Result', // 指向服務器端檢查更新的 PHP 腳本
+            // async: false,
             method: 'GET',
-            data: { 'light_signal': light_signal },
+            data: { 'data': data },
             dataType: "json"
         });
     }
-}
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
 
-function save_result(data) {
-    // console.log(data);
-    data.cc_job_id = document.getElementById('job_id').value;
-    data.cc_seq_id = document.getElementById('seq_id').value;
-    data.cc_task_id = document.getElementById('task_id').value;
-    data.cc_equipment = 'temp';
-    data.cc_barcodesn = 'temp';
-    data.cc_station = 'temp';
-    data.cc_operator = 'temp';
+    async function function_auth_check(action) {
+        let pass = false;
+        document.getElementById('verify_action').value = action;
+        if(action == 'change_job'){
+            if(document.getElementById('button_auth_switch_job').value == '1' ){
+                verify_action(action);
+            }else{
+                verify_form_display();
+            }
+        }
+        if(action == 'skip_seq'){
+            if(document.getElementById('button_auth_switch_next_seq').value == '1' ){
+                verify_action(action);
+            }else{
+                verify_form_display();
+            }
+        }
+        if(action == 'back_seq'){
+            if(document.getElementById('button_auth_switch_previous_seq').value == '1' ){
+                verify_action(action);
+            }else{
+                verify_form_display();
+            }
+        }
+        if(action == 'reset_task'){
+            if(document.getElementById('button_auth_task_reset').value == '1' ){
+                verify_action(action);
+            }else{
+                verify_form_display();
+            }
+        }
+        if(action == 'stop_on_ng'){
+            if(document.getElementById('button_auth_stop_on_ng').value == '1' ){
+                verify_action(action);
+            }else{
+                verify_form_display();
+            }
+        }
+        if(action == 'change_seq'){
+            if(document.getElementById('button_auth_switch_seq').value == '1' ){
+                verify_action(action);
+            }else{
+                verify_form_display();
+            }
+        }
+        if(action == 'barcode'){
+            if(document.getElementById('button_auth_switch_job').value == '1' ){
+                verify_action(action);
+            }else{
+                verify_form_display();
+            }
+        }
+    }
 
-    
-    $.ajax({
-        url: '?url=Operations/Save_Result', // 指向服務器端檢查更新的 PHP 腳本
-        // async: false,
-        method: 'GET',
-        data: { 'data': data },
-        dataType: "json"
+    function verify_form_display() {
+        toggleIdentityVerify();
+        document.getElementById('id_verify').value = '';
+        document.getElementById('id_verify').focus()
+    }
+
+    async function call_job_check(){
+
+        let action = document.getElementById('verify_action').value;
+        let card = document.getElementById('id_verify').value;
+        $.ajax({
+            url: '?url=Operations/button_auth_check', // 指向服務器端檢查更新的 PHP 腳本
+            // async: false,
+            method: 'POST',
+            data: { 'card': card, 'action': action },
+            dataType: "json"
+        }).done(function(response) { //成功且有回傳值才會執行
+            // alert(456)
+            console.log(response)
+            if(response.result){
+                verify_action(action)
+            }else{
+                alert('verify fail')
+            }
+            toggleIdentityVerify();
+        });
+    }
+
+    function verify_action(action) {
+        if(action == 'change_job'){
+            document.getElementById('change_job').style.display='block';
+        }
+        if(action == 'skip_seq'){
+            change_seq('next')
+        }
+        if(action == 'back_seq'){
+            change_seq('previous')
+        }
+        if(action == 'reset_task'){
+            let seq_id = document.getElementById('seq_id').value;
+            change_job(seq_id);
+        }
+        if(action == 'stop_on_ng'){
+            console.log('stop_on_ng');
+            retry_time = 0
+            let stop_on_ng = document.getElementById('stop_on_ng').value;
+            document.getElementById('screw_info').innerHTML = retry_time + ' / '+ stop_on_ng;
+            // reset 
+        }
+        if(action == 'change_seq'){
+            document.getElementById('SeqSelect').style.display='block';
+        }
+        if(action == 'barcode'){
+            barcode_change_job();
+        }
+    }
+
+    function task_reset_check() {
+        
+    }
+
+    function barcode_change_job(argument) {
+        let barcode = document.getElementById('barcode').value
+
+        $.ajax({
+            url: '?url=Operations/Barcode_ChangeJob', // 指向服務器端檢查更新的 PHP 腳本
+            method: 'POST',
+            data: { 'barcode': barcode },
+            dataType: "json"
+        }).done(function(response) { //成功且有回傳值才會執行
+            if(response.result == 'yes'){
+                history.go(0);
+            }
+            barcode_input.value = '';
+        });
+    }
+
+    var barcode_input = document.getElementById("barcode");
+
+    barcode_input.addEventListener("keypress", function(event) {
+      // If the user presses the "Enter" key on the keyboard
+      if (event.key === "Enter") {
+        // Cancel the default action, if needed
+        event.preventDefault();
+        // Trigger the button element with a click
+        // barcode_change_job();
+        function_auth_check('barcode')
+        
+      }
     });
-}
 
 
 </script>
@@ -1252,36 +1697,36 @@ function save_result(data) {
 
 <script>
 
-let messageCount = 0;
+    let messageCount = 0;
 
-function addMessage() {
-    messageCount++;
-    document.getElementById('messageCount').innerText = messageCount;
-}
+    function addMessage() {
+        messageCount++;
+        document.getElementById('messageCount').innerText = messageCount;
+    }
 
-function ClickNotification() {
-    let messageBox = document.getElementById('messageBox');
-    let closeBtn = document.getElementsByClassName("close")[0];
-    messageBox.style.display = (messageBox.style.display === 'block') ? 'none' : 'block';
-}
+    function ClickNotification() {
+        let messageBox = document.getElementById('messageBox');
+        let closeBtn = document.getElementsByClassName("close")[0];
+        messageBox.style.display = (messageBox.style.display === 'block') ? 'none' : 'block';
+    }
 
-addMessage();
+    addMessage();
 
 
 
-function ClickVirtualMessage()
-{
-    let VirtualMessage = document.getElementById('VirtualMessage');
-    let closeBtn = document.getElementsByClassName("close")[0];
-    VirtualMessage.style.display = (VirtualMessage.style.display === 'block') ? 'none' : 'block';
-}
+    function ClickVirtualMessage()
+    {
+        let VirtualMessage = document.getElementById('VirtualMessage');
+        let closeBtn = document.getElementsByClassName("close")[0];
+        VirtualMessage.style.display = (VirtualMessage.style.display === 'block') ? 'none' : 'block';
+    }
 
-function toggleIdentityVerify()
-{
-    let IdentityVerify = document.getElementById('IdentityVerify');
-    let closeBtn = document.getElementsByClassName("close")[0];
-    IdentityVerify.style.display = (IdentityVerify.style.display === 'block') ? 'none' : 'block';
-}
+    function toggleIdentityVerify()
+    {
+        let IdentityVerify = document.getElementById('IdentityVerify');
+        let closeBtn = document.getElementsByClassName("close")[0];
+        IdentityVerify.style.display = (IdentityVerify.style.display === 'block') ? 'none' : 'block';
+    }
 
 </script>
 

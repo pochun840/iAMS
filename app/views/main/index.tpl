@@ -3,6 +3,7 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/w3.css" type="text/css">
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/nav.css" type="text/css">
 <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/datatables.min.css">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/main.css">
 
 
 <?php echo $data['nav']; ?>
@@ -10,15 +11,16 @@
 <div class="container-ms">
     <header>
         <div class="home">
-            <img id="header-img" src="./img/home-head.svg">Home
+            <img id="header-img" src="./img/home-head.svg"><?php echo $text['main_home_text']; ?>
         </div>
 
         <div class="notification">
             <i style="width:auto; height:40px" class="fa fa-bell" onclick="ClickNotification()"></i>
             <span id="messageCount" class="badge"></span>
         </div>
-        <div class="personnel"><i style="width:auto; height: 40px" class="fa fa-user"></i> Esther</div>
+        <div class="personnel"><i style="width:auto; height: 40px" class="fa fa-user"></i> <?php echo $_SESSION['user']; ?> </div>
     </header>
+    <?php //require APPROOT . 'views/inc/head_div.tpl'; ?>
 
     <!-- Notification -->
     <div id="messageBox" class="messageBox" style="display: none;">
@@ -94,63 +96,30 @@
         <div class="scrollbar-force-overflow">
             <div class="container">
                 <div class="menu-button">
-                    <div style="margin: 30px 100px" class="w3-center">
-                        <button class="menu-item" onclick="window.location.href='?url=Products'">
-                            <img src="./img/job.svg" alt="">
-                            <span style="font-size: 18px; line-height: 60px">Job</span>
-                        </button>
-                        <button class="menu-item" onclick="window.location.href='?url=Equipments'">
-                            <img src="./img/equipment.svg" alt="">
-                            <span style="font-size: 18px; line-height: 60px">Equipment</span>
-                        </button>
-                        <button class="menu-item"onclick="window.location.href='?url=Plugins'">
-                            <img src="./img/plugins.svg" alt="">
-                            <span style="font-size: 18px; line-height: 60px">Plugin</span>
-                        </button>
-                        <button class="menu-item"onclick="window.location.href='?url=Charts'">
-                            <img src="./img/chart.svg" alt="">
-                            <span style="font-size: 18px; line-height: 60px">Chart</span>
-                        </button>
-                        <br><br>
+                    <div style="margin: 20px 100px" class="w3-center button-container">
+                        <?php
+                            $count = 0;
+                            foreach ($data['rows'] as $key => $value) {
+                                if( in_array($value['controller'], $data['permissions']) ){//有權限才顯示
+                                // if( in_array($value['controller'], $data['permissions']) || $value['name'] == 'home' ){//有權限才顯示
+                                    // echo $value['name'] . ' ';
+                                    echo '<button class="menu-item" onclick="window.location.href=\''.$value['link'].'\'">';
+                                    echo '<img src="'.$value['img'].'" alt="" style="margin-bottom: 10px">';
+                                    echo '<span style="font-size: 18px; line-height: 1.5">'. $text['main_'.$value['name'].'_text'] .'</span>';
+                                    echo '</button>';
+                                    $count += 1;
+                                    if ($count % 4 == 0) {
+                                        echo '<br><br>';
+                                    }
+                                }
+                                // echo($key);
+                            }
+                        ?>
 
-                        <button id="operation" class="menu-item" onclick="window.location.href='?url=Operations'">
-                            <img src="./img/operation.svg" alt="">
-                            <span style="font-size: 18px; line-height: 60px">Operation</span>
-                        </button>
-                        <button class="menu-item" onclick="window.location.href='?url=Templates'">
-                            <img src="./img/templates.svg" alt="">
-                            <span style="font-size: 18px; line-height: 60px">Templates</span>
-                        </button>
-                        <button class="menu-item" onclick="window.location.href='?url=Calibrations'">
-                            <img src="./img/calibration.svg" alt="">
-                            <span style="font-size: 18px; line-height: 60px">Calibration</span>
-                        </button>
-                        <button class="menu-item" onclick="window.location.href='?url=Monitors'">
-                            <img src="./img/monitor.svg" alt="">
-                            <span style="font-size: 18px; line-height: 60px">Monitor</span>
-                        </button>
-
-                        <br><br>
-
-                        <button class="menu-item" onclick="window.location.href='?url=Users'">
-                            <img src="./img/identity.svg" alt="" style="margin-bottom: 10px;">
-                            <span style="font-size: 18px; line-height: 1.5">Identity Management</span>
-                        </button>
                         <button class="menu-item"  onclick="DB2GTCS()">
                             <img src="./img/database.svg" alt="" style="margin-bottom: 10px;">
-                            <span style="font-size: 18px; line-height: 1.5">GTCS-DB Sync</span>
+                            <span style="font-size: 18px; line-height: 1.5px"><?php echo $text['main_DB_SYNC_text'] ?></span>
                         </button>
-                        <button class="menu-item" onclick="window.location.href='?url=Historicals'">
-                            <img src="./img/historical.svg" alt="" style="margin-bottom: 10px">
-                            <span style="font-size: 18px; line-height: 1.5">Historical Record</span>
-                        </button>
-                        <button class="menu-item" onclick="window.location.href='?url=Settings'">
-                            <img src="./img/system-setting.svg" alt="" style="margin-bottom: 10px">
-                            <span style="font-size: 18px; line-height: 1.5">System Setting</span>
-                        </button>
-
-                        <br><br>
-
                     </div>
                 </div>
             </div>
@@ -158,344 +127,10 @@
     </div>
 </div>
 
-<style>
-
-.container-ms
-{
-    margin: 0 auto;
-    padding: 0px;
-    overflow: hidden;
-    width: calc(100%);
-    position: static;
-    padding-left: 68px;
-}
-
-header
-{
-    background-color: red;
-    font-size: 26px;
-    width: 100%;
-    color: white;
-    height:50px;
-    margin-bottom: 0px;
-    align-items: center;
-}
-
-.home
-{
-    float: left;
-    margin-left: 10px;
-    margin:3px;
-    font-size: 26px;
-    vertical-align: middle;
-}
-
-#header-img
-{
-    width: auto;
-    height:36px;
-    margin: 2px;
-    padding-right: 5px;
-    margin-left: 10px;
-    float: left;
-    color:white;
-}
-
-.personnel
-{
-    float: right;
-    margin: 0 15px;
-    font-size: 24px;
-    vertical-align: middle;
-    padding: 4px;
-    bottom: 0;
-}
-
-/* Start Notification */
-.notification
-{
-    float: right;
-    font-size: 24px;
-    margin-right: 20px;
-    padding: 4px;
-    vertical-align: middle;
-    bottom: 0;
-}
-
-.topnav-message
-{
-    width: 100%;
-    overflow: hidden;
-    background-color:#fff;
-    border: 1px solid #BBBBBB;
-    border-radius: 5px;
-    padding: 0px;
-}
-
-.messageBox
-{
-    display: none;
-    position: absolute; /* Thay vi position: fixed */
-    border-radius: 10px;
-    right: 10px;
-    top: 45px;
-    float: right;
-    width: 400px;
-    box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.2);
-    background-color: #fff;
-    border: 0px solid #000;
-    padding: 0px;
-    z-index: 1000;
-}
-
-.notification .badge
-{
-    position: absolute;
-    height: auto;
-    width: auto;
-    text-align: center;
-    top: -3px;
-    right: 8px;
-    padding: 2px 8px;
-    border-radius: 50%;
-    color: white;
-}
-
-**
-* Checkbox Four
-*/
-.checkboxFour
-{
-    width: 0px;
-    height: 0px;
-    background: #ddd;
-    margin: 0px 0px;
-    border-radius: 100%;
-    position: relative;
-}
-
-/**
-* Create the online and offline button
-*/
-.checkboxFour label
-{
-    display: block;
-    position: fixed;
-    width: 11px;
-    height: 11px;
-    border-radius: 100px;
-    transition: all .5s ease;
-    cursor: pointer;
-    position: absolute;
-    right: 8px;
-    z-index: 1;
-    background: #CFCFCF;
-}
-
-/**
-* Create the checked state
-*/
-.checkboxFour input[type=checkbox]:checked + label
-{
-    background: #0083FF;
-}
-
-/* scrollbar Notification Mess */
-.scrollbar-message
-{
-    float: left;
-    height: calc(100vh - 300px);
-    width: 100%;
-    overflow-y: scroll;
-}
-
-.force-overflow-message
-{
-    min-height: 60vh;
-}
-
-/**  STYLE Message */
-#style-message::-webkit-scrollbar
-{
-    display: none;
-    width: 12px;
-    background-color: #F5F5F5;
-}
-
-#style-message::-webkit-scrollbar-thumb
-{
-    border-radius: 10px;
-    background: linear-gradient(left, #96A6BF, #63738C);
-    box-shadow: inset 0 0 1px 1px #5C6670;
-}
-
-#style-message::-webkit-scrollbar-track
-{
-    border-radius: 10px;
-    background: #eee;
-    box-shadow: 0 0 1px 1px #bbb, inset 0 0 7px rgba(0,0,0,0.3)
-}
-
-#style-message::-webkit-scrollbar-thumb:hover
-{
-    background: linear-gradient(left, #8391A6, #536175);
-}
-
-#messageCount
-{
-    text-align: center;
-}
-
-.close-message
-{
-    color: #4F576D;
-    float: right;
-    margin: 0 auto;
-    padding: 0px;
-    top: 0;
-    margin-right: 10px;
-    font-size: 30px;
-    font-weight: bold;
-    vertical-align: middle;
-}
-
-.close-message:hover,
-.close-message:focus
-{
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
-}
-.recyclebox{color: #14A800; background-color: #E8F9F1; border-radius: 10px; padding-right: 5%; padding: 0 5px;}
-.workstation{color: #555555; background-color: #DDDDDD; border-radius: 10px; padding: 0 5px}
-/* End Notification */
-
-/* Clearfix to clear the float */
-header::after
-{
-    content: "";
-    display: table;
-    clear: both;
-}
-
-.container
-{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.container
-{
-   width: 100%;
-}
-
-@media (max-width: 768px)
-{
-    .container
-    {
-        width: 100%;
-    }
-}
-
-button
-{
-    border-radius: 50%;
-    border: #D9D9D9 solid 1px;
-    background: #FFFFFF;
-    width: 130px;
-    height: 130px;
-    color: Black;
-    text-align: center;
-    font-weight: bolder;
-    box-shadow: 0 3px 7px 1px #AAA;
-    margin: 0px 20px;
-}
-
-.menu-button
-{
-    display: inline-block;
-    padding: 5px;
-}
-
-.menu
-{
-    width: 80px;
-    height: 80px;
-    text-align: center;
-    box-sizing: border-box;
-    font-size: 30px;
-    margin: 0px 10px;
-
-}
-
-.menu-item
-{
-    padding: 5px;
-    align-items: center;
-    text-align: center;
-    margin-bottom: 50px;
-}
-
-.menu-item:hover
-{
-    background: #EEEEEE;
-    color: #3290B1;
-}
-
-/* scrollbar style */
-.scrollbar
-{
-    float: left;
-    height: 75vh;
-    width: 100%;
-    overflow-y: scroll;
-}
-
-.scrollbar-force-overflow
-{
-    min-height: 75vh;
-}
-
-#wrapper
-{
-    text-align: center;
-    margin: auto;
-}
-
-#style-all::-webkit-scrollbar
-{
-    display: none;
-    width: 12px;
-    background-color: #F5F5F5;
-}
-
-/**  STYLE Y */
-#style-all::-webkit-scrollbar-thumb
-{
-    border-radius: 10px;
-    background: linear-gradient(left, #96A6BF, #63738C);
-    box-shadow: inset 0 0 1px 1px #5C6670;
-}
-
-#style-all::-webkit-scrollbar-track
-{
-    border-radius: 10px;
-    background: #eee;
-    box-shadow: 0 0 1px 1px #bbb, inset 0 0 7px rgba(0,0,0,0.3)
-}
-
-#style-all::-webkit-scrollbar-thumb:hover
-{
-    background: linear-gradient(left, #8391A6, #536175);
-}
-
-</style>
-
 <script type="text/javascript">
     function DB2GTCS(argument)
     {
-        var yes = confirm('你確定嗎？');
+        var yes = confirm('<?php echo $text['Delete_confirm_text']; ?>');
 
         if (yes) {
             let url = '?url=Settings/GTCS_DB_SYNC';

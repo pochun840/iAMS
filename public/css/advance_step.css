@@ -262,7 +262,7 @@ header::after
     float: right;
     margin-right: 5px;
     padding: 0 3px;
-    background-color: #008B8B;
+    background-color: #444E66;
     border-radius: 5px;
     color: #fff;
     border: 0px solid #444E66;
@@ -444,6 +444,7 @@ tr:hover
 .modal-body
 {
     background-color: #F2F1F1; /* Replace with your desired background color */
+    padding-top: 0;
 }
 
 .modal-footer

@@ -20,17 +20,16 @@
 </style>
 
 <div class="container-ms">
-
     <header>
         <div class="epuipment">
-            <img id="header-img" src="./img/equipment-head.svg">Epuipment
+            <img id="header-img" src="./img/equipment-head.svg"><?php echo $text['Equipment_text']; ?>
         </div>
 
         <div class="notification">
             <i style=" width:auto; height: 40px;" class="fa fa-bell" onclick="ClickNotification()"></i>
             <span id="messageCount" class="badge"></span>
         </div>
-        <div class="personnel"><i style="width:auto; height: 40px;font-size: 26px" class="fa fa-user"></i> Esther</div>
+        <div class="personnel"><i style="width:auto; height: 40px;font-size: 26px" class="fa fa-user"></i> <?php echo $_SESSION['user']; ?></div>
     </header>
 
     <!-- Notification -->
@@ -103,10 +102,10 @@
             <ul class="menu-add">
                 <li style="float: right">
                     <button id="button_AddDevice" type="button">
-                        <img id="img-device" src="./img/add-device.svg" alt="">Add Device
+                        <img id="img-device" src="./img/add-device.svg" alt=""><?php echo $text['Add_Device_text']; ?>
                     </button>
 
-                    <ul class="submenu">
+                    <ul class="submenu" style="display:none;">
                         <li><a href="#" class="submenu-item">Kilews GTCS</a></li>
                         <li><a href="#" class="submenu-item">Kilews TCG</a></li>
                         <li><a href="#" class="submenu-item">ARM</a></li>
@@ -116,6 +115,7 @@
                         <li><a href="#" class="submenu-item">PLC</a></li>
                         <li><a href="#" class="submenu-item">Button</a></li>
                         <li><a href="#" class="submenu-item">Socket selector</a></li>
+                        <li><a href="#" class="submenu-item">Socket tray</a></li>
                     </ul>
                 </li>
             </ul>
@@ -133,7 +133,7 @@
                             <div class="col-3" style="line-height: 32px; font-size:18px; padding-left: 5%">
                                 <div style="font-size: 20px"><b>GTCS</b></div>
                                 <div>V.1.1.0</div>
-                                <div>Nov 11.23 10:55</div>
+                                <!-- <div>Nov 11.23 10:55</div> -->
                             </div>
                             <!-- Message  -->
                             <div class="col-4" style="font-size:17px">
@@ -163,9 +163,9 @@
                                 <img class="images" src="./img/ep_picture.png" alt="">
                             </div>
                             <div class="col-3" style="line-height: 32px; padding-left: 5%">
-                                <div style="font-size: 20px"><b>ARM</b></div>
+                                <div style="font-size: 20px"><b><?php echo $text['Arm_text']; ?></b></div>
                                 <div>V.1.1.0</div>
-                                <div>Nov 11.23 10:55</div>
+                                <!-- <div>Nov 11.23 10:55</div> -->
                             </div>
                             <!-- Message  -->
                             <div class="col-4" style="font-size:18px">
@@ -198,7 +198,7 @@
                             <div class="col-3" style="line-height: 32px; padding-left: 5%">
                                 <div style="font-size: 20px"><b>pick-to-light sensors</b></div>
                                 <div>V.1.1.0</div>
-                                <div>Nov 11.23 10:55</div>
+                                <!-- <div>Nov 11.23 10:55</div> -->
                             </div>
 
                             <!-- Message  -->
@@ -230,9 +230,9 @@
                                 <img class="images" src="./img/ep_picture.png" alt="">
                             </div>
                             <div class="col-3" style="line-height: 32px; padding-left: 5%">
-                                <div style="font-size: 20px"><b>Tower Light sensors</b></div>
+                                <div style="font-size: 20px"><b><?php echo $text['Tower_Light_sensors_text']; ?></b></div>
                                 <div>V.1.1.0</div>
-                                <div>Nov 11.23 10:55</div>
+                                <!-- <div>Nov 11.23 10:55</div> -->
                             </div>
 
                             <!-- Message  -->
@@ -266,7 +266,7 @@
                             <div class="col-3" style="line-height: 32px; padding-left: 5%">
                                 <div style="font-size: 20px"><b>PLC</b></div>
                                 <div>V.1.1.0</div>
-                                <div>Nov 11.23 10:55</div>
+                                <!-- <div>Nov 11.23 10:55</div> -->
                             </div>
 
                             <!-- Message  -->
@@ -300,7 +300,7 @@
                             <div class="col-3" style="line-height: 32px; padding-left: 5%">
                                 <div style="font-size: 20px"><b>KL-TCG</b></div>
                                 <div>V.1.1.0</div>
-                                <div>Nov 11.23 10:55</div>
+                                <!-- <div>Nov 11.23 10:55</div> -->
                             </div>
 
                             <!-- Message  -->
@@ -335,7 +335,7 @@
                             <div class="col-3" style="line-height: 32px; padding-left: 5%">
                                 <div style="font-size: 20px"><b>Recycle box</b></div>
                                 <div>V.1.1.0</div>
-                                <div>Nov 11.23 10:55</div>
+                                <!-- <div>Nov 11.23 10:55</div> -->
                             </div>
 
                             <!-- Message  -->
@@ -360,13 +360,49 @@
                                 <a><i id="Edit" class="fa fa-edit" onclick="ShowRecycleboxSettingMode()"></i></a>
                             </div>
                         </div>
+
+                        <!-- Socket tray  -->
+                        <div class="row epuipment-row">
+                            <div class="col-1">
+                                <img class="images" src="./img/ep_picture.png" alt="">
+                            </div>
+                            <div class="col-3" style="line-height: 32px; padding-left: 5%">
+                                <div style="font-size: 20px"><b><?php echo $text['Socket_Tray_text']; ?></b></div>
+                                <div>V.1.1.0</div>
+                                <!-- <div>Nov 11.23 10:55</div> -->
+                            </div>
+
+                            <!-- Message  -->
+                            <div class="col-4" style="font-size:18px">
+                                <form action="" id="Recycle-box_Status">
+                                    <div class="mt-1" style="text-align: center;line-height: 55px">
+                                        ---
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="col">
+                                <div class="simple-toggle">
+                                    <label class="tgl" style="font-size:28px; float: right;">
+                                        <input type="checkbox">
+                                        <span data-on="&#10003;" data-off="&#10005;"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <a><i id="Remove" class="fa fa-minus-square-o"></i></a>
+                                <a><i id="Edit" class="fa fa-edit" onclick="ShowSockettraySettingMode()"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <?php 
+    <?php
         if(file_exists('../app/views/'.$data['div_device'].'.tpl')){
             require_once '../app/views/'.$data['div_device'].'.tpl';
         }
@@ -385,11 +421,14 @@
         if(file_exists('../app/views/'.$data['div_recycle_box'].'.tpl')){
             require_once '../app/views/'.$data['div_recycle_box'].'.tpl';
         }
+        if(file_exists('../app/views/'.$data['div_socket_tray'].'.tpl')){
+            require_once '../app/views/'.$data['div_socket_tray'].'.tpl';
+        }
         if(file_exists('../app/views/'.$data['div_add_device_modal'].'.tpl')){
             require_once '../app/views/'.$data['div_add_device_modal'].'.tpl';
         }
     ?>
-    
+
 <script>
 /// Modal Add Equipment
     var modal = document.getElementById("myModal");
@@ -499,6 +538,15 @@ function ShowPLCSettingMode()
     document.getElementById('Equipment_Setting').style.display = 'none';
 }
 
+function ShowSockettraySettingMode()
+{
+    // Show Socket tray Setting
+    document.getElementById('SocketTray_Edit_Setting').style.display = 'block';
+
+    // Hide Equipment Setting
+    document.getElementById('Equipment_Setting').style.display = 'none';
+}
+
 function cancelSetting()
 {
     var EquipmentSetting = document.getElementById('Equipment_Setting');
@@ -508,6 +556,7 @@ function cancelSetting()
     var PickToLightSetting = document.getElementById('PickToLight_Edit_Setting');
     var TowerLightSetting = document.getElementById('TowerLight_Edit_Setting');
     var PLCSetting = document.getElementById('PLC_In_Out_Setting');
+    var SockettraySetting = document.getElementById('SocketTray_Edit_Setting');
 
     // Check the current state and toggle accordingly
     if (DeviceSetting.style.display === 'block')
@@ -545,6 +594,12 @@ function cancelSetting()
         // If PLCSetting is currently displayed, switch to EquipmentSetting
         EquipmentSetting.style.display = 'block';
         PLCSetting.style.display = 'none';
+    }
+    else if (SockettraySetting.style.display === 'block')
+    {
+        // If SockettraySetting is currently displayed, switch to EquipmentSetting
+        EquipmentSetting.style.display = 'block';
+        SockettraySetting.style.display = 'none';
     }
     else
     {

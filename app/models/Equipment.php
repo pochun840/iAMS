@@ -81,13 +81,35 @@ class Equipment{
 
     public function GetIOPinSetting()
     {
-        $sql = "SELECT * FROM `equipment_io_pin` ORDER BY pin_number ";
+        $sql = "SELECT * FROM `equipment_io_pin` WHERE pin_type = 'output' ORDER BY pin_number ";
         $statement = $this->db->prepare($sql);
         // $statement->bindValue(':device_id', $device_id);
         $results = $statement->execute();
         $results = $statement->fetchall(PDO::FETCH_ASSOC);
 
         return $results;
+    }
+
+    public function Save_Controller_IP($ip)
+    {
+        $sql = "UPDATE `controller` SET ip = :ip WHERE controller_id = :controller_id ";
+        $statement = $this->db->prepare($sql);
+        $statement->bindValue(':ip', $ip);
+        $statement->bindValue(':controller_id', 1);
+        $result = $statement->execute();
+
+        return $result;
+    }
+
+    public function GetControllerIP($controller_id)
+    {
+        $sql = "SELECT * FROM `controller` WHERE controller_id = :controller_id  ";
+        $statement = $this->db->prepare($sql);
+        $statement->bindValue(':controller_id', $controller_id);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+
+        return $result['ip'];
     }
 
 

@@ -117,7 +117,7 @@ class Historicals extends Controller
                 $info_data .= "<td style='".$style."'>". $status_arr['status_type'][$v['fasten_status']]."</td>";
                 $info_data .= "<td>".$status_arr['error_msg'][$v['error_message']]."</td>";
                 $info_data .= "<td></td>";
-                $info_data .= '<td><img src="./img/info-30.png" alt="" style="height: 28px; vertical-align: middle;" onclick="NextToInfo()"></td>';
+                $info_data .= "<td><a href=\" ?url=Historicals/nextinfo/".$v['system_sn']." \"><img src=\"./img/info-30.png\" style=\"height: 28px; vertical-align: middle;\" ></a></td>";
         
                 $info_data .="</tr>";
                 echo $info_data;
@@ -379,16 +379,16 @@ class Historicals extends Controller
             #取得完整的資料
             $length = strlen($data['job_info'][0]['id']);
             if ($length < 4) {
-                $no = sprintf("%04d", $data['job_info'][0]['id']);
+                // $no = sprintf("%04d", $data['job_info'][0]['id']);
+                $no = sprintf("%04d", $data['job_info'][0]['system_sn']);
             } else {
-                $no = $data['job_info'][0]['id'];
+                // $no = $data['job_info'][0]['id'];
+                $no = $data['job_info'][0]['system_sn'];
             }
-          
-
-            
+            // var_dump($data['job_info']);
+            // var_dump($no);
 
             $csvdata_arr = $this->Historicals_newModel->get_info($no, $chat_mode);
-        
 
             if(!empty($csvdata_arr)){
                 $data['chart_info'] = $this->ChartData($chat_mode, $csvdata_arr, $unitvalue, $chat_mode_arr);
@@ -398,7 +398,7 @@ class Historicals extends Controller
                 $data['chart_info']['y_title'] = $titles['y_title'];
                 $data['chart_info']['chat_mode'] = $chat_mode;
             }
-            
+
              
             #狀態列表
             $status_arr = $this->Historicals_newModel->status_code_change();
@@ -487,6 +487,7 @@ class Historicals extends Controller
                 $checked_sn_in =  $checkedsn;
             }
 
+
             #取得該筆的所有完整詳細資料
             $info_final = $this->Historicals_newModel->csv_info($checked_sn_in);  
 
@@ -497,8 +498,8 @@ class Historicals extends Controller
             #取得曲線圖的ID
             $id = '';
             foreach($info_final as $kk =>$vv){
-                $id.= sprintf("%04d", $vv['id']).",";
-                
+                // $id.= sprintf("%04d", $vv['id']).",";
+                $id.= sprintf("%04d", $vv['system_sn']).",";
             }
 
             $id = rtrim($id,',');

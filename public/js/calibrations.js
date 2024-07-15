@@ -271,7 +271,7 @@ function Connect() {
         alert(JSON.stringify(data));
 
         $.ajax({
-            url: 'http://192.168.0.152/imas/public/index.php?url=Calibrations/tidy_data',
+            url: '?url=Calibrations/tidy_data',
             type: 'GET',
             dataType: 'json',
             success: function(response) {

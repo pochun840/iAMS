@@ -8,6 +8,6 @@ define('APPROOT', dirname(dirname(__FILE__)) . '/');
 define('URLROOT', '../public/'); //local用
 
 // 網站名稱
-define('SITENAME', 'CC');
+define('SITENAME', 'iAMS');
 
 define('CONTROLLER_IP', '192.168.0.186');

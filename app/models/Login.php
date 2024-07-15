@@ -25,6 +25,21 @@ class Login{
         return $statement->fetch(PDO::FETCH_ASSOC);
     }
 
+    //透過id取得user
+    public function get_user_by_idcard($card)
+    {
+        $sql = "SELECT * FROM `users` WHERE card = :card AND del = 0 ";
+        $statement = $this->db->prepare($sql);
+        $statement->bindValue(':card', $card);
+        $statement->execute();
+        $row = $statement->fetch(PDO::FETCH_ASSOC);
+
+        return $row;
+    }
+
+
+    //----------------------------------------------------------------------------------------------------------------
+
     // 取得iDas登入密碼
     public function GetiDasPwd()
     {
@@ -129,9 +144,5 @@ class Login{
 
         return (int)$max_user;
     }
-
-
-
-
 
 }

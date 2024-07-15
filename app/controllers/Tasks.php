@@ -23,6 +23,7 @@ class Tasks extends Controller
         $tasks = $this->TaskModel->getTasks($job_id,$seq_id);
         $seq_data = $this->SequenceModel->GetSeqById($job_id,$seq_id);
         $job_data = $this->ProductModel->getJobById($job_id);
+
         //預處理task_list
         foreach ($tasks as $key => $value) {
             if( isset($value['program'][0]) ){
@@ -135,6 +136,11 @@ class Tasks extends Controller
                 $input_check = false;
                 $error_message .= "tolerance,";
             }
+            if( !empty($data_array['tolerance2']) && isset($data_array['tolerance2'])  ){
+            }else{ 
+                $input_check = false;
+                $error_message .= "tolerance2,";
+            }
             if( isset($data_array['message_text']) ){
             }else{ 
                 $input_check = false;
@@ -160,14 +166,72 @@ class Tasks extends Controller
                 $input_check = false;
                 $error_message .= "enable_arm,";
             }
+            if( isset($data_array['sockect_hole'])  ){
+            }else{ 
+                $input_check = false;
+                $error_message .= "sockect_hole,";
+            }
+            if( !isset($data_array['message_timeout']) ){ // message_timeout 預設為0
+                $data_array['message_timeout'] = 0;
+            }
+            if( isset($data_array['virtual_message_check'])  ){
+            }else{ 
+                $input_check = false;
+                $error_message .= "virtual_message_check,";
+            }
+
+            // var_dump($_POST);
+            // var_dump($_FILES);
+            // echo json_encode(array('error' => $error_message));
+            // exit();
+
 
             if ($input_check) {
                 $jobs = $this->TaskModel->EditTask($data_array);
+                //add socket hole
+                $this->TaskModel->edit_task_socket_hole($data_array);
+
                 //step也要新增 用screw_template_id 去新增
                 $program = $this->TaskModel->EditTaskProgram($data_array);
             }
         }
 
+        if ($data_array['virtual_message_check'] == 'false') {
+            // 刪除vurtaul message
+            $file_location = $this->TaskModel->DeleteVirtualMessage($data_array['job_id'],$data_array['seq_id'],$data_array['task_id']);
+            // 同時刪除資料夾中的資料，避免重複上傳資料量過大
+            unlink($file_location);
+
+        }else{
+            if (!empty($_FILES) && $input_check) {
+                // 有上傳檔案
+                $image_array=explode('/',$_FILES['fileInput']['type']);
+                $file_type = $image_array[0];
+                $image_type = $image_array[1];
+                $t=time();
+                $datetime = date("Y-m-dHms",$t);
+                $image_new_name = $datetime.'.'.$image_type;
+                $image_upload_path="./img/task_img/".$image_new_name;
+                $is_uploaded = move_uploaded_file($_FILES["fileInput"]["tmp_name"],$image_upload_path);
+
+                if($is_uploaded){
+                    // 把img url寫入資料庫
+                    // echo 'Image Successfully Uploaded';
+                    $this->TaskModel->SetTaskImage($data_array['job_id'],$data_array['seq_id'],$data_array['task_id'],$image_upload_path,$file_type,$data_array['message_text'],$data_array['message_timeout']);
+                }
+                else{
+                    // echo 'Something Went Wrong!';
+                    $error_message .= 'image upload error';
+                }
+            }
+
+            if(empty($_FILES) && $input_check){
+                // 沒有上傳檔案
+                $image_upload_path = '';
+                $file_type = '';
+                $this->TaskModel->SetTaskImage($data_array['job_id'],$data_array['seq_id'],$data_array['task_id'],$image_upload_path,$file_type,$data_array['message_text'],$data_array['message_timeout']);
+            }
+        }
 
         echo json_encode(array('error' => $error_message));
         exit();
@@ -225,6 +289,37 @@ class Tasks extends Controller
         }
 
         echo json_encode($tasks_data);
+    }
+
+    public function save_position_only($value='')
+    {
+        $input_check = true;
+        if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
+            $job_id = $_POST['job_id'];
+        }else{ 
+            $input_check = false; 
+        }
+        if( !empty($_POST['seq_id']) && isset($_POST['seq_id'])  ){
+            $seq_id = $_POST['seq_id'];
+        }else{ 
+            $input_check = false; 
+        }
+        if( !empty($_POST['items']) && isset($_POST['items'])  ){
+            $items = $_POST['items'];
+        }else{ 
+            $input_check = false; 
+        }
+
+        foreach ($items as $key => $value) {
+            $tasks_data = $this->TaskModel->EditPositionOnly($job_id,$seq_id,$value['index'],$value['img_div']);
+        }
+        
+        // if($input_check){
+        //     $tasks_data = $this->TaskModel->EditPositionOnly($items);
+        // }
+
+        echo json_encode(array('result' => $tasks_data));
+        exit();
     }
 
 

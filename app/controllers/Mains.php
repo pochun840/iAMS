@@ -4,11 +4,13 @@ class Mains extends Controller
 {
     private $DashboardModel;
     private $NavsController;
+    private $NavModel;
     // 在建構子中將 Post 物件（Model）實例化
     public function __construct()
     {
         $this->DashboardModel = $this->model('Main');
         $this->NavsController = $this->controller_new('Navs');
+        $this->NavModel = $this->model('Nav');
     }
 
     // 取得所有Jobs
@@ -17,8 +19,20 @@ class Mains extends Controller
         $isMobile = $this->isMobileCheck();
         $nav = $this->NavsController->get_nav();
 
+        $account = $_SESSION['user'];
+        $uid = $this->NavModel->GetUserIdByAccount($account);
+        $user_permissions =  $this->NavModel->GetPermissionsByUserId($uid);
+        $rows = $this->NavModel->GetNav();
+
+        $permissions = array();
+        foreach ($user_permissions as $key => $value) {
+            $permissions[] = $value['Route'];
+        }
+
         $data = [
             'isMobile' => $isMobile,
+            'rows' => $rows,
+            'permissions' => $permissions,
             'nav' => $nav,
         ];
         

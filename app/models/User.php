@@ -14,15 +14,16 @@ class User{
     }
 
 
-    public function AddUser($user_account,$password,$user_name,$user_employee_number)
+    public function AddUser($user_account,$password,$user_name,$user_employee_number,$user_card)
     {
         $password = hash('sha256', $password); // 建議使用密碼哈希
 
-        $stmt = $this->db->prepare('INSERT INTO users (account, password, name, employee_number ) VALUES (:account, :password, :name, :employee_number)');
+        $stmt = $this->db->prepare('INSERT INTO users (account, password, name, employee_number, card ) VALUES (:account, :password, :name, :employee_number, :card)');
         $stmt->bindValue(':account', $user_account);
         $stmt->bindValue(':password', $password);
         $stmt->bindValue(':name', $user_name);
         $stmt->bindValue(':employee_number', $user_employee_number);
+        $stmt->bindValue(':card', $user_card);
         $stmt->execute();
 
         $sql = "SELECT * FROM `users` WHERE account = :account ";
@@ -35,24 +36,26 @@ class User{
         return $user_id;
     }
 
-    public function EditUser($id,$password,$user_name,$user_employee_number)
+    public function EditUser($id,$password,$user_name,$user_employee_number,$user_card)
     {
         date_default_timezone_set('UTC');
         //若password為空，不更新password
         if ($password == '') {
-            $stmt = $this->db->prepare('UPDATE users SET name = :name, employee_number = :employee_number, last_updated = :last_updated WHERE id = :id');
+            $stmt = $this->db->prepare('UPDATE users SET name = :name, employee_number = :employee_number, card = :card, last_updated = :last_updated WHERE id = :id');
             $stmt->bindValue(':id', $id);
             $stmt->bindValue(':name', $user_name);
             $stmt->bindValue(':employee_number', $user_employee_number);
+            $stmt->bindValue(':card', $user_card);
             $stmt->bindValue(':last_updated', date("Y-m-d H:i:s"));
             $results = $stmt->execute();
         }else{
             $password = hash('sha256', $password); // 建議使用密碼哈希
-            $stmt = $this->db->prepare('UPDATE users SET password = :password, name = :name, employee_number = :employee_number, last_updated = :last_updated WHERE id = :id');
+            $stmt = $this->db->prepare('UPDATE users SET password = :password, name = :name, employee_number = :employee_number, card = :card, last_updated = :last_updated WHERE id = :id');
             $stmt->bindValue(':id', $id);
             $stmt->bindValue(':password', $password);
             $stmt->bindValue(':name', $user_name);
             $stmt->bindValue(':employee_number', $user_employee_number);
+            $stmt->bindValue(':card', $user_card);
             $stmt->bindValue(':last_updated', date("Y-m-d H:i:s"));
             $results = $stmt->execute();
         }
@@ -101,7 +104,7 @@ class User{
 
     public function DuplicateCheck($user_account)
     {
-        $sql = "SELECT COUNT(*) as count FROM `users` WHERE account = :account ";
+        $sql = "SELECT COUNT(*) as count FROM `users` WHERE account = :account AND del = 0";
         $statement = $this->db->prepare($sql);
         $statement->bindValue(':account', $user_account);
         $statement->execute();

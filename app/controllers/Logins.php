@@ -26,7 +26,7 @@ class Logins extends Controller
         //例外狀況，切換語系
         $exception = false;
         if(isset($url[1])){
-            if($url[0] == 'Dashboards' && $url[1] == 'change_language' ){
+            if($url[0] == 'Mains' && $url[1] == 'change_language' ){
                 $exception = true;
             }
         }
@@ -40,11 +40,12 @@ class Logins extends Controller
             $password = $_POST['password'];
             
             if($this->verifyCredentials($username,$password)){
-                $part1 = hash('sha256', $password);
-                $authToken = hash('sha256', $part1.'kilews');//
-                setcookie('user', $username, time() + $this->timeout_seconds, '/');
-                setcookie('auth_token', $authToken, time() + $this->timeout_seconds, '/');
-                $_SESSION['user'] = $username;
+                // $part1 = hash('sha256', $password);
+                // $authToken = hash('sha256', $part1.'kilews');//
+                // setcookie('auth_token', $authToken, time() + $this->timeout_seconds, '/');
+
+                // setcookie('user', $username, time() + $this->timeout_seconds, '/');
+                // $_SESSION['user'] = $username;
                 
                 //加入權限控管
                 $this->PermissionCheck($url);
@@ -61,7 +62,9 @@ class Logins extends Controller
             if ($this->isAuthenticated() || $exception ) { //切換語系例外
                 //用戶已登錄，繼續處理其他操作
                 //加入權限控管
-                $this->PermissionCheck($url);
+                if(!$exception){
+                    $this->PermissionCheck($url);
+                }
 
                 return true;
             } else {
@@ -104,13 +107,31 @@ class Logins extends Controller
         // 自定義的身份驗證邏輯，根據實際情況進行驗證
         // 返回 true 表示驗證成功，false 表示驗證失敗
         // 可以與數據庫或其他存儲進行比對驗證
-        $pwd = $this->LoginModel->getpwd($username); //控制器密碼
-        if($pwd == false){//找不到帳號
-            return false;
-        }
-        $input = hash('sha256', $password);
-        $output = $pwd['password'];
 
+        $id_login = false;
+        
+        if($_POST['action'] == 'idlogin'){
+
+            //用id查詢登入 get username
+            //seletc user by id
+            //get password
+            $id_login = false;
+            $user = $this->LoginModel->get_user_by_idcard($password);
+
+            if($user){
+                $id_login = true;
+            }
+            $input = 123;
+            $output = 546;
+        }else{
+            $pwd = $this->LoginModel->getpwd($username); //控制器密碼
+            if($pwd == false){//找不到帳號
+                return false;
+            }
+            $input = hash('sha256', $password);
+            $output = $pwd['password'];
+        }
+        
         if($input == $output){
             //登入成功寫入 active_sessions 資料庫
             // $reslut = $this->active_sessions('admin');
@@ -118,10 +139,25 @@ class Logins extends Controller
             $this->logMessage('login','success');
 
             if($reslut){
+
+                $part1 = hash('sha256', $password);
+                $authToken = hash('sha256', $part1.'kilews');//
+                setcookie('auth_token', $authToken, time() + $this->timeout_seconds, '/');
+                setcookie('user', $username, time() + $this->timeout_seconds, '/');
+                $_SESSION['user'] = $username;
+
                 return true;
             }else{
                 return false;
             }
+        }else if($id_login == true){
+            $username = $user['account'];
+            $authToken = hash('sha256', $user['password'].'kilews');//
+            setcookie('auth_token', $authToken, time() + $this->timeout_seconds, '/');
+            setcookie('user', $username, time() + $this->timeout_seconds, '/');
+            $_SESSION['user'] = $username;
+
+            return true;
         }else{
             $this->logMessage('login','account:'.$username.' login fail');
             // exit();

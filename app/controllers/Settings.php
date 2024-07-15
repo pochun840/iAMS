@@ -6,6 +6,9 @@ class Settings extends Controller
     private $SequenceModel;
     private $SettingModel;
     private $NavsController;
+    private $UserModel;
+    private $OperationModel;
+    private $EquipmentModel;
     // 在建構子中將 Post 物件（Model）實例化
     public function __construct()
     {
@@ -13,6 +16,9 @@ class Settings extends Controller
         $this->SequenceModel = $this->model('Sequence');
         $this->SettingModel = $this->model('Setting');
         $this->NavsController = $this->controller_new('Navs');
+        $this->UserModel = $this->model('User');
+        $this->OperationModel = $this->model('Operation');
+        $this->EquipmentModel = $this->model('Equipment');
     }
 
     // 取得所有Jobs
@@ -20,10 +26,23 @@ class Settings extends Controller
 
         $isMobile = $this->isMobileCheck();
         $nav = $this->NavsController->get_nav();
+        $all_roles = $this->UserModel->GetAllRole();
+
+        $button_auth = array();
+        $button_auth['switch_next_seq'] = $this->OperationModel->GetConfigValue('auth_skip')['value'];
+        $button_auth['switch_previous_seq'] = $this->OperationModel->GetConfigValue('auth_back')['value'];
+        $button_auth['task_reset'] = $this->OperationModel->GetConfigValue('auth_task_reset')['value'];
+        $button_auth['switch_job'] = $this->OperationModel->GetConfigValue('auth_job_change')['value'];
+        $button_auth['stop_on_ng'] = $this->OperationModel->GetConfigValue('stop_on_ng')['value'];
+        $button_auth['switch_seq'] = $this->OperationModel->GetConfigValue('auth_seq_change')['value'];
+        $button_auth['role_checked'] = $this->OperationModel->GetConfigValue('manger_verify')['value'];
+        $button_auth['role_checked'] = explode(",",$button_auth['role_checked']);//轉換成array 方便用in_array判斷
 
         $data = [
             'isMobile' => $isMobile,
             'nav' => $nav,
+            'all_roles' => $all_roles,
+            'button_auth' => $button_auth,
         ];
         
         $this->view('setting/index', $data);
@@ -48,18 +67,30 @@ class Settings extends Controller
 
     public function FTP_download($value='')
     {
+        //get controller ip
+        $controller_ip = $this->EquipmentModel->GetControllerIP(1);
+
         $remote_file = '/mnt/ramdisk/tcscon.db';   ### 遠端檔案
         $local_file = '../localfile.db';   ### 本機儲存檔案名稱
 
         $handle = fopen($local_file, 'w');
 
         ### 連接的 FTP 伺服器是 localhost
-        $conn_id = ftp_connect(CONTROLLER_IP);
+        $conn_id = ftp_connect($controller_ip);
 
         ### 登入 FTP, 帳號是 USERNAME, 密碼是 PASSWORD
         $USERNAME = 'kls';
         $PASSWORD = '12345678rd';
         $login_result = ftp_login($conn_id, $USERNAME, $PASSWORD);
+
+        // 用ssh2連接
+        // $connection = ssh2_connect($controller_ip, 22);
+        // ssh2_auth_password($connection, $USERNAME, $PASSWORD);
+
+        // $sftp = ssh2_sftp($connection);
+        // $res2 = ssh2_scp_recv($connection, $remote_file, $local_file);
+        // end 用ssh2連接
+
 
         if (ftp_fget($conn_id, $handle, $remote_file, FTP_ASCII, 0)) {
             echo "下載成功, 並儲存到 $local_file\n";
@@ -76,7 +107,10 @@ class Settings extends Controller
 
     public function FTP_upload($value='')
     {
-        $ftp_server = CONTROLLER_IP;
+        //get controller ip
+        $controller_ip = $this->EquipmentModel->GetControllerIP(1);
+
+        $ftp_server = $controller_ip;
         $ftp_username = "kls";
         $ftp_password = "12345678rd";
 
@@ -234,8 +268,11 @@ class Settings extends Controller
     //下modbus讓GTCS匯入FTP的cfg
     public function ImportDB($value='')
     {
+        //get controller ip
+        $controller_ip = $this->EquipmentModel->GetControllerIP(1);
+
         require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
-        $modbus = new ModbusMaster(CONTROLLER_IP, "TCP");
+        $modbus = new ModbusMaster($controller_ip, "TCP");
         try {
             $modbus->port = 502;
             $modbus->timeout_sec = 30;
@@ -264,6 +301,24 @@ class Settings extends Controller
             // echo $modbus->status;
             exit();
         }
+    }
+
+    public function Operation_Setting()
+    {
+        $error_message = '';
+
+        $this->OperationModel->SetConfigValue('auth_skip',$_POST['switch_next_seq']);
+        $this->OperationModel->SetConfigValue('auth_back',$_POST['switch_previous_seq']);
+        $this->OperationModel->SetConfigValue('auth_task_reset',$_POST['task_reset']);
+        $this->OperationModel->SetConfigValue('auth_job_change',$_POST['switch_job']);
+        $this->OperationModel->SetConfigValue('auth_seq_change',$_POST['switch_seq']);
+        $this->OperationModel->SetConfigValue('manger_verify',$_POST['role_checked']);
+        $this->OperationModel->SetConfigValue('stop_on_ng',$_POST['stop_on_ng']);
+
+        echo json_encode(array('error' => $error_message));
+        exit();
+
+
     }
 
     

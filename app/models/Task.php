@@ -13,9 +13,10 @@ class Task{
     // 取得所有Task
     public function getTasks($job_id,$seq_id)
     {
-        $sql = "SELECT task.*,ccs.gtcs_job_id,ccs_a.gtcs_job_id FROM `task` 
+        $sql = "SELECT task.*,ccs.gtcs_job_id,ccs_a.gtcs_job_id,tst.hole_id FROM `task` 
                 LEFT JOIN ccs_normalstep as ccs on task.job_id = ccs.job_id and task.seq_id = ccs.seq_id and task.task_id = ccs.task_id 
                 LEFT JOIN ccs_advancedstep as ccs_a on task.job_id = ccs_a.job_id and task.seq_id = ccs_a.seq_id and task.task_id = ccs_a.task_id 
+                LEFT JOIN task_socket_tray as tst on task.job_id = tst.job_id and task.seq_id = tst.seq_id and task.task_id = tst.task_id 
                 WHERE task.job_id = :job_id AND task.seq_id = :seq_id GROUP BY task.task_id ORDER BY task_id";
         $statement = $this->db->prepare($sql);
         $statement->bindValue(':job_id', $job_id);
@@ -106,11 +107,12 @@ class Task{
                         position_x = :position_x,
                         position_y = :position_y,
                         tolerance = :tolerance,
+                        tolerance2 = :tolerance2,
                         pts = :pts,
-                        message = :message,
                         circle_div = :circle_div,
                         delay = :delay,
-                        enable_arm = :enable_arm
+                        enable_arm = :enable_arm,
+                        template_program_id = :template_program_id
                     WHERE job_id = :job_id AND seq_id = :seq_id AND task_id = :task_id";
             $statement = $this->db->prepare($sql);
             $statement->bindValue(':controller', $data['controller_id']);
@@ -118,11 +120,13 @@ class Task{
             $statement->bindValue(':position_x', $data['position_x']);
             $statement->bindValue(':position_y', $data['position_y']);
             $statement->bindValue(':tolerance', $data['tolerance']);
+            $statement->bindValue(':tolerance2', $data['tolerance2']);
             $statement->bindValue(':pts', 1);
             $statement->bindValue(':circle_div', $data['img_div']);
-            $statement->bindValue(':message', $data['message_text']);
+            // $statement->bindValue(':message', $data['message_text']);
             $statement->bindValue(':delay', $data['delaytime']);
             $statement->bindValue(':enable_arm', $data['enable_arm']);
+            $statement->bindValue(':template_program_id', $data['screw_template_id']);
 
             $statement->bindValue(':seq_id', $data['seq_id']);
             $statement->bindValue(':job_id', $data['job_id']);
@@ -131,8 +135,8 @@ class Task{
 
         }else{ //不存在，用insert
 
-            $sql = "INSERT INTO `task` ('job_id','seq_id','task_id','controller','enable_equipment','position_x','position_y','tolerance','pts','message','circle_div','delay','enable_arm' )
-                    VALUES (:job_id,:seq_id,:task_id,:controller,:enable_equipment,:position_x,:position_y,:tolerance,:pts,:message,:circle_div,:delay,:enable_arm )";
+            $sql = "INSERT INTO `task` ('job_id','seq_id','task_id','controller','enable_equipment','position_x','position_y','tolerance','tolerance2','pts','circle_div','delay','enable_arm','template_program_id' )
+                    VALUES (:job_id,:seq_id,:task_id,:controller,:enable_equipment,:position_x,:position_y,:tolerance,:tolerance2,:pts,:circle_div,:delay,:enable_arm,:template_program_id )";
             $statement = $this->db->prepare($sql);
             $statement->bindValue(':job_id', $data['job_id']);
             $statement->bindValue(':seq_id', $data['seq_id']);
@@ -142,11 +146,13 @@ class Task{
             $statement->bindValue(':position_x', $data['position_x']);
             $statement->bindValue(':position_y', $data['position_y']);
             $statement->bindValue(':tolerance', $data['tolerance']);
+            $statement->bindValue(':tolerance2', $data['tolerance2']);
             $statement->bindValue(':pts', 1);
-            $statement->bindValue(':message', $data['message_text']);
+            // $statement->bindValue(':message', $data['message_text']);
             $statement->bindValue(':circle_div', $data['img_div']);
             $statement->bindValue(':delay', $data['delaytime']);
             $statement->bindValue(':enable_arm', $data['enable_arm']);
+            $statement->bindValue(':template_program_id', $data['screw_template_id']);
             
             $results = $statement->execute();
 
@@ -157,7 +163,10 @@ class Task{
 
     public function GetTaskById($job_id,$seq_id,$task_id)
     {
-        $sql= "SELECT * FROM task WHERE job_id = :job_id AND seq_id = :seq_id AND task_id = :task_id ";
+        $sql= "SELECT task.*,tst.hole_id,tm.text,tm.img,tm.type,tm.timeout as message_timeout FROM task 
+               LEFT JOIN task_socket_tray tst on task.job_id = tst.job_id AND task.seq_id = tst.seq_id AND task.task_id = tst.task_id
+               LEFT JOIN task_message tm on task.job_id = tm.job_id AND task.seq_id = tm.seq_id AND task.task_id = tm.task_id
+               WHERE task.job_id = :job_id AND task.seq_id = :seq_id AND task.task_id = :task_id ";
         $statement = $this->db->prepare($sql);
         $statement->bindValue(':job_id', $job_id);
         $statement->bindValue(':seq_id', $seq_id);
@@ -200,8 +209,6 @@ class Task{
     {
         // code...
         //透過controller_id跟screw_template_id找出特定的template以進行複製
-        //先寫死 1/8之後再寫對應的table
-
         //20240321 先確認template的type，再根據type更新對應的db
         $sql= "SELECT * FROM gtcs_sequence_template WHERE template_program_id = :template_program_id ";
         $statement = $this->db->prepare($sql);
@@ -236,6 +243,23 @@ class Task{
         }
     }
 
+    public function CheckTaskProgramExist_adv($job_id,$seq_id,$task_id)
+    {
+        $sql = "SELECT count(*) as count FROM ccs_advancedstep WHERE job_id = :job_id AND seq_id = :seq_id AND task_id = :task_id";
+        $statement = $this->db->prepare($sql);
+        $statement->bindValue(':job_id', $job_id);
+        $statement->bindValue(':seq_id', $seq_id);
+        $statement->bindValue(':task_id', $task_id);
+        $results = $statement->execute();
+        $rows = $statement->fetch();
+
+        if ($rows['count'] > 0) {
+            return true; // task 已存在
+        }else{
+            return false; // task 不存在
+        }
+    }
+
     public function DeleteTasksById($job_id,$seq_id,$task_id)
     {
         //delete Task
@@ -252,6 +276,18 @@ class Task{
         $results = $statement->execute();
         //delete ccs_advancedstep
         $statement = $this->db->prepare('DELETE FROM ccs_advancedstep WHERE job_id = :job_id AND seq_id = :seq_id AND task_id = :task_id ');
+        $statement->bindValue(':job_id', $job_id);
+        $statement->bindValue(':seq_id', $seq_id);
+        $statement->bindValue(':task_id', $task_id);
+        $results = $statement->execute();
+        //delete task_socket_tray
+        $statement = $this->db->prepare('DELETE FROM task_socket_tray WHERE job_id = :job_id AND seq_id = :seq_id AND task_id = :task_id ');
+        $statement->bindValue(':job_id', $job_id);
+        $statement->bindValue(':seq_id', $seq_id);
+        $statement->bindValue(':task_id', $task_id);
+        $results = $statement->execute();
+        //delete task_message
+        $statement = $this->db->prepare('DELETE FROM task_message WHERE job_id = :job_id AND seq_id = :seq_id AND task_id = :task_id ');
         $statement->bindValue(':job_id', $job_id);
         $statement->bindValue(':seq_id', $seq_id);
         $statement->bindValue(':task_id', $task_id);
@@ -281,6 +317,13 @@ class Task{
         $statement->bindValue(':task_id', $task_id);
         $results = $statement->execute();
 
+        $sql = 'UPDATE `task_socket_tray` SET task_id = task_id-1 WHERE job_id = :job_id AND seq_id = :seq_id AND task_id > :task_id ';
+        $statement = $this->db->prepare($sql);
+        $statement->bindValue(':job_id', $job_id);
+        $statement->bindValue(':seq_id', $seq_id);
+        $statement->bindValue(':task_id', $task_id);
+        $results = $statement->execute();
+
     }
 
     public function edit_normal_task_program($data)
@@ -292,6 +335,21 @@ class Task{
         $statement->execute();
         $template_data = $statement->fetch(PDO::FETCH_ASSOC);
 
+        // if( $this->CheckTaskProgramExist( $data['job_id'],$data['seq_id'],$data['task_id'] ) ){//已存在，先刪掉再insert
+            $sql= "DELETE FROM `ccs_normalstep` WHERE job_id = :job_id AND seq_id = :seq_id AND task_id = :task_id ";
+            $statement = $this->db->prepare($sql);
+            $statement->bindValue(':job_id', $data['job_id']);
+            $statement->bindValue(':seq_id', $data['seq_id']);
+            $statement->bindValue(':task_id', $data['task_id']);
+            $statement->execute();
+            
+            $sql= "DELETE FROM `ccs_advancedstep` WHERE job_id = :job_id AND seq_id = :seq_id AND task_id = :task_id ";
+            $statement = $this->db->prepare($sql);
+            $statement->bindValue(':job_id', $data['job_id']);
+            $statement->bindValue(':seq_id', $data['seq_id']);
+            $statement->bindValue(':task_id', $data['task_id']);
+            $statement->execute();
+        // }
         //insert into ccs_normalstep
         //一樣先check是否重複
         if( $this->CheckTaskProgramExist( $data['job_id'],$data['seq_id'],$data['task_id'] ) ){ //已存在，用update
@@ -407,12 +465,21 @@ class Task{
         $statement->execute();
         $template_data = $statement->fetchall(PDO::FETCH_ASSOC);
 
-        if( $this->CheckTaskProgramExist( $data['job_id'],$data['seq_id'],$data['task_id'] ) ){//已存在，先刪掉再insert
-            $sql= "DELETE FROM gtcs_advancedstep_template WHERE template_program_id = :template_program_id ";
+        // if( $this->CheckTaskProgramExist_adv( $data['job_id'],$data['seq_id'],$data['task_id'] ) ){//已存在，先刪掉再insert
+            $sql= "DELETE FROM `ccs_advancedstep` WHERE job_id = :job_id AND seq_id = :seq_id AND task_id = :task_id ";
             $statement = $this->db->prepare($sql);
-            $statement->bindValue(':template_program_id', $data['screw_template_id']);
+            $statement->bindValue(':job_id', $data['job_id']);
+            $statement->bindValue(':seq_id', $data['seq_id']);
+            $statement->bindValue(':task_id', $data['task_id']);
             $statement->execute();
-        }
+
+            $sql= "DELETE FROM `ccs_normalstep` WHERE job_id = :job_id AND seq_id = :seq_id AND task_id = :task_id ";
+            $statement = $this->db->prepare($sql);
+            $statement->bindValue(':job_id', $data['job_id']);
+            $statement->bindValue(':seq_id', $data['seq_id']);
+            $statement->bindValue(':task_id', $data['task_id']);
+            $statement->execute();
+        // }
 
         foreach ($template_data as $key => $temp_data) {
             $sql = "INSERT INTO `ccs_advancedstep` ('job_id','seq_id','task_id','step_id','step_name','step_targettype','step_targetangle','step_targettorque','step_delayttime','step_tooldirection','step_rpm','step_offsetdirection','step_torque_jointoffset','step_monitoringmode','step_torwin_target','step_torquewindow','step_angwin_target','step_anglewindow','step_hightorque','step_lowtorque','step_monitoringangle','step_highangle','step_lowangle','torque_unit','step_angle_mode','step_slope','gtcs_job_id' )
@@ -449,10 +516,156 @@ class Task{
 
             $results = $statement->execute();
         }
+    }
+
+    //sockect hole
+    public function edit_task_socket_hole($data)
+    {
+        if( $this->CheckSocketHole( $data['job_id'],$data['seq_id'],$data['task_id'] ) ){ //已存在，用update
+
+            $sql = "UPDATE `task_socket_tray` 
+                    SET hole_id = :hole_id 
+                    WHERE job_id = :job_id AND seq_id = :seq_id AND task_id = :task_id";
+            $statement = $this->db->prepare($sql);
+            $statement->bindValue(':hole_id', $data['sockect_hole']);
+
+            $statement->bindValue(':seq_id', $data['seq_id']);
+            $statement->bindValue(':job_id', $data['job_id']);
+            $statement->bindValue(':task_id', $data['task_id']);
+            $results = $statement->execute();
 
 
+        }else{ //不存在，用insert
+
+            $sql = "INSERT INTO `task_socket_tray` ('job_id','seq_id','task_id','hole_id' )
+                    VALUES (:job_id,:seq_id,:task_id,:hole_id)";
+            $statement = $this->db->prepare($sql);
+            $statement->bindValue(':job_id', $data['job_id']);
+            $statement->bindValue(':seq_id', $data['seq_id']);
+            $statement->bindValue(':task_id', $data['task_id']);
+            $statement->bindValue(':hole_id', $data['sockect_hole']);
+            
+            $results = $statement->execute();
+
+        }
+
+        return $results;
+    }
+
+    public function CheckSocketHole($job_id,$seq_id,$task_id)
+    {
+        $sql = "SELECT count(*) as count FROM task_socket_tray WHERE job_id = :job_id AND seq_id = :seq_id AND task_id = :task_id";
+        $statement = $this->db->prepare($sql);
+        $statement->bindValue(':job_id', $job_id);
+        $statement->bindValue(':seq_id', $seq_id);
+        $statement->bindValue(':task_id', $task_id);
+        $results = $statement->execute();
+        $rows = $statement->fetch();
+
+        if ($rows['count'] > 0) {
+            return true; // task 已存在
+        }else{
+            return false; // task 不存在
+        }
+    }
+
+    public function EditPositionOnly($job_id,$seq_id,$task_id,$position)
+    {
+        $sql = "UPDATE `task` 
+                    SET circle_div = :circle_div
+                    WHERE job_id = :job_id AND seq_id = :seq_id AND task_id = :task_id";
+        $statement = $this->db->prepare($sql);
+        $statement->bindValue(':circle_div', $position);
+
+        $statement->bindValue(':seq_id', $job_id);
+        $statement->bindValue(':job_id', $seq_id);
+        $statement->bindValue(':task_id', $task_id);
+
+        $result = $statement->execute();
+
+        return $result;
+    }
+
+    public function SetTaskImage($job_id,$seq_id,$task_id,$img_url,$file_type,$message,$message_timeout)
+    {
+        
+        if( $this->CheckTaskImage($job_id,$seq_id,$task_id) ){ //已存在，用update
+
+            $sql = "UPDATE `task_message` 
+                    SET img = :img, `text` = :message, type = :type, timeout = :message_timeout
+                    WHERE job_id = :job_id AND seq_id = :seq_id AND task_id = :task_id";
+            $statement = $this->db->prepare($sql);
+            $statement->bindValue(':job_id', $job_id);
+            $statement->bindValue(':seq_id', $seq_id);
+            $statement->bindValue(':task_id', $task_id);
+            $statement->bindValue(':img', $img_url);
+            $statement->bindValue(':message', $message);
+            $statement->bindValue(':type', $file_type);
+            $statement->bindValue(':message_timeout', $message_timeout);
+
+            $results = $statement->execute();
 
 
+        }else{ //不存在，用insert
+
+            $sql = "INSERT INTO `task_message` ('job_id','seq_id','task_id','img','type','text','timeout' )
+                    VALUES (:job_id,:seq_id,:task_id,:img,:type,:message,:message_timeout)";
+            $statement = $this->db->prepare($sql);
+            // var_dump($this->db->errorInfo());
+            $statement->bindValue(':job_id', $job_id);
+            $statement->bindValue(':seq_id', $seq_id);
+            $statement->bindValue(':task_id', $task_id);
+            $statement->bindValue(':img', $img_url);
+            $statement->bindValue(':message', $message);
+            $statement->bindValue(':type', $file_type);
+            $statement->bindValue(':message_timeout', $message_timeout);
+            
+            $results = $statement->execute();
+
+        }
+
+        return $results;
+    }
+
+    public function CheckTaskImage($job_id,$seq_id,$task_id)
+    {
+        $sql = "SELECT count(*) as count FROM `task_message` WHERE job_id = :job_id AND seq_id = :seq_id AND task_id = :task_id ";
+        $statement = $this->db->prepare($sql);
+        // var_dump($this->db->errorInfo());
+        $statement->bindValue(':job_id', $job_id);
+        $statement->bindValue(':seq_id', $seq_id);
+        $statement->bindValue(':task_id', $task_id);
+        $results = $statement->execute();
+        $rows = $statement->fetch();
+        
+        
+
+        if ($rows['count'] > 0) {
+            return true; // task 已存在
+        }else{
+            return false; // task 不存在
+        }
+    }
+
+    public function DeleteVirtualMessage($job_id,$seq_id,$task_id)
+    {
+
+        $sql= "SELECT * FROM `task_message` WHERE job_id = :job_id AND seq_id = :seq_id AND task_id = :task_id ";
+        $statement = $this->db->prepare($sql);
+        $statement->bindValue(':job_id', $job_id);
+        $statement->bindValue(':seq_id', $seq_id);
+        $statement->bindValue(':task_id', $task_id);
+        $statement->execute();
+        $row = $statement->fetch(PDO::FETCH_ASSOC);
+
+        $sql= "DELETE FROM `task_message` WHERE job_id = :job_id AND seq_id = :seq_id AND task_id = :task_id ";
+        $statement = $this->db->prepare($sql);
+        $statement->bindValue(':job_id', $job_id);
+        $statement->bindValue(':seq_id', $seq_id);
+        $statement->bindValue(':task_id', $task_id);
+        $statement->execute();
+
+        return $row['img'];
     }
 
 }

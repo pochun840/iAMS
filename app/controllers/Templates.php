@@ -115,13 +115,29 @@ class Templates extends Controller
         $program_name = '';
 
         $advancedstep = $this->TemplateModel->GetProgramById_Advanced($template_program_id);
-        foreach ($advancedstep as $key => $value) {//預處理
+        foreach ($advancedstep as $key => $value) {//預處理 為了list顯示
             if($advancedstep[$key]['step_targettype'] == 1){
                 $advancedstep[$key]['step_targettorque'] = '0';
             }else{
                 $advancedstep[$key]['step_targetangle'] = '0';
             }
+            //判斷是用window還是Hi-Lo， 
+            //step_monitoringmode  0 window ，1 Hi-Lo
+            if($value['step_monitoringmode'] == 0){
+                $advancedstep[$key]['step_hightorque'] = $advancedstep[$key]['step_torwin_target'] + $advancedstep[$key]['step_torquewindow'];
+                $advancedstep[$key]['step_lowtorque'] = $advancedstep[$key]['step_torwin_target'] - $advancedstep[$key]['step_torquewindow'];
+                $advancedstep[$key]['step_highangle'] = $advancedstep[$key]['step_angwin_target'] + $advancedstep[$key]['step_anglewindow'];
+                $advancedstep[$key]['step_lowangle'] = $advancedstep[$key]['step_angwin_target'] - $advancedstep[$key]['step_anglewindow'];
+            }
+
+            //判斷如果是target type = torque，是否要監控角度，有的話才顯示Hi A Lo A
+            if ($value['step_targettype'] == 2 && $value['step_monitoringangle'] == 0) {
+                $advancedstep[$key]['step_highangle'] = '-';
+                $advancedstep[$key]['step_lowangle'] = '-';
+            }
         }
+
+        // var_dump($advancedstep);
 
         $data = [
             'isMobile' => $isMobile,

@@ -24,13 +24,13 @@
 
     <header>
         <div class="seq">
-            <img id="header-img" src="./img/job-head.svg">Sequence
+            <img id="header-img" src="./img/job-head.svg"><?php echo $text['Squence_text']; ?>
         </div>
         <div class="notification">
             <i style=" width:auto; height: 40px;" class="fa fa-bell" onclick="ClickNotification()"></i>
             <span id="messageCount" class="badge"></span>
         </div>
-        <div class="personnel"><i style="width:auto; height: 40px;font-size: 26px" class="fa fa-user"></i> Esther</div>
+        <div class="personnel"><i style="width:auto; height: 40px;font-size: 26px" class="fa fa-user"></i> <?php echo $_SESSION['user']; ?></div>
     </header>
 
     <!-- Notification -->
@@ -100,36 +100,36 @@
 
     <div class="topnav">
         <div class="row t3">
-            <div class="col-1" style="font-size: 1.8vmin; padding-left: 2%;">Job ID</div>
+            <div class="col-1" style="font-size: 1.8vmin; padding-left: 2%;"><?php echo $text['Job_ID_text']; ?></div>
             <div class="col-1 t3" style="padding-left: 1%">
                 <input id="job_id" type="text" class="form-control" value="<?php echo $data['job_id']; ?>" disabled="disabled" style="font-size: 1.8vmin;background-color: #E3E3E3; height: 30px">
             </div>
 
-            <div class="col-1" style="font-size: 1.8vmin; padding-left: 2%">Job name</div>
+            <div class="col-1" style="font-size: 1.8vmin; padding-left: 2%"><?php echo $text['Job_Name_text']; ?></div>
             <div class="col-2 t3">
                 <input id="job_name" type="text" class="form-control" value="<?php echo $data['job_name']; ?>" disabled="disabled" style="font-size: 1.8vmin;background-color: #E3E3E3; height: 30px">
             </div>
 
-            <div class="col-1" style="font-size: 1.8vmin; padding-left: 2%">Seq Count</div>
+            <div class="col-1" style="font-size: 1.8vmin; padding-left: 2%"><?php echo $text['Seq_count_text']; ?></div>
             <div class="col-1 t3">
                 <input id="seq_count" type="text" class="form-control" value="<?php echo count($data['sequences']); ?>" disabled="disabled" style="font-size: 1.8vmin;background-color: #E3E3E3; height: 30px">
             </div>
 
             <div class="col t3">
                 <button class="btn" id="back-btn" type="button" onclick="history.go(-1);">
-                    <img id="img-back" src="./img/back.svg" alt="">back
+                    <img id="img-back" src="./img/back.svg" alt=""><?php echo $text['Back_text']; ?>
                 </button>
                 <button class="btn" id="delete-btn" type="button" onclick="delete_seq()">
-                    <img id="img-delete" src="./img/delete.svg" alt="">Delete
+                    <img id="img-delete" src="./img/delete.svg" alt=""><?php echo $text['Delete_text']; ?>
                 </button>
                 <button class="btn" id="edit-btn" type="button" onclick="edit_seq_normal();">
-                    <img id="img-edit" src="./img/edit.svg" alt="">Edit
+                    <img id="img-edit" src="./img/edit.svg" alt=""><?php echo $text['Edit_text']; ?>
                 </button>
                 <button class="btn" id="copy-btn" type="button" onclick="copy_seq_div()">
-                    <img id="img-copy" src="./img/copy.svg" alt="">Copy
+                    <img id="img-copy" src="./img/copy.svg" alt=""><?php echo $text['Copy_text']; ?>
                 </button>
                 <button class="btn" id="add_seq" type="button" onclick="new_seq(<?php echo $data['job_id']; ?>)">
-                    <img id="img-seq" src="./img/add-new-seq.svg" alt="">Add Seq
+                    <img id="img-seq" src="./img/add-new-seq.svg" alt=""><?php echo $text['Add_Seq_text']; ?>
                 </button>
             </div>
         </div>
@@ -142,11 +142,11 @@
                     <table class="table table-bordered" id="table_seq">
                         <thead id="header-table">
                             <tr style="text-align: center">
-                                <th width="10%">Seq ID</th>
-                                <th width="25%">Seq Name</th>
-                                <th width="35%">Picture</th>
-                                <th width="10%">Enable</th>
-                                <th width="20%">Action</th>
+                                <th width="10%"><?php echo $text['Seq_ID_text']; ?></th>
+                                <th width="25%"><?php echo $text['Seq_Name_text']; ?></th>
+                                <th width="35%"><?php echo $text['Picture_text']; ?></th>
+                                <th width="10%"><?php echo $text['Enalbe_text']; ?></th>
+                                <th width="20%"><?php echo $text['Action_text']; ?></th>
                             </tr>
                         </thead>
                         <tbody id="tbody" style="background-color: #F2F1F1; font-size: 2vmin">
@@ -163,17 +163,17 @@
                                     }
                                     echo '<td style="text-align: left">';
                                     echo '<div class="dropdown">';
-                                    echo '<label><img src="./img/info-30.png" alt="" style="height: 30px; float: left; margin-right: 5px; margin-bottom: 10px" onclick="PictureDetailFunction('.$seq['seq_id'].')"> Detail</label>';
+                                    echo '<label><img src="./img/info-30.png" alt="" style="height: 30px; float: left; margin-right: 5px; margin-bottom: 10px" onclick="PictureDetailFunction('.$seq['seq_id'].')"> '.$text['Detail_text'].'</label>';
                                     echo '<div id="Detail-Dropdown-'.$seq['seq_id'].'" class=" dropdown dropdown-content">';
-                                    echo   '<a style="margin-top: 10%">Seq ID :<i style="float: right">GTCS</i></a>';
-                                    echo   '<a>Stop on NG :<i style="float: right">'.$seq['ng_stop'].'</i></a>';
-                                    echo   '<a>Seq enable :<i style="float: right">'.$seq['sequence_enable'].'</i></a>';
-                                    echo   '<a>OK Seq :<i style="float: right">'.$seq['ok_sequence'].'</i></a>';
-                                    echo   '<a>Stop Seq OK :<i style="float: right">'.$seq['ok_sequence_stop'].'</i></a>';
-                                    echo   '<a>Timeout :<i style="float: right">'.$seq['sequence_maxtime'].'</i></a>';
+                                    echo   '<a style="margin-top: 10%">'.$text['Seq_ID_text'].' :<i style="float: right">GTCS</i></a>';
+                                    echo   '<a>'.$text['NG_Stop_text'].' :<i style="float: right">'.$seq['ng_stop'].'</i></a>';
+                                    echo   '<a>'.$text['Enalbe_text'].' :<i style="float: right">'.$seq['sequence_enable'].'</i></a>';
+                                    echo   '<a>'.$text['Sequence_OK_text'].' :<i style="float: right">'.$seq['ok_sequence'].'</i></a>';
+                                    //echo   '<a>'.$text['Sequence_OK_text'].' :<i style="float: right">'.$seq['ok_sequence_stop'].'</i></a>';
+                                    echo   '<a>'.$text['Timeout_text'].' :<i style="float: right">'.$seq['sequence_maxtime'].'</i></a>';
                                     echo '</div>
                                     <br>
-                                    <label><img src="./img/add-task.png" style="height: 30px; float: left; margin-right: 5px" onclick="location.href = \'?url=Tasks/index/'.$data['job_id'].'/'.$seq['seq_id'].'\';"> Add Task</label>
+                                    <label><img src="./img/add-task.png" style="height: 30px; float: left; margin-right: 5px" onclick="location.href = \'?url=Tasks/index/'.$data['job_id'].'/'.$seq['seq_id'].'\';"> '.$text['Add_Task_text'].'</label>
                                     </div>';
                                     echo '</td>';
                                     echo '</tr>';
@@ -200,19 +200,19 @@
                 <div class="modal-body">
                     <form id="new_seq_form">
                         <div class="row">
-                            <div for="seq_id" class="col-4 t1">Seq ID :</div>
+                            <div for="seq_id" class="col-4 t1"><?php echo $text['Seq_ID_text']; ?> :</div>
                             <div class="col-4 t2">
                                 <input type="text" min=1 max=99 class="form-control input-ms" id="seq_id" maxlength="2" disabled >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="seq_name" class="col-4 t1">Seq Name :</div>
+                            <div for="seq_name" class="col-4 t1"><?php echo $text['Seq_Name_text']; ?> :</div>
                             <div class="col-4 t2" >
                                 <input type="text" class="form-control input-ms" id="seq_name" maxlength="12" required>
                             </div>
                         </div>
                         <div class="row">
-                            <div for="barcode_enable" class="col-4 t1">Barcode Enable :</div>
+                            <div for="barcode_enable" class="col-4 t1"><?php echo $text['Barcode_Enable_text']; ?> :</div>
                             <div class="switch menu col-4 t2">
                                 <input id="barcode_enable" type="checkbox">
                                 <label><i></i></label>
@@ -221,13 +221,13 @@
                         <hr>
                         <form class="upload-file" action="" method="post" enctype="multipart/form-data">
                             <div class="row">
-                                <div for="add_picture" class="col-4 t1">Add Picture :</div>
+                                <div for="add_picture" class="col-4 t1"><?php echo $text['Add_Picture_text']; ?> :</div>
                                 <div class=" col-1 t2 custom-file">
                                     <input type="file" name="image" id="custom-file" class="input-file" onchange="displayImage()" accept="image/gif, image/jpeg, image/png">
                                     <label for="custom-file" class="file-label" style="height: 30px; width: 30px; ">&#10010;</label>
                                 </div>
 
-                                <div for="add_picture" class="col-2 t1">Picture :</div>
+                                <div for="add_picture" class="col-2 t1"><?php echo $text['Picture_text']; ?> :</div>
                                 <div class="col t2 file-name box tailoring-box" id="preview-container" style="display:none;">
                                     <img id="image-preview" alt="Preview" style="max-width: 150px; max-height: 150px;">
                                 </div>
@@ -235,7 +235,7 @@
                         </form>
                         <hr>
                         <div class="row">
-                            <div for="stop_on_NG" class="col-4 t1">Stop on NG :</div>
+                            <div for="stop_on_NG" class="col-4 t1"><?php echo $text['NG_Stop_text']; ?> :</div>
                             <div class="col t2">
               					<select id="stop_on_NG" style="width: 150px; height: 30px">
                					    <option value="0">No</option>
@@ -260,14 +260,14 @@
                             </div>
                         </div> -->
                         <div class="row">
-                            <div for="ok_seq" class="col-4 t1">Sequence OK :</div>
+                            <div for="ok_seq" class="col-4 t1"><?php echo $text['Sequence_OK_text']; ?> :</div>
                             <div class="switch menu col-4 t2">
                                 <input id="ok_seq" type="checkbox" checked>
                                 <label><i></i></label>
                             </div>
                         </div>
                        <div class="row">
-                            <div for="timeout" class="col-4 t1">Timeout :</div>
+                            <div for="timeout" class="col-4 t1"><?php echo $text['Timeout_text']; ?> :</div>
                             <div class="col-4 t2">
                                 <input id="timeout" type="number" min=1 max=99 class="form-control input-ms" maxlength="2" >
                             </div>
@@ -276,8 +276,8 @@
                 </div>
 
                 <div class="modal-footer justify-content-center">
-                    <button id="button1" class="button button3" onclick="new_seq_save()">Save</button>
-                    <button id="button2" class="button button3" onclick="document.getElementById('SeqNew').style.display='none'" class="cancelbtn">Cancel</button>
+                    <button id="button1" class="button button3" onclick="new_seq_save()"><?php echo $text['Save_text']; ?></button>
+                    <button id="button2" class="button button3" onclick="document.getElementById('SeqNew').style.display='none'" class="cancelbtn"><?php echo $text['Cancel_text']; ?></button>
                 </div>
             </div>
         </div>
@@ -290,37 +290,37 @@
                 <header class="w3-container modal-header">
                     <span onclick="document.getElementById('CopySeq').style.display='none'"
                     class="w3-button w3-red w3-xxlarge w3-display-topright" style="padding: 7px; width: 60px">&times;</span>
-                    <h3>Copy Sequence</h3>
+                    <h3><?php echo $text['Copy_seq_text']; ?></h3>
                 </header>
 
                 <div class="modal-body">
                     <form id="copy_seq_form">
-                        <div for="from_seq_id" class="col" style="font-size: 20px; margin: 5px 0px 5px"><b>Copy From</b></div>
+                        <div for="from_seq_id" class="col" style="font-size: 20px; margin: 5px 0px 5px"><b><?php echo $text['Copy_from_text']; ?></b></div>
                         <div style="padding-left: 20px;">
         		            <div class="row">
-        				        <div for="from_seq_id" class="col-4 t1">Seq ID :</div>
+        				        <div for="from_seq_id" class="col-4 t1"><?php echo $text['Seq_ID_text']; ?> :</div>
         				        <div class="col-5 t2">
         				            <input type="text" class="form-control" id="from_seq_id" disabled>
         				        </div>
         				    </div>
                             <div class="row">
-                                <div for="from_seq_name" class="col-4 t1">Seq Name :</div>
+                                <div for="from_seq_name" class="col-4 t1"><?php echo $text['Seq_Name_text']; ?> :</div>
                                 <div class="col-5 t2">
                                     <input type="text" class="form-control" id="from_seq_name" disabled>
                                 </div>
                             </div>
                         </div>
 
-                        <div for="from_seq_id" class="cola" style="font-size: 20px; margin: 5px 0px 5px"><b>Copy To</b></div>
+                        <div for="from_seq_id" class="cola" style="font-size: 20px; margin: 5px 0px 5px"><b><?php echo $text['Copy_to_text']; ?></b></div>
                         <div style="padding-left: 20px;">
                             <div class="row">
-                                <div for="to_seq_id" class="col-4 t1">Seq ID :</div>
+                                <div for="to_seq_id" class="col-4 t1"><?php echo $text['Seq_ID_text']; ?> :</div>
                 				<div class="col-5 t2">
                 				    <input type="text" class="form-control" id="to_seq_id">
                 				</div>
             				</div>
                             <div class="row">
-                                <div for="to_seq_name" class="col-4 t1">Seq Name :</div>
+                                <div for="to_seq_name" class="col-4 t1"><?php echo $text['Seq_Name_text']; ?> :</div>
                                 <div class="col-5 t2">
                                     <input type="text" class="form-control" id="to_seq_name">
                                 </div>
@@ -449,7 +449,7 @@ function displayImage()
             return 0;
         }
         
-        document.getElementById('modal_head').innerHTML = 'New Seq'; //'New Job'
+        document.getElementById('modal_head').innerHTML = '<?php echo $text['New_Seq_text']; ?>'; //'New Seq'
         //帶入預設值
         document.getElementById("seq_id").value = seq_id;
         document.getElementById("seq_name").value = '';
@@ -610,7 +610,7 @@ function displayImage()
     }
 
     function edit_seq_normal(){
-        document.getElementById('modal_head').innerHTML = 'Edit Seq'; //'New Job'
+        document.getElementById('modal_head').innerHTML = '<?php echo $text['Edit_Seq_text']; ?>'; //'edit seq'
 
         let job_id = document.getElementById("job_id").value;
         let rowSelected = document.getElementsByClassName('selected');
@@ -646,7 +646,7 @@ function displayImage()
                     document.getElementById('preview-container').style.display = 'block';
                 }
 
-                document.getElementById('modal_head').innerHTML = 'Edit Job'; //'New Job'
+                document.getElementById('modal_head').innerHTML = '<?php echo $text['Edit_Seq_text']; ?>'; //'Edit Seq'
                 document.getElementById('SeqNew').style.display='block'
             },
             error: function(error) {
@@ -706,7 +706,7 @@ function displayImage()
         let rowSelected = document.getElementsByClassName('selected');
         let seq_id = rowSelected[0].childNodes[0].innerHTML;
 
-        var yes = confirm('你確定嗎？');
+        var yes = confirm('<?php echo $text['Delete_confirm_text']; ?>');
 
         if (yes) {
             let url = '?url=Sequences/delete_seq_by_id';

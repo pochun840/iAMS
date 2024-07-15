@@ -267,7 +267,7 @@ header::after
 .center-content
 {
    width: 100%;
-   padding: 15px 50px;
+   padding: 15px 30px;
 }
 
 @media (max-width: 768px)
@@ -278,7 +278,7 @@ header::after
     }
 }
 
-#container
+.container
 {
     position: relative;
     padding: 10px;
@@ -597,6 +597,7 @@ header::after
     background-color: #F2F1F1; /* Replace with your desired background color */
     border: 0.5px solid #888;
     border-top: none;
+    padding-top: 0;
     border-radius: 5px;
     padding-bottom: 0;
 }
@@ -633,13 +634,15 @@ header::after
 .btn-Addsave
 {
     background-color: #444E66;
+    margin-bottom: 5px;
     width: 60px;
-    height: 40px;
-    margin: 8px;
+    height: 35px;
     color: #fff;
-    font-size: 17px;
-    align-items: center;
+    font-size: 16px;
     text-align: center;
+    border: 0px solid #888;
+    border-radius: 5px;
+    vertical-align: middle;
     box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.2);
 }
 
@@ -669,14 +672,14 @@ header::after
 .scrollbar-AddEquipmentlog
 {
     float: left;
-    height: calc(100vh - 585px);
+    height: 18vh;
     width: 100%;
     overflow-y: scroll;
 }
 
 .force-overflow-AddEquipmentlog
 {
-    min-height: 30vh;
+    min-height: 10vh;
 }
 
 /**  STYLE Communication log */
@@ -710,39 +713,124 @@ header::after
 .scrollbar-Communicationlog
 {
     float: left;
-    height: calc(100vh - 570px);
+    height: calc(50vh - 200px);
     width: 100%;
     overflow-y: scroll;
 }
 
 .force-overflow-Communicationlog
 {
-    min-height: 40vh;
+    min-height: 30vh;
 }
 
-/**  STYLE Communication log */
-#style-Communicationlog::-webkit-scrollbar
+/**  STYLE Communicationlog-sockettray */
+#style-Communicationlog-sockettray::-webkit-scrollbar
 {
     display: none;
     width: 12px;
     background-color: #F5F5F5;
 }
 
-#style-Communicationlog::-webkit-scrollbar-thumb
+#style-Communicationlog-sockettray::-webkit-scrollbar-thumb
 {
     border-radius: 10px;
     background: linear-gradient(left, #96A6BF, #63738C);
     box-shadow: inset 0 0 1px 1px #5C6670;
 }
 
-#style-Communicationlog::-webkit-scrollbar-track
+
+#style-Communicationlog-sockettray::-webkit-scrollbar-track
 {
     border-radius: 10px;
     background: #eee;
     box-shadow: 0 0 1px 1px #bbb, inset 0 0 7px rgba(0,0,0,0.3)
 }
 
-#style-Communicationlog::-webkit-scrollbar-thumb:hover
+#style-Communicationlog-sockettray::-webkit-scrollbar-thumb:hover
+{
+    background: linear-gradient(left, #8391A6, #536175);
+}
+
+/** STYLE Communicationlog-device */
+#style-Communicationlog-device::-webkit-scrollbar
+{
+    display: none;
+    width: 12px;
+    background-color: #F5F5F5;
+}
+
+#style-Communicationlog-device::-webkit-scrollbar-thumb
+{
+    border-radius: 10px;
+    background: linear-gradient(left, #96A6BF, #63738C);
+    box-shadow: inset 0 0 1px 1px #5C6670;
+}
+
+
+#style-Communicationlog-device::-webkit-scrollbar-track
+{
+    border-radius: 10px;
+    background: #eee;
+    box-shadow: 0 0 1px 1px #bbb, inset 0 0 7px rgba(0,0,0,0.3)
+}
+
+#style-Communicationlog-device::-webkit-scrollbar-thumb:hover
+{
+    background: linear-gradient(left, #8391A6, #536175);
+}
+
+/** STYLE Communicationlog-arm */
+#style-Communicationlog-arm::-webkit-scrollbar
+{
+    display: none;
+    width: 12px;
+    background-color: #F5F5F5;
+}
+
+#style-Communicationlog-arm::-webkit-scrollbar-thumb
+{
+    border-radius: 10px;
+    background: linear-gradient(left, #96A6BF, #63738C);
+    box-shadow: inset 0 0 1px 1px #5C6670;
+}
+
+
+#style-Communicationlog-arm::-webkit-scrollbar-track
+{
+    border-radius: 10px;
+    background: #eee;
+    box-shadow: 0 0 1px 1px #bbb, inset 0 0 7px rgba(0,0,0,0.3)
+}
+
+#style-Communicationlog-arm::-webkit-scrollbar-thumb:hover
+{
+    background: linear-gradient(left, #8391A6, #536175);
+}
+
+/** STYLE Communicationlog-towerlight */
+#style-Communicationlog-towerlight::-webkit-scrollbar
+{
+    display: none;
+    width: 12px;
+    background-color: #F5F5F5;
+}
+
+#style-Communicationlog-towerlight::-webkit-scrollbar-thumb
+{
+    border-radius: 10px;
+    background: linear-gradient(left, #96A6BF, #63738C);
+    box-shadow: inset 0 0 1px 1px #5C6670;
+}
+
+
+#style-Communicationlog-towerlight::-webkit-scrollbar-track
+{
+    border-radius: 10px;
+    background: #eee;
+    box-shadow: 0 0 1px 1px #bbb, inset 0 0 7px rgba(0,0,0,0.3)
+}
+
+#style-Communicationlog-towerlight::-webkit-scrollbar-thumb:hover
 {
     background: linear-gradient(left, #8391A6, #536175);
 }
@@ -1050,6 +1138,8 @@ header::after
     background-color: #444E66;
     width: auto;
     height: 35px;
+    padding: 0 5px;
+    border-radius: 5px;
     color: #fff;
     font-size: 16px;
     align-items: center;
@@ -1318,20 +1408,20 @@ header::after
     border: 1px solid #999999;
 }
 
-.Buzzer-Button
+.checkmark_buzzer
 {
     background-color: #EEEEEE;
     border: 1px solid #999999;
     width: auto;
     height: 30px;
     padding: 0 5px;
-    margin-top: 5px;
     margin-left: 5px;
     border-radius: 5px;
     margin-bottom: 2px;
     color: #000;
     text-align: center;
-    font-size: 16px;
+    font-size: 18px;
+    vertical-align: middle;
 }
 
 .left-right-setting
@@ -1371,6 +1461,7 @@ header::after
 {
     vertical-align: middle;
     background-color: #DEDEDE;
+    border: 1px solid #999999;
     border-radius: 10px;
     width: 60px;
     text-align: center;
@@ -1558,7 +1649,39 @@ header::after
 }
 
 
+/* Socket tray */
+.socket-tray
+{
+    margin-right: 10px;
+    text-align: center;
+    margin-top: 2px;
+    border: none;
+    border-radius: 15px;
+    width: 45px;
+    height: 28px;
+    border: 1px solid #999999;
+}
 
+.btn-Test
+{
+    background-color: #444E66;
+    margin-bottom: 5px;
+    width: 60px;
+    height: 28px;
+    color: #fff;
+    font-size: 16px;
+    text-align: center;
+    border: 0px solid #888;
+    border-radius: 5px;
+    vertical-align: middle;
+    box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.2);
+}
+
+select
+{
+    border: 1px solid #888;
+    border-radius: 3px;
+}
 
 
 

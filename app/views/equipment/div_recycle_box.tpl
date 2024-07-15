@@ -1,14 +1,14 @@
 <!-- Recycle Box Edit Setting -->
     <div id="RecycleBox_Edit_Setting" style="display: none">
         <div class="topnav">
-            <label type="text" style="font-size: 20px; margin: 4px; padding-left: 2%">Recycle Box Setting</label>
+            <label type="text" style="font-size: 20px; margin: 4px; padding-left: 5%">Recycle Box Setting</label>
             <button class="btn" id="back-btn" type="button" onclick="cancelSetting()">
                 <img id="img-back" src="./img/back.svg" alt="">back
             </button>
         </div>
         <div class="main-content">
             <div class="center-content">
-                <div id="container">
+                <div class="container">
                     <div class="wrapper" style=" top: 0">
                         <div class="navbutton" onclick="handleButtonClick(this, 'recyclebox')">
                             <span data-content="Connect setting" onclick="showContent('recyclebox')"></span>Connect setting

@@ -8,6 +8,7 @@ class Operations extends Controller
     private $TaskModel;
     private $NavsController;
     private $EquipmentModel;
+    private $NavModel;
     // 在建構子中將 Post 物件（Model）實例化
     public function __construct()
     {
@@ -17,6 +18,7 @@ class Operations extends Controller
         $this->TaskModel = $this->model('Task');
         $this->NavsController = $this->controller_new('Navs');
         $this->EquipmentModel = $this->model('Equipment');
+        $this->NavModel = $this->model('Nav');
     }
 
     // 取得所有Jobs
@@ -24,6 +26,7 @@ class Operations extends Controller
 
         $isMobile = $this->isMobileCheck();
         $nav = $this->NavsController->get_nav();
+        $controller_ip = $this->EquipmentModel->GetControllerIP(1);
 
         $current_job_id = $this->OperationModel->GetConfigValue('current_job_id');
         $current_seq_id = $this->OperationModel->GetConfigValue('current_seq_id');
@@ -39,8 +42,8 @@ class Operations extends Controller
         $task_list = $this->TaskModel->getTasks($current_job_id['value'],$current_seq_id['value']);
 
         //get total seq
-        $total_seq = $this->SequenceModel->getSequences($current_job_id['value']);
-        $total_seq = count($total_seq);
+        $total_seq = $this->SequenceModel->getSequences_enable($current_job_id['value']);
+        $total_seq_count = count($total_seq);
 
         $job_list = $this->ProductModel->getJobs();
         //預處理task_list
@@ -57,6 +60,14 @@ class Operations extends Controller
                 $task_list[$key]['last_step_name'] = $value['program'][array_key_last($value['program'])]['step_name'];
                 $task_list[$key]['last_step_count'] = count($value['program']);
                 $task_list[$key]['gtcs_job_id'] = $value['program'][array_key_last($value['program'])]['gtcs_job_id'];
+
+                //hi lo 直接改 0:window 1:hi-lo
+                if($value['program'][array_key_last($value['program'])]['step_monitoringmode'] == 0){
+                    $task_list[$key]['last_step_hightorque'] = $value['program'][array_key_last($value['program'])]['step_torwin_target'] + $value['program'][array_key_last($value['program'])]['step_torquewindow'];
+                    $task_list[$key]['last_step_lowtorque'] = $value['program'][array_key_last($value['program'])]['step_torwin_target'] - $value['program'][array_key_last($value['program'])]['step_torquewindow'];
+                    $task_list[$key]['last_step_highangle'] = $value['program'][array_key_last($value['program'])]['step_angwin_target'] + $value['program'][array_key_last($value['program'])]['step_anglewindow'];
+                    $task_list[$key]['last_step_lowangle'] = $value['program'][array_key_last($value['program'])]['step_angwin_target'] + $value['program'][array_key_last($value['program'])]['step_anglewindow'];
+                }
             }else{
                 $task_list[$key]['last_job_type'] = 'normal';
                 $task_list[$key]['last_targettype'] = $value['program']['step_targettype'];
@@ -74,6 +85,43 @@ class Operations extends Controller
 
         $task_count = count($task_list);
 
+        //建立button權限
+        $button_auth = array();
+        $button_auth['switch_next_seq'] = $this->OperationModel->GetConfigValue('auth_skip')['value'];
+        $button_auth['switch_previous_seq'] = $this->OperationModel->GetConfigValue('auth_back')['value'];
+        $button_auth['task_reset'] = $this->OperationModel->GetConfigValue('auth_task_reset')['value'];
+        $button_auth['switch_job'] = $this->OperationModel->GetConfigValue('auth_job_change')['value'];
+        $button_auth['switch_seq'] = $this->OperationModel->GetConfigValue('auth_seq_change')['value'];
+        $button_auth['stop_on_ng'] = $this->OperationModel->GetConfigValue('stop_on_ng')['value'];
+        $button_auth['role_checked'] = $this->OperationModel->GetConfigValue('manger_verify')['value'];
+        $button_auth['role_checked'] = explode(",",$button_auth['role_checked']);//轉換成array 方便用in_array判斷
+        // var_dump($button_auth);
+        // GetRoleIdByAccount
+        $account = $_SESSION['user'];
+        // var_dump($account);
+        $role_id = $this->NavModel->GetRoleIdByAccount($account);
+        if( !in_array($role_id,$button_auth['role_checked']) ){
+            foreach ($button_auth as $key => $value) {
+                $button_auth[$key] = 0;
+            }
+        }
+
+        if ($role_id == 1) {
+            foreach ($button_auth as $key => $value) {
+                $button_auth[$key] = 1;
+            }
+        }
+        // var_dump($role_id);
+        // var_dump($button_auth);
+        // var_dump($task_list);
+        // var_dump($task_list[0]['program']);
+        // var_dump($_SERVER);
+
+        // $barcode = @$_SESSION['barcode'];
+        $barcode = @$_COOKIE['barcode'];
+        // unset($_SESSION['barcode']);
+        setcookie('barcode', '', time() - 3600, '/');
+
         $data = [
             'isMobile' => $isMobile,
             'nav' => $nav,
@@ -84,11 +132,15 @@ class Operations extends Controller
             'job_list' => $job_list,
             'seq_data' => $seq_data,
             'seq_list' => $seq_list,
-            'total_seq' => $total_seq,
+            'total_seq' => $total_seq_count,
             'seq_img' => @$seq_data['img'],
             'task_program' => $task_program,
             'task_list' => $task_list,
             'task_count' => $task_count,
+            'button_auth' => $button_auth,
+            'barcode' => $barcode,
+            'controller_ip' => $controller_ip,
+            'max_seq_id' => $total_seq[array_key_last($total_seq)]['seq_id'],
         ];
         
         $this->view('operation/index', $data);
@@ -97,6 +149,9 @@ class Operations extends Controller
 
     public function Call_Controller_Job()
     {
+        //get controller ip
+        $controller_ip = $this->EquipmentModel->GetControllerIP(1);
+
         $input_check = true;
         $error_message = '';
         if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
@@ -108,7 +163,7 @@ class Operations extends Controller
 
         if ($input_check) {
             require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
-            $modbus = new ModbusMaster(CONTROLLER_IP, "TCP");
+            $modbus = new ModbusMaster($controller_ip, "TCP");
             try {
                 $modbus->port = 502;
                 $modbus->timeout_sec = 10;
@@ -163,12 +218,65 @@ class Operations extends Controller
             $input_check = false;
             $error_message .= "seq_id,";
         }
+        if( !empty($_POST['task_id']) && isset($_POST['task_id'])  ){
+            $task_id = $_POST['task_id'];
+        }else{ 
+            $task_id = 1;
+        }
+        if( !empty($_POST['direction']) && isset($_POST['direction'])  ){
+            $direction = $_POST['direction'];
+        }else{ 
+            $direction = '';
+        }
 
         if ($input_check) {
-            $current_job_id = $this->OperationModel->SetConfigValue('current_job_id',$job_id);
-            $current_job_id = $this->OperationModel->SetConfigValue('current_seq_id',$seq_id);
-            echo json_encode(array('error' => $error_message));
-            exit();
+
+            //check seq enable or not
+            $enable_seq_list = $this->OperationModel->GetSeqEnable($job_id);
+            // var_dump($enable_seq_list);
+            if($enable_seq_list[$seq_id-1]['sequence_enable'] == 1 ){
+                $current_job_id = $this->OperationModel->SetConfigValue('current_job_id',$job_id);
+                $current_job_id = $this->OperationModel->SetConfigValue('current_seq_id',$seq_id);
+                $current_job_id = $this->OperationModel->SetConfigValue('current_task_id',$task_id);
+                echo json_encode(array('error' => $error_message));
+                exit();
+            }else{
+
+                if($direction == 'next'){
+                    for ($i=$seq_id; $i < count($enable_seq_list); $i++) { 
+                        if($enable_seq_list[$i]['sequence_enable'] == 1){
+                            $seq_id = $enable_seq_list[$i]['seq_id'];
+                            break;
+                        }
+                    }
+                }
+                // var_dump($seq_id);
+
+                if($direction == 'previous'){
+                    for ($i=$seq_id-1; $i >= 0; $i--) { 
+                        if($enable_seq_list[$i]['sequence_enable'] == 1){
+                            $seq_id = $enable_seq_list[$i]['seq_id'];
+                            break;
+                        }
+                    }
+                }
+
+                // var_dump($enable_seq_list);
+                // var_dump($seq_id);
+
+                $current_job_id = $this->OperationModel->SetConfigValue('current_job_id',$job_id);
+                $current_job_id = $this->OperationModel->SetConfigValue('current_seq_id',$seq_id);
+                $current_job_id = $this->OperationModel->SetConfigValue('current_task_id',$task_id);
+                echo json_encode(array('error' => $error_message));
+                exit();
+
+            }
+
+            // $current_job_id = $this->OperationModel->SetConfigValue('current_job_id',$job_id);
+            // $current_job_id = $this->OperationModel->SetConfigValue('current_seq_id',$seq_id);
+            // $current_job_id = $this->OperationModel->SetConfigValue('current_task_id',$task_id);
+            // echo json_encode(array('error' => $error_message));
+            // exit();
         }else{
             echo json_encode(array('error' => $error_message));
             exit();
@@ -178,10 +286,13 @@ class Operations extends Controller
 
     public function ToolStatusCheck()
     {
+        //get controller ip
+        $controller_ip = $this->EquipmentModel->GetControllerIP(1);
+
         $error_message = '';
         if (true) {
             require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
-            $modbus = new ModbusMaster(CONTROLLER_IP, "TCP");
+            $modbus = new ModbusMaster($controller_ip, "TCP");
             try {
                 $modbus->port = 502;
                 $modbus->timeout_sec = 10;
@@ -224,9 +335,12 @@ class Operations extends Controller
 
         // $tool_status = 1;
 
+        //get controller ip
+        $controller_ip = $this->EquipmentModel->GetControllerIP(1);
+
         if ($input_check) {
             require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
-            $modbus = new ModbusMaster(CONTROLLER_IP, "TCP");
+            $modbus = new ModbusMaster($controller_ip, "TCP");
             try {
                 $modbus->port = 502;
                 $modbus->timeout_sec = 10;
@@ -286,6 +400,7 @@ class Operations extends Controller
         $TowerLightSetting = $this->EquipmentModel->GetTowerLightSetting();
         $IO = $this->EquipmentModel->GetIOPinSetting();
 
+
         if(isset($_GET['light_signal']) ){
             $light_signal = $_GET['light_signal'];
         }else{
@@ -331,92 +446,278 @@ class Operations extends Controller
 
     public function Save_Result()
     {
-        $this->OperationModel->SaveFastenData($_GET['data']);        
+        //儲存鎖附結果到fasten_data
+        $this->OperationModel->SaveFastenData($_GET['data']);
+        //把鎖附的曲線圖資料拉到本機
+        $this->SaveFastenDataLog($_GET['data']['system_sn']);
     }
 
-    public function FunctionName($value='')
+    public function SaveFastenDataLog($system_sn)
     {
-        $TowerLightSetting = $this->EquipmentModel->GetTowerLightSetting();
-        var_dump($TowerLightSetting);
-        $IO = $this->EquipmentModel->GetIOPinSetting();
-        var_dump($IO);
+        $file_arr = array('_0p5','_1p0','_2p0');#檔案格式
 
-        // $pin0 = boolval($TowerLightSetting[0]['buzzer']);
-        // $pin1 = boolval($TowerLightSetting[0]['yellow_light']);
-        // $pin4 = boolval($TowerLightSetting[0]['green_light']);
-        // $pin5 = boolval($TowerLightSetting[0]['red_light']);
+        $filename = 'DATALOG_'.str_pad($system_sn,10,"0",STR_PAD_LEFT);
 
-        $pins = array();
-        $pins[0] = false;
-        $pins[1] = false;
-        $pins[2] = false;
-        $pins[3] = false;
-        $pins[4] = false;
-        $pins[5] = false;
-        $pins[6] = false;
-        $pins[7] = false;
-        $pins[8] = false;
-        $pins[9] = false;
-        $pins[10] = false;
-        $pins[11] = false;
+        $remote_Dir = '/mnt/ramdisk/';   ### 遠端檔案
+        $local_Dir = '../public/data/';   ### 本機儲存檔案名稱
 
-        foreach ($IO as $key => $value) {
-            if(in_array('red_light',$value)){
-                $pins[$value['pin_number']] = boolval($TowerLightSetting[0]['red_light']);
-            }
-            if(in_array('green_light',$value)){
-                $pins[$value['pin_number']] = boolval($TowerLightSetting[0]['green_light']);
-            }
-            if(in_array('yellow_light',$value)){
-                $pins[$value['pin_number']] = boolval($TowerLightSetting[0]['yellow_light']);
-            }
-            if(in_array('buzzer',$value)){
-                $pins[$value['pin_number']] = boolval($TowerLightSetting[0]['buzzer']);
+        // $handle = fopen($local_file, 'w');
+
+        //get controller ip
+        $controller_ip = $this->EquipmentModel->GetControllerIP(1);
+
+        ### 連接的 FTP 伺服器是 localhost
+        $conn_id = ftp_connect($controller_ip);
+
+        ### 登入 FTP, 帳號是 USERNAME, 密碼是 PASSWORD
+        $USERNAME = 'kls';
+        $PASSWORD = '12345678rd';
+        $login_result = ftp_login($conn_id, $USERNAME, $PASSWORD);
+
+        $remoteFilePaths = ftp_nlist($conn_id, $remote_Dir);
+
+        foreach ($file_arr as $key => $value) {
+            if(in_array( '/mnt/ramdisk/'.$filename.$value.'.csv'  ,$remoteFilePaths)){
+                $remote_file = '/mnt/ramdisk/'.$filename.$value.'.csv';
+                $local_file = $local_Dir.$filename.$value.'.csv';
+                if (ftp_get($conn_id, $local_file, $remote_file, FTP_BINARY)) {
+                    echo "下載成功\n";
+                } else {
+                    echo "下載 $remote_file 到 $local_file 失敗\n";
+                }
             }
         }
 
-        var_dump($pins);
-
+        ftp_close($conn_id);
+        // fclose($handle);
     }
 
-    // Define your asynchronous function
-    public function asyncFunction($data)
+    public function button_auth_check()
     {
-        $deferred = new Deferred();
-
-        var_dump($data);
-
-        // Simulate some asynchronous task (e.g., fetching data from database or external API)
-        $loop = Factory::create();
-        $loop->addTimer(1, function () use ($deferred, $data) {
-            // Once the task is completed, resolve the promise with the result
-            $deferred->resolve("Result for $data");
-            var_dump($data);
-        });
-
-        return $deferred->promise();
-    }
-
-    public function react($value='')
-    {
-        // echo 123;
-        // Create event loop
-        $loop = Factory::create();
-        $dataList = ['data1', 'data2', 'data3'];
-        // var_dump($dataList);
-        // Process each data asynchronously
-        foreach ($dataList as $data) {
-            $this->asyncFunction($data)->then(function ($result) use ($data) {
-                echo "Completed processing for $data: $result\n";
-            });
+        if(isset($_POST['card']) ){
+            $card = $_POST['card'];
+        }else{
+            $card = '';
         }
 
-        $loop->run();
+        if(isset($_POST['action']) ){
+            $action = $_POST['action'];
+        }else{
+            $action = '';
+        }
 
+        $result = false;
+        $user_data = $this->OperationModel->ButtonAuthCheck($card);
+        if($user_data){
+            if($user_data['RoleID'] == 1){
+                $result = true;
+            }
+        }else{
+            echo json_encode(array('result' => $result));
+            exit();
+        }
+        
+        $role_checked = $this->OperationModel->GetConfigValue('manger_verify')['value'];
+        $role_checked = explode(",",$role_checked);//轉換成array 方便用in_array判斷
+
+
+
+        //action: change_job skip_seq back_seq reset_task
+        //auth_skip auth_back auth_task_reset auth_job_change
+        switch ($action) {
+            case 'change_job':
+                $check = $this->OperationModel->GetConfigValue('auth_job_change')['value'];
+                break;
+            case 'skip_seq':
+                $check = $this->OperationModel->GetConfigValue('auth_skip')['value'];
+                break;
+            case 'back_seq':
+                $check = $this->OperationModel->GetConfigValue('auth_back')['value'];
+                break;
+            case 'reset_task':
+                $check = $this->OperationModel->GetConfigValue('auth_task_reset')['value'];
+                break;
+            case 'stop_on_ng':
+                $check = $this->OperationModel->GetConfigValue('stop_on_ng')['value'];
+                break;
+            case 'change_seq':
+                $check = $this->OperationModel->GetConfigValue('auth_seq_change')['value'];
+                break;
+            default:
+                $check = 0;
+                break;
+        }
+
+        if($check == 1 && in_array($user_data['RoleID'],$role_checked) ){
+            $result = true;
+        }
+
+        echo json_encode(array('result' => $result));
+        exit();
+    }
+
+    public function Set_Socket_Hole()
+    {
+        if( isset($_POST['Socket_Hole']) ){
+            $post['light_signal'] = 'sockect_hole';
+            $post['hole_id'] = $_POST['hole_id'];
+
+            $url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERVER_NAME'].'/CC/api/set_io_signal.php';
+
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_POST, TRUE);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($post));
+            curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+
+            curl_setopt($curl, CURLOPT_USERAGENT, 'api');
+
+            // curl_setopt($curl, CURLOPT_TIMEOUT, 1); //if your connect is longer than 1s it lose data in POST better is finish script in recevie
+            curl_setopt($curl, CURLOPT_HEADER, 0);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, false);
+            curl_setopt($curl, CURLOPT_FORBID_REUSE, true);
+            curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 1);
+            curl_setopt($curl, CURLOPT_DNS_CACHE_TIMEOUT, 100);
+            curl_setopt($curl, CURLOPT_NOSIGNAL, 1);
+            curl_setopt($curl, CURLOPT_TIMEOUT_MS, 50);
+
+            curl_setopt($curl, CURLOPT_FRESH_CONNECT, true);
+
+            curl_exec($curl);
+
+            curl_close($curl);
+            return json_encode( array('result' => '1') );
+        }else{
+            return json_encode( array('result' => '0') );    
+        }
 
     }
 
+    public function Get_Socket_Hole()
+    {
+        if (isset($_GET['hole_id'])) {
+            $hole_id = $_GET['hole_id'];
+        }else{
+            $hole_id = -1;
+        }
 
+        $check = $this->pingDomain('192.168.1.75',502);
+        if($check > 0){
+
+        }else{
+            // 可以避免io沒開的時候 會卡很久，但某些機器判斷會有問題 暫時先移除
+            echo json_encode(array('result' => 'no con'));
+            exit();
+        }
+
+        //要加先判斷連線是否通，不然會等太久
+
+        require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
+        $modbus = new ModbusMaster('192.168.1.75', "TCP");
+        try {
+            $modbus->port = 502;
+            $modbus->timeout_sec = 3;
+            // $data = array($tool_status);
+            $dataTypes = array("INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT");
+
+            // FC 2
+            $data = $modbus->readInputDiscretes(0, 0, 16);
+
+            $power0 = (int)$data[5]*1;
+            $power1 = (int)$data[6]*2;
+            $power2 = (int)$data[7]*4;
+
+            $sum = $power0 + $power1 + $power2;
+
+            if($hole_id == $sum){
+                echo json_encode(array('result' => 'yes'));
+                exit();
+            }
+            
+            echo json_encode(array('result' => 'no'));
+            exit();
+        } catch (Exception $e) {
+            echo json_encode(array('result' => '$modbus->status;'));
+            exit();
+        }
+
+    }
+
+    public function pingDomain($domain,$port)
+    {
+        error_reporting(0);
+        $starttime = microtime(true);
+
+        try {
+          $file = fsockopen ($domain, $port, $errno, $errstr, 0.1);
+        } catch (Exception $e) {
+          
+        }
+        $stoptime  = microtime(true);
+        $status    = 0;
+     
+        if (!$file) $status = -1;  // Site is down
+        else {
+            fclose($file);
+            $status = ($stoptime - $starttime) * 1000;
+            $status = floor($status);
+        }
+        return $status;
+    }
+
+    // public function pingDomain($domain, $port, $timeout = 1, $retries = 3)
+    // {
+    //     $starttime = microtime(true);
+    //     $status = -1; // 初始化为失败状态
+
+    //     for ($i = 0; $i < $retries; $i++) {
+    //         $errno = 0;
+    //         $errstr = '';
+    //         $connectionString = "tcp://$domain:$port";
+            
+    //         // 使用 @ 以防止错误信息输出到标准输出
+    //         $file = @stream_socket_client($connectionString, $errno, $errstr, $timeout);
+
+    //         if ($file) {
+    //             $stoptime = microtime(true);
+    //             fclose($file);
+    //             $status = ($stoptime - $starttime) * 1000; // 计算响应时间
+    //             $status = floor($status);
+    //             break; // 成功连接后退出循环
+    //         } else {
+    //             // 记录错误日志以便调试
+    //             echo "Attempt $i: Error $errno - $errstr";
+    //             // error_log("Attempt $i: Error $errno - $errstr");
+    //         }
+    //     }
+
+    //     return $status;
+    // }
+
+    public function Barcode_ChangeJob()
+    {
+        if (isset($_POST['barcode'])) {
+            $barcode = $_POST['barcode'];
+        }else{
+            $barcode = -1;
+        }
+
+        $data = $this->OperationModel->BarcodeMatchCheck($barcode);
+
+        if($data){
+            // $_SESSION['barcode'] = $barcode;
+            setcookie('barcode', $barcode, time() + 60, '/');
+            $this->OperationModel->SetConfigValue('current_job_id',$data['barcode_selected_job']);
+            $this->OperationModel->SetConfigValue('current_seq_id',$data['barcode_selected_seq']);
+            $this->OperationModel->SetConfigValue('current_task_id',1);
+            echo json_encode(array('result' => 'yes'));
+            exit();
+        }else{
+            echo json_encode(array('result' => 'no'));
+            exit();
+        }
+
+    }
 
 
 }

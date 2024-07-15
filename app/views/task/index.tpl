@@ -24,14 +24,14 @@
 <div class="container-ms">
     <header>
         <div class="task">
-            <img id="header-img" src="./img/job-head.svg">Task
+            <img id="header-img" src="./img/job-head.svg"><?php echo $text['Task_text']; ?>
         </div>
 
         <div class="notification">
             <i style=" width:auto; height: 40px;" class="fa fa-bell" onclick="ClickNotification()"></i>
             <span id="messageCount" class="badge"></span>
         </div>
-        <div class="personnel"><i style="width:auto; height: 40px;font-size: 26px" class="fa fa-user"></i> Esther</div>
+        <div class="personnel"><i style="width:auto; height: 40px;font-size: 26px" class="fa fa-user"></i> <?php echo $_SESSION['user']; ?></div>
     </header>
 
     <!-- Notification -->
@@ -101,27 +101,27 @@
 
     <div class="topnav">
         <div class="row t3">
-            <div class="col-1" style="font-size: 1.8vmin; padding-left: 2%;">Job ID</div>
+            <div class="col-1" style="font-size: 1.8vmin; padding-left: 2%;"><?php echo $text['Job_ID_text']; ?></div>
             <div class="col-1 t3">
                 <input id="job_id" type="text" class="form-control" value="<?php echo $data['job_id']; ?>" disabled="disabled" style="font-size: 1.8vmin;background-color: #E3E3E3;">
             </div>
 
-            <div class="col-1" style="font-size: 1.8vmin; padding-left: 2%">Seq ID</div>
+            <div class="col-1" style="font-size: 1.8vmin; padding-left: 2%"><?php echo $text['Seq_ID_text']; ?></div>
             <div class="col-1 t3">
                 <input id="seq_id" type="text" class="form-control" value="<?php echo $data['seq_id']; ?>" disabled="disabled" style="font-size:1.8vmin;background-color: #E3E3E3;">
             </div>
 
-            <div class="col-1" style="font-size: 1.8vmin; padding-left: 2%">Task Count</div>
+            <div class="col-1" style="font-size: 1.8vmin; padding-left: 2%"><?php echo $text['Task_Count_text']; ?></div>
             <div class="col-1 t3">
                 <input type="text" class="form-control" value="<?php echo count($data['tasks']); ?>" disabled="disabled" style="font-size: 1.8vmin;background-color: #E3E3E3;">
             </div>
 
             <div class="col t3">
                 <button class="btn" id="back-btn" type="button" onclick="history.go(-1);">
-                    <img id="img-back" src="./img/back.svg" alt="">back
+                    <img id="img-back" src="./img/back.svg" alt=""><?php echo $text['Back_text']; ?>
                 </button>
                 <button class="btn" id="delete-btn" type="button" onclick="delete_task()">
-                    <img id="img-delete" src="./img/delete.svg" alt="">Delete
+                    <img id="img-delete" src="./img/delete.svg" alt=""><?php echo $text['Delete_text']; ?>
                 </button>
             </div>
         </div>
@@ -144,13 +144,13 @@
                         }
                     ?>
                 </div>
-                <input class="saveButton" type="button" style="position: absolute;right: -10px;" onclick="save_position()" value="save">
+                <input class="saveButton" type="button" style="position: absolute;right: -10px;" onclick="save_position()" value="<?php echo $text['Save_text']; ?>">
             </div>
 
             <div class="right-column w3-center">
                 <div class="container" id="task-setting" style="width: 80%; background-color: #F2F1F1; height: 70vh">
                     <div class="w3-panel w3-round-large" style="background-color: #444; color: #fff; height: 40px; text-align: left">
-                        <label style="font-size: 24px; text-align: left">Task</label>
+                        <label style="font-size: 24px; text-align: left"><?php echo $text['Task_text']; ?></label>
                         <button id="edit_task" onclick="edit_task()">
                             <i class="fa fa-pencil" style="font-size: 24px; width:30px; height:30px; color:red; margin-top: 3px"></i>
                         </button>
@@ -184,34 +184,34 @@
                             echo '<ol>';
                             echo '<div onclick="updateParameters('.$value['task_id'].')">';
                             if($value['last_targettype'] == 1){//angle
-                                echo '<a id="step'.$value['task_id'].'" ><img src="./img/angle.png" alt="" style="height: 25px; width: 25px; float: left"> | SGT-CS303 | step'.$value['last_step_count'].' | '.$value['last_step_name'].' | '.$value['last_step_targetangle'].'&ordm;</a>';
+                                echo '<a id="step'.$value['task_id'].'" ><img src="./img/angle.png" alt="" style="height: 25px; width: 25px; float: left"> | SGT-CS303 | '. $text['Step_text'].$value['last_step_count'].' | '.$value['last_step_name'].' | '.$value['last_step_targetangle'].'&ordm;</a>';
                                 echo '<div class="dropdown-content" id="target_torque-'.$value['task_id'].'" style="display:none;" step-id="'.$value['task_id'].'">';
 
                                 if($value['last_job_type'] == 'normal'){
-                                    echo '<div id="">Step1 '. $value['last_step_name'] .' | <span>'.$value['last_step_targetangle'].'&ordm;| Hi '.$value['last_step_highangle'].' | Lo '.$value['last_step_lowangle'].'</span></div>';
+                                    echo '<div id="">'.$text['Step_text'].'1 '. $value['last_step_name'] .' | <span>'.$value['last_step_targetangle'].'&ordm;| '.$text['Hi_text'].' '.$value['last_step_highangle'].' | '.$text['Lo_text'].' '.$value['last_step_lowangle'].'</span></div>';
                                 }else{
                                     foreach ($value['program'] as $key => $value) {
                                         if($value['step_targettype'] == 1 ){//angle
-                                            echo '<div id="">Step'.($key+1).' '. $value['step_name'] .' | <span>'.$value['step_targetangle'].'&ordm;| Hi '.$value['step_highangle'].' | Lo '.$value['step_lowangle'].'</span></div>';
+                                            echo '<div id="">'.$text['Step_text'].($key+1).' '. $value['step_name'] .' | <span>'.$value['step_targetangle'].'&ordm;| '.$text['Hi_text'].' '.$value['step_highangle'].' | '.$text['Lo_text'].' '.$value['step_lowangle'].'</span></div>';
                                         }else{
-                                            echo '<div id="">Step'.($key+1).' '. $value['step_name'] .' | <span>'.$value['step_targettorque'].'-Nm| Hi '.$value['step_hightorque'].' | Lo '.$value['step_lowtorque'].'</span></div>';
+                                            echo '<div id="">'.$text['Step_text'].($key+1).' '. $value['step_name'] .' | <span>'.$value['step_targettorque'].'-Nm| '.$text['Hi_text'].' '.$value['step_hightorque'].' | '.$text['Lo_text'].' '.$value['step_lowtorque'].'</span></div>';
                                         }
                                     }
                                 }
 
                                 
                             }else{//torque
-                                echo '<a id="step'.$value['task_id'].'" ><img src="./img/torque.png" alt="" style="height: 25px; width: 25px; float: left"> | SGT-CS303 | step'.$value['last_step_count'].' | '.$value['last_step_name'].' | '.$value['last_step_targettorque'].'-Nm</a>';
+                                echo '<a id="step'.$value['task_id'].'" ><img src="./img/torque.png" alt="" style="height: 25px; width: 25px; float: left"> | SGT-CS303 | '.$text['Step_text'].$value['last_step_count'].' | '.$value['last_step_name'].' | '.$value['last_step_targettorque'].'-Nm</a>';
                                 echo '<div class="dropdown-content" id="target_torque-'.$value['task_id'].'" style="display:none;" step-id="'.$value['task_id'].'">';
 
                                 if($value['last_job_type'] == 'normal'){
-                                    echo   '<div id="">Step1 '. $value['last_step_name'] .' | <span>'.$value['last_step_targettorque'].'-Nm| Hi '.$value['last_step_hightorque'].' | Lo '.$value['last_step_lowtorque'].'</span></div>';
+                                    echo   '<div id="">'.$text['Step_text'].'1 '. $value['last_step_name'] .' | <span>'.$value['last_step_targettorque'].'-Nm| '.$text['Hi_text'].' '.$value['last_step_hightorque'].' | '.$text['Lo_text'].' '.$value['last_step_lowtorque'].'</span></div>';
                                 }else{
                                     foreach ($value['program'] as $key => $value) {
                                         if($value['step_targettype'] == 1 ){//angle
-                                            echo '<div id="">Step'.($key+1).' '. $value['step_name'] .' | <span>'.$value['step_targetangle'].'&ordm;| Hi '.$value['step_highangle'].' | Lo '.$value['step_lowangle'].'</span></div>';
+                                            echo '<div id="">'.$text['Step_text'].($key+1).' '. $value['step_name'] .' | <span>'.$value['step_targetangle'].'&ordm;| '.$text['Hi_text'].' '.$value['step_highangle'].' | '.$text['Lo_text'].' '.$value['step_lowangle'].'</span></div>';
                                         }else{
-                                            echo '<div id="">Step'.($key+1).' '. $value['step_name'] .' | <span>'.$value['step_targettorque'].'-Nm| Hi '.$value['step_hightorque'].' | Lo '.$value['step_lowtorque'].'</span></div>';
+                                            echo '<div id="">'.$text['Step_text'].($key+1).' '. $value['step_name'] .' | <span>'.$value['step_targettorque'].'-Nm| '.$text['Hi_text'].' '.$value['step_hightorque'].' | '.$text['Lo_text'].' '.$value['step_lowtorque'].'</span></div>';
                                         }
                                     }
                                 }
@@ -239,9 +239,9 @@
                 <div class="modal-body">
                     <form id="new_task_form">
                         <div class="row">
-                            <div class="col-4" style="font-size: 24px; text-align: left"><b>Equipment</b></div>
+                            <div class="col-4" style="font-size: 24px; text-align: left"><b><?php echo $text['main_equipment_text']; ?></b></div>
 
-                            <div for="task_id" class="col-2 t1">Task ID :</div>
+                            <div for="task_id" class="col-2 t1"><?php echo $text['Task_id_text']; ?> :</div>
                             <div class="col-3 t2">
                                 <input type="text" min=1 max=99 class="form-control input-ms" id="task_id" maxlength="2" disabled="disabled">
                             </div>
@@ -251,41 +251,45 @@
                             <div class="scrollbar_e-force-overflow">
                                 <div style="padding-left: 10px">
                                     <div class="row">
-                                        <div for="new_task_form" class="col-2 t1"><b>Controller</b></div>
+                                        <div for="new_task_form" class="col-2 t1"><b><?php echo $text['Controller_text']; ?></b></div>
                                         <div class="col-2 t2 form-check form-check-inline">
                                             <input class="t2 form-check-input" type="checkbox" name="controller" id="gtcs" value="1" onclick="EquipmentCheckbox('gtcs')" style="zoom:1.0; vertical-align: middle">&nbsp;
                                             <label class="t2 form-check-label" for="gtcs">GTCS</label>
                                         </div>
-                               	        <div class="col-3 t2 form-check form-check-inline">
+                               	        <!-- <div class="col-3 t2 form-check form-check-inline">
                                             <input class="t2 form-check-input" type="checkbox" name="controller" id="c3" value="2" style="zoom:1.0; vertical-align: middle">&nbsp;
                                             <label class="t2 form-check-label" for="c3">TCG Tool-SN</label>
                                         </div>
                                	        <div class="col-3 t2 form-check form-check-inline">
                                             <input class="t2 form-check-input" type="checkbox" name="controller" id="c2" value="2" style="zoom:1.0; vertical-align: middle">&nbsp;
                                             <label class="t2 form-check-label" for="c2">GTCS MTF6000</label>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
 
                                 <div style="padding-left: 10px; margin: 10px 0">
                                     <div class="row">
-                                        <div for="new_task_form" class="col-2 t1"><b>Sensor</b></div>
-                               	        <div class="col-2 t2 form-check form-check-inline">
+                                        <div for="new_task_form" class="col-2 t1"><b><?php echo $text['Sensor_text']; ?></b></div>
+                               	        <!-- <div class="col-2 t2 form-check form-check-inline">
                                             <input class="t2 form-check-input" type="checkbox" name="button" id="button" value="2" style="zoom:1.0; vertical-align: middle">&nbsp;
                                             <label class="t2 form-check-label" for="button">Button</label>
-                                        </div>
-                                        <div class="col-3 t2 form-check form-check-inline">
+                                        </div> -->
+                                        <!-- <div class="col-3 t2 form-check form-check-inline">
                                             <input class="t2 form-check-input" type="checkbox" name="pick-to-light" id="pick-to-light" value="3" style="zoom:1.0; vertical-align: middle">&nbsp;
                                             <label class="t2 form-check-label" for="pick-to-light">Pick-To-Light</label>
-                                        </div>
-                                        <div class="col-3 t2 form-check form-check-inline">
+                                        </div> -->
+                                        <div class="col-2 t2 form-check form-check-inline">
                                             <input class="form-check-input" type="checkbox" name="" id="message" value="1" onclick="EquipmentCheckbox('message')" style="zoom:1.0; vertical-align: middle">&nbsp;
-                                            <label class="form-check-label" for="message">Virtual message</label>
+                                            <label class="form-check-label" for="message"><?php echo $text['Virtual_message_text']; ?></label>
+                                        </div>
+                                        <div class="col t2 form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" name="" id="socket-tray" value="1" style="zoom:1.0; vertical-align: middle" onclick="EquipmentCheckbox('socket-tray')">&nbsp;
+                                            <label class="form-check-label" for="socket-tray"><?php echo $text['Socket_Tray_text']; ?></label>
                                         </div>
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-2 t1"></div>
+                                        <!-- <div class="col-2 t1"></div>
                                         <div class="col-2 t2 form-check form-check-inline">
                                             <input class="t2 form-check-input" type="checkbox" name="sleeve" id="sleeve" value="3" style="zoom:1.0; vertical-align: middle">&nbsp;
                                             <label class="t2 form-check-label" for="sleeve">Sleeve</label>
@@ -297,33 +301,30 @@
                                         <div class="col-3 t2 form-check form-check-inline">
                                             <input class="form-check-input" type="checkbox" name="" id="screw-feeder" value="1" onclick="EquipmentCheckbox()" style="zoom:1.0; vertical-align: middle">&nbsp;
                                             <label class="form-check-label" for="screw-feeder">Screw feeder</label>
-                                        </div>
-                                        <div class="col t2 form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" name="" id="socket-tray" value="1" style="zoom:1.0; vertical-align: middle">&nbsp;
-                                            <label class="form-check-label" for="socket-tray">Socket Tray</label>
-                                        </div>
+                                        </div> -->
+                                        
                                     </div>
                                 </div>
 
                                 <div style="padding-left: 10px; margin: 10px 0">
                                     <div class="row">
-                                        <div for="new_task_form" class="col-2 t1"><b>ARM</b></div>
+                                        <div for="new_task_form" class="col-2 t1"><b><?php echo $text['Arm_text']; ?></b></div>
                                         <div class="col-2 t2 form-check form-check-inline">
                                             <input class="form-check-input" type="checkbox" name="" id="arm" value="0" onclick="EquipmentCheckbox('arm')" style="zoom:1.0; vertical-align: middle">&nbsp;
-                                            <label class="form-check-label" for="arm">Arm</label>
+                                            <label class="form-check-label" for="arm"><?php echo $text['Arm_text']; ?></label>
                                         </div>
                                         <div class="col t2 form-check form-check-inline">
                                             <input class="form-check-input" type="checkbox" name="" id="screw-feeder-position" value="1" onclick="EquipmentCheckbox()" style="zoom:1.0; vertical-align: middle">&nbsp;
-                                            <label class="form-check-label" for="screw-feeder-position">Screw feeder position</label>
+                                            <label class="form-check-label" for="screw-feeder-position"><?php echo $text['Screw_feeder_position_text']; ?></label>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div style="padding-left: 10px; margin: 10px 0">
                                     <div class="row">
-                                        <div for="new_task_form" class="col-1 t1"><b>Timeout</b></div>
-                                        <div for="new_task_form" class="col t1">
-                                            <input class="form-control input-ms" id="delaytime" value="0" style="zoom:1.0; vertical-align:middle;width: 75px; margin-left: 42px">
+                                        <div for="new_task_form" class="col-2 t1"><b><?php echo $text['Timeout_text']; ?></b></div>
+                                        <div for="new_task_form" class="col t1" style="padding-left:0;">
+                                            <input class="form-control input-ms" id="delaytime" value="0" style="zoom:1.0; vertical-align:middle;width: 75px; margin-left: 0px">
                                         </div>
                                     </div>
                                 </div>
@@ -334,17 +335,18 @@
                         <div class="scrollbar-all" id="style-all">
                             <div class="force-overflow-all">
                                 <!-- Socket tray Setiing -->
-                                <div id="socketTray-setting">
-                                    <div for="new_task_form" class="col-3 t1"><b>Socket Tray</b></div>
-                                     <div style="padding-left: 5%;margin-bottom: 15px;">
+                                <div id="socketTray-setting" style="display:none;">
+                                    <div for="new_task_form" class="col-3 t1"><b><?php echo $text['Socket_Tray_text']; ?></b></div>
+                                    <div style="padding-left: 5%;margin-bottom: 15px;">
                                         <div class="col t2" style="padding: 5px;">
                                             <div class="row t2">
                                                 <div class="col-5 t3 Sockettray" style="display: flex;">
-                                                    <input type="text" id="Socket-tray1" value="1" class="form-control input-ms socket-tray" disabled="disabled">
-                                                    <input type="text" id="Socket-tray2" value="2" class="form-control input-ms socket-tray" disabled="disabled">
-                                                    <input type="text" id="Socket-tray3" value="3" class="form-control input-ms socket-tray" disabled="disabled">
-                                                    <input type="text" id="Socket-tray4" value="4" class="form-control input-ms socket-tray" disabled="disabled" style="background-color: red">
-                                                    <input type="text" id="Socket-tray5" value="5" class="form-control input-ms socket-tray" disabled="disabled">
+                                                    <select id="hole_select">
+                                                        <option value="1">1</option>
+                                                        <option value="2">2</option>
+                                                        <option value="3">3</option>
+                                                        <option value="4">4</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
@@ -353,55 +355,35 @@
                                 </div>
                                 <!-- program Setiing -->
                                 <div id="program-setting" style="display: none;">
-                                    <div for="new_task_form" class="col-3 t1"><b>Program(controller)</b></div>
+                                    <div for="new_task_form" class="col-3 t1"><b><?php echo $text['Program_controller_text']; ?></b></div>
                                     <div class="scrollbar-Program border-bottom-div" id="style-Program">
                                         <div class="force-overflow-Program" style="padding-left: 7%">
                                             <div id="TemplateContainer" class="row">
-                                                <div class="col t2 form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="screw" id="aaa" value="1" onclick="" style="zoom:1.0; vertical-align: middle;margin-top:0;">
-                                                    <div class="col-2">1</div>
-                                                    <label class="form-check-label" for="aaa">P1|MTF6000|3 N.m</label>
-                                                </div>
-                                                <div class="col form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="screw" id="bbb" value="2" onclick="" style="zoom:1.0; vertical-align: middle;margin-top:0;">
-                                                    <div class="col-2">3</div>
-                                                    <label class="form-check-label" for="bbb">P1|MTF6000|3 N.m</label>
-                                                </div>
-                                                <div class="col form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="screw" id="ccc" value="3" onclick="" style="zoom:1.0; vertical-align: middle;margin-top:0;">
-                                                    <div class="col-2">2</div>
-                                                    <label class="form-check-label" for="ccc">P1|MTF6000|3 N.m</label>
-                                                </div>
-                                                <div class="col form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="screw" id="ddd" value="4" onclick="" style="zoom:1.0; vertical-align: middle;margin-top:0;">
-                                                    <div class="col-2">4</div>
-                                                    <label class="form-check-label" for="ddd">P1|MTF6000|3 N.m</label>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <!-- ARM Setiing -->
                                 <div id="ARM-setting" style="display: none;">
-                                    <div for="new_task_form" class="col t1"><b>ARM</b></div>
-                                    <div class="col t1">Task1 screw position</div>
+                                    <div for="new_task_form" class="col t1"><b><?php echo $text['Arm_text']; ?></b></div>
+                                    <div class="col t1"><?php echo $text['Task_screw_position_text']; ?></div>
                                     <div style="padding-left: 5%;margin-bottom: 15px">
                                         <div style="padding: 5px;">
                                             <div class="row t1">
-                                                <div class="col-5 t2">
+                                                <div class="col-12 t2">
                                                     <input type="text" class="form-control input-ms" value="(100,100)" id="position" maxlength="50" disabled="disabled" style="margin-right: 10px; background-color: #DEDEDE; font-size: 18px;width: 150px; height: 30px">
-                                                    <button id="button-confirm" type="button" onclick="get_arm_position()">Confirm</button>
-                                                    <button id="button-cancel" type="button">Cancel</button>
+                                                    <button id="button-confirm" type="button" onclick="get_arm_position()" value=""><?php echo $text['Confirm_text']; ?></button>
+                                                    <button id="button-cancel" type="button"><?php echo $text['Cancel_text']; ?></button>
                                                 </div>
                                             </div>
                                             <div class="row t1">
-                                                <div class="col-5 t1" for="">Encoder 1 Tolerance setting</div>
+                                                <div class="col-5 t1" for=""><?php echo $text['Encoder_text'].' 1 '.$text['Tolerance_setting_text']; ?></div>
                                                 <div class="col-4 t2">
                                                     <input type="text" class="form-control input-ms" value="200" id="tolerance1" maxlength="5" style="margin-right: 10px; font-size: 18px; height: 30px">
                                                 </div>
                                             </div>
                                             <div class="row t1">
-                                                <div class="col-5 t1" for="">Encoder 2 Tolerance setting</div>
+                                                <div class="col-5 t1" for=""><?php echo $text['Encoder_text'].' 2 '.$text['Tolerance_setting_text']; ?></div>
                                                 <div class="col-4 t2">
                                                     <input type="text" class="form-control input-ms" value="200" id="tolerance2" maxlength="5" style="margin-right: 10px; font-size: 18px; height: 30px">
                                                 </div>
@@ -413,12 +395,12 @@
 
                                 <!-- Message Setiing -->
                                 <div id="Message-setting" style="display: none;">
-                                    <div for="new_task_form" class="col-3 t1"><b>Virtual message</b></div>
+                                    <div for="new_task_form" class="col-3 t1"><b><?php echo $text['Virtual_message_text']; ?></b></div>
                                     <div style="padding-left: 5%; margin-bottom: 15px">
                                         <div style="padding: 5px;">
-                                            <div class="col-2 t2 form-check form-check-inline" style="margin-left: 5px">
-                                                <input class="form-check-input" type="checkbox" name="text" id="text" value="0" style="zoom:1.0; vertical-align: middle">&nbsp;
-                                                <label class="form-check-label" for="text">Text</label>
+                                            <div class="col-2 t2 form-check form-check-inline" style="padding-left: 0px">
+                                                <!-- <input class="form-check-input" type="checkbox" name="text" id="text" value="0" style="zoom:1.0; vertical-align: middle">&nbsp; -->
+                                                <label class="form-check-label" for="text"><?php echo $text['Text_text']; ?></label>
                                             </div>
                                             <div class="row">
                                                 <div class="col" style="padding-left: 15%">
@@ -426,20 +408,21 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-2 t2 form-check form-check-inline" style="margin-left: 5px">
-                                                <input class="form-check-input" type="checkbox" name="picture" id="picture" value="0" style="zoom:1.0; vertical-align: middle">&nbsp;
-                                                <label class="form-check-label" for="picture">Picture</label>
+                                            <div class="col-12 t2 form-check form-check-inline" style="padding-left: 0px">
+                                                <!-- <input class="form-check-input" type="checkbox" name="picture" id="picture" value="0" style="zoom:1.0; vertical-align: middle">&nbsp; -->
+                                                <label class="form-check-label" for="picture"><?php echo $text['Picture_text']; ?></label>
+                                                <label for="fileInput" class="file-label" style="height: 30px; width: 30px; align-content: center;">✚</label>
+                                                <input type="file" id="fileInput" name="mediaFile" accept="image/*,video/*,audio/*" style="opacity: 0;">
                                             </div>
                                             <div class="row" style="padding-left: 14%">
-                                                <div class="col-5 t2" style="background-color: #FFE5E5; height: 150px; width: 300px; justify-content: center; align-items: center; margin-left: 12px">
-                                                    <i class='fa fa-plus-circle' style="font-size:48px;color: #888888"></i>
+                                                <div id="previewContainer" class="col-6 t2">
                                                 </div>
                                             </div>
 
-                                            <div class="col-2 t2" for="">Timeout</div>
+                                            <div class="col-2 t2" for=""><?php echo $text['Timeout_text']; ?></div>
                                             <div class="row" style="padding:3px">
                                                 <div class="col-4 t2" style="padding-left: 15%">
-                                                    <input type="number" class="form-control input-ms" value="0" id="tolerance1" maxlength="5">
+                                                    <input type="number" class="form-control input-ms" value="0" id="message_timeout" maxlength="5">
                                                 </div>
                                             </div>
                                         </div>
@@ -448,8 +431,8 @@
                                 </div>
 
                                 <!-- Screw Feeder Position Setiing -->
-                                <div id="ScrewFeederPosition">
-                                    <div class="col t1"><b>Screw feeder position</b></div>
+                                <div id="ScrewFeederPosition" style="display:none;">
+                                    <div class="col t1"><b><?php echo $text['Screw_feeder_position_text']; ?></b></div>
                                     <div style="padding-left: 5%;margin-bottom: 15px;">
                                         <div class="col t2" style="padding: 5px;">
                                	            <div class="col form-check form-check-inline">
@@ -474,7 +457,7 @@
                                 </div>
 
                                 <!-- Recycle Box Setiing -->
-                                <div id="Recycle-Box-setting">
+                                <div id="Recycle-Box-setting" style="display:none;">
                                     <div for="new_task_form" class="col-3 t1"><b>Recycle Box</b></div>
                                     <div style="padding-left: 5%;margin-bottom: 15px;">
                                         <div class="row t1" style="padding: 5px;">
@@ -489,7 +472,7 @@
                                 </div>
 
                                 <!-- Pick to light Setiing -->
-                                <div id="pick-to-light-setting">
+                                <div id="pick-to-light-setting" style="display:none;">
                                     <div for="new_task_form" class="col-3 t1"><b>Pick-To-Light</b></div>
                                     <div style="padding-left: 5%;margin-bottom: 15px">
                                         <div class="row t1" style="padding: 5px;">
@@ -504,7 +487,7 @@
                                 </div>
 
                                 <!-- Screw Feeder Setiing -->
-                                <div id="Screw-Feeder-setting">
+                                <div id="Screw-Feeder-setting" style="display:none;">
                                     <div for="new_task_form" class="col-3 t1"><b>Screw Feeder</b></div>
                                     <div style="padding-left: 5%; margin-bottom: 15px">
                                         <div class="col t1" style="padding: 5px;">
@@ -518,7 +501,7 @@
                                 </div>
 
                                 <!-- Button Setiing -->
-                                <div id="Button-setting">
+                                <div id="Button-setting" style="display:none;">
                                     <div for="new_task_form" class="col-3 t1"><b>Button</b></div>
                                     <div style="padding-left: 5%; margin-bottom: 15px">
                                         <div class="row t1" style="padding: 5px;">
@@ -563,6 +546,7 @@ window.onclick = function(event) {
 // choose controller and sensor  //
 function EquipmentCheckbox(item)
 {
+    let expr = '';
     switch (item) {
       case 'gtcs':
         get_gtcs_template(item);
@@ -586,6 +570,16 @@ function EquipmentCheckbox(item)
       case 'message':
         var controller1 = document.getElementById(item);
         var program1 = document.getElementById("Message-setting");
+        if (controller1.checked == true) {
+            program1.style.display = "block";
+        } else {
+            program1.style.display = "none";
+        }
+        break;
+
+      case 'socket-tray':
+        var controller1 = document.getElementById(item);
+        var program1 = document.getElementById("socketTray-setting");
         if (controller1.checked == true) {
             program1.style.display = "block";
         } else {
@@ -665,7 +659,7 @@ function new_task() {
     document.getElementById("program-setting").style.display = 'none';
     document.getElementById("ARM-setting").style.display = 'none';
 
-    document.getElementById('modal_head').innerHTML = 'New Task'; //'New Job'
+    document.getElementById('modal_head').innerHTML = '<?php echo $text['New_Task_text']; ?>'; //'New Job'
     //帶入預設值
     document.getElementById("task_id").value = task_id;
     document.getElementById("close_modal_1").setAttribute("onclick", "close_modal()");
@@ -698,12 +692,14 @@ function new_task_save() {
     let screw_template_id = document.querySelector('input[name="screw"]:checked').value;
     let position = document.getElementById("position").value;
     let tolerance = document.getElementById("tolerance1").value;
+    let tolerance2 = document.getElementById("tolerance2").value;
     let message_text = document.getElementById("message_text").value;
     let delaytime = document.getElementById("delaytime").value;
     // let img_div = document.getElementById('img-container').innerHTML;//Tolerance 
     let img_div = document.querySelector('div[data-id="'+task_id+'"]').outerHTML
     let controller_id = document.querySelector('input[name="controller"]:checked').value;
     let enable_arm = document.getElementById('arm').checked;
+    let sockect_hole = document.getElementById('hole_select').value;
 
     let circle_width = document.querySelector('div[data-id="'+task_id+'"]').style.width
     let circle_height = document.querySelector('div[data-id="'+task_id+'"]').style.height
@@ -714,6 +710,10 @@ function new_task_save() {
     // console.log(styyle);
     // alert(123)
 
+    if (!document.getElementById('socket-tray').checked){//沒有打勾
+        sockect_hole = -1;
+    }
+
     var formData = new FormData();
     // 添加表单数据
     formData.append('job_id', job_id);
@@ -722,11 +722,22 @@ function new_task_save() {
     formData.append('screw_template_id', screw_template_id);
     formData.append('position', position);
     formData.append('tolerance', tolerance);
+    formData.append('tolerance2', tolerance2);
     formData.append('message_text', message_text);
     formData.append('delaytime', delaytime);
     formData.append('img_div', img_div);
     formData.append('controller_id', controller_id);
     formData.append('enable_arm', +enable_arm);
+    formData.append('sockect_hole', +sockect_hole);
+
+    let virtual_message_check = document.getElementById('message').checked
+    formData.append('virtual_message_check', virtual_message_check);
+
+    let fileInput = $('#fileInput')[0].files[0];
+    formData.append('fileInput', fileInput);
+
+    let message_timeout = document.getElementById("message_timeout").value;
+    formData.append('message_timeout', message_timeout);
 
     console.log(formData);
     console.log(formData.job_id);
@@ -742,7 +753,7 @@ function new_task_save() {
         contentType: false,
         success: function(response) {
             // 成功回調函數，處理伺服器的回應
-            // console.log(response); // 在控制台輸出伺服器的回應
+            console.log(response); // 在控制台輸出伺服器的回應
             // history.go(0);
             if (response.error == '') {
                 history.go(0);
@@ -784,10 +795,23 @@ function edit_task() {
         type: "POST",
         url: url,
         data: { 'job_id': job_id,'seq_id': seq_id,'task_id': task_id },
-        dataType: "json"
+        dataType: "json",
+        beforeSend: function( xhr ) {
+            document.getElementById('gtcs').checked = false;
+            document.getElementById('arm').checked = false;
+            document.getElementById('socket-tray').checked = false;
+            document.getElementById('message').checked = false;
+            EquipmentCheckbox('arm');
+            EquipmentCheckbox('gtcs');
+            EquipmentCheckbox('socket-tray');
+            EquipmentCheckbox('message');
+            document.getElementById('fileInput').value = '';
+            document.getElementById('previewContainer').innerHTML = '';
+            document.getElementById('message_text').value = '';
+        }
     }).done(function(response) { //成功且有回傳值才會執行
 
-        document.getElementById('modal_head').innerHTML = 'Edit Task'; //'New Job'
+        document.getElementById('modal_head').innerHTML = '<?php echo $text['Edit_Task_text']; ?>'; //'New Job'
         //帶入預設值
         document.getElementById("task_id").value = task_id;
         document.getElementById("close_modal_1").setAttribute("onclick", "document.getElementById('TaskNew').style.display='none'");
@@ -804,9 +828,60 @@ function edit_task() {
             //position
             document.getElementById('position').value = '('+parseInt(response.position_x)+','+parseInt(response.position_y)+')';
             //tolerance
-            document.getElementById('tolerance').value = response.tolerance;
+            document.getElementById('tolerance1').value = response.tolerance;
+            document.getElementById('tolerance2').value = response.tolerance2;
         }
+        if(response['hole_id'] != null){//帶入controller
+            if(response['hole_id'] > 0){
+                document.getElementById('hole_select').value = response.hole_id;
+                document.getElementById('socket-tray').checked = true;
+                EquipmentCheckbox('socket-tray');    
+            }
+        }
+        //帶入template id
+        if(response['template_program_id'] != ''){//
+            setTimeout(() => { //等待template載入完成
+              document.getElementById('screw_'+response['template_program_id']).checked = true;
+            }, 200);
+        }
+        //帶入virtaul message
+        if(response['img'] != null || response['text'] != null){
+            document.getElementById('message').checked = true;
+            EquipmentCheckbox('message');
+            document.getElementById('message_text').value = response['text'];
+            
+            let previewContainer = document.getElementById('previewContainer');
+            previewContainer.innerHTML = ''; // 清空以前的预览
 
+            let fileType = response['type'];
+            let url = response['img'];
+
+            if (fileType.startsWith('image')) {
+                const img = document.createElement('img');
+                img.id = 'virtual_file'
+                img.src = url;
+                img.width = 300;
+                img.height = 200;
+                previewContainer.appendChild(img);
+            } else if (fileType.startsWith('video')) {
+                const video = document.createElement('video');
+                video.id = 'virtual_file'
+                video.src = url;
+                video.controls = true;
+                video.width = 300;
+                video.height = 200;
+                previewContainer.appendChild(video);
+            } else if (fileType.startsWith('audio')) {
+                const audio = document.createElement('audio');
+                audio.id = 'virtual_file'
+                audio.src = url;
+                audio.controls = true;
+                previewContainer.appendChild(audio);
+            } else {
+                // alert('不支持的文件类型');
+            }
+
+        }
 
         document.getElementById('TaskNew').style.display = 'block'
     });
@@ -854,6 +929,14 @@ function get_gtcs_template(item) {
                 label.textContent = `${item.step_name} | Tool | ${item.step_targetangle} º`;
             }
 
+            if (typeof item.template_program_name !== 'undefined') {
+                if(item.step_targettype == 2){//target = torque
+                    label.textContent = `${item.template_program_name} | Tool | ${item.step_targettorque} N.m`;
+                }else{//target = angle
+                    label.textContent = `${item.template_program_name} | Tool | ${item.step_targetangle} º`;
+                }
+            }
+
             div.appendChild(input);
             div.appendChild(labelDiv);
             div.appendChild(label);
@@ -878,7 +961,7 @@ function delete_task() {
     let seq_id = document.getElementById("seq_id").value;
     let task_id = document.getElementsByClassName('dropdown-content seleted')[0].getAttribute('step-id');
 
-    var yes = confirm('你確定嗎？');
+    var yes = confirm('<?php echo $text['Delete_confirm_text']; ?>');
 
     if (yes) {
         let url = '?url=Tasks/delete_task_by_id';
@@ -906,20 +989,88 @@ function delete_task() {
 
 //save img position
 function save_position() {
+    let job_id = document.getElementById("job_id").value;
+    let seq_id = document.getElementById("seq_id").value;
     let items = [];
-          // { index: 0, status: "Initialize", color: "" },
-          
     let divs = document.querySelectorAll('div[data-id]')
     divs.forEach((div) => {
-      console.log(div);
-      let task_id = 0;
-      let style = 0;
-
-      items = { index: task_id, style: "0" };
-      console.log(items);
+      let task_id = div.getAttribute("data-id");
+      let img_div = '';
+      let circle_width = div.style.width
+      let circle_height = div.style.height
+      let circle_top = div.style.top
+      let circle_left = div.style.left
+      img_div = `style="width: `+circle_width+`; height: `+circle_height+`; top: `+circle_top+`; left: `+circle_left+`;"`
+      items.push( { index: task_id, img_div: img_div } );
     });
 
+    let url = '?url=Tasks/save_position_only';
+        $.ajax({
+            type: "POST",
+            data: { 'job_id': job_id, 'seq_id': seq_id, 'items': items },
+            dataType: "json",
+            url: url,
+            success: function(response) {
+                // 成功回調函數，處理伺服器的回應
+                // console.log(response); // 在控制台輸出伺服器的回應
+                history.go(0);
+            },
+            error: function(error) {
+                // 失敗回調函數，處理錯誤情況
+                // console.error('Error:', error); // 在控制台輸出錯誤訊息
+            }
+        }).fail(function() {
+            history.go(0);//失敗就重新整理
+        });
+
 }
+
+</script>
+
+<script type="text/javascript">
+    //upload img/video/audio
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const previewContainer = document.getElementById('previewContainer');
+            previewContainer.innerHTML = ''; // 清空以前的预览
+
+            if (file) {
+                const fileType = file.type;
+                const url = URL.createObjectURL(file);
+
+                if (fileType.startsWith('image/')) {
+                    const img = document.createElement('img');
+                    img.id = 'virtual_file'
+                    img.src = url;
+                    img.width = 300;
+                    img.height = 200;
+                    previewContainer.appendChild(img);
+                } else if (fileType.startsWith('video/')) {
+                    const video = document.createElement('video');
+                    video.id = 'virtual_file'
+                    video.src = url;
+                    video.controls = true;
+                    video.width = 300;
+                    video.height = 200;
+                    previewContainer.appendChild(video);
+                } else if (fileType.startsWith('audio/')) {
+                    const audio = document.createElement('audio');
+                    audio.id = 'virtual_file'
+                    audio.src = url;
+                    audio.controls = true;
+                    previewContainer.appendChild(audio);
+                } else {
+                    alert('不支持的文件类型');
+                }
+                document.getElementById('virtual_file').addEventListener('ended',myHandler,false);
+            }
+        });
+
+    
+    function myHandler(e) {
+        // What you want to do after the event
+        // alert(123)
+    }
 
 </script>
 
@@ -930,7 +1081,8 @@ function save_position() {
         // body...
         // alert(666);
         // const wsServer = 'ws://127.0.0.1:9527';
-        const wsServer = 'ws://192.168.0.115:9527';
+        // const wsServer = 'ws://192.168.0.115:9527';
+        const wsServer = 'ws://localhost:9527';
         const websocket = new WebSocket(wsServer);
         
         websocket.onopen = function (evt) {

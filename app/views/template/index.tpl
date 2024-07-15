@@ -18,13 +18,13 @@
 
     <header>
         <div class="program">
-            <img id="header-img" src="./img/template-head.svg">Program Template
+            <img id="header-img" src="./img/template-head.svg"><?php echo $text['Program_Template_text']; ?>
         </div>
         <div class="notification">
             <i style="width:auto; height:40px" class="fa fa-bell" onclick="ClickNotification()"></i>
             <span id="messageCount" class="badge"></span>
         </div>
-        <div class="personnel"><i style="width:auto; height: 40px;font-size: 26px" class="fa fa-user"></i> Esther</div>
+        <div class="personnel"><i style="width:auto; height: 40px;font-size: 26px" class="fa fa-user"></i> <?php echo $_SESSION['user']; ?></div>
     </header>
 
     <!-- Notification -->
@@ -96,10 +96,10 @@
         <div class="center-content" style="padding: 20px 100px; padding-left: 18%">
             <div class="Controller-setting">
                 <div class="row t1">
-                    <div class="col-4 t1">Choose Controller :</div>
+                    <div class="col-4 t1"><?php echo $text['Choose_Controller_text']; ?> :</div>
                     <div class="custom-select">
                         <select id="ControllerSelect">
-                            <option value="" disabled selected>Select option</option>
+                            <option value="" disabled selected><?php echo $text['Select_text']; ?></option>
                             <option value="GTCS">GTCS</option>
                             <option value="TCG">TCG</option>
                         </select>
@@ -107,10 +107,10 @@
                 </div>
 
                 <div class="row t1">
-                    <div class="col-4 t1">Screw Tool :</div>
+                    <div class="col-4 t1"><?php echo $text['Screw_Tool_text']; ?> :</div>
                     <div class="custom-select">
                         <select class="selectem">
-                            <option value="" disabled selected>Choose Tool</option>
+                            <option value="" disabled selected><?php echo $text['Select_text']; ?></option>
                             <option value="tool1">SGT-CS303</option>
                             <!-- <option value="tool2">3-01007-7L-H</option> -->
                         </select>
@@ -120,25 +120,25 @@
                 <hr>
 
                 <div id="jobTypeContainer">
-                    <div class="t1">Choose Mode (Normal / Advance)</div>
+                    <div class="t1"><?php echo $text['Choose_Mode_combo_text']; ?></div>
                     <div class="row t1">
-                        <div class="col-5 t2 radio">
-                            <div class="col-3 form-check form-check-inline t1">
+                        <div class="col-12 t2 radio">
+                            <div class="col-12 form-check form-check-inline t1">
                                 <label class="form-check-label" for="normal-job">
                                     <input class="form-check-input" id="normal-job" type="radio" name="jobType" value="normal" style="zoom:1; vertical-align: middle">
-                                    Normal
+                                    <?php echo $text['Normal_text']; ?>
                                 </label>
                             </div>
-                            <div class="col-3 form-check form-check-inline t1">
+                            <div class="col-12 form-check form-check-inline t1">
                                 <label class="form-check-label" for="advance-job">
                                     <input class="form-check-input" id="advance-job" type="radio" name="jobType" value="advance" style="zoom:1; vertical-align: middle">
-                                    Advance
+                                    <?php echo $text['Advanced_text']; ?>
                                 </label>
                             </div>
                         </div>
                     </div>
                 </div>
-                <button class="nextButton" id="nextButton" onclick="go_to()">Next &#10144;</button>
+                <button class="nextButton" id="nextButton" onclick="go_to()"><?php echo $text['Next_text']; ?> &#10144;</button>
             </div>
         </div>
     </div>

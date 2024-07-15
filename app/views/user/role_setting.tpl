@@ -19,14 +19,14 @@
 
     <header>
         <div class="identification">
-            <img id="header-img " src="./img/user-head.svg"> Identification
+            <img id="header-img " src="./img/user-head.svg"> <?php echo $text['main_user_text']; ?>
         </div>
 
         <div class="notification">
             <i style="width:auto; height:40px" class="fa fa-bell" onclick="ClickNotification()"></i>
             <span id="messageCount" class="badge"></span>
         </div>
-        <div class="personnel"><i style="width:auto; height: 40px;font-size: 26px" class="fa fa-user"></i> Esther</div>
+        <div class="personnel"><i style="width:auto; height: 40px;font-size: 26px" class="fa fa-user"></i> <?php echo $_SESSION['user']; ?></div>
     </header>
 
     <!-- Notification -->
@@ -98,13 +98,13 @@
         <div class="center-content">
             <div class="wrapper">
                 <div class="navbutton" onclick="handleButtonClick(this, 'member')">
-                    <span data-content="Member List" onclick="showContent('member')"></span>Member List
+                    <span data-content="<?php echo $text['Member_List_text']; ?>" onclick="showContent('member')"></span><?php echo $text['Member_List_text']; ?>
                 </div>
                 <div class="navbutton active" onclick="handleButtonClick(this, 'role')">
-                    <span data-content="Role Setting" onclick="showContent('role')"></span>Role Setting
+                    <span data-content="<?php echo $text['Role_Setting_text']; ?>" onclick="showContent('role')"></span><?php echo $text['Role_Setting_text']; ?>
                 </div>
                 <div class="navbutton" onclick="handleButtonClick(this, 'station')">
-                    <span data-content="Station Setting" onclick="showContent('station')"></span>Station Setting
+                    <span data-content="<?php echo $text['Station_Setting_text']; ?>" onclick="showContent('station')"></span><?php echo $text['Station_Setting_text']; ?>
                 </div>
             </div>
 
@@ -112,7 +112,7 @@
             <div id="roleContent" class="content"  style="display: ;">
                 <div id="AddRoleSetting" class="role-setting" >
                     <div class="w3-panel alert-light">
-                        <label type="text" style="font-size: 22px; margin: 10px; color: #000"><b>Role</b></label>
+                        <label type="text" style="font-size: 22px; margin: 10px; color: #000"><b><?php echo $text['Role_text']; ?></b></label>
 
                         <button id="role-permission-setting" type="button" onclick="NextToRolePermissionsSetting()">
                             <img id="img-user-setting" src="./img/user-setting.svg" alt="">
@@ -124,17 +124,17 @@
                     </div>
                     <form id="form_add_role" onsubmit="addNewRole();return false;" method="post">
                         <div class="row t1" style=" padding-left: 5%">
-                            <label for="role_name" class="col-2 t1">Add Role Name :</label>
+                            <label for="role_name" class="col-2 t1"><?php echo $text['Add_text'].' '.$text['Role_Name_text']; ?> :</label>
                             <div class="col-2 t2" style="margin-left: -15px">
                                 <input type="text" id="role_name" name="role_name" class="t3 form-control input-ms" maxlength="">
                             </div>
                             <div class="col t2">
-                                <input id="add-roleName" class="t3" type="submit" name="add_role" value="Add">
+                                <input id="add-roleName" class="t3" type="submit" name="add_role" value="<?php echo $text['Add_text']; ?>">
                             </div>
                         </div>
                     </form>
                     <div class="row t1" style="padding-left: 5%">
-                        <div for="role_name" class="col t1">Role Name :</div>
+                        <div for="role_name" class="col t1"><?php echo $text['Role_Name_text']; ?> :</div>
                     </div>
 
                     <div class="scrollbar-addRole" id="style-addRole">
@@ -143,7 +143,7 @@
                                 <div class="col-6 t2" style="padding-left: 20%">
                                     <ul class="rolelist t2" id="roleList">
                                         <?php foreach ($data['all_roles'] as $key => $value): ?>
-                                            <li onclick="list_select(this);" value="<?php echo $value['ID']; ?>" ondblclick="NextToRoleSetting(<?php echo $value['ID']; ?>)"><?php echo $value['ID'].'. '.$value['Title']; ?></li>
+                                            <li onclick="list_select(this);" value="<?php echo $value['ID']; ?>" ondblclick="NextToRoleSetting(<?php echo $value['ID'].",'".$value['Title']."'"; ?>)"><?php echo $value['ID'].'. '.$value['Title']; ?></li>
                                         <?php endforeach ?>
                                     </ul>
                                 </div>
@@ -162,9 +162,9 @@
                         </label>
 
                         <button id="back-setting" type="button" onclick="cancelSetting()">
-                            <img id="img-back" src="./img/back.svg" alt=""> Back
+                            <img id="img-back" src="./img/back.svg" alt=""> <?php echo $text['Back_text']; ?>
                         </button>
-                        <button id="Bulk-Change" type="button" onclick="bulk_change()">Bulk Change</button>
+                        <button id="Bulk-Change" type="button" onclick="bulk_change()"><?php echo $text['Bulk_Change_text']; ?></button>
                     </div>
                     <div class="table-container">
                         <div class="scrollbar" id="style-RoleEdit">
@@ -175,29 +175,21 @@
                                             <th style="width: 5%; text-align: center; vertical-align: middle;">
                                                 <input type="checkbox" id="selectAll2" class="form-check-input" value="0" style="zoom:1.3">
                                             </th>
-                                            <th style="width: 20%;">Member</th>
-                                            <th style="width: 20%;">Serial Number</th>
-                                            <th style="width: 20%;">Role</th>
+                                            <th style="width: 20%;"><?php echo $text['Member_text']; ?></th>
+                                            <th style="width: 20%;"><?php echo $text['Serial_Number_text']; ?></th>
+                                            <th style="width: 20%;"><?php echo $text['Role_text']; ?></th>
                                         </tr>
                                     </thead>
 
                                     <tbody id="tbody2" style="background-color: #F2F1F1; font-size: 1.8vmin;">
-                                        <tr style="text-align: center; vertical-align: middle;">
+                                        <!-- <tr style="text-align: center; vertical-align: middle;">
                                             <td style="text-align: center; vertical-align: middle;">
                                                 <input class="select-checkbox form-check-input" type="checkbox" name="" id="" value="0" style="zoom:1.2">
                                             </td>
                                             <td style="text-align: center">Jimmy Lee</td>
                                             <td>123456789</td>
                                             <td>Super Admin</td>
-                                        </tr>
-                                        <tr style="text-align: center; vertical-align: middle;">
-                                            <td style="text-align: center; vertical-align: middle;">
-                                                <input class="select-checkbox form-check-input" type="checkbox" name="" id="" value="0" style="zoom:1.2">
-                                            </td>
-                                            <td style="text-align: center">Esther</td>
-                                            <td>123</td>
-                                            <td>Super Admin</td>
-                                        </tr>
+                                        </tr> -->
                                     </tbody>
                                 </table>
                             </div>
@@ -207,22 +199,18 @@
 
                 <div id="RolePermissionSetting" class="role-setting" style="display: none">
                     <div class="w3-panel alert-light" style="line-height: 30px">
-                        <label type="text" style="font-size: 24px; margin: 10px; color: #000"><b>Role<b style="font-size: 25px"> &gt;</b> Role permissions setting</b></label>
+                        <label type="text" style="font-size: 24px; margin: 10px; color: #000"><b>Role<b style="font-size: 25px"> &gt;</b> <?php echo $text['Role_permissions_setting_text']; ?></b></label>
 
                         <button id="back-setting" type="button" onclick="cancelSetting()">
-                            <img id="img-back" src="./img/back.svg" alt=""> Back
+                            <img id="img-back" src="./img/back.svg" alt=""> <?php echo $text['Back_text']; ?>
                         </button>
                     </div>
 
                     <div class="row" style=" padding-left: 5%">
                         <div for="Role-Permissions" class="col t3" style="font-size: 20px">
-                            Role Name : &nbsp;
+                            <?php echo $text['Role_Name_text']; ?> : &nbsp;
                             <select id="roles_select" style="width: 200px; border: 1px solid #AAAAAA" onchange="load_role_permissions()">
-                                <option value="-1" selected disabled>Choose a role</option>
-                                <!-- <option value="1">Super admin</option>
-                                <option value="2">Administrator</option>
-                                <option value="3">operator</option>
-                                <option value="4">Foreman</option> -->
+                                <option value="-1" selected disabled><?php echo $text['Choose_text']; ?></option>
                                 <?php foreach ($data['all_roles'] as $key => $value): ?>
                                     <option value="<?php echo $value['ID']; ?>"><?php echo $value['Title']; ?></option>
                                 <?php endforeach ?>
@@ -283,7 +271,7 @@
                                 </table>
                             </div>
                         </div>
-                        <button class="saveButton" id="saveButton" onclick="save_role_permissions()">Save</button>
+                        <button class="saveButton" id="saveButton" onclick="save_role_permissions()"><?php echo $text['Save_text']; ?></button>
                     </div>
                 </div>
             </div>
@@ -560,7 +548,7 @@ addMessage();
 <script type="text/javascript">
     
 // Next Role Edit Setting
-function NextToRoleSetting(roleIndex)
+function NextToRoleSetting(roleIndex,title_name)
 {
     $.ajax({ // 提醒
         type: "POST",
@@ -616,6 +604,8 @@ function NextToRoleSetting(roleIndex)
 
         // You can use the roleIndex to customize the behavior based on the clicked role
         console.log('Double-clicked role:', roleIndex);
+
+        document.getElementById('RoleName').value = title_name;
 
     }).fail(function() {
         // history.go(0);//失敗就重新整理
@@ -742,7 +732,7 @@ function del_role() {
                 if (data.error != '') {
                     Swal.fire({ // DB sync notice
                         title: 'Error',
-                        text: 'Already Assign',
+                        text: data.error,
                     })
                 } else {
                     history.go(0);

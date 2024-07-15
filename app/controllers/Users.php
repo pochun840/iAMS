@@ -108,9 +108,15 @@ class Users extends Controller
             $user_password = $_POST['user_password'];
             $user_employee_number = $_POST['user_employee_number'];
             $role = $_POST['user_role'];
+
+            if( !empty($_POST['user_card']) && isset($_POST['user_card'])  ){
+                $user_card = $_POST['user_card'];
+            }else{ 
+                $user_card = '';
+            }
             
 
-            $user_id = $this->UserModel->AddUser($user_account,$user_password,$user_name,$user_employee_number);
+            $user_id = $this->UserModel->AddUser($user_account,$user_password,$user_name,$user_employee_number,$user_card);
             if (isset($user_id)) {
                 $this->UserModel->AddUserRole($user_id,$role);
                 $this->logMessage('add user','success: user:'.$user_account);
@@ -161,12 +167,17 @@ class Users extends Controller
 
             $user_id = $_POST['user_id'];
             $user_name = $_POST['user_name'];
-            // $user_account = $_POST['user_account'];
             $user_password = $_POST['user_password'];
             $user_employee_number = $_POST['user_employee_number'];
             $role = $_POST['user_role'];
 
-            $results = $this->UserModel->EditUser($user_id,$user_password,$user_name,$user_employee_number);
+            if( !empty($_POST['user_card']) && isset($_POST['user_card'])  ){
+                $user_card = $_POST['user_card'];
+            }else{ 
+                $user_card = '';
+            }
+
+            $results = $this->UserModel->EditUser($user_id,$user_password,$user_name,$user_employee_number,$user_card);
             if ($results) {
                 $this->UserModel->EditUserRole($user_id,$role);
                 $this->logMessage('edit user','success: user_id:'.$user_id);
@@ -259,11 +270,16 @@ class Users extends Controller
             // var_dump($_POST);
             //驗證帳號不可重複
             $role_id = $_POST['role_id'];
+            if ($role_id == 1) {
+                echo json_encode(array('error' => 'Can Not Delete Super admin'));
+                exit();
+            }
+
 
             $result = $this->UserModel->DeleteRole($role_id);
 
             if(!$result){
-                echo json_encode(array('error' => 'fail'));
+                echo json_encode(array('error' => 'Already Assign'));
                 exit();
             }else{
                 $this->logMessage('delete role','success: role_id:'.$role_id);

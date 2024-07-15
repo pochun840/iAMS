@@ -19,13 +19,13 @@
 
     <header>
         <div class="program">
-            <img id="header-img" src="./img/template-head.svg">Program Template
+            <img id="header-img" src="./img/template-head.svg"><?php echo $text['Program_Template_text']; ?>
         </div>
         <div class="notification">
             <i style="width:auto; height:40px" class="fa fa-bell" onclick="ClickNotification()"></i>
             <span id="messageCount" class="badge"></span>
         </div>
-        <div class="personnel"><i style="width:auto; height: 40px;font-size: 26px" class="fa fa-user"></i> Esther</div>
+        <div class="personnel"><i style="width:auto; height: 40px;font-size: 26px" class="fa fa-user"></i> <?php echo $_SESSION['user']; ?></div>
     </header>
 
     <!-- Notification -->
@@ -94,10 +94,10 @@
     </div>
 
     <div class="topnav">
-        <label type="text" style="font-size: 22px; margin: 6px;">Program - Normal</label>
+        <label type="text" style="font-size: 22px; margin: 6px;"><?php echo $text['Program_Normal_text']; ?></label>
         <div class="topnav-right">
             <button class="btn" id="back-btn" type="button" onclick="location.href = '?url=Templates/';">
-                <img id="img-back" src="./img/back.svg" alt="">back
+                <img id="img-back" src="./img/back.svg" alt=""><?php echo $text['Back_text']; ?>
             </button>
         </div>
     </div>
@@ -105,27 +105,27 @@
     <div class="main-content">
         <div class="center-content">
             <div class="row" style="margin-bottom: 5px;">
-                <div for="controller-type" class="col-1 t1">Controller :</div>
+                <div for="controller-type" class="col-1 t1"><?php echo $text['Controller_text']; ?> :</div>
                 <div class="col-1 t2" style="margin-right: 3%">
                     <input type="text" class="form-control input-ms" id="controller-type" value="GTCS" maxlength="" disabled="disabled">
                 </div>
 
-                <div for="controller-type" class="col-1 t1">Screw Tool :</div>
+                <div for="controller-type" class="col-1 t1"><?php echo $text['Screw_Tool_text']; ?> :</div>
                 <div class="col-2 t2" style="margin-right: 2%">
                     <input type="text" class="form-control input-ms" id="screw-type" value="SGT-CS303" maxlength="" disabled="disabled">
                 </div>
 
                 <div class="col">
                     <button id="add-program" type="button" onclick="new_program()">
-                        <img id="img-program" src="./img/add-program.svg" alt="">Add Program
+                        <img id="img-program" src="./img/add-program.svg" alt=""><?php echo $text['Add_Program_text']; ?>
                     </button>
 
                     <button id="copy-program" type="button" onclick="copy_program_div()">
-                        <img id="img-copy" src="./img/program-copy.svg" alt="">Copy
+                        <img id="img-copy" src="./img/program-copy.svg" alt=""><?php echo $text['Copy_text']; ?>
                     </button>
 
                     <button id="delete-program" type="button" onclick="delete_program()">
-                        <img id="img-delete" src="./img/program-delete.svg" alt="">Delete
+                        <img id="img-delete" src="./img/program-delete.svg" alt=""><?php echo $text['Delete_text']; ?>
                     </button>
                 </div>
             </div>
@@ -136,12 +136,12 @@
                         <thead id="header-table" style="background-color: #A3A3A3; font-size: 2vmin">
                             <tr style="text-align: center">
                                 <th width="5%"></th>
-                                <th width="10%">Program ID</th>
-                                <th width="20%">Program Name</th>
-                                <th width="20%">Target Q</th>
-                                <th width="15%">Target A</th>
-                                <th width="10%">Edit</th>
-                                <th width="18%">Hi / Lo</th>
+                                <th width="10%"><?php echo $text['Program_ID_text']; ?></th>
+                                <th width="20%"><?php echo $text['Program_Name_text']; ?></th>
+                                <th width="20%"><?php echo $text['Target_Q_text']; ?></th>
+                                <th width="15%"><?php echo $text['Target_A_text']; ?></th>
+                                <th width="10%"><?php echo $text['Edit_text']; ?></th>
+                                <th width="18%"><?php echo $text['HiLo_text']; ?></th>
                             </tr>
                         </thead>
                         <tbody id="tbody" style="background-color: #F2F1F1; font-size: 2vmin; text-align: center">
@@ -175,22 +175,22 @@
                                 echo        '<div id="Detail-Dropdown-'.$value['template_program_id'].'" class="dropdown-content">';
 
                                 if($value['step_targettype'] == 2){  //
-                                    echo '<a>Thredhold Type :<i style="float: right">'.'Torque'.'</i></a>';
+                                    echo '<a>'.$text['Target_Type_text'].' :<i style="float: right">'.'Torque'.'</i></a>';
                                 }else{
-                                    echo '<a>Thredhold Type :<i style="float: right">'.'Angle'.'</i></a>';
+                                    echo '<a>'.$text['Target_Type_text'].' :<i style="float: right">'.'Angle'.'</i></a>';
                                 }
 
-                                echo            '<a>Thredhold Torque :<i style="float: right">'.$value['step_targettorque'].'</i></a>';
-                                echo            '<a>Thredhold Angle :<i style="float: right">'.$value['step_targetangle'].'</i></a>';
-                                echo            '<a>Downshif Enable :<i style="float: right">'.$value['step_downshift_enable'].'</i></a>';
-                                echo            '<a>Downshif Torque :<i style="float: right">'.$value['step_downshift_torque'].'</i></a>';
-                                echo            '<a>Downshif Speed :<i style="float: right">'.$value['step_downshift_speed'].'</i></a>';
+                                echo            '<a>'.$text['Target_Torque_text'].' :<i style="float: right">'.$value['step_targettorque'].'</i></a>';
+                                echo            '<a>'.$text['Target_Angle_text'].' :<i style="float: right">'.$value['step_targetangle'].'</i></a>';
+                                echo            '<a>'.$text['Downshift_Enable_text'].' :<i style="float: right">'.$value['step_downshift_enable'].'</i></a>';
+                                echo            '<a>'.$text['Downshift_Torque_text'].' :<i style="float: right">'.$value['step_downshift_torque'].'</i></a>';
+                                echo            '<a>'.$text['Downshift_Speed_text'].' :<i style="float: right">'.$value['step_downshift_speed'].'</i></a>';
                                 // echo            '<a>Over Angle Stop :<i style="float: right">'.$value['template_program_id'].'</i></a>'; //新功能
-                                echo            '<a>Hi Angle :<i style="float: right">'.$value['step_highangle'].'&#186;</i></a>';
-                                echo            '<a>Lo Angle :<i style="float: right">'.$value['step_lowangle'].'</i></a>';
-                                echo            '<a>Pre-Run :<i style="float: right">'.$value['step_prr'].'</i></a>';
-                                echo            '<a>Pre-Run RPM :<i style="float: right">'.$value['step_prr_rpm'].'</i></a>';
-                                echo            '<a>Pre-Run Angle :<i style="float: right">'.$value['step_prr_angle'].'</i></a>';
+                                echo            '<a>'.$text['Hi_Angle_text'].' :<i style="float: right">'.$value['step_highangle'].'&#186;</i></a>';
+                                echo            '<a>'.$text['Lo_Angle_text'].' :<i style="float: right">'.$value['step_lowangle'].'</i></a>';
+                                echo            '<a>'.$text['PreRun_text'].' :<i style="float: right">'.$value['step_prr'].'</i></a>';
+                                echo            '<a>'.$text['PreRun_RPM_text'].' :<i style="float: right">'.$value['step_prr_rpm'].'</i></a>';
+                                echo            '<a>'.$text['PreRun_Angle_text'].' :<i style="float: right">'.$value['step_prr_angle'].'</i></a>';
                                 echo        '</div>';
                                 echo    '</div>';
                                 echo '</td>';
@@ -211,21 +211,21 @@
                 <header class="w3-container modal-header">
                     <span onclick="document.getElementById('ProgramNew').style.display='none'"
                     class="w3-button w3-red w3-xxlarge w3-display-topright" style="padding: 7px; width: 60px">&times;</span>
-                    <h3 id="modal_head">New Program</h3>
+                    <h3 id="modal_head"><?php echo $text['New_Program_text']; ?></h3>
                 </header>
 
                 <div class="modal-body">
                     <form id="new_task_form">
                         <div class="row t1">
-                            <div for="new_task_form" class="col-3 t1" style="font-size: 18px"><b>Target Type :</b></div>
+                            <div for="new_task_form" class="col-3 t1" style="font-size: 18px"><b><?php echo $text['Target_Type_text']; ?> :</b></div>
                             <div class="col t2">
                                 <div class="col-4 form-check form-check-inline">
                                     <input class="form-check-input t2" type="radio" checked="checked" name="Target-Type" id="Target-Torque" value="2" onclick="TargetTypeCheckbox()" style="zoom:1.2; vertical-align: middle">
-                                    <label class="form-check-label t2" for="Target-Torque">Torque Parameter</label>
+                                    <label class="form-check-label t2" for="Target-Torque"><?php echo $text['Torque_text'].' '.$text['Parameter_text']; ?></label>
                                 </div>
                           	    <div class="col-4 form-check form-check-inline">
                                     <input class="form-check-input t2" type="radio" name="Target-Type" id="Target-Angle" value="1" onclick="TargetTypeCheckbox()" style="zoom:1.2; vertical-align: middle">
-                                    <label class="form-check-label t2" for="Target-Angle">Angle Parameter</label>
+                                    <label class="form-check-label t2" for="Target-Angle"><?php echo $text['Angle_text'].' '.$text['Parameter_text']; ?></label>
                                 </div>
                             </div>
                         </div>
@@ -235,40 +235,40 @@
                             <div class="row t1">
                                 <div class="col-4 t1" style="padding-left: 5%">
                                     <img src="./img/torque.png" width="40" height="40" alt="">&nbsp;&nbsp;
-                                    <b>Torque Parameter</b>
+                                    <b><?php echo $text['Torque_text'].' '.$text['Parameter_text']; ?></b>
                                 </div>
                             </div>
                             <div class="scrollbar-modal" id="style-torque">
                                 <div class="modal-force-overflow">
                                     <div style="padding-left: 5%; background-color: #D9D9D9">
                                         <div class="row t1">
-                                            <div class="col-3 t1" for="">Max Torque :</div>
+                                            <div class="col-3 t1" for=""><?php echo $text['Max_Torque_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input type="text" id="max-torque" class="form-control input-ms" value="5.0" maxlength="" disabled="disabled">
                                             </div>
                                             <div class="col t2">N.m</div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1" for="">Program ID :</div>
+                                            <div class="col-3 t1" for=""><?php echo $text['Program_ID_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input type="text" id="program-id" class="form-control input-ms" value="1" maxlength="" disabled="disabled">
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1" for="">Program Name :</div>
+                                            <div class="col-3 t1" for=""><?php echo $text['Program_Name_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input type="text" id="program-name" class="form-control input-ms" value="SEQ-1" maxlength="" >
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1" for="">Target Torque :</div>
+                                            <div class="col-3 t1" for=""><?php echo $text['Target_Torque_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input type="text" id="target-torque" class="form-control input-ms" value="0.6" maxlength="">
                                             </div>
                                             <div class="col t2">N.m</div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1">Joint Offset :</div>
+                                            <div class="col-3 t1"><?php echo $text['Joint_Offset_text']; ?> :</div>
                                             <div class="col-1 t2">
                               					<select id="joint-offset" style="width: 50px; height: 32px; border: 0">
                                					    <option value="0">&#10010;</option>
@@ -280,102 +280,102 @@
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1" for="">Hi Torque :</div>
+                                            <div class="col-3 t1" for=""><?php echo $text['Hi_Torque_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input type="text" id="hi-torque" class="form-control input-ms" value="0.7" maxlength="">
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1" for="">Lo Torque :</div>
+                                            <div class="col-3 t1" for=""><?php echo $text['Lo_Torque_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input type="text" id="Lo-torque" class="form-control input-ms" value="0.0" maxlength="">
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1" for="">Run Down Speed :</div>
+                                            <div class="col-3 t1" for=""><?php echo $text['RunDownSpeed_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input type="text" id="run-down-speed" class="form-control input-ms" value="100" maxlength="">
                                             </div>
-                                            <div class="col t2">max rpm 1100</div>
+                                            <div class="col t2"><?php echo $text['max_rpm_text']; ?> 1100</div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1" style="font-size: 20px">Threshold Type :</div>
+                                            <div class="col-3 t1" style="font-size: 20px"><?php echo $text['Threshold_Type_text']; ?> :</div>
                                             <div class="col t2">
                                      	        <div class="col-3 form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" checked="checked" name="Threshold-Type" id="TypeTorque" value="0"style="zoom:1.2; vertical-align: middle">
-                                                    <label class="form-check-label" for="TypeTorque">Torque</label>
+                                                    <label class="form-check-label" for="TypeTorque"><?php echo $text['Torque_text']; ?></label>
                                                 </div>
                                       	        <div class="col form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" name="Threshold-Type" id="TypeAngle" value="1" style="zoom:1.2; vertical-align: middle">
-                                                    <label class="form-check-label" for="TypeAngle">Angle</label>
+                                                    <label class="form-check-label" for="TypeAngle"><?php echo $text['Angle_text']; ?></label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1">Threshold Torque :</div>
+                                            <div class="col-3 t1"><?php echo $text['Threshold_Torque_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input id="threshold_torque" type="text" value="0.0" class="form-control input-ms" maxlength="" >
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1">Threshold Angle :</div>
+                                            <div class="col-3 t1"><?php echo $text['Threshold_Angle_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input id="threshold_angle" type="text" value="1800" class="form-control input-ms" maxlength="" >
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1">Downshift Enable :</div>
+                                            <div class="col-3 t1"><?php echo $text['Downshift_Enable_text']; ?> :</div>
                                             <div class="switch Downshift col-5 t2">
                                                 <input id="Downshift-ON-OFF" type="checkbox">
                                                 <label><i></i></label>
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1">Downshift Torque :</div>
+                                            <div class="col-3 t1"><?php echo $text['Downshift_Torque_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input id="downshift-torque" type="text" value="1800" class="form-control input-ms" maxlength="" >
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1">Downshift Speed :</div>
+                                            <div class="col-3 t1"><?php echo $text['Downshift_Speed_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input id="downshift-speed" type="text" value="1800" class="form-control input-ms" maxlength="" >
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1">Monitoring Angle :</div>
+                                            <div class="col-3 t1"><?php echo $text['Monitoring_Angle_text']; ?> :</div>
                                             <div class="switch Monitoring col-5 t2">
                                                 <input id="Monitoring-ON-OFF" type="checkbox">
                                                 <label><i></i></label>
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1">Hi Angle :</div>
+                                            <div class="col-3 t1"><?php echo $text['Hi_Angle_text']; ?> :</div>
                                             <div class="col-4 t2">
-                                                <input id="hi-angle" type=text" value="30600" class="form-control input-ms" maxlength="" >
+                                                <input id="hi-angle" type="text" value="30600" class="form-control input-ms" maxlength="" >
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1">Lo Angle :</div>
+                                            <div class="col-3 t1"><?php echo $text['Lo_Angle_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input id="lo-angle" type="text" value="0" class="form-control input-ms" maxlength="" >
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1">Pre-Run :</div>
+                                            <div class="col-3 t1"><?php echo $text['PreRun_text']; ?> :</div>
                                             <div class="switch PreRun col-5 t2">
                                                 <input id="Pre-run" type="checkbox">
                                                 <label><i></i></label>
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1">Pre-Run RPM :</div>
+                                            <div class="col-3 t1"><?php echo $text['PreRun_RPM_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input id="pre-run-rpm" type="text" value="200" class="form-control input-ms" maxlength="" >
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1">Pre-Run Angle :</div>
+                                            <div class="col-3 t1"><?php echo $text['PreRun_Angle_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input id="pre-run-angle" type="text" value="1800" class="form-control input-ms" maxlength="" >
                                             </div>
@@ -391,64 +391,64 @@
                             <div class="row t1">
                                 <div class="col-4 t1" style="padding-left: 3%">
                                     <img src="./img/angle.png" width="40" height="40" alt="">&nbsp;&nbsp;
-                                    <b>Angle Parameter</b>
+                                    <b><?php echo $text['Angle_text'].' '.$text['Parameter_text']; ?></b>
                                 </div>
                             </div>
                             <div class="scrollbar-modal" id="style-angle">
                                 <div class="modal-force-overflow">
                                     <div style="padding-left: 5%; background-color: #D9D9D9">
                                         <div class="row t1">
-                                            <div class="col-3 t1" for="">Max Torque :</div>
+                                            <div class="col-3 t1" for=""><?php echo $text['Max_Torque_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input type="text" id="max-torque-a" class="form-control input-ms" value="5.0" maxlength="" disabled="disabled">
                                             </div>
                                             <div class="col t2">N.m</div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1" for="">Program ID :</div>
+                                            <div class="col-3 t1" for=""><?php echo $text['Program_ID_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input type="text" id="program-id-a" class="form-control input-ms" value="1" maxlength="" disabled="disabled">
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1" for="">Program Name :</div>
+                                            <div class="col-3 t1" for=""><?php echo $text['Program_Name_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input type="text" id="program-name-a" class="form-control input-ms" value="Progam-1" maxlength="">
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1" for="">Target Angle(&#186;) :</div>
+                                            <div class="col-3 t1" for=""><?php echo $text['Target_Angle_text']; ?>(&#186;) :</div>
                                             <div class="col-4 t2">
                                                 <input type="text" id="target-angle-a" class="form-control input-ms" value="1800" maxlength="">
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1">Hi Angle :</div>
+                                            <div class="col-3 t1"><?php echo $text['Hi_Angle_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input id="hi-angle-a" type="text" value="30600" class="form-control input-ms" maxlength="">
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1">Lo Angle :</div>
+                                            <div class="col-3 t1"><?php echo $text['Lo_Angle_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input id="lo-angle-a" type="text" value="0" class="form-control input-ms" maxlength="">
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1" for="">Hi Torque :</div>
+                                            <div class="col-3 t1" for=""><?php echo $text['Hi_Torque_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input type="text" id="hi-torque-a" class="form-control input-ms" value="0.7" maxlength="">
                                             </div>
                                             <div class="col t2">N.m</div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1" for="">Lo Torque :</div>
+                                            <div class="col-3 t1" for=""><?php echo $text['Lo_Torque_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input type="text" id="Lo-torque-a" class="form-control input-ms" value="0.0" maxlength="">
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1">Joint Offset :</div>
+                                            <div class="col-3 t1"><?php echo $text['Joint_Offset_text']; ?> :</div>
                                             <div class="col-1 t2">
                               					<select id="joint-offset-a" style="width: 50px; height: 32px; border: 0" >
                                					    <option value="0">&#10010;</option>
@@ -460,71 +460,71 @@
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1" for="">Run Down Speed :</div>
+                                            <div class="col-3 t1" for=""><?php echo $text['RunDownSpeed_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input type="text" id="run-down-speed-a" class="form-control input-ms" value="100" maxlength="">
                                             </div>
-                                            <div class="col t2">max rpm 1100</div>
+                                            <div class="col t2"><?php echo $text['max_rpm_text']; ?> 1100</div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1" style="font-size: 20px">Threshold Type :</div>
+                                            <div class="col-3 t1" style="font-size: 20px"><?php echo $text['Target_Type_text']; ?> :</div>
                                             <div class="col t2">
                                      	        <div class="col-3 form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" name="Threshold-Type-a" id="TypeTorque-a" value="0"style="zoom:1.2; vertical-align: middle">
-                                                    <label class="form-check-label" for="TypeTorque-a">Torque</label>
+                                                    <label class="form-check-label" for="TypeTorque-a"><?php echo $text['Torque_text']; ?></label>
                                                 </div>
                                       	        <div class="col form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" checked="checked" name="Threshold-Type-a" id="TypeAngle-a" value="1" style="zoom:1.2; vertical-align: middle">
-                                                    <label class="form-check-label" for="TypeAngle-a">Angle</label>
+                                                    <label class="form-check-label" for="TypeAngle-a"><?php echo $text['Angle_text']; ?></label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1">Threshold Torque :</div>
+                                            <div class="col-3 t1"><?php echo $text['Threshold_Torque_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input id="threshold_torque-a" type="text" value="0.0" class="form-control input-ms" maxlength="" >
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1">Threshold Angle :</div>
+                                            <div class="col-3 t1"><?php echo $text['Threshold_Angle_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input id="threshold_angle-a" type="text" value="1800" class="form-control input-ms" maxlength="">
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1">Downshift Enable :</div>
+                                            <div class="col-3 t1"><?php echo $text['Downshift_Enable_text']; ?> :</div>
                                             <div class="switch Downshift col-5 t2">
                                                 <input id="Downshift-ON-OFF-a" type="checkbox">
                                                 <label><i></i></label>
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1">Downshift Torque :</div>
+                                            <div class="col-3 t1"><?php echo $text['Downshift_Torque_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input id="downshift-torque-a" type="text" value="1800" class="form-control input-ms" maxlength="" >
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1">Downshift Speed :</div>
+                                            <div class="col-3 t1"><?php echo $text['Downshift_Speed_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input id="downshift-speed-a" type="text" value="1800" class="form-control input-ms" maxlength="" >
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1">Pre-Run :</div>
+                                            <div class="col-3 t1"><?php echo $text['PreRun_text']; ?> :</div>
                                             <div class="switch PreRun col-5 t2">
                                                 <input id="Pre-run-a" type="checkbox">
                                                 <label><i></i></label>
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1">Pre-Run RPM :</div>
+                                            <div class="col-3 t1"><?php echo $text['PreRun_RPM_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input id="pre-run-rpm-a" type="text" value="200" class="form-control input-ms" maxlength="" >
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1">Pre-Run Angle :</div>
+                                            <div class="col-3 t1"><?php echo $text['PreRun_Angle_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input id="pre-run-angle-a" type="text" value="1800" class="form-control input-ms" maxlength="" >
                                             </div>
@@ -536,8 +536,8 @@
                     </form>
                 </div>
                 <div class="modal-footer justify-content-center">
-                    <button id="button1" class="button button3" onclick="new_program_save()">Save</button>
-                    <button id="button2" class="button button3" onclick="document.getElementById('ProgramNew').style.display='none'" class="cancelbtn">Cancel</button>
+                    <button id="button1" class="button button3" onclick="new_program_save()"><?php echo $text['Save_text']; ?></button>
+                    <button id="button2" class="button button3" onclick="document.getElementById('ProgramNew').style.display='none'" class="cancelbtn"><?php echo $text['Cancel_text']; ?></button>
                 </div>
             </div>
         </div>
@@ -550,7 +550,7 @@
                 <header class="w3-container modal-header">
                     <span onclick="document.getElementById('CopyProgram').style.display='none'"
                     class="w3-button w3-red w3-xxlarge w3-display-topright" style="padding: 7px; width: 60px">&times;</span>
-                    <h3>Copy Program</h3>
+                    <h3><?php echo $text['Copy_text'].' '.$text['Program_text']; ?></h3>
                 </header>
 
                 <div class="modal-body">
@@ -558,13 +558,13 @@
                         <div class="col" style="font-size: 20px; margin: 5px 0px 5px"><b>Copy From</b></div>
                         <div style="padding-left: 20px;">
         		            <div class="row">
-        				        <div for="from_pro_id" class="col-5 t1">Program ID :</div>
+        				        <div for="from_pro_id" class="col-5 t1"><?php echo $text['Program_ID_text']; ?> :</div>
         				        <div class="col-5 t2">
         				            <input type="text" class="form-control" id="from_pro_id" disabled>
         				        </div>
         				    </div>
                             <div class="row">
-                                <div for="from_pro_name" class="col-5 t1">Program Name :</div>
+                                <div for="from_pro_name" class="col-5 t1"><?php echo $text['Program_Name_text']; ?> :</div>
                                 <div class="col-5 t2">
                                     <input type="text" class="form-control" id="from_pro_name" disabled>
                                 </div>
@@ -574,13 +574,13 @@
                         <div for="from_pro_id" class="col" style="font-size: 20px; margin: 5px 0px 5px"><b>Copy To</b></div>
                         <div style="padding-left: 20px;">
                             <div class="row">
-                                <div for="to_pro_id" class="col-5 t1">Program ID :</div>
+                                <div for="to_pro_id" class="col-5 t1"><?php echo $text['Program_ID_text']; ?> :</div>
                 				<div class="col-5 t2">
                 				    <input type="text" class="form-control" id="to_pro_id">
                 				</div>
             				</div>
                             <div class="row">
-                                <div for="to_pro_name" class="col-5 t1">Program Name :</div>
+                                <div for="to_pro_name" class="col-5 t1"><?php echo $text['Program_Name_text']; ?> :</div>
                                 <div class="col-5 t2">
                                     <input type="text" class="form-control" id="to_Program_name">
                                 </div>
@@ -590,8 +590,8 @@
                 </div>
 
                 <div class="modal-footer justify-content-center">
-                    <button id="button1" class="button button3" onclick="copy_program()">Save</button>
-                    <button id="button2" class="button button3" onclick="document.getElementById('CopyProgram').style.display='none'" class="cancelbtn">Cancel</button>
+                    <button id="button1" class="button button3" onclick="copy_program()"><?php echo $text['Save_text']; ?></button>
+                    <button id="button2" class="button button3" onclick="document.getElementById('CopyProgram').style.display='none'" class="cancelbtn"><?php echo $text['Cancel_text']; ?></button>
                 </div>
             </div>
         </div>
@@ -1034,7 +1034,7 @@ function delete_program() {
     let rowSelected = document.getElementsByClassName('selected');
     let program_id = rowSelected[0].childNodes[1].innerHTML;
 
-    var yes = confirm('你確定嗎？');
+    var yes = confirm('<?php echo $text['Delete_confirm_text']; ?>');
 
     if (yes) {
         let url = '?url=Templates/delete_program_by_id';

@@ -11,21 +11,21 @@
 
 <style>
 
-.t1{font-size: 17px; margin: 3px 0px; display: flex; align-items: center;}
-.t2{font-size: 17px; margin: 3px 0px;}
+.t1{font-size: 18px; margin: 3px 0px; display: flex; align-items: center;}
+.t2{font-size: 18px; margin: 3px 0px;}
 </style>
 
 <div class="container-ms">
 
     <header>
         <div class="program">
-            <img id="header-img" src="./img/template-head.svg">Program Template
+            <img id="header-img" src="./img/template-head.svg"><?php echo $text['Program_Template_text']; ?>
         </div>
         <div class="notification">
             <i style="width:auto; height:40px" class="fa fa-bell" onclick="ClickNotification()"></i>
             <span id="messageCount" class="badge"></span>
         </div>
-        <div class="personnel"><i style="width:auto; height: 40px;font-size: 26px" class="fa fa-user"></i> Esther</div>
+        <div class="personnel"><i style="width:auto; height: 40px;font-size: 26px" class="fa fa-user"></i> <?php echo $_SESSION['user']; ?></div>
     </header>
 
     <!-- Notification -->
@@ -94,10 +94,10 @@
     </div>
 
     <div class="topnav">
-        <label type="text" style="font-size: 22px; margin: 4px;">Program - Advance</label>
+        <label type="text" style="font-size: 22px; margin: 4px;"><?php echo $text['Program_Advanced_text']; ?></label>
         <div class="topnav-right">
             <button class="btn" id="back-btn" type="button" onclick="location.href = '?url=Templates/';">
-                <img id="img-back" src="./img/back.svg" alt="">back
+                <img id="img-back" src="./img/back.svg" alt=""><?php echo $text['Back_text']; ?>
             </button>
         </div>
     </div>
@@ -105,7 +105,7 @@
     <div class="main-content">
         <div class="center-content">
             <div class="row" style="margin-bottom: 5px;">
-                <div for="controller-type" class="col-1 t1">Controller :</div>
+                <div for="controller-type" class="col-1 t1"><?php echo $text['Controller_text']; ?> :</div>
                 <div class="col-1 t2" style="margin-right: 3%">
                     <input type="text" class="form-control input-ms" id="controller-type" value="GTCS" maxlength="" disabled="disabled">
                 </div>
@@ -117,19 +117,19 @@
 
                 <div class="col t1">
                     <button id="add-program" type="button" onclick="new_program()">
-                        <img id="img-add" src="./img/add-program.svg" alt="">Add Program
+                        <img id="img-add" src="./img/add-program.svg" alt=""><?php echo $text['Add_Program_text']; ?>
                     </button>
 
                     <button id="copy-program" type="button" onclick="copy_program_div()">
-                        <img id="img-copy" src="./img/program-copy.svg" alt="">Copy
+                        <img id="img-copy" src="./img/program-copy.svg" alt=""><?php echo $text['Copy_text']; ?>
                     </button>
 
                     <button id="delete-program" type="button" onclick="delete_program()">
-                        <img id="img-delete" src="./img/program-delete.svg" alt="">Delete
+                        <img id="img-delete" src="./img/program-delete.svg" alt=""><?php echo $text['Delete_text']; ?>
                     </button>
 
                     <button id="test" type="button">
-                        <img id="img-test" src="./img/check-all.png"> Test
+                        <img id="img-test" src="./img/check-all.png"> <?php echo $text['Test_text']; ?>
                     </button>
                 </div>
             </div>
@@ -140,12 +140,12 @@
                         <thead id="header-table" style="background-color: #A3A3A3; font-size: 2vmin">
                             <tr style="text-align: center; vertical-align: middle;">
                                 <th width="5%"></th>
-                                <th width="10%">Program ID</th>
-                                <th width="20%">Program Name</th>
-                                <th width="10%">Target Q (N.m)</th>
-                                <th width="10%">Target A (&#186;)</th>
-                                <th width="35%">Edit</th>
-                                <th width="15%">Add Step</th>
+                                <th width="10%"><?php echo $text['Program_ID_text']; ?></th>
+                                <th width="20%"><?php echo $text['Program_Name_text']; ?></th>
+                                <th width="10%"><?php echo $text['Target_Q_text']; ?> (N.m)</th>
+                                <th width="10%"><?php echo $text['Target_A_text']; ?> (&#186;)</th>
+                                <th width="35%"><?php echo $text['Edit_text']; ?></th>
+                                <th width="15%"><?php echo $text['Add_Step_text']; ?></th>
                             </tr>
                         </thead>
                         <tbody id="tbody" style="background-color: #F2F1F1; font-size: 2vmin; text-align: center">
@@ -167,7 +167,7 @@
                                 }
                                 echo '</td>';
                                 echo '<td>';
-                                echo '<a href="index.php?url=Templates/advancedstep_step/'.$step['template_program_id'].'"><i id="" class="fa fa-plus-square-o" style="font-size: 35px; height: 35px; display: inline-block; vertical-align: middle;">
+                                echo '<a href="index.php?url=Templates/advancedstep_step/'.$step['template_program_id'].'"><i id="" class="fa fa-plus-square-o" style="color: #444E66;font-size: 35px; height: 35px; display: inline-block; vertical-align: middle;">
                                 </i></a>';
                                 echo '</td>';
                                 echo '</tr>';
@@ -188,7 +188,7 @@
                 <header class="w3-container modal-header">
                     <span onclick="document.getElementById('ProgramNew').style.display='none'"
                     class="w3-button w3-red w3-xxlarge w3-display-topright" style="padding: 7px; width: 60px">&times;</span>
-                    <h3 id="modal_head">New Program</h3>
+                    <h3 id="modal_head"><?php echo $text['New_Program_text']; ?></h3>
                 </header>
 
                 <div class="modal-body">
@@ -198,23 +198,23 @@
                                 <div class="modal-force-overflow">
                                     <div style="padding-left: 5%; height: 300px">
                                         <div class="row t1">
-                                            <div class="col-5 t1" for="">Program ID :</div>
+                                            <div class="col-5 t1" for=""><?php echo $text['Program_ID_text']; ?> :</div>
                                             <div class="col-5 t2">
                                                 <input type="text" id="program-id" class="form-control input-ms" value="1" maxlength="" disabled="disabled">
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-5 t1" for="">Program Name :</div>
+                                            <div class="col-5 t1" for=""><?php echo $text['Program_Name_text']; ?> :</div>
                                             <div class="col-5 t2">
                                                 <input type="text" id="program-name" class="form-control input-ms" value="Program-1" maxlength="">
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-5 t1" for="">Target Type :</div>
+                                            <div class="col-5 t1" for=""><?php echo $text['Target_Type_text']; ?> :</div>
                                             <div class="col-5 t2">
                               					<select id="target-type" class="form-control" style="appearance:auto;" >
-                               					    <option value="2">Torque</option>
-                               					    <option value="1">Angle</option>
+                               					    <option value="2"><?php echo $text['Torque_text']; ?></option>
+                               					    <option value="1"><?php echo $text['Angle_text']; ?></option>
                                   				</select>
                                             </div>
                                         </div>
@@ -226,8 +226,8 @@
                     </form>
                 </div>
                 <div class="modal-footer justify-content-center">
-                    <button id="button1" class="button button3" onclick="create_advance_template()">Save</button>
-                    <button id="button2" class="button button3" onclick="document.getElementById('ProgramNew').style.display='none'" class="cancelbtn">Cancel</button>
+                    <button id="button1" class="button button3" onclick="create_advance_template()"><?php echo $text['Save_text']; ?></button>
+                    <button id="button2" class="button button3" onclick="document.getElementById('ProgramNew').style.display='none'" class="cancelbtn"><?php echo $text['Cancel_text']; ?></button>
                 </div>
             </div>
         </div>
@@ -240,37 +240,37 @@
                 <header class="w3-container modal-header">
                     <span onclick="document.getElementById('CopyProgram').style.display='none'"
                     class="w3-button w3-red w3-xxlarge w3-display-topright" style="padding: 7px; width: 60px">&times;</span>
-                    <h3>Copy Program</h3>
+                    <h3><?php echo $text['Copy_text'].' '.$text['Program_text']; ?></h3>
                 </header>
 
                 <div class="modal-body">
                     <form id="copy_Pro_form">
-                        <div class="col" style="font-size: 20px; margin: 5px 0px 5px"><b>Copy From</b></div>
+                        <div class="col" style="font-size: 20px; margin: 5px 0px 5px"><b><?php echo $text['Copy_from_text']; ?></b></div>
                         <div style="padding-left: 20px;">
         		            <div class="row">
-        				        <div for="from_pro_id" class="col-5 t1">Program ID :</div>
+        				        <div for="from_pro_id" class="col-5 t1"><?php echo $text['Program_ID_text']; ?> :</div>
         				        <div class="col-5 t2">
         				            <input type="text" class="form-control" id="from_pro_id" disabled>
         				        </div>
         				    </div>
                             <div class="row">
-                                <div for="from_pro_name" class="col-5 t1">Program Name :</div>
+                                <div for="from_pro_name" class="col-5 t1"><?php echo $text['Program_Name_text']; ?> :</div>
                                 <div class="col-5 t2">
                                     <input type="text" class="form-control" id="from_pro_name" disabled>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col" style="font-size: 20px; margin: 5px 0px 5px"><b>Copy To</b></div>
+                        <div class="col" style="font-size: 20px; margin: 5px 0px 5px"><b><?php echo $text['Copy_to_text']; ?></b></div>
                         <div style="padding-left: 20px;">
                             <div class="row">
-                                <div for="to_pro_id" class="col-5 t1">Program ID :</div>
+                                <div for="to_pro_id" class="col-5 t1"><?php echo $text['Program_ID_text']; ?> :</div>
                 				<div class="col-5 t2">
                 				    <input type="text" class="form-control" id="to_pro_id">
                 				</div>
             				</div>
                             <div class="row">
-                                <div for="to_pro_name" class="col-5 t1">Program Name :</div>
+                                <div for="to_pro_name" class="col-5 t1"><?php echo $text['Program_Name_text']; ?> :</div>
                                 <div class="col-5 t2">
                                     <input type="text" class="form-control" id="to_Program_name">
                                 </div>
@@ -280,8 +280,8 @@
                 </div>
 
                 <div class="modal-footer justify-content-center">
-                    <button id="button1" class="button button3" onclick="copy_program()">Save</button>
-                    <button id="button2" class="button button3" onclick="document.getElementById('CopyProgram').style.display='none'" class="cancelbtn">Cancel</button>
+                    <button id="button1" class="button button3" onclick="copy_program()"><?php echo $text['Save_text']; ?></button>
+                    <button id="button2" class="button button3" onclick="document.getElementById('CopyProgram').style.display='none'" class="cancelbtn"><?php echo $text['Cancel_text']; ?></button>
                 </div>
             </div>
         </div>
@@ -362,7 +362,7 @@ function highlight_row() {
             return 0;
         }
 
-        document.getElementById('modal_head').innerHTML = 'New Program'; //'New Program'
+        document.getElementById('modal_head').innerHTML = '<?php echo $text['New_Program_text']; ?>'; //'New Program'
         // //帶入預設值
         document.getElementById("program-id").value = program_id;
 
@@ -438,7 +438,7 @@ function highlight_row() {
         let rowSelected = document.getElementsByClassName('selected');
         let program_id = rowSelected[0].childNodes[1].innerHTML;
 
-        var yes = confirm('你確定嗎？' +'Program ID : '+ program_id);
+        var yes = confirm('<?php echo $text['Delete_confirm_text']; ?>' +'<?php echo $text['Program_ID_text']; ?> : '+ program_id);
 
         if (yes) {
             let url = '?url=Templates/delete_program_by_id';

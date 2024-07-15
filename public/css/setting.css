@@ -219,12 +219,13 @@ header::after
 .main-content
 {
     width: 100%;
+    height: calc(100vh - 50px);
 }
 
 .center-content
 {
     width: 100%;
-    padding: 10px 50px;
+    padding: 1px 0px;
 }
 
 @media (max-width: 768px)
@@ -235,34 +236,13 @@ header::after
     }
 }
 
-#container
-{
-    position: relative;
-    background-color: #F5F5F5;
-    box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
-    height: calc(100vh - 140px);
-    width: 100%;
-}
-
-.saveButton
-{
-    background-color: #555;
-    color: white;
-    font-size: 20px;
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    margin: 10px;
-    opacity: 0.8;
-    height: 50px;
-    width: 80px;
-}
-
 /* menu button setting */
 .wrapper
 {
-    margin: 10px 0px;
+    position: absolute;
     width: 100%;
+    padding: 2px 10px;
+    border: 0px solid #444E66;
 }
 
 .navbutton
@@ -270,7 +250,7 @@ header::after
     position: relative;
     display: inline-block;
     font-family: 'Arial', sans-serif;
-    padding: 3px 12px 3px 30px;
+    padding: 3px 12px 3px 33px;
     color: #fff;
     font-weight: bold;
     cursor: pointer;
@@ -302,12 +282,12 @@ header::after
     display: block;
     transform: skewX(-30deg);
     white-space: nowrap;
-    padding: 3px 10px 2px 18px;
+    padding: 3px 10px 2px 15px;
 }
 
 .navbutton:hover span
 {
-    width: calc(100% - 20px);
+    width: calc(100% - 25px);
     color: #fff;
 }
 
@@ -317,71 +297,198 @@ header::after
     color: #fff;
 }
 
-
-/** Barcode style **/
-table
+.content
 {
-    width: 100%;
-    border-collapse: collapse;
-    overflow-y: scroll;
-    scrollbar-width: thin;
+    padding: 5px 20px;
+}
+
+#Operation_Setting
+{
+    position: relative;
+    padding: 10px 0px;
+    background-color: #FCFCFC;
+    box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
+    height: calc(100vh - 120px);
+}
+
+#System_Setting
+{
+    position: relative;
+    padding: 10px 50px;
+    background-color: #FCFCFC;
+    box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
+    height: calc(100vh - 120px);
+}
+
+select
+{
+    height: 29px;
+    width: 150px;
+    font-size: 18px;
+    border: 1px solid #CCCCCC;
+    cursor: pointer;
+    border-radius: 5px;
+    color: #000;
+    transition: color 0.s ease, background-color 0.3s ease, border-bottom-color 0.3s ease;
+}
+
+.ExportButton
+{
+    height: 35px;
+    width: auto;
+    padding: 0 10px;
+    margin-top: 3px;
+    background: linear-gradient(to left top, #00688B, #2C3752);
+    border-radius: 5px;
+    font-size:18px;
+    color: #fff;
+    border: 0px solid #444E66;
+    box-shadow: 2px 2px 2px 0px rgba(0,0,0,0.2);
+    text-align: center;
     vertical-align: middle;
 }
 
-#header-table
+.saveButton
 {
-    position: sticky;
-    top: 0;
-    background-color: #A3A3A3;
-    z-index: 2;
-    font-size: 2vmin;
+    background-color: #555;
+    color: white;
+    border-radius: 5px;
+    font-size: 20px;
+    position: absolute;
+    bottom: 20px;
+    right: 30px;
+    margin: 10px;
+    opacity: 0.8;
+    height: 50px;
+    width: 100px;
 }
 
-/* scrollbar style Barcode */
-.scrollbar-barcode
+
+/* ON/OFF button */
+
+/* Menu Checkbox */
+.switch
 {
-    float: left;
-    height: 20vh;
+    margin: 50px auto;
+    position: relative;
+}
+
+.switch label
+{
     width: 100%;
-    overflow-y: scroll;
+    height: 100%;
+    position: relative;
+    display: block;
 }
 
-.force-overflow-barcode
+.switch input
 {
-    min-height: 20vh;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+    z-index: 100;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
 }
 
-#wrapper
+.switch.menu
 {
-    text-align: center;
-    margin: auto;
+    width: 80px;
+    height: 20px;
 }
 
-/**  STYLE Member */
-#style-barcode::-webkit-scrollbar
+.switch.menu label
 {
-    display: none;
-    width: 12px;
-    background-color: #F5F5F5;
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: #a5a39d;
+    border-radius: 40px;
+    box-shadow:
+        inset 0 5px 10px 2px rgba(0,0,0,0.2),
+        1px 2px 1px rgba(131,139,131,0.5);
 }
 
-#style-barcode::-webkit-scrollbar-thumb
+.switch.menu label i
 {
-    border-radius: 10px;
-    background: linear-gradient(left, #96A6BF, #63738C);
-    box-shadow: inset 0 0 1px 1px #5C6670;
+    display: block;
+    height: 100%;
+    width: 50%;
+    border-radius: inherit;
+    background: silver;
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    background: #b2ac9e;
+    background: -moz-linear-gradient(#f7f2f6, #b2ac9e);
+    background: -ms-linear-gradient(#f7f2f6, #b2ac9e);
+    background: -o-linear-gradient(#f7f2f6, #b2ac9e);
+    background: -webkit-gradient(linear, 0 0, 0 100%, from(#f7f2f6), to(#b2ac9e));
+    background: -webkit-linear-gradient(#f7f2f6, #b2ac9e);
+    background: linear-gradient(#f7f2f6, #b2ac9e);
+    box-shadow:
+            inset 0 1px 0 white,
+            0 0 8px rgba(0,0,0,0.3),
+            0 5px 5px rgba(0,0,0,0.2);
 }
 
-#style-barcode::-webkit-scrollbar-track
+.switch.menu label i:after
 {
-    border-radius: 10px;
-    background: #eee;
-    box-shadow: 0 0 1px 1px #bbb, inset 0 0 7px rgba(0,0,0,0.3)
+    content: "";
+    position: absolute;
+    left: 15%;
+    top: 25%;
+    width: 70%;
+    height: 50%;
+    background: #d2cbc3;
+    background: -moz-linear-gradient(#cbc7bc, #d2cbc3);
+    background: -ms-linear-gradient(#cbc7bc, #d2cbc3);
+    background: -o-linear-gradient(#cbc7bc, #d2cbc3);
+    background: -webkit-gradient(linear, 0 0, 0 100%, from(#cbc7bc), to(#d2cbc3));
+    background: -webkit-linear-gradient(#cbc7bc, #d2cbc3);
+    background: linear-gradient(#cbc7bc, #d2cbc3);
+    border-radius: inherit;
 }
 
-#style-barcode::-webkit-scrollbar-thumb:hover
+.switch.menu label i:before
 {
-    background: linear-gradient(left, #8391A6, #536175);
+    content: "off";
+    text-transform: uppercase;
+    font-style: normal;
+    font-weight: bold;
+    color: rgba(0,0,0,0.4);
+    text-shadow: 0 1px 0 #696969, 0 -1px 0 #696969;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 11px;
+    position: absolute;
+    top: 40%;
+    right: -79%;
+    margin-top: -5px;
 }
 
+.switch.menu input:checked ~ label
+{
+    background: #00CC00;
+    color: #696969;
+}
 
+.switch.menu input:checked ~ label i
+{
+    right: -1%;
+}
+
+.switch.menu input:checked ~ label i:before
+{
+    content: "on";
+    right: 115%;
+    color: #696969;
+    text-shadow:
+        0 1px 0 #afcb9b,
+        0 -1px 0 #00CC00;
+}
+/* END ON/OFF button */

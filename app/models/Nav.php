@@ -51,4 +51,18 @@ class Nav{
         return $results['id'];
     }
 
+    // 取得user id by account
+    public function GetRoleIdByAccount($account)
+    {
+        $sql = 'SELECT * FROM users 
+                LEFT JOIN cc_userroles ON users.id = cc_userroles.UserID 
+                WHERE account = :account ';
+        $statement = $this->db->prepare($sql);
+        $statement->bindValue(':account', $account);
+        $statement->execute();
+        $results = $statement->fetch(PDO::FETCH_ASSOC);
+
+        return $results['RoleID'];
+    }
+
 }

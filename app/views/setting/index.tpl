@@ -9,22 +9,31 @@
 <?php echo $data['nav']; ?>
 
 <style>
-.t1{font-size: 18px; margin: 3px 0px; display: flex; align-items: center; padding-left: 3%}
-.t2{font-size: 18px; margin: 3px 0px;}
+.t1{font-size: 18px; margin: 5px 0px; display: flex; align-items: center; padding-left: 3%}
+.t2{font-size: 18px; margin: 5px 0px;}
+
+.t3{font-size: 18px; margin: 5px 0px; display: flex; align-items: center; padding-left: 3%}
+.t4{font-size: 15px; margin: 5px 0px;}
+
+.form-check-inline
+{
+    display: inline-block;
+    margin-right: 20px;
+}
 </style>
 
 <div class="container-ms">
 
     <header>
         <div class="setting">
-            <img id="header-img" src="./img/setting-head.svg"> Setting
+            <img id="header-img" src="./img/setting-head.svg"> <?php echo $text['main_setting_text']; ?>
         </div>
 
         <div class="notification">
             <i style="width:auto; height:40px" class="fa fa-bell" onclick="ClickNotification()"></i>
             <span id="messageCount" class="badge"></span>
         </div>
-        <div class="personnel"><i style="width:auto; height: 40px; font-size: 26px" class="fa fa-user"></i> Esther</div>
+        <div class="personnel"><i style="width:auto; height: 40px; font-size: 26px" class="fa fa-user"></i> <?php echo $_SESSION['user']; ?></div>
     </header>
 
     <!-- Notification -->
@@ -77,7 +86,7 @@
                         <a style="float: right">2h</a>
                     </div>
                     <div id="ER-Mess" style="font-size: 15px; padding-bottom: 10px" class="checkboxFour">
-                        <a>Controller:GTCS has............</a>
+                        <a>Controller:GTCS has...........</a>
                         <a style="float: right; margin: 5px;">
                             <input type="checkbox" value="1" id="checkboxFourInput" name="" hidden="hidden" checked="checked">
                             <label for="checkboxFourInput"></label>
@@ -94,155 +103,180 @@
 
     <div class="main-content">
         <div class="center-content">
-                <div class="wrapper">
-                    <div class="navbutton active" onclick="handleButtonClick(this, 'controller')">
-                        <span data-content="Controller setting" onclick="showContent('controller')"></span>Controller setting
+            <div class="wrapper">
+                <div class="navbutton active" onclick="handleButtonClick(this, 'operation')">
+                    <span data-content="<?php echo $text['Operation_Setting_text']; ?>" onclick="showContent('operation')"></span><?php echo $text['Operation_Setting_text']; ?>
+                </div>
+                <div class="navbutton" onclick="handleButtonClick(this, 'system_setting')">
+                    <span data-content="<?php echo $text['System_Setting_text']; ?>" onclick="showContent('system_setting')"></span><?php echo $text['System_Setting_text']; ?>
+                </div>
+            </div>
+
+            <!-- System Operation -->
+            <div id="operationContent" class="content">
+                <div id="Operation_Setting" style="margin-top: 40px">
+                    <div class="t1">
+                        <div class="col-2 t2" style="font-weight: bold;margin-top: 15px"><?php echo $text['Manager_Verify_text']; ?>:</div>
+
+                        <?php foreach ($data['all_roles'] as $key => $value) {
+                            echo '<div class="t2 form-check form-check-inline" style="margin-left: -5px">';
+                            // echo '<input class="form-check-input" type="checkbox" name="manager_role" id="Leader'.$key.'" value="'.$value['ID'].'" style="zoom:1.1; vertical-align: middle;">';
+                            if (in_array($value['ID'], $data['button_auth']['role_checked'])) {
+                                echo '<input class="form-check-input" type="checkbox" name="manager_role" id="Leader'.$key.'" value="'.$value['ID'].'" style="zoom:1.1; vertical-align: middle;" checked>';
+                            }else{
+                                echo '<input class="form-check-input" type="checkbox" name="manager_role" id="Leader'.$key.'" value="'.$value['ID'].'" style="zoom:1.1; vertical-align: middle">';
+                            }
+
+                            echo '<label class="form-check-label" for="Leader'.$key.'">'.$value['Title'].'</label>';
+                            echo '</div>';
+                        }?>
                     </div>
-                    <div class="navbutton" onclick="handleButtonClick(this, 'system')">
-                        <span data-content="System setting" onclick="showContent('system')"></span>System setting
+                    <div class="row t1">
+                        <div class="col-3 t2" style="padding-left: 5%"><?php echo $text['Skip_Button_Access_text']; ?>:</div>
+                        <div class="switch menu col-3 t4">
+                            <input id="switch_next_seq" type="checkbox" <?php if($data['button_auth']['switch_next_seq']){ echo 'checked';} ?>>
+                            <label><i></i></label>
+                        </div>
                     </div>
-                    <div class="navbutton" onclick="handleButtonClick(this, 'barcode')">
-                        <span data-content="Barcode setting" onclick="showContent('barcode')"></span>Barcode setting
+                    <div class="row t1">
+                        <div class="col-3 t2" style="padding-left: 5%"><?php echo $text['Back_Button_Access_text']; ?>:</div>
+                        <div class="switch menu col-3 t4">
+                            <input id="switch_previous_seq" type="checkbox" <?php if($data['button_auth']['switch_previous_seq']){ echo 'checked';} ?>>
+                            <label><i></i></label>
+                        </div>
                     </div>
-                    <div class="navbutton" onclick="handleButtonClick(this, 'upload')">
-                        <span data-content="Upload iAMS Version" onclick="showContent('upload')"></span>Upload iAMS Version
+                    <div class="row t1">
+                        <div class="col-3 t2" style="padding-left: 5%"><?php echo $text['Task_Reset_Button_Access_text']; ?>:</div>
+                        <div class="switch menu col-3 t4">
+                            <input id="task_reset" type="checkbox" <?php if($data['button_auth']['task_reset']){ echo 'checked';} ?>>
+                            <label><i></i></label>
+                        </div>
+                    </div>
+
+                    <div class="row t1" style="">
+                        <div class="col-3 t2" style="padding-left: 5%"><?php echo $text['Job_Selection_Access_text']; ?>:</div>
+                        <div class="switch menu col-3 t4">
+                            <input id="switch_job" type="checkbox" <?php if($data['button_auth']['switch_job']){ echo 'checked';} ?>>
+                            <label><i></i></label>
+                        </div>
+                    </div>
+                    <div class="row t1" style="padding-bottom: 2%">
+                        <div class="col-3 t2" style="padding-left: 5%"><?php echo $text['Seq_Selection_Access_text']; ?>:</div>
+                        <div class="switch menu col-3 t4">
+                            <input id="switch_seq" type="checkbox" <?php if($data['button_auth']['switch_seq']){ echo 'checked';} ?>>
+                            <label><i></i></label>
+                        </div>
+                    </div>
+                    <div class="row t1">
+                        <div class="col-3 t3" style="padding-left: 0%; font-weight: bold"><?php echo $text['Stop_On_NG_text']; ?>:</div>
+                        <div class="switch menu col-3 t4">
+                            <input id="stop_on_ng" type="checkbox" <?php if($data['button_auth']['stop_on_ng']){ echo 'checked';} ?>>
+                            <label><i></i></label>
+                        </div>
+                    </div>
+                    <button class="saveButton" onclick="save_manager_verify()"><?php echo $text['Save_text']; ?></button>
+                </div>
+            </div>
+
+            <!-- Seytem Setting -->
+            <div id="system_settingContent" class="content" style="display: none">
+                <div id="System_Setting" style="margin-top: 40px">
+                <div style="width: 95%">
+                    <div class="row t1">
+                        <div class="col-3 t1" style="padding-left: 3%;margin-top: 15px"><?php echo $text['Current_iAMS_version_text']; ?>:</div>
+                        <div class=" col-1 t2 custom-file">
+                            <label>1.00.1</label>
+                        </div>
+                    </div>
+                    <form action="" method="post" enctype="multipart/form-data">
+                        <div class="row t1">
+                            <div class="col-3 t1" style="padding-left: 3%"><?php echo $text['Export_specific_JOB_data_text']; ?>:</div>
+                            <div class="col-4 t2 custom-file">
+                                <select id="Export-Job" style="width: 190px">
+                                    <option value="1">Job123</option>
+                                    <option value="2">Job2</option>
+                                    <option value="3">Job6768</option>
+                                    <option value="4">Job324</option>
+                                </select>
+                            </div>
+                            <div class="col-1 t2">
+                                <button class="ExportButton" id="Export-job-btn"><?php echo $text['Export_text']; ?></button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="row t1">
+                        <div class="col-7 t1" style="padding-left: 3%"><?php echo $text['Export_iAMS_data_text']; ?>:</div>
+                        <div class="col-1 t2">
+                            <button class="ExportButton" id="Export-iams-data"><?php echo $text['Export_text']; ?></button>
+                        </div>
+                    </div>
+
+                    <form action="" method="post" enctype="multipart/form-data">
+                        <div class="row t1">
+                            <div class="col-3 t1" style="padding-left: 3%"><?php echo $text['Import_specific_JOB_data_text']; ?>:</div>
+                            <div class="col-4 t2">
+                                <input type="file" name="image" id="Import-Job-Data" class="input-file">
+                            </div>
+                            <div class="col-1 t2">
+                                <button class="ExportButton" id="Import-job-btn"><?php echo $text['Import_text']; ?></button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <form action="" method="post" enctype="multipart/form-data">
+                        <div class="row t1">
+                            <div class="col-3 t1" style="padding-left: 3%"><?php echo $text['Import_data_text']; ?>:</div>
+                            <div class="col-4 t2">
+                                <input type="file" name="image" id="Import-Data" class="input-file">
+                            </div>
+                            <div class="col-1 t2">
+                                <button class="ExportButton" id="Import-data-btn"><?php echo $text['Import_text']; ?></button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <form action="" method="post" enctype="multipart/form-data">
+                        <div class="row t1">
+                            <div class="col-3 t1" style="padding-left: 3%"><?php echo $text['iAMS_Update_text']; ?>:</div>
+                            <div class="col-4 t2">
+                                <input type="file" name="image" id="iAMS-Update" class="input-file">
+                            </div>
+                            <div class="col-1 t2">
+                                <button class="ExportButton" id="iAMS-Update-btn"><?php echo $text['Update_text']; ?></button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="row t1">
+                        <div class="col-3 t2" style="padding-left: 3%;"><?php echo $text['Blackout_Recovery_text']; ?>:</div>
+                        <div class="switch menu col-3 t4">
+                            <input id="Blackout-Recovery" type="checkbox" checked="checked">
+                            <label><i></i></label>
+                        </div>
                     </div>
                 </div>
-
-                <div id="container">
-                    <div id="controllerContent" class="content">
-                        <div style="padding-left: 7%; padding: 10px">
-                            <div class="col t1" style="padding: 10px"><b>Controller Setting</b></div>
-                            <div class="row t1">
-                                <div class="col-2 t1" >ID :</div>
-                                <div class="col-3 t2">
-                                    <input type="text" id="controller-id" class="form-control input-ms" value="">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="systemContent" class="content"  style="display: none;">
-                        <div style="padding-left: 7%; padding: 0px">
-                            <div class="col t1" style="padding: 10px"><b>Contrller Setting</b></div>
-                            <div class="row t1">
-                                <div class="col-3 t1" >ID :</div>
-                                <div class="col-3 t2">
-                                    <input type="text" id="controller-id" class="form-control input-ms" value="" maxlength="" disabled="disabled">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="barcodeContent" class="content"  style="display: none;">
-                        <div style="padding-left: 5%; padding: 0px">
-                            <div class="row t1">
-                                <div class="col t1" style="padding: 10px"><b>Barcode Setting</b></div>
-                            </div>
-
-                            <div class="scrollbar-barcode" id="style-barcode" style="padding: 0px 10px;">
-                                <div class="force-overflow-barcode">
-                                    <table class="table table-bordered table-hover" id="table">
-                                        <thead id="header-table" style="text-align: center; vertical-align: middle;">
-                                            <tr>
-                                                <th style="width: 10%;">Job ID</th>
-                                                <th style="width: 20%;">Job Name</th>
-                                                <th style="width: 30%;">Barcode</th>
-                                                <th style="width: 15%;">From</th>
-                                                <th style="width: 15%;">To</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody id="tbody1" style="background-color: #F2F1F1; font-size: 1.8vmin;text-align: center; vertical-align: middle;">
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Job 1</td>
-                                                <td>123456789</td>
-                                                <td>--</td>
-                                                <td>--</td>
-                                            </tr>
-
-                                            <tr>
-                                                <td>2</td>
-                                                <td>Job 2</td>
-                                                <td>123456789</td>
-                                                <td>--</td>
-                                                <td>--</td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>Job 3</td>
-                                                <td>123456789</td>
-                                                <td>--</td>
-                                                <td>--</td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>Job 4</td>
-                                                <td>123456789</td>
-                                                <td>--</td>
-                                                <td>--</td>
-                                            </tr>
-                                            <tr>
-                                                <td>5</td>
-                                                <td>Job 5</td>
-                                                <td>123456789</td>
-                                                <td>--</td>
-                                                <td>--</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-                            <div style=" margin-top: 5px">
-                                <div class="row t1">
-                                    <div class="col-2 t1">Maintain Counts :</div>
-                                    <div class="col-3 t2">
-                                        <input type="text" id="maintain-counts" class="form-control input-ms" value="" maxlength="" disabled="disabled">
-                                    </div>
-                                </div>
-
-                                <div class="row t1">
-                                    <div class="col-2 t1">Refresh :</div>
-                                    <div class="col-3 t2">
-                                        <input type="text" id="refresh" class="form-control input-ms" value="" maxlength="" disabled="disabled">
-                                    </div>
-                                </div>
-
-                                <div class="row t1">
-                                    <div class="col-2 t1">Total Counts :</div>
-                                    <div class="col-3 t2">
-                                        <input type="text" id="total-counts" class="form-control input-ms" value="" maxlength="" disabled="disabled">
-                                    </div>
-                                </div>
-
-                                <div class="row t1">
-                                    <div class="col-2 t1">Max Torque :</div>
-                                    <div class="col-3 t2">
-                                        <input type="text" id="max-torque" class="form-control input-ms" value="" maxlength="" disabled="disabled">
-                                    </div>
-                                </div>
-
-                                <div class="row t1">
-                                    <div class="col-2 t1">Max Speed :</div>
-                                    <div class="col-3 t2">
-                                        <input type="text" id="max-speed" class="form-control input-ms" value="" maxlength="" disabled="disabled">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="uploadContent" class="content"  style="display: none;">
-
-                    </div>
-
-                    <button class="saveButton" id="saveButton">Save</button>
+                    <button class="saveButton" id="saveButton"><?php echo $text['Save_text']; ?></button>
                 </div>
             </div>
         </div>
+    </div>
 <script>
+// Notification ....................
+let messageCount = 0;
+
+function addMessage() {
+    messageCount++;
+    document.getElementById('messageCount').innerText = messageCount;
+}
+
+function ClickNotification() {
+    let messageBox = document.getElementById('messageBox');
+    let closeBtn = document.getElementsByClassName("close")[0];
+    messageBox.style.display = (messageBox.style.display === 'block') ? 'none' : 'block';
+}
+addMessage();
+
+// END Notification ....................
 
 // menu nav button
 function showContent(contentType)
@@ -270,22 +304,49 @@ function handleButtonClick(button, content)
     // Call the function to display the content corresponding to the clicked navbutton
     showContent(content);
 }
+</script>
 
-// Notification ....................
-let messageCount = 0;
+<script type="text/javascript">
+    function save_manager_verify(argument) {
+        let switch_next_seq = document.getElementById('switch_next_seq').checked;
+        let switch_previous_seq = document.getElementById('switch_previous_seq').checked;
+        let task_reset = document.getElementById('task_reset').checked;
+        let switch_job = document.getElementById('switch_job').checked;
+        let switch_seq = document.getElementById('switch_seq').checked;
+        let stop_on_ng = document.getElementById('stop_on_ng').checked;
 
-function addMessage() {
-    messageCount++;
-    document.getElementById('messageCount').innerText = messageCount;
-}
+        let list = document.querySelectorAll("input[name='manager_role']:checked");
+        let role_checked = '';
+        for (var i = 0; i < list.length; i++) {
+            role_checked += list[i].value + ','
+        }
+        role_checked = role_checked.slice(0, -1);
 
-function ClickNotification() {
-    let messageBox = document.getElementById('messageBox');
-    let closeBtn = document.getElementsByClassName("close")[0];
-    messageBox.style.display = (messageBox.style.display === 'block') ? 'none' : 'block';
-}
+        $.ajax({
+            type: "POST",
+            data: {
+                'switch_next_seq': +switch_next_seq,
+                'switch_previous_seq': +switch_previous_seq,
+                'task_reset': +task_reset,
+                'switch_job': +switch_job,
+                'switch_seq': +switch_seq,
+                'stop_on_ng': +stop_on_ng,
+                'role_checked': role_checked,
+            },
+            dataType: "json",
+            url: "?url=Settings/Operation_Setting",
+        }).done(function(notice) { //成功且有回傳值才會執行
+            if (notice.error != '') {} else {
+                Swal.fire('Saved!', '', 'success');
+                // window.location = window.location.href;
+            }
+        }).fail(function() {
+            // history.go(0);//失敗就重新整理
+        });
 
-addMessage();
+
+    }
+
 
 </script>
 </div>

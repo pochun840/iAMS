@@ -58,7 +58,9 @@ class Product{
                         reverse_force = :reverse_force,
                         reverse_cnt_mode = :reverse_cnt_mode,
                         reverse_threshold_torque = :reverse_threshold_torque,
-                        point_size = :point_size
+                        point_size = :point_size,
+                        barcode_start = :barcode_start,
+                        tower_light = :tower_light
                     WHERE job_id = :job_id ";
             $statement = $this->db->prepare($sql);
             $statement->bindValue(':job_name', $data['job_name']);
@@ -71,13 +73,15 @@ class Product{
             $statement->bindValue(':reverse_cnt_mode', $data['reverse_count']);
             $statement->bindValue(':reverse_threshold_torque', $data['threshold_torque']);
             $statement->bindValue(':point_size', $data['size']);
+            $statement->bindValue(':barcode_start', $data['barcode_start']);
+            $statement->bindValue(':tower_light', $data['tower_light']);
             $statement->bindValue(':job_id', $data['job_id']);
             $results = $statement->execute();
 
         }else{ //不存在，用insert
 
-            $sql = "INSERT INTO `job` ('job_id','job_name','controller_id','ok_job','ok_job_stop','reverse_direction','reverse_rpm','reverse_force','reverse_cnt_mode','reverse_threshold_torque','point_size' )
-                    VALUES (:job_id,:job_name,:controller_id,:ok_job,:ok_job_stop,:reverse_direction,:reverse_rpm,:reverse_force,:reverse_cnt_mode,:reverse_threshold_torque,:point_size)";
+            $sql = "INSERT INTO `job` ('job_id','job_name','controller_id','ok_job','ok_job_stop','reverse_direction','reverse_rpm','reverse_force','reverse_cnt_mode','reverse_threshold_torque','point_size','barcode_start','tower_light' )
+                    VALUES (:job_id,:job_name,:controller_id,:ok_job,:ok_job_stop,:reverse_direction,:reverse_rpm,:reverse_force,:reverse_cnt_mode,:reverse_threshold_torque,:point_size,:barcode_start,:tower_light)";
             $statement = $this->db->prepare($sql);
             $statement->bindValue(':job_name', $data['job_name']);
             $statement->bindValue(':controller_id', $data['controller_type']);
@@ -89,6 +93,8 @@ class Product{
             $statement->bindValue(':reverse_cnt_mode', $data['reverse_count']);
             $statement->bindValue(':reverse_threshold_torque', $data['threshold_torque']);
             $statement->bindValue(':point_size', $data['size']);
+            $statement->bindValue(':barcode_start', $data['barcode_start']);
+            $statement->bindValue(':tower_light', $data['tower_light']);
             $statement->bindValue(':job_id', $data['job_id']);
             $results = $statement->execute();
 
@@ -207,6 +213,109 @@ class Product{
         $statement->execute();
 
         return $statement->fetch();
+    }
+
+    //barcode function
+
+    public function EditBarcode($barcode,$match_from,$match_to,$job_id,$seq_id)
+    {
+        if( $this->CheckBarcodeRepeat($barcode,$match_from,$match_to,$job_id,$seq_id) ){ //重複barcode
+
+            return 'repeat';
+        }
+
+
+        if( $this->CheckBarcodeExist($job_id,$seq_id) ){ //已存在，用update
+
+            $sql = "UPDATE `barcode` 
+                    SET barcode = :barcode,
+                        barcode_mask_from = :barcode_mask_from,
+                        barcode_mask_count = :barcode_mask_count 
+                    WHERE barcode_selected_job = :job_id AND barcode_selected_seq = :seq_id ";
+            $statement = $this->db->prepare($sql);
+            $statement->bindValue(':barcode', $barcode);
+            $statement->bindValue(':barcode_mask_from', $match_from);
+            $statement->bindValue(':barcode_mask_count', $match_to);
+            $statement->bindValue(':job_id', $job_id);
+            $statement->bindValue(':seq_id', $seq_id);
+            $results = $statement->execute();
+
+        }else{ //不存在，用insert
+
+            $sql = "INSERT INTO `barcode` ('barcode','barcode_mask_from','barcode_mask_count','barcode_selected_job','barcode_selected_seq' )
+                    VALUES (:barcode,:barcode_mask_from,:barcode_mask_count,:job_id,:seq_id)";
+            $statement = $this->db->prepare($sql);
+            $statement->bindValue(':barcode', $barcode);
+            $statement->bindValue(':barcode_mask_from', $match_from);
+            $statement->bindValue(':barcode_mask_count', $match_to);
+            $statement->bindValue(':job_id', $job_id);
+            $statement->bindValue(':seq_id', $seq_id);
+            $results = $statement->execute();
+
+        }
+
+        return $results;
+    }
+
+    public function CheckBarcodeExist($job_id,$seq_id)
+    {
+        $sql = "SELECT count(*) as count FROM barcode WHERE barcode_selected_job = :barcode_selected_job AND barcode_selected_seq = :barcode_selected_seq  ";
+        $statement = $this->db->prepare($sql);
+        $statement->bindValue(':barcode_selected_job', $job_id);
+        $statement->bindValue(':barcode_selected_seq', $seq_id);
+        $results = $statement->execute();
+        $rows = $statement->fetch();
+
+        if ($rows['count'] > 0) {
+            return true; // job 已存在
+        }else{
+            return false; // job 不存在
+        }
+    }
+
+    public function CheckBarcodeRepeat($barcode,$match_from,$match_to,$job_id,$seq_id)
+    {
+        $barcode_length = strlen($barcode);
+        $target = substr($barcode, $match_from-1, $match_to);
+        $sql = "SELECT *,count(*) as count FROM barcode WHERE  barcode_mask_from = :barcode_mask_from AND barcode_mask_count = :barcode_mask_count AND length(barcode) = :barcode_length AND substr(barcode,barcode_mask_from,barcode_mask_count) = :target ";
+
+        $statement = $this->db->prepare($sql);
+        $statement->bindValue(':target', $target);
+        $statement->bindValue(':barcode_length', $barcode_length, PDO::PARAM_INT);
+        $statement->bindValue(':barcode_mask_from', $match_from);
+        $statement->bindValue(':barcode_mask_count', $match_to);
+        $results = $statement->execute();
+        $row = $statement->fetch();
+
+        if ($row['count'] > 0) {
+            if($row['barcode_selected_job'] == $job_id && $row['barcode_selected_seq'] == $seq_id){
+                return false;
+            }
+            return true; // job 已存在
+        }else{
+            return false; // job 不存在
+        }
+    }
+
+    public function getBarcodes($value='')
+    {
+        $sql = "SELECT barcode.*,job_name, seq_name FROM barcode 
+                left join job on barcode.barcode_selected_job = job.job_id
+                left join sequence on barcode.barcode_selected_seq = sequence.seq_id AND barcode.barcode_selected_job = sequence.job_id
+                ";
+        $statement = $this->db->prepare($sql);
+        $statement->execute();
+
+        return $statement->fetchall(PDO::FETCH_ASSOC);
+    }
+
+    public function DeleteBarcode($id)
+    {
+        $stmt = $this->db->prepare('DELETE FROM barcode WHERE id = :id');
+        $stmt->bindValue(':id', $id);
+        $results = $stmt->execute();
+
+        return $results;
     }
 
 }

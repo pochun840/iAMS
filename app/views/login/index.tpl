@@ -7,45 +7,46 @@
     <div class="container">
         <header>
             <h2>Kilews</h2>
-            <h4>登入</h4>
+            <h4><?php echo $text['login_text']; ?></h4>
         </header>
         <form action="?url=Logins" method="POST">
-            <div class="input-field">
-                <input type="text"  name="username" required>
-                <label>Username</label>
+            <input checked id='login' name="action" type='radio' value='login' required onchange="toggleUsernameField()">
+            <label for='login'><?php echo $text['account_text']; ?></label>
+
+            <input id='idlogin' name='action' type='radio' value='idlogin' onchange="toggleUsernameField()">
+            <label for='idlogin'>ID</label>
+
+            <div id='wrapper'>
+                <div id='arrow'></div>
+                <input id='username' name="username" placeholder='<?php echo $text['account_text']; ?>' type='text'>
+                <input id='password' name="password" placeholder='<?php echo $text['password_text']; ?>' type='password'>
             </div>
-            <div class="input-field">
-                <input class="pswrd" name="password" type="password" required>
-                <label>Password</label>
-            </div>
-            <div class="button">
-                <div class="inner">
-				</div>
-                <button type="submit"><?php echo $text['login_text']; ?></button>
-            </div>
+            <button type='submit' id="loginButton"><?php echo $text['account_text'].' '.$text['login_text']; ?></button>
         </form>
 
         <!--  Change Language -->
         <div id="language-selector" class="w3-padding w3-display-botom">
-            <label style="font-size: 16px; color: #fff" for="language">Select Language :</label>&nbsp;
-            <select class="custom-select" id="language" onchange="changeLanguage()">
+            <label style="font-size: 16px; color: #fff" for="language"><?php echo $text['select_language_text']; ?> :</label>&nbsp;
+            <select class="custom-select" id="language" onchange="language_change()">
                 <option value="zh-cn">简中</option>
                 <option value="zh-tw">繁中</option>
                 <option value="en-us">English</option>
-                <option value="vi">Tiếng Việt</option>
+                <option value="vi-vn">Tiếng Việt</option>
             </select>
         </div>
     </div>
 
   <script>
-    function language_change(language) {
+    function language_change() {
+        let lang = document.getElementById('language').value;
+
         $.ajax({
           type: "POST",
-          url: "?url=Dashboards/change_language",
-          data: {'language':language},
+          url: "?url=Mains/change_language",
+          data: {'language':lang},
           dataType: "json",
-          encode: true,
-          async: false,//等待ajax完成
+          // encode: true,
+          // async: false,//等待ajax完成
         }).done(function (data) {//成功且有回傳值才會執行
             window.location = window.location.href;
         });
@@ -59,6 +60,7 @@
                 }
             }
         ?>
+        document.getElementById("language").value = "<?php echo $_SESSION['language']; ?>";
     });
 
 // Change Language .......
@@ -86,6 +88,21 @@ function changeLanguage()
     });
 }
 
+// Function to toggle visibility of username field based on selected action
+function toggleUsernameField()
+{
+    var idLoginRadio = document.getElementById('idlogin');
+    var usernameField = document.getElementById('username');
+
+    // If ID login is selected, hide the username field
+    if (idLoginRadio.checked) {
+        usernameField.style.display = 'none';
+        document.getElementById('loginButton').innerHTML = 'ID <?php echo $text['login_text']; ?>';
+    } else {
+        usernameField.style.display = ''; // Show the username field
+        document.getElementById('loginButton').innerHTML = '<?php echo $text['account_text'].' '.$text['login_text']; ?>';
+    }
+}
 
   </script>
 

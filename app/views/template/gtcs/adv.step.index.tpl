@@ -11,21 +11,21 @@
 
 <style>
 
-.t1{font-size: 17px; margin: 3px 0px; display: flex; align-items: center;}
-.t2{font-size: 17px; margin: 3px 0px;}
+.t1{font-size: 18px; margin: 3px 0px; display: flex; align-items: center;}
+.t2{font-size: 18px; margin: 3px 0px;}
 </style>
 
 <div class="container-ms">
 
     <header>
         <div class="program">
-            <img id="header-img" src="./img/template-head.svg">Program Template
+            <img id="header-img" src="./img/template-head.svg"><?php echo $text['Program_Template_text']; ?>
         </div>
         <div class="notification">
             <i style="width:auto; height:40px" class="fa fa-bell" onclick="ClickNotification()"></i>
             <span id="messageCount" class="badge"></span>
         </div>
-        <div class="personnel"><i style="width:auto; height: 40px;font-size: 26px" class="fa fa-user"></i> Esther</div>
+        <div class="personnel"><i style="width:auto; height: 40px;font-size: 26px" class="fa fa-user"></i> <?php echo $_SESSION['user']; ?></div>
     </header>
 
     <!-- Notification -->
@@ -94,10 +94,10 @@
     </div>
 
     <div class="topnav">
-        <label type="text" style="font-size: 22px; margin: 4px;">Advance Step</label>
+        <label type="text" style="font-size: 22px; margin: 4px;"><?php echo $text['Advanced_Step_text']; ?></label>
         <div class="topnav-right">
             <button class="btn" id="back-btn" type="button" onclick="location.href = '?url=Templates/advancedstep_index';">
-                <img id="img-back" src="./img/back.svg" alt="">back
+                <img id="img-back" src="./img/back.svg" alt=""><?php echo $text['Back_text']; ?>
             </button>
         </div>
     </div>
@@ -105,31 +105,31 @@
     <div class="main-content">
         <div class="center-content">
             <div class="row" style="margin-bottom: 5px;">
-                <div for="porgram-id" class="col-1 t1">Program ID:</div>
+                <div for="porgram-id" class="col-1 t1"><?php echo $text['Program_ID_text']; ?>:</div>
                 <div class="col-1 t2" style="margin-right: 1%">
                     <input type="number" class="form-control input-ms" id="porgram-id" value="<?php echo $data['program_id']; ?>" maxlength="" disabled="disabled">
                 </div>
 
-                <div for="program-name" class="col-2 t1" style="margin-right: -5%">Program Name:</div>
+                <div for="program-name" class="col-2 t1" style="margin-right: -5%"><?php echo $text['Program_Name_text']; ?>:</div>
                 <div class="col-2 t2">
                     <input type="text" class="form-control input-ms" id="program-name" value="<?php echo $data['program_name']; ?>" maxlength="" disabled="disabled" >
                 </div>
 
                 <div class="col t1">
                     <button id="add-step" type="button" onclick="new_step()">
-                        <img id="img-add" src="./img/add-program.svg" alt="">Add Step
+                        <img id="img-add" src="./img/add-program.svg" alt=""><?php echo $text['Add_Step_text']; ?>
                     </button>
 
                     <button id="copy-step" type="button" onclick="copy_step_div()">
-                        <img id="img-copy" src="./img/program-copy.svg" alt="">Copy
+                        <img id="img-copy" src="./img/program-copy.svg" alt=""><?php echo $text['Copy_text']; ?>
                     </button>
 
                     <button id="delete-step" type="button" onclick="delete_advanced_step()">
-                        <img id="img-delete" src="./img/program-delete.svg" alt="">Delete
+                        <img id="img-delete" src="./img/program-delete.svg" alt=""><?php echo $text['Delete_text']; ?>
                     </button>
 
                     <button id="test" type="button">
-                        <img id="img-test" src="./img/check-all.png"> Test
+                        <img id="img-test" src="./img/check-all.png"> <?php echo $text['Test_text']; ?>
                     </button>
                 </div>
             </div>
@@ -140,15 +140,15 @@
                         <thead id="header-table" style="background-color: #A3A3A3; font-size: 2vmin">
                             <tr style="text-align: center; vertical-align: middle;">
                                 <th width="5%"></th>
-                                <th width="8%">Step ID</th>
-                                <th width="15%">Step Name</th>
-                                <th width="10%">Target Q (N.m)</th>
-                                <th width="10%">Target A (&#186;)</th>
-                                <th width="10%">Hi Q</th>
-                                <th width="10%">Lo Q</th>
-                                <th width="10%">Hi A</th>
-                                <th width="10%">Lo A</th>
-                                <th width="10%">Edit</th>
+                                <th width="8%"><?php echo $text['Step_ID_text']; ?></th>
+                                <th width="15%"><?php echo $text['Step_Name_text']; ?></th>
+                                <th width="10%"><?php echo $text['Target_Q_text']; ?> (N.m)</th>
+                                <th width="10%"><?php echo $text['Target_A_text']; ?> (&#186;)</th>
+                                <th width="10%"><?php echo $text['Hi_Q_text']; ?></th>
+                                <th width="10%"><?php echo $text['Lo_Q_text']; ?></th>
+                                <th width="10%"><?php echo $text['Hi_A_text']; ?></th>
+                                <th width="10%"><?php echo $text['Lo_A_text']; ?></th>
+                                <th width="10%"><?php echo $text['Edit_text']; ?></th>
                             </tr>
                         </thead>
                         <tbody id="tbody" style="background-color: #F2F1F1; font-size: 2vmin; text-align: center">
@@ -188,7 +188,7 @@
                 <header class="w3-container modal-header">
                     <span onclick="document.getElementById('StepNew').style.display='none'"
                     class="w3-button w3-red w3-xxlarge w3-display-topright" style="padding: 7px; width: 60px">&times;</span>
-                    <h3 id="modal_head">New Step</h3>
+                    <h3 id="modal_head"><?php echo $text['New_Step_text']; ?></h3>
                 </header>
 
                 <div class="modal-body">
@@ -196,11 +196,11 @@
                         <div id="Torque_Parameter" style="display: block">
                             <div style="padding-left: 5%">
                                 <div class="row t1">
-                                    <div class="col-3 t1" for="">Program ID :</div>
+                                    <div class="col-3 t1" for=""><?php echo $text['Program_ID_text']; ?> :</div>
                                     <div class="col-2 t2">
                                         <input type="text" id="program-id" class="form-control input-ms" value="<?php echo $data['program_id']; ?>" maxlength="" disabled="disabled">
                                     </div>
-                                    <div class="col-3 t1" for="">Program Name :</div>
+                                    <div class="col-3 t1" for=""><?php echo $text['Program_Name_text']; ?> :</div>
                                     <div class="col-3 t2">
                                         <input type="text" id="program-name" class="form-control input-ms" value="<?php echo $data['program_name']; ?>" maxlength="" disabled="disabled">
                                     </div>
@@ -211,74 +211,74 @@
                                 <div class="NewStep-force-overflow">
                                     <div style="padding-left: 5%; background-color: #D9D9D9">
                                         <div class="row t1">
-                                            <div class="col-3 t1" for="">Max Torque :</div>
+                                            <div class="col-3 t1" for=""><?php echo $text['Max_Torque_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input type="text" id="max-torque" class="form-control input-ms" value="5.0" maxlength="" disabled="disabled">
                                             </div>
                                             <div class="col t2">N.m</div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1" for="">Step ID :</div>
+                                            <div class="col-3 t1" for=""><?php echo $text['Step_ID_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input type="text" id="step-id" class="form-control input-ms" value="1" maxlength="" disabled="disabled">
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1" for="">Step Name :</div>
+                                            <div class="col-3 t1" for=""><?php echo $text['Step_Name_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input type="text" id="step-name" class="form-control input-ms" value="Step-1" maxlength="">
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1" for="">Target Type :</div>
+                                            <div class="col-3 t1" for=""><?php echo $text['Target_Type_text']; ?> :</div>
                                             <div class="col-4 t2">
                               					<select id="target_type" style="width: 215px; height: 32px; border: 0">
-                               					    <option value="2">Torque</option>
-                               					    <option value="1">Angle</option>
+                               					    <option value="2"><?php echo $text['Torque_text']; ?></option>
+                               					    <option value="1"><?php echo $text['Angle_text']; ?></option>
                                   				</select>
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1" style="font-size: 20px">Direction :</div>
+                                            <div class="col-3 t1" style="font-size: 20px"><?php echo $text['Direction_text']; ?> :</div>
                                             <div class="col t2">
                                      	        <div class="col-3 form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" checked="checked" name="direction-option" id="direction-cw" value="0"style="zoom:1.2; vertical-align: middle">
-                                                    <label class="form-check-label" for="direction-cw">CW</label>
+                                                    <label class="form-check-label" for="direction-cw"><?php echo $text['CW_text']; ?></label>
                                                 </div>
                                       	        <div class="col form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" name="direction-option" id="direction-ccw" value="1" style="zoom:1.2; vertical-align: middle">
-                                                    <label class="form-check-label" for="direction-ccw">CCW</label>
+                                                    <label class="form-check-label" for="direction-ccw"><?php echo $text['CCW_text']; ?></label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1" for="">Run Down Speed :</div>
+                                            <div class="col-3 t1" for=""><?php echo $text['RunDownSpeed_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input type="text" id="run-down-speed" class="form-control input-ms" value="100" maxlength="">
                                             </div>
-                                            <div class="col t2">max rpm 1100</div>
+                                            <div class="col t2"><?php echo $text['max_rpm_text']; ?> 1100</div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1" for="">Target Torque :</div>
+                                            <div class="col-3 t1" for=""><?php echo $text['Target_Torque_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input type="text" id="target-torque" class="form-control input-ms" value="0.6" maxlength="">
                                             </div>
                                             <div class="col t2">N.m</div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1" for="">Target Angle(&#186;) :</div>
+                                            <div class="col-3 t1" for=""><?php echo $text['Target_Angle_text']; ?>(&#186;) :</div>
                                             <div class="col-4 t2">
                                                 <input type="text" id="target-angle" class="form-control input-ms" value="1800" maxlength="" disabled="disabled">
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1" for="">Delay Time :</div>
+                                            <div class="col-3 t1" for=""><?php echo $text['Delay_Time_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input type="text" id="delay-time" class="form-control input-ms" value="0.0" maxlength="">
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1">Joint Offset :</div>
+                                            <div class="col-3 t1"><?php echo $text['Joint_Offset_text']; ?> :</div>
                                             <div class="col-1 t2">
                               					<select id="joint-offset" style="width: 50px; height: 32px; border: 0">
                                					    <option value="0">&#10010;</option>
@@ -290,34 +290,34 @@
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1" style="font-size: 20px">Monitor Mode :</div>
+                                            <div class="col-3 t1" style="font-size: 20px"><?php echo $text['Monitor_Mode_text']; ?> :</div>
                                             <div class="col t2">
                                      	        <div class="col-3 form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" name="monitor-option" id="window" value="0"style="zoom:1.2; vertical-align: middle" checked="checked">
-                                                    <label class="form-check-label" for="window">Window</label>
+                                                    <label class="form-check-label" for="window"><?php echo $text['Window_text']; ?></label>
                                                 </div>
                                       	        <div class="col form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" name="monitor-option" id="Hi-Low" value="1" style="zoom:1.2; vertical-align: middle">
-                                                    <label class="form-check-label" for="Hi-Low">Hi-Low</label>
+                                                    <label class="form-check-label" for="Hi-Low"><?php echo $text['Hi_Low_text']; ?></label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1">Monitor Angle :</div>
+                                            <div class="col-3 t1"><?php echo $text['Monitor_Angle_text']; ?> :</div>
                                             <div class="switch MonitorAngle col-5 t2">
                                                 <input id="MonitorAngle-ON-OFF" name="MonitorAngle-ON-OFF" type="checkbox" checked>
                                                 <label><i></i></label>
                                             </div>
                                         </div>
                                         <div class="row t1" id="Over_Ang_Stop_tr">
-                                            <div class="col-3 t1">Over Angle Stop :</div>
+                                            <div class="col-3 t1"><?php echo $text['Over_Angle_Stop_text']; ?> :</div>
                                             <div class="switch AngleStop col-5 t2">
                                                 <input id="AngleStop-ON-OFF" name="AngleStop-ON-OFF" type="checkbox">
                                                 <label><i></i></label>
                                             </div>
                                         </div>
                                         <div class="row t1" id="Torque_Window_tr">
-                                            <div class="col-3 t1" for="">Torque Window :</div>
+                                            <div class="col-3 t1" for=""><?php echo $text['Torque_Window_text']; ?> :</div>
                                             <div class="col-2 t2">
                                                 <input type="text" id="torque-window" class="form-control input-ms" value="0.6" maxlength="" disabled>
                                             </div>
@@ -327,7 +327,7 @@
                                             </div>
                                         </div>
                                         <div class="row t1" id="Angle_Window_tr">
-                                            <div class="col-3 t1" for="">Angle Window :</div>
+                                            <div class="col-3 t1" for=""><?php echo $text['Angle_Window_text']; ?> :</div>
                                             <div class="col-2 t2">
                                                 <input type="text" id="angle-window" class="form-control input-ms" value="1800" maxlength="" >
                                             </div>
@@ -337,34 +337,34 @@
                                             </div>
                                         </div>
                                         <div class="row t1" id="Hi_Torque_tr">
-                                            <div class="col-3 t1" for="">Hi Torque :</div>
+                                            <div class="col-3 t1" for=""><?php echo $text['Hi_Torque_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input type="text" id="hi-torque" class="form-control input-ms" value="0.7" maxlength="">
                                             </div>
                                         </div>
                                         <div class="row t1" id="Lo_Torque_tr">
-                                            <div class="col-3 t1" for="">Lo Torque :</div>
+                                            <div class="col-3 t1" for=""><?php echo $text['Lo_Torque_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input type="text" id="lo-torque" class="form-control input-ms" value="0.0" maxlength="">
                                             </div>
                                         </div>
                                         <div class="row t1" id="Hi_Angle_tr">
-                                            <div class="col-3 t1">Hi Angle :</div>
+                                            <div class="col-3 t1"><?php echo $text['Hi_Angle_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input id="hi-angle" type="text" value="30600" class="form-control input-ms" maxlength="">
                                             </div>
                                         </div>
                                         <div class="row t1" id="Lo_Angle_tr">
-                                            <div class="col-3 t1">Lo Angle :</div>
+                                            <div class="col-3 t1"><?php echo $text['Lo_Angle_text']; ?> :</div>
                                             <div class="col-4 t2">
                                                 <input id="lo-angle" type="text" value="0" class="form-control input-ms" maxlength="">
                                             </div>
                                         </div>
                                         <div class="row t1">
-                                            <div class="col-3 t1">Record Angle Val :</div>
+                                            <div class="col-3 t1"><?php echo $text['Record_Angle_Val_text']; ?> :</div>
                                             <div class="col-1 t2">
                               					<select id="record-angle-val" style="width: 210px; height: 32px; border: 0">
-                               					    <option value="0">skip</option>
+                               					    <option value="0"><?php echo $text['skip_text']; ?></option>
                                                     <option value="1" selected>+</option>
                                                     <option value="2">-</option>
                                   				</select>
@@ -377,8 +377,8 @@
                     </form>
                 </div>
                 <div class="modal-footer justify-content-center">
-                    <button id="button1" class="button button3" onclick="new_step_save()">Save</button>
-                    <button id="button2" class="button button3" onclick="document.getElementById('StepNew').style.display='none'" class="cancelbtn">Cancel</button>
+                    <button id="button1" class="button button3" onclick="new_step_save()"><?php echo $text['Save_text']; ?></button>
+                    <button id="button2" class="button button3" onclick="document.getElementById('StepNew').style.display='none'" class="cancelbtn"><?php echo $text['Cancel_text']; ?></button>
                 </div>
             </div>
         </div>
@@ -391,37 +391,37 @@
                 <header class="w3-container modal-header">
                     <span onclick="document.getElementById('Copystep').style.display='none'"
                     class="w3-button w3-red w3-xxlarge w3-display-topright" style="padding: 7px; width: 60px">&times;</span>
-                    <h3>Copy Step</h3>
+                    <h3><?php echo $text['Copy_text'].' '.$text['Step_text']; ?></h3>
                 </header>
 
                 <div class="modal-body">
                     <form id="copy_step_form">
-                        <div class="col" style="font-size: 20px; margin: 5px 0px 5px"><b>Copy From</b></div>
+                        <div class="col" style="font-size: 20px; margin: 5px 0px 5px"><b><?php echo $text['Copy_from_text']; ?></b></div>
                         <div style="padding-left: 20px;">
         		            <div class="row">
-        				        <div for="from_step_id" class="col-5 t1">Step ID :</div>
+        				        <div for="from_step_id" class="col-5 t1"><?php echo $text['Step_ID_text']; ?> :</div>
         				        <div class="col-5 t2">
         				            <input type="text" class="form-control" id="from_step_id" disabled>
         				        </div>
         				    </div>
                             <div class="row">
-                                <div for="from_step_name" class="col-5 t1">Step Name :</div>
+                                <div for="from_step_name" class="col-5 t1"><?php echo $text['Step_Name_text']; ?> :</div>
                                 <div class="col-5 t2">
                                     <input type="text" class="form-control" id="from_step_name" disabled>
                                 </div>
                             </div>
                         </div>
 
-                        <div for="from_step_id" class="col" style="font-size: 20px; margin: 5px 0px 5px"><b>Copy To</b></div>
+                        <div for="from_step_id" class="col" style="font-size: 20px; margin: 5px 0px 5px"><b><?php echo $text['Copy_to_text']; ?></b></div>
                         <div style="padding-left: 20px;">
                             <div class="row">
-                                <div for="to_step_id" class="col-5 t1">Step ID :</div>
+                                <div for="to_step_id" class="col-5 t1"><?php echo $text['Step_ID_text']; ?> :</div>
                 				<div class="col-5 t2">
                 				    <input type="text" class="form-control" id="to_step_id" disabled>
                 				</div>
             				</div>
                             <div class="row">
-                                <div for="to_step_name" class="col-5 t1">Step Name :</div>
+                                <div for="to_step_name" class="col-5 t1"><?php echo $text['Step_Name_text']; ?> :</div>
                                 <div class="col-5 t2">
                                     <input type="text" class="form-control" id="to_step_name"> 
                                 </div>
@@ -431,8 +431,8 @@
                 </div>
 
                 <div class="modal-footer justify-content-center">
-                    <button id="button1" class="button button3" onclick="copy_step_save()">Save</button>
-                    <button id="button2" class="button button3" onclick="document.getElementById('Copystep').style.display='none'" class="cancelbtn">Cancel</button>
+                    <button id="button1" class="button button3" onclick="copy_step_save()"><?php echo $text['Save_text']; ?></button>
+                    <button id="button2" class="button button3" onclick="document.getElementById('Copystep').style.display='none'" class="cancelbtn"><?php echo $text['Cancel_text']; ?></button>
                 </div>
             </div>
         </div>
@@ -643,7 +643,7 @@ function new_step() {
         return 0;
     }else{
 
-        document.getElementById('modal_head').innerHTML = 'New Step'; //'New Program'
+        document.getElementById('modal_head').innerHTML = '<?php echo $text['New_Step_text']; ?>'; //'New Program'
         // // //帶入預設值
         document.getElementById("step-id").value = step_id;
 
@@ -827,7 +827,7 @@ function edit_adv_step(step_id) {
 
             option_list_update();//更新顯示
 
-            document.getElementById('modal_head').innerHTML = 'Edit Step'; //'New Job'
+            document.getElementById('modal_head').innerHTML = '<?php echo $text['Edit_text'].$text['Step_text']; ?>'; //'New Job'
             document.getElementById('StepNew').style.display = 'block'
         },
         error: function(error) {
@@ -893,7 +893,7 @@ function delete_advanced_step() {
     let step_id = rowSelected[0].childNodes[1].innerHTML;
     let program_id = document.getElementById('porgram-id').value;
 
-    var yes = confirm('你確定嗎？' + 'Step ID : ' + step_id);
+    var yes = confirm('<?php echo $text['Delete_confirm_text']; ?>' + '<?php echo $text['Step_ID_text']; ?> : ' + step_id);
 
     if (yes) {
         let url = '?url=Templates/delete_advanced_step_by_id';

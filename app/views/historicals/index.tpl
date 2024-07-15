@@ -137,13 +137,13 @@ if(!empty($_COOKIE['chat_mode_change'])){
 <div class="container-ms">
     <header>
         <div class="historical">
-            <img id="header-img " src="./img/historical-head.svg"> historical Record
+            <img id="header-img " src="./img/historical-head.svg"> <?php echo $text['Historical_Record_text']; ?>
         </div>
         <div class="notification">
             <i style="width:auto; height:40px" class="fa fa-bell" onclick="ClickNotification()"></i>
             <span id="messageCount" class="badge"></span>
         </div>
-        <div class="personnel"><i style="width:auto; height: 40px;font-size: 26px" class="fa fa-user"></i> Esther</div>
+        <div class="personnel"><i style="width:auto; height: 40px;font-size: 26px" class="fa fa-user"></i> <?php echo $_SESSION['user']; ?></div>
     </header>
 
     <!-- Notification -->
@@ -215,13 +215,13 @@ if(!empty($_COOKIE['chat_mode_change'])){
         <div class="center-content">
             <div class="wrapper">
                 <div class="navbutton active" onclick="handleButtonClick(this, 'fastening')">
-                    <span data-content="Fastening Record" onclick="showContent('fastening')"></span>Fastening Record
+                    <span data-content="<?php echo $text['Fastening_Record_text']; ?>" onclick="showContent('fastening')"></span><?php echo $text['Fastening_Record_text']; ?>
                 </div>
                 <div class="navbutton" onclick="handleButtonClick(this, 'workflowlog')">
-                    <span data-content="Work Flow Log" onclick="showContent('workflowlog')"></span>Work Flow Log
+                    <span data-content="<?php echo $text['Work_Flow_Log_text']; ?>" onclick="showContent('workflowlog')"></span></span><?php echo $text['Work_Flow_Log_text']; ?>
                 </div>
                 <div class="navbutton" onclick="handleButtonClick(this, 'useraccess')">
-                    <span data-content="User Access Logging" onclick="showContent('useraccess')"></span>User Access Logging
+                    <span data-content="<?php echo $text['User_Access_Logging_text']; ?>" onclick="showContent('useraccess')"></span><?php echo $text['User_Access_Logging_text']; ?>
                 </div>
             </div>
 
@@ -230,13 +230,13 @@ if(!empty($_COOKIE['chat_mode_change'])){
                 <div id="FasteningDisplay" style="margin-top: 40px">
                     <div style="padding-left: 2%">
                         <div class="row">
-                            <div for="BarcodeSN" class="col-1 t1">BarcodeSN</div>
-                            <div class="col-2 t2">
+                            <div for="BarcodeSN" class="col-2 t1"><?php echo $text['BarcodeSN_text']; ?>:</div>
+                            <div class="col-2 t2" style="margin-left: -100px">
                                 <input type="text" class="t3 form-control input-ms" id="barcodesn" name="barcodesn" maxlength="" style="width: 190px;">
                             </div>
 
-                            <div for="Operator" class="col-1 t1">Operator</div>
-                            <div class="col-2 t2">
+                            <div for="Operator" class="col-2 t1"><?php echo $text['Operator_text']; ?>:</div>
+                            <div class="col-2 t2" style="margin-left: -100px">
                                <!--<input type="text" class="t3 form-control input-ms" id="Operator" maxlength="" value="" style="width: 190px;">-->
                                <!--<select>
                                     <?//php foreach($data['all_roles'] as $key =>$val){ ?>
@@ -245,37 +245,37 @@ if(!empty($_COOKIE['chat_mode_change'])){
                                </select>-->
                             </div>
 
-                            <div for="SelectJob" class="col-1 t1">Select Job</div>
-                            <div class="col-2 t3">
-                                <input type="text" class="t3 form-control input-ms" id="JobSelect" placeholder="Click here.." onfocus="openModal('JobSelect')" onclick="this.blur()">
+                            <div for="SelectJob" class="col-2 t1"><?php echo $text['Select_Job_text']; ?>:</div>
+                            <div class="col-2 t3" style="margin-left: -100px">
+                                <input type="text" class="t3 form-control input-ms" id="JobSelect" placeholder="<?php echo $text['Click_here_text']; ?>.." onfocus="openModal('JobSelect')" onclick="this.blur()">
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="col-1 t1" for="FromDate">From</div>
-                            <div class="col-2 t1">
+                            <div class="col-2 t1" for="FromDate"><?php echo $text['From_text']; ?>:</div>
+                            <div class="col-2 t1" style="margin-left: -100px">
                                 <input type="datetime-local" class="t3" id="FromDate" name="FromDate" style="width: 190px;border-radius: 5px;border: 1px solid #CCCCCC; ">
                             </div>
 
-                            <div class="col-1 t1" for="ToDate">To</div>
-                            <div class="col-2 t1">
+                            <div class="col-2 t1" for="ToDate"><?php echo $text['To_text']; ?>:</div>
+                            <div class="col-2 t1" style="margin-left: -100px">
                                 <input type="datetime-local" class="t3" id="ToDate" name="ToDate" style="width: 190px; border-radius: 5px;border: 1px solid #CCCCCC;">
                             </div>
                         </div>
 
                         <div class="row">
-                            <div for="result-status" class="col-1 t1">Result Status</div>
-                            <div class="col-2 t2">
+                            <div for="result-status" class="col-2 t1"><?php echo $text['Result_Status_text']; ?>:</div>
+                            <div class="col-2 t2" style="margin-left: -100px">
                                 <select id="status" style="width: 190px">
                                     <?php foreach($data['res_status_arr'] as $key_res =>$val_res){?>
                                             <option value="<?php echo $key_res;?>"><?php echo $val_res;?></option>
                                     <?php }?>
-                                    
+
                                 </select>
                             </div>
 
-                            <div for="Controller" class="col-1 t1">Controller</div>
-                            <div class="col-2 t3">
+                            <div for="Controller" class="col-2 t1"><?php echo $text['Controller_text']; ?>:</div>
+                            <div class="col-2 t3" style="margin-left: -100px">
                                 <select id="Controller" style="width: 190px;">
                                     <?php foreach($data['res_controller_arr'] as $key_res_1 =>$val_res_1){?>
                                             <option value="<?php echo $key_res_1;?>"><?php echo $val_res_1;?></option>
@@ -283,8 +283,8 @@ if(!empty($_COOKIE['chat_mode_change'])){
                                 </select>
                             </div>
 
-                            <div for="Program" class="col-1 t1">program</div>
-                            <div class="col-2 t3">
+                            <div for="Program" class="col-2 t1"><?php echo $text['program_text']; ?>:</div>
+                            <div class="col-2 t3"  style="margin-left: -100px">
                                 <select id="Program" style="width: 190px;">
                                      <?php foreach($data['res_program'] as $key_res_2 =>$val_res_2){?>
                                             <option value="<?php echo $key_res_2;?>"><?php echo $val_res_2;?></option>
@@ -296,17 +296,17 @@ if(!empty($_COOKIE['chat_mode_change'])){
 
                     <div class="topnav-menu">
                         <div class="search-container">
-                            <input type="text" placeholder="Search.." name="sname" id="search_name" size="40" style="height: 35px">&nbsp;
-                            <button id="Search" type="button" class="Search-button" onclick="search_info()">Search</button>
+                            <input type="text" placeholder="<?php echo $text['Search_text']; ?>.." name="sname" id="search_name" size="40" style="height: 35px">&nbsp;
+                            <button id="Search" type="button" class="Search-button" onclick="search_info()"><?php echo $text['Search_text']; ?></button>
                         </div>
 
 
                         <div class="topnav-right">
-                            <button id="Export-CSV" type="button" class="ExportButton" onclick="csv_download()">Export CSV</button>
-                            <button id="Export-Report" type="button" class="ExportButton" onclick="window.open('?url=Historicals/history_result', '_blank');" >Export Report</button>
-                            <button id="Combine-btn" type="button" onclick="NextToCombineData()">Combine Data</button>
-                            <button id="Clear" type="button"   onclick="clear_button() ">Clear</button>
-                            <button  id="nopage" type="button"  onclick="nopage('nopage')">Nopage</button>
+                            <button id="Export-CSV" type="button" class="ExportButton" onclick="csv_download()"><?php echo $text['Export_text']; ?> CSV</button>
+                            <button id="Export-Report" type="button" class="ExportButton" onclick="window.open('?url=Historicals/history_result', '_blank');" ><?php echo $text['Export_Report_text']; ?></button>
+                            <button id="Combine-btn" type="button" onclick="NextToCombineData()"><?php echo $text['Combine_Data_text']; ?></button>
+                            <button id="Clear" type="button" onclick="clear_button() "><?php echo $text['Clear_text']; ?></button>
+                            <button id="nopage" type="button" onclick="nopage('nopage')"><?php echo $text['Nopage_text']; ?></button>
                         </div>
 
                     </div>
@@ -317,22 +317,22 @@ if(!empty($_COOKIE['chat_mode_change'])){
                                 <thead id="header-table" style="text-align: center; vertical-align: middle">
                                     <tr>
                                         <th><i class="fa fa-trash-o" style="font-size:26px;color:black" onclick="deleteinfo()"></i></th>
-                                        <th>Index</th>
-                                        <th>Time</th>
-                                        <th>Station</th>
-                                        <th>BarcodeSN</th>
-                                        <th>Job Name</th>
-                                        <th>Seq Name</th>
-                                        <th>task</th>
-                                        <th>Equipment</th>
-                                        <th>Torque range</th>
-                                        <th>Angle range</th>
-                                        <th>Final Torque</th>
-                                        <th>Final Angle</th>
-                                        <th>Status</th>
-                                        <th>Error</th>
-                                        <th>Pset</th>
-                                        <th>Action</th>
+                                        <th><?php echo $text['Index_text']; ?></th>
+                                        <th><?php echo $text['Time_text']; ?></th>
+                                        <th><?php echo $text['Station_text']; ?></th>
+                                        <th><?php echo $text['BarcodeSN_text']; ?></th>
+                                        <th><?php echo $text['Job_Name_text']; ?></th>
+                                        <th><?php echo $text['Seq_Name_text']; ?></th>
+                                        <th><?php echo $text['Task_text']; ?></th>
+                                        <th><?php echo $text['Equipment_text']; ?></th>
+                                        <th><?php echo $text['Torque_range_text']; ?></th>
+                                        <th><?php echo $text['Angle_range_text']; ?></th>
+                                        <th><?php echo $text['Final_Torque_text']; ?></th>
+                                        <th><?php echo $text['Final_Angle_text']; ?></th>
+                                        <th><?php echo $text['Status_text']; ?></th>
+                                        <th><?php echo $text['Error_text']; ?></th>
+                                        <th><?php echo $text['Pset_text']; ?></th>
+                                        <th><?php echo $text['Action_text']; ?></th>
                                     </tr>
                                 </thead>
 
@@ -402,38 +402,38 @@ if(!empty($_COOKIE['chat_mode_change'])){
                 <!-- Click Detail Fastening Record Info -->
                 <div id="DetailInfoDisplay" style="display: none">
                     <div class="topnav">
-                        <label type="text" style="font-size: 18px; padding-left: 1%; margin: 4px">Fastenig record &#62; Info</label>
+                        <label type="text" style="font-size: 18px; padding-left: 1%; margin: 4px"><?php echo $text['Fastening_Record_text']; ?> &#62; <?php echo $text['Info_text']; ?></label>
                         <button id="back-setting" type="button" onclick="goBack()">
-                            <img id="img-back" src="./img/back.svg" alt=" onclick="goBack()">Back
+                            <img id="img-back" src="./img/back.svg" alt=" onclick='goBack()'"><?php echo $text['Back_text']; ?>
                         </button>
                     </div>
                     <div id ="jobinfo">
                     <table class="table" style="font-size: 15px;">
                         <tr style="padding: 0 10px">
-                            <td>Index: <?php echo $data['job_info'][0]['system_sn'];?></td>
-                            <td>Job info: <?php echo $data['job_info'][0]['job_name'];?> / <?php echo $data['job_info'][0]['sequence_name']. "/". $data['job_info'][0]['cc_task_name'];?></td>
-                            <td>Controller: </td>
-                            <td>Error code: <?php echo  $data['status_arr']['error_msg'][$data['job_info'][0]['error_message']];?></td>
-                            <td>Status : <a style="background-color: <?php echo $data['status_arr']['status_color'][$data['job_info'][0]['fasten_status']];?>; padding: 0 10px"><?php echo $data['status_arr']['status_type'][$data['job_info'][0]['fasten_status']];?></a></td>
+                            <td><?php echo $text['Index_text']; ?>: <?php echo $data['job_info'][0]['system_sn'];?></td>
+                            <td><?php echo $text['Job_info_text']; ?>: <?php echo $data['job_info'][0]['job_name'];?> / <?php echo $data['job_info'][0]['sequence_name']. "/". $data['job_info'][0]['cc_task_name'];?></td>
+                            <td><?php echo $text['Controller_text']; ?>: </td>
+                            <td><?php echo $text['Error_code_text']; ?>: <?php echo  $data['status_arr']['error_msg'][$data['job_info'][0]['error_message']];?></td>
+                            <td><?php echo $text['Status_text']; ?> : <a style="background-color: <?php echo $data['status_arr']['status_color'][$data['job_info'][0]['fasten_status']];?>; padding: 0 10px"><?php echo $data['status_arr']['status_type'][$data['job_info'][0]['fasten_status']];?></a></td>
                         </tr>
                         <tr>
-                            <td>Actual Torque: <?php echo $data['job_info'][0]['fasten_torque'];?> kgf.cm</td>
-                            <td>BarcodeSN: <?php echo $data['job_info'][0]['cc_barcodesn'];?></td>
-                            <td>Direction: <?php echo  $data['status_arr']['direction'][$data['job_info'][0]['count_direction']];?></td>
-                            <td>Pset: </td>
-                            <td>Time: <?php echo $data['job_info'][0]['data_time'];?></td>
+                            <td><?php echo $text['Actual_Torque_text']; ?>: <?php echo $data['job_info'][0]['fasten_torque'];?> N.m</td>
+                            <td><?php echo $text['BarcodeSN_text']; ?>: <?php echo $data['job_info'][0]['cc_barcodesn'];?></td>
+                            <td><?php echo $text['Direction_text']; ?>: <?php echo  $data['status_arr']['direction'][$data['job_info'][0]['count_direction']];?></td>
+                            <td><?php echo $text['Pset_text']; ?>: </td>
+                            <td><?php echo $text['Time_text']; ?>: <?php echo $data['job_info'][0]['data_time'];?></td>
                         </tr>
                         <tr  style="vertical-align: middle;">
-                            <td>Member: <!--<input class="t6" type="text" size="10" value="Esther" disabled="disabled" style="background-color: #F5F5F5">--></td>
-                            <td>Note: <!--<input class="t6" type="text" value="arm (444,215)[200]" disabled="disabled" style="background-color: #F5F5F5; width: 15vw"></td>-->
+                            <td><?php echo $text['Member_text']; ?>: <!--<input class="t6" type="text" size="10" value="Esther" disabled="disabled" style="background-color: #F5F5F5">--></td>
+                            <td><?php echo $text['Note_text']; ?>: <!--<input class="t6" type="text" value="arm (444,215)[200]" disabled="disabled" style="background-color: #F5F5F5; width: 15vw"></td>-->
                             <td>
-                                <input class="form-check-input" type="checkbox" id="myCheckbox" onchange="check_limit(this)"  <?php if($limit_val=="1"){ echo "checked"; }else{}?>  style="zoom:1.2; float: left">&nbsp; display the high/low auxiliary lines.
+                                <input class="form-check-input" type="checkbox" id="myCheckbox" onchange="check_limit(this)"  <?php if($limit_val=="1"){ echo "checked"; }else{}?>  style="zoom:1.2; float: left">&nbsp; <?php echo $text['Display_lilo_text']; ?>
                             </td>
                             </td>
                         </tr>
                         <tr style="vertical-align: middle">
                             <td>
-                                Chart Setting:  
+                                <?php echo $text['Chart_Setting_text']; ?>:  
                                 <select id="chartseting" class="t6 Select-All" style="float: none"  onchange="chat_mode_change(this)">
                                     <?php foreach($data['chat_mode_arr'] as $k_chat => $v_chat){?>
                                         <option  value="<?php echo $k_chat;?>"  <?php if($chat_mode_change == $k_chat){echo "selected";}else{echo "";}?>  > <?php echo $v_chat;?> </option>
@@ -441,7 +441,7 @@ if(!empty($_COOKIE['chat_mode_change'])){
                                 </select>
                             </td>
                             <td>
-                                Torque Unit:  
+                                <?php echo $text['Torque_Unit_text']; ?>:  
                                 <select id="Torque-Unit" class="Select-All" style="float: none; width: 100px" onchange="unit_change(this)">
                                     <?php foreach($data['torque_mode_arr'] as $k_torque =>$v_torque){?>
                                             <option  value="<?php echo $k_torque;?>" <?php if($data['unitvalue'] == $k_torque){echo "selected";}else{echo "";}?> > <?php echo $v_torque; ?> </option>
@@ -473,7 +473,7 @@ if(!empty($_COOKIE['chat_mode_change'])){
                     <?php if(!empty($data['chart_info'])){?>
                         <div>
                             <div style="text-align: center">
-                                <label style="float: left" id='DiagramDisplay'><b>Diagram Display</b></label>
+                                <label style="float: left" id='DiagramDisplay'><b><?php echo $text['Diagram_Display_text']; ?></b></label>
                                 <label><?php echo $data['chat']['chat_name'];?></label>
                             </div>
                         
@@ -483,10 +483,10 @@ if(!empty($_COOKIE['chat_mode_change'])){
                                     <div class="menu-chart"  id="menu-chart" onclick="toggleMenu()">
                                         <i class="fa fa-bars" style="font-size: 26px"></i>
                                         <div class="menu-content" id="myMenu">
-                                            <a  id="downloadchartbtn">Download HTML</a>
+                                            <a  id="downloadchartbtn"><?php echo $text['Download_text']; ?> HTML</a>
                                         </div> 
                                     </div>
-                                    <div id="chartinfo" style="width: 1500px; height: 400px;"></div>
+                                    <div id="chartinfo" style="width: 1500px; height: 400px; z-index: 1;"></div>
                                 </div>
                             </div>
                         </div>
@@ -498,42 +498,37 @@ if(!empty($_COOKIE['chat_mode_change'])){
                 <!-- Click Combine Data -->
                 <div id="CombineDataDisplay" style="display: none">
                     <div class="topnav">
-                        <label type="text" style="font-size: 20px; padding-left: 1%; margin: 6px">Fastenig record &#62; Combine data</label>
+                        <label type="text" style="font-size: 20px; padding-left: 1%; margin: 6px"><?php echo $text['Historical_Record_text']; ?> &#62; <?php echo $text['Combine_data_text']; ?></label>
                         <button id="back-setting" type="button"  onclick="goBack()" >
-                            <img id="img-back" src="./img/back.svg" alt=""  onclick="goBack()" >Back
+                            <img id="img-back" src="./img/back.svg" alt=""  onclick="goBack()" ><?php echo $text['Back_text']; ?>
                         </button>
                     </div>
                     <div class="topnav-menu" style="background-color: #FFF; margin-top: 3px">
                         <div class="row t1">
-                            <div class="col t2 form-check form-check-inline" style="margin-left: 10px">
-                                <input class="form-check-input" type="checkbox" id="myCheckbox" onchange="check_limit(this)";  <?php if($limit_val=="1"){ echo "checked"; }else{}?> style="zoom:1.2; vertical-align: middle">
-                                <label class="form-check-label" for="optioncheck">display the high/low auxiliary lines.</label>
+                            <div class="col-9 t2 form-check form-check-inline" style="margin-left: 15px">
+                                <input class="form-check-input" type="checkbox" id="myCheckbox" onchange="check_limit(this)";  <?php if($limit_val=="1"){ echo "checked"; }else{}?> style="zoom:1.3;vertical-align: middle; margin-top:7px">
+                                <label class="form-check-label" for="optioncheck"><?php echo $text['Display_lilo_text']; ?></label>
 
                                 <label style="padding-left: 5%">
-                                    Chart Setting : &nbsp;
-                                    <select id="chart" style="width: 100px" onchange="chart_change(this)" >
+                                    <?php echo $text['Chart_Setting_text']; ?> : &nbsp;
+                                    <select id="chart" style="width: 220px" onchange="chart_change(this)" >
                                         <?php foreach($data['chat_mode_arr_combine'] as $k_mode => $v_mode){ ?>
                                             <option value="<?php echo $k_mode; ?>" <?php if($data['chat_mode'] == $k_mode){ echo "selected";}?>><?php echo $v_mode; ?></option>
                                         <?php } ?>
                                     </select>
                                 </label>
                                 <label style="padding-left: 5%">
-                                    Unit :
+                                    <?php echo $text['Torque_Unit_text']; ?> :
                                         <select id="unit" style="width: 100px" onchange="unit_change_combine(this)" >
                                           <?php foreach($data['torque_mode_arr'] as $k_torque => $v_torque){?>
                                                 <option  value="<?php echo $k_torque;?>"  <?php if( $data['unit'] == $k_torque){echo "selected";}else{echo "";}?>  > <?php echo $v_torque;?> </option>
                                           <?php } ?>        
                                         </select>
-                                </label>
-                            </div>
-                            <div class="col t2">
-                                <!--<button id="Export-Excel-data" type="button" class="ExportButton">Export Excel</button>-->
-                                <button id="downland_combine" type="button" class="ExportButton">Export HTML</button>
+                                </label>&nbsp;
+                                <button id="downland_combine" type="button" class="t2 ExportButton"><?php echo $text['Export_text']; ?> HTML</button>
                             </div>
                         </div>
                     </div>
-
-                    <hr class="w3-clear" style="width: 100%">
 
                     <div class="w3-col">
                         <div class="w3-round" style="margin: 5px 0;">
@@ -541,24 +536,24 @@ if(!empty($_COOKIE['chat_mode_change'])){
                                 <div class="scrollbar-Combine" id="style-Combine">
                                     <div class="force-overflow-Combine" id="combinedata">
                                     <?php foreach( $data['info_final'] as $key =>$val){?>
-                                            <div class="w3-half">
+                                            <div class="w3-half" style="border: 1px solid #A0C0C0; font-size: 16px">
                                                 <div class="row t1">
-                                                    <div class="col"> Index : <?php echo $val['system_sn'];?></div>
-                                                    <div class="col"> Job info : <?php echo $val['job_name'];?></div>
-                                                    <div class="col"> Pset : </div>
+                                                    <div class="col"> <?php echo $text['Index_text']; ?> : <?php echo $val['system_sn'];?></div>
+                                                    <div class="col"> <?php echo $text['Job_info_text']; ?> : <?php echo $val['job_name'];?></div>
+                                                    <div class="col"> <?php echo $text['Pset_text']; ?> : </div>
                                                 </div>
                                                 <div class="row t1">
-                                                    <div class="col"> Time : <?php echo $val['data_time'];?></div>
-                                                    <div class="col"> Task Time : <?php echo $val['fasten_time'];?> ms </div>
-                                                    <div class="col"> Status : <a style="background-color:<?php echo $data['status_arr']['status_color'][$val['fasten_status']];?>"><?php echo $data['status_arr']['status_type'][$val['fasten_status']];?></a></div>
+                                                    <div class="col"> <?php echo $text['Time_text']; ?> : <?php echo $val['data_time'];?></div>
+                                                    <div class="col"> <?php echo $text['Task_text'].' '.$text['Time_text']; ?> : <?php echo $val['fasten_time'];?> ms </div>
+                                                    <div class="col"> <?php echo $text['Status_text']; ?> : <a style="background-color:<?php echo $data['status_arr']['status_color'][$val['fasten_status']];?>"><?php echo $data['status_arr']['status_type'][$val['fasten_status']];?></a></div>
                                                 </div>
                                                 <div class="row t1">
-                                                    <div class="col"> barcodeSN : <?php echo $val['cc_barcodesn'];?></div>
-                                                    <div class="col"> Error Code : <?php echo  $data['status_arr']['error_msg'][$val['error_message']];?></div>
-                                                    <div class="col"> Actual Torque : <?php echo $val['fasten_torque'] ." ".$data['torque_mode_arr'][$val['torque_unit']];?> </div>
+                                                    <div class="col"> <?php echo $text['BarcodeSN_text']; ?> : <?php echo $val['cc_barcodesn'];?></div>
+                                                    <div class="col"> <?php echo $text['Equipment_text']; ?> : </div>
+                                                    <div class="col"> <?php echo $text['Actual_Torque_text']; ?> : <?php echo $val['fasten_torque'] ." ".$data['torque_mode_arr'][$val['torque_unit']];?> </div>
                                                 </div>
                                                 <div class="row t1">
-                                                    <div class="col"> Equipment : </div>
+                                                    <div class="col"> <?php echo $text['Error_code_text']; ?> : <?php echo  $data['status_arr']['error_msg'][$val['error_message']];?></div>
                                                 </div>
                                              </div>
                                     <?php }?>
@@ -1071,6 +1066,10 @@ addMessage();
         };
     }
     myChart.setOption(option);
+    myChart.resize({
+      width: window.innerWidth*0.8,
+      height: 400,
+    });
 
 
 </script>
@@ -1301,6 +1300,11 @@ addMessage();
     }
 
     myChart_combine.setOption(option);
+    myChart_combine.resize({
+      width: window.innerWidth*0.8,
+      height: 400,
+    });
+
 
 </script>
 <?php }else if($path == "combinedata" && $data['chat_mode'] == "6"){?>
@@ -1438,8 +1442,10 @@ if (limit_val == 1) {
     });
 }
 myChart_combine.setOption(option);
-
-    
+myChart_combine.resize({
+      width: window.innerWidth*0.8,
+      height: 400,
+    });
 
 
 </script>
@@ -1516,8 +1522,8 @@ document.getElementById('downland_combine').addEventListener('click', function()
     var divToRemove = document.getElementById('empty1');
     var divToRemove2 = document.getElementById('chart-title');
 
-    var job1 = '<?php echo $data['info_final'][0]['system_sn'];?>';
-    var job2 = '<?php echo $data['info_final'][1]['system_sn'];?>';
+    var job1 = '<?php if(isset($data['info_final'][0]['system_sn'])) echo $data['info_final'][0]['system_sn'];?>';
+    var job2 = '<?php if(isset($data['info_final'][1]['system_sn'])) echo $data['info_final'][1]['system_sn'];?>';
     
     if(divToRemove) {
         divToRemove.parentNode.removeChild(divToRemove);
@@ -1569,5 +1575,30 @@ document.getElementById('downland_combine').addEventListener('click', function()
     history.go(0);
 
 });
+
+</script>
+
+
+<script type="text/javascript">
+    
+function reportWindowSize() {
+
+  if (document.getElementById('chartinfo') != null) {
+    var myChart = echarts.init(document.getElementById('chartinfo'));
+    myChart.resize({
+      width: window.innerWidth*0.8,
+      height: 400,
+    });    
+  }
+  if (document.getElementById('chart_combine') != null) {
+    var myChart_combine = echarts.init(document.getElementById('chart_combine'));
+    myChart_combine.resize({
+      width: window.innerWidth*0.8,
+      height: 400,
+    });
+  }
+}
+
+window.onresize = reportWindowSize;
 
 </script>

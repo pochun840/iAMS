@@ -1,14 +1,14 @@
 <!-- PLC Input Output Setting -->
     <div id="PLC_In_Out_Setting" style="display: none">
         <div class="topnav">
-            <label type="text" style="font-size: 20px; margin: 4px; padding-left: 2%">PLC Setting</label>
+            <label type="text" style="font-size: 20px; margin: 4px; padding-left: 5%">PLC Setting</label>
             <button class="btn" id="back-btn" type="button" onclick="cancelSetting()">
                 <img id="img-back" src="./img/back.svg" alt="">back
             </button>
         </div>
 
         <div class="center-content">
-            <div id="container">
+            <div class="container">
                 <div style="padding: 0px">
                     <div style="padding-left: 5%; padding-bottom: 1%">
                         <label style="font-size: 20px">

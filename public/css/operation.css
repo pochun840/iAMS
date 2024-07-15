@@ -6,6 +6,8 @@
     width: calc(100%);
     position: static;
     padding-left: 68px;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
 }
 
 header, footer, .center-content
@@ -279,7 +281,6 @@ header
     padding: 5px;
 }
 
-
 .VerifyButton
 {
     background-color: #4F576D;
@@ -294,7 +295,6 @@ header
     height: 35px;
     width: auto;
 }
-
 
 /* scrollbar style */
 .scrollbar-Message_text
@@ -337,6 +337,7 @@ header
     background: linear-gradient(left, #8391A6, #536175);
 }
 
+
 /* Clearfix to clear the float */
 header::after
 {
@@ -347,121 +348,43 @@ header::after
 
 .main-content
 {
-    display: flex;
-    padding: 0px 5px;
+    width: 100%;
 }
 
 .center-content
 {
-   width: 100%;
+    float: left;
+    padding: 0px;
+    width: 100%;
+    position: relative;
+    height: 61vh;
 }
 
 .center-content img
 {
    width: 100%;
-   height: auto;
+   height: 54vh;
 }
 
-@media (max-width: 768px)
+/*** Operation Setting ****/
+.operation_setting
 {
-    .center-content
-    {
-        width: 100%;
-    }
-}
-
-.left, .center, .right
-{
+    margin: 0;
+    display: flex;
+    padding: 0 10px;
+    flex-direction: column;
     width: 100%;
-    border: 1px solid #ddd;
-    padding: 0px 5px;
-    box-sizing: border-box;
-    background: #FFFFFF;
 }
 
-/* Create two columns/boxes that floats next to each other */
-.left
+.img_task
 {
-    float: left;
-    width: 20%;
-    padding: 0px;
-    height: 73vh;
+    display: flex;
+    width: 100%;
+    margin: 1px 0;
+    margin-bottom: 2px;
 }
 
-.center
-{
-    float: left;
-    padding: 0px;
-    width: 56%;
-    position: relative;
-    height: 73vh;
-}
-
-.right
-{
-    float: right;
-    width: 24%;
-    padding: 0px;
-    height: 73vh;
-}
-
-/* underlined */
-.highlight
-{
-    text-decoration: underline black;
-    text-align: center;
-}
-
-/* Style left */
-
-#tigtening
-{
-    font-size: 18px;
-    margin-top: 0%;
-}
-
-.custom-border
-{
-    border-bottom: 2px solid #00572B; /* Change to your desired border color */
-    padding-bottom: 5px; /* Adjust as needed */
-}
-
-.center-text
-{
-    text-align: center;
-    align-content: center;
-    align-items: center;
-    font-size: 4.5vmin;
-    margin-bottom: 2%;
-    background-color: #CCFFCC;
-    height: 60px;
-}
-
-#Torque
-{
-    align-items: center;
-    height: 50px;
-    float: left;
-    align-content: center;
-    line-height: 1.6;
-    margin-bottom: 3%;
-    text-align: center;
-    background-color: #F2F1F1;
-}
-
-#Thread
-{
-    align-items: center;
-    height: 50px;
-    float: left;
-    align-content: center;
-    line-height: 1.6;
-    margin-bottom: 3%;
-    text-align: center;
-    background-color: #F2F1F1;
-}
-
-/* Style center */
+/* Button Setting */
 .btn-menu
 {
     bottom: 0;
@@ -474,11 +397,192 @@ header::after
 {
     display: inline-block;
     margin-right: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
+    background-color:#9FA9AE;
+    font-size: 26px;
+    height: 45px;
+    width: 45px;
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    box-shadow: 0 3px 7px 1px #AAA;
+}
+
+#SeqNameSelect
+{
+    width: 260px;
+    font-size: 16px;
+    float: center;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: Opx;
+    background-color: #fff;
+    border: none;
+    border: 1px solid;
+    border-radius: 2px;
+    color: #000;
+    appearance: none;
+    padding: 0px 0px 0px 0px;
+    transition: color 0.s ease, background-color 0.3s ease, border-bottom-color 0.3s ease;
+}
+
+.target_sensor
+{
+    display: flex;
+    width: 100%;
+    margin: 1px 0;
+}
+
+.column
+{
+    width: 100%;
+    padding: 2px;
+    margin-right: 5px;
+    justify-content: center;
+    align-items: center;
+    border: 0px solid #ccc;
+}
+
+/** Task  Step **/
+#task-setting
+{
+    padding: 0 20px;
+}
+
+.btn-calljob
+{
+    display: inline-block;
     background-color:#AAA;
-    font-size: 20px;
-    height: 50px;
-    width: 50px;
+    font-size: 18px;
+    float: right;
+    border-radius: 5px;
+    height: 30px;
+    width: auto;
+    border: none;
+    color: #000;
+    box-shadow: 0 3px 7px 1px #AAA;
+}
+
+ol
+{
+    counter-reset: li;
+    font: 16px 'trebuchet MS', 'lucida sans';
+    padding: 0 20px;
+    margin: 0;
+    list-style: none;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);
+}
+
+.ol a
+{
+    position: relative;
+    display: block;
+    padding: .4em .4em .4em 2em;
+    margin: .7em 0;
+    background: #fff;
+    border: 1px solid #26D0F5;
+    color: #444;
+    text-decoration: none;
+    border-radius: .3em;
+    transition: all .3s ease-out;
+}
+
+.ol a:hover{
+    background: #CCCC99;
+}
+
+.ol a:hover:before{
+    transform: rotate(360deg);
+}
+
+.ol a:before
+{
+    content: counter(li);
+    counter-increment: li;
+    position: absolute;
+    left: -1.3em;
+    top: 55%;
+    margin-top: -1.7em;
+    background: #A1B8AE;
+    height: 3em;
+    width: 3em;
+    line-height: 2.5em;
+    border: .3em solid #F2F1F1;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 2em;
+    transition: all .3s ease-out;
+}
+
+#step1 a
+{
+    color: #000;
+}
+
+.dropdown-content
+{
+    display: none;
+    margin-left: 37px;
+    padding-left: 3%;
+    font-size: 14px;
+    width: 79%;
+    border-radius: 5px;
+    z-index: 10; /* Sit on top */
+    text-align: left;
+    background-color: #F2F1F1;
+    box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.2);
+}
+
+/* scrollbar tasklist style */
+.scrollbar-tasklist
+{
+    float: left;
+    height: 335px;
+    width: 100%;
+    overflow-y: scroll;
+}
+
+.force-overflow-tasklist
+{
+    min-height: 300px;
+}
+
+/**  STYLE Tasklist Text */
+#style-tasklist::-webkit-scrollbar
+{
+    display: none;
+    width: 12px;
+    background-color: #F5F5F5;
+}
+
+#style-tasklist::-webkit-scrollbar-thumb
+{
+    border-radius: 10px;
+    background: linear-gradient(left, #96A6BF, #63738C);
+    box-shadow: inset 0 0 1px 1px #5C6670;
+}
+
+#style-tasklist::-webkit-scrollbar-track
+{
+    border-radius: 10px;
+    background: #eee;
+    box-shadow: 0 0 1px 1px #bbb, inset 0 0 7px rgba(0,0,0,0.3)
+}
+
+#style-tasklist::-webkit-scrollbar-thumb:hover
+{
+    background: linear-gradient(left, #8391A6, #536175);
+}
+
+.btn-secondary
+{
+    display: inline-block;
+    background-color:#AAA;
+    font-size: 18px;
+    float: right;
+    border-radius: 5px;
+    height: 35px;
+    width: 35px;
     border: none;
     color: #000;
     box-shadow: 0 3px 7px 1px #AAA;
@@ -501,7 +605,7 @@ header::after
     border-radius: 0;
     padding: 0;
     height: 50px;
-    background-color: #DDDDDD;
+    background-color: #9FA9AE;
 }
 
 /* Modal Content/Box */
@@ -517,7 +621,7 @@ header::after
     border-radius: 0;
     height: 55px;
     padding: 0;
-    background-color: #DDDDDD;
+    background-color: #9FA9AE;
 }
 
 .modal-footer button
@@ -536,191 +640,57 @@ header::after
     display: table;
 }
 
-.center
+/*** Target Sensor Style **/
+.column-target
 {
+    width: 20%;
+    padding: 0 20px;
+    margin-right: -5px;
     justify-content: center;
     align-items: center;
-    border-spacing: 40px;
-}
-
-#SeqName
-{
-    width: 260px;
-    height: 200px;
-    font-size: 16px;
-    float: center;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: Opx;
-    background-color: #fff;
-    border: none;
-    border: 1px solid;
-    border-radius: 2px;
-    color: #000;
-    appearance: none;
-    padding: 0px 0px 0px 0px;
-    transition: color 0.s ease, background-color 0.3s ease, border-bottom-color 0.3s ease;
-}
-
-/* Style right */
-#task-setting
-{
-    display: inline-block;
-    align-items: center;
-    justify-content: space-around;
-}
-
-ol
-{
-    counter-reset: li;
-    list-style: none;
-    align-items: center;
-    text-shadow: 0 1px 0 rgba(255,255,255,.5);
-}
-
-ol a
-{
+    border: 0px solid #ccc;
     float: left;
-    width: 88%;
-    border-radius: 15px;
-    padding-left: 0px;
-    font-size: 16px;
-    position: relative;
-    display: block;
-    padding: .2em .4em .4em .8em;
-    margin: .1em 0 .5em 2em;
-    background: #fff;
-    border: 2px solid #44d0ff;
-    text-align: left;
-    color: #444;
-    text-decoration: none;
-    transition: all .3s ease-out;
 }
 
-ol a:before
+.target_style
 {
-    content: counter(li);
-    counter-increment: li;
-    position: absolute;
-    left: -2.8em;
-    top: 50%;
-    margin-top: -1.1em;
-    background: #444;
-    color: #fff;
-    height: 2.2em;
-    width: 2.2em;
-    line-height: 2em;
-    text-align: center;
-    font-weight: bold;
-}
-
-ol a:after
-{
-    position: absolute;
-    content: "";
-    border: 0.7em solid transparent;
-    left: -1.0em;
-    top: 50%;
-    margin-top: -.7em;
-    transition: all .3s ease-out;
-}
-
-ol a:hover:after
-{
-    left: -.5em;
-    border-left-color: #444;
-}
-
-#step1 a
-{
-    color: #000;
-}
-
-.dropdown-content
-{
-    display: none;
-    margin-left: 37px;
-    padding-left: 3%;
-    font-size: 14px;
-    width: 79%;
-    border-radius: 10px;
-    z-index: 10; /* Sit on top */
-    text-align: left;
-    background-color: #F2F1F1;
-    box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.2);
-}
-
-/* Style the footer */
-.footer
-{
-    width: 100%;
-    height:14vh;
-    display: flex;
-    background-color:#F2F1F1;
-    padding: 0px 0px;
-    text-align: center;
-}
-
-/* Style the footer */
-/* Float four columns side by side */
-.column
-{
-    float: left;
-    width: 25%;
+    height: 14vh;
+    background-color: #B5BBBE;
+    margin-bottom: 5px;
     padding: 0 5px;
-    margin-top: 5px;
+    border-radius: 10px;
 }
 
-.row {margin: 0 -5px;}
-
-/* Clear floats after the columns */
-.row:after
+.column-sensor
 {
-    content: "";
-    display: table;
-    clear: both;
+    width: 20%;
+    padding: 0 20px;
+    justify-content: center;
+    align-items: center;
+    border: 0px solid #ccc;
+    float: left;
 }
 
-/* Responsive columns */
-@media screen and (max-width: 600px)
+.sensor_style
 {
-    .column
-    {
-        width: 100%;
-        display: block;
-        padding: 0px;
-    }
+    height: 9vh;
+    background-color: #C6D5DC;
+    margin-bottom: 5px;
+    padding: 0 5px;
+    border-radius: 10px;
 }
 
-/* Style the counter cards */
-.zoom
-{
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    height:12vh;
-    padding: 0px;
+.custom-checkbox {
+    font-size: 1.8vmin;
     text-align: left;
-    padding-left: 5%;
-    background-color: #CFCFCF;
-    color: black;
-    border-radius: 5px;
+    padding-left: 25px;
 }
 
-.zoom-border
+/* Custom styling for the checkbox input */
+.custom-checkbox input[type="checkbox"]
 {
-    position: relative;
-    display: inline-block;
-    overflow: hidden;
+    width: 20px; /* Adjust size as needed */
+    height: 20px; /* Adjust size as needed */
+    background-color: green; /* Change background color */
 }
-
-.column img
-{
-    height: 20px;
-    width: 30px;
-    padding-right: 10px;
-    margin-top: 4px;
-}
-
-
-
-
 

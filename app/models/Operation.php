@@ -13,34 +13,12 @@ class Operation{
         $this->db = $this->db->getDb_cc();
     }
 
-    // 取得Nav列
-    public function GetNav()
-    {
-        $sql = 'SELECT * FROM nav';
-        $statement = $this->db->prepare($sql);
-        $results = $statement->execute();
-
-        return $statement->fetchall(PDO::FETCH_ASSOC);;
-    }
-
-    // 取得user id by account
-    public function GetUserIdByAccount($account)
-    {
-        $sql = 'SELECT * FROM users WHERE account = :account';
-        $statement = $this->db->prepare($sql);
-        $statement->bindValue(':account', $account);
-        $statement->execute();
-        $results = $statement->fetch(PDO::FETCH_ASSOC);
-
-        return $results['id'];
-    }
-
     //-----------------------------------------------
 
     // 取得config table的設定值
     public function GetConfigValue($config_name)
     {
-        $sql = 'SELECT * FROM config WHERE config_name = :config_name ';
+        $sql = 'SELECT * FROM system_config WHERE config_name = :config_name ';
         $statement = $this->db->prepare($sql);
         $statement->bindValue(':config_name', $config_name);
         $statement->execute();
@@ -52,7 +30,7 @@ class Operation{
     // 設定config table的設定值
     public function SetConfigValue($config_name,$value)
     {
-        $sql = 'UPDATE config SET value = :value WHERE config_name = :config_name ';
+        $sql = 'UPDATE system_config SET value = :value WHERE config_name = :config_name ';
         $statement = $this->db->prepare($sql);
         $statement->bindValue(':value', $value);
         $statement->bindValue(':config_name', $config_name);
@@ -76,6 +54,10 @@ class Operation{
     // 取得所有enable的Sequence
     public function SaveFastenData($data)
     {
+        if($this->RecordRepeatCheck($data['system_sn'],$data['data_time'],$data['device_sn'])){//如果有重複的就不寫入直接返回
+            return 0;
+        }
+
         $sql = "INSERT INTO `fasten_data` ('cc_barcodesn','cc_station','cc_job_id','cc_seq_id','cc_task_id','cc_equipment','cc_operator','system_sn','data_time','device_type','device_id','device_sn','tool_type','tool_sn','tool_status','job_id','job_name','sequence_id','sequence_name','step_id','fasten_torque','torque_unit','fasten_time','fasten_angle','count_direction','last_screw_count','max_screw_count','fasten_status','error_message','step_targettype','step_tooldirection','step_rpm','step_targettorque','step_hightorque','step_lowtorque','step_targetangle','step_highangle','step_lowangle','step_delayttime','threshold_torque','step_threshold_angle','downshift_torque','downshift_speed','step_prr_rpm','step_prr_angle','barcode','total_angle')
         VALUES(:cc_barcodesn,:cc_station,:cc_job_id,:cc_seq_id,:cc_task_id,:cc_equipment,:cc_operator,:system_sn,:data_time,:device_type,:device_id,:device_sn,:tool_type,:tool_sn,:tool_status,:job_id,:job_name,:sequence_id,:sequence_name,:step_id,:fasten_torque,:torque_unit,:fasten_time,:fasten_angle,:count_direction,:last_screw_count,:max_screw_count,:fasten_status,:error_message,:step_targettype,:step_tooldirection,:step_rpm,:step_targettorque,:step_hightorque,:step_lowtorque,:step_targetangle,:step_highangle,:step_lowangle,:step_delayttime,:threshold_torque,:step_threshold_angle,:downshift_torque,:downshift_speed,:step_prr_rpm,:step_prr_angle,:barcode,:total_angle)
         ";
@@ -131,6 +113,63 @@ class Operation{
         $results = $statement->execute();
 
         return 0;
+    }
+
+    public function ButtonAuthCheck($card)
+    {
+        $sql = "SELECT * FROM `users` 
+                LEFT JOIN cc_userroles ur ON users.id = ur.UserID
+                WHERE card = :card AND del = 0";
+        $statement = $this->db->prepare($sql);
+        $statement->bindValue(':card', $card);
+        $statement->execute();
+
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function RecordRepeatCheck($system_sn,$data_time,$device_sn)
+    {
+        $sql = "SELECT count(*) as count FROM fasten_data WHERE system_sn = :system_sn AND data_time = :data_time AND device_sn = :device_sn";
+        $statement = $this->db->prepare($sql);
+        $statement->bindValue(':system_sn', $system_sn);
+        $statement->bindValue(':data_time', $data_time);
+        $statement->bindValue(':device_sn', $device_sn);
+        $results = $statement->execute();
+        $rows = $statement->fetch();
+
+        if ($rows['count'] > 0) {
+            return true; // job 已存在
+        }else{
+            return false; // job 不存在
+        }
+    }
+
+    public function BarcodeMatchCheck($barcode)
+    {
+        $barcode_length = strlen($barcode);
+
+        $sql = "SELECT * FROM `barcode` 
+                WHERE length(barcode) = :barcode_length 
+                AND substr(barcode,barcode_mask_from,barcode_mask_count) = substr(:barcode,barcode_mask_from,barcode_mask_count) ";
+
+        $statement = $this->db->prepare($sql);
+        $statement->bindValue(':barcode_length', $barcode_length, PDO::PARAM_INT);
+        $statement->bindValue(':barcode', $barcode);
+        $statement->execute();
+
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function GetSeqEnable($job_id)
+    {
+        $sql = "SELECT * FROM `sequence` 
+                WHERE job_id = :job_id ";
+
+        $statement = $this->db->prepare($sql);
+        $statement->bindValue(':job_id', $job_id);
+        $statement->execute();
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
 }

@@ -23,13 +23,13 @@
 
     <header>
         <div class="job">
-            <img id="header-img" src="./img/job-head.svg">Job
+            <img id="header-img" src="./img/job-head.svg"><?php echo $text['main_product_text']; ?>
         </div>
         <div class="notification">
             <i style=" width:auto; height: 40px;" class="fa fa-bell" onclick="ClickNotification()"></i>
             <span id="messageCount" class="badge"></span>
         </div>
-        <div class="personnel"><i style="width:auto; height: 40px;font-size: 26px" class="fa fa-user"></i> Esther</div>
+        <div class="personnel"><i style="width:auto; height: 40px;font-size: 26px" class="fa fa-user"></i> <?php echo $_SESSION['user']; ?></div>
     </header>
 
     <!-- Notification -->
@@ -98,26 +98,26 @@
     </div>
 
     <div class="topnav">
-        <a style="font-size: 18px; padding-left: 2%">Barcode :</a>&nbsp;
+        <a style="font-size: 18px; padding-left: 2%"><?php echo $text['Barcode_text']; ?> :</a>&nbsp;
         <input class="t2" type="text" id="search-bar" size="50" placeholder="">
-        <button id="barcode-btn" type="button" onclick="document.getElementById('barcode-setting').style.display='block'">
-            Setting
+        <button id="barcode-btn" type="button" onclick="get_all_barcode()">
+            <?php echo $text['Setting_text']; ?>
         </button>
         <div class="topnav-right">
             <button id="add-job" type="button" onclick="new_job()">
-                <img id="img-job" src="./img/add-new-job.svg" alt="">Add Job
+                <img id="img-job" src="./img/add-new-job.svg" alt=""><?php echo $text['Add_Job_text']; ?>
             </button>
 
             <button id="copy-btn" type="button" onclick="copy_job_div()">
-                <img id="img-copy" src="./img/copy.svg" alt="">Copy
+                <img id="img-copy" src="./img/copy.svg" alt=""><?php echo $text['Copy_text']; ?>
             </button>
 
             <button id="edit-btn" type="button" onclick="edit_job()">
-                <img id="img-edit" src="./img/edit.svg" alt="">Edit
+                <img id="img-edit" src="./img/edit.svg" alt=""><?php echo $text['Edit_text']; ?>
             </button>
 
             <button id="delete-btn" type="button" onclick="delete_job()">
-                <img id="img-delete" src="./img/delete.svg" alt="">Delete
+                <img id="img-delete" src="./img/delete.svg" alt=""><?php echo $text['Delete_text']; ?>
             </button>
         </div>
     </div>
@@ -129,11 +129,11 @@
                     <table class="table table-bordered" id="table-job" >
                         <thead id="header-table">
                             <tr style="text-align: center">
-                                <th width="10%">Job ID</th>
-                                <th width="20%">Job Name</th>
-                                <th width="30%">Picture</th>
-                                <th width="25%">More Info</th>
-                                <th width="15%">Action</th>
+                                <th width="10%"><?php echo $text['Job_ID_text']; ?></th>
+                                <th width="20%"><?php echo $text['Job_Name_text']; ?></th>
+                                <th width="30%"><?php echo $text['Picture_text']; ?></th>
+                                <th width="25%"><?php echo $text['More_Info_text']; ?></th>
+                                <th width="15%"><?php echo $text['Action_text']; ?></th>
                             </tr>
                         </thead>
                         <tbody id="tbody" style="background-color: #F2F1F1; font-size: 2vmin; text-align: center">
@@ -143,23 +143,23 @@
                                     echo '<td>'.$job['job_id'].'</td>';
                                     echo '<td>'.$job['job_name'].'</td>';
                                     echo '<td><img src="'.$job['img'].'" style="max-height: 100px;display: inline-block;"></td>';
-                                    echo '<td>'.$job['seq_count'].' Seq / '.$job['task_count'].' Task <br> Arm'.'</td>';
+                                    echo '<td>'.$job['seq_count'].' '.$text['Seq_text'].' / '.$job['task_count'].' '.$text['Task_text'].' <br> '.$text['Arm_text'].' '.'</td>';
                                     echo '<td style="text-align: left">';
                                     echo '<div class="dropdown">';
-                                    echo '<label><img src="./img/info-30.png" alt="" style="height: 30px; float: left; margin-right: 5px; margin-bottom: 10px" onclick="PictureDetailFunction('.$job['job_id'].')"> Detail</label>';
+                                    echo '<label><img src="./img/info-30.png" alt="" style="height: 30px; float: left; margin-right: 5px; margin-bottom: 10px" onclick="PictureDetailFunction('.$job['job_id'].')"> '.$text['Detail_text'].' </label>';
                                     echo '<div id="Detail-Dropdown-'.$job['job_id'].'" class=" dropdown dropdown-content">';
-                                    echo   '<a style="margin-top: 10%">Controller Type :<i style="float: right">GTCS</i></a>';
-                                    echo   '<a>Job ID :<i style="float: right">'.$job['job_id'].'</i></a>';
-                                    echo   '<a>Ok Job :<i style="float: right">'.$job['ok_job'].'</i></a>';
-                                    echo   '<a>Job Repeat :<i style="float: right">'.$job['ok_job_stop'].'</i></a>';
-                                    echo   '<a>Reverse Button :<i style="float: right">'.$job['reverse_direction'].'</i></a>';
-                                    echo   '<a>Reverse RPM :<i style="float: right">'.$job['reverse_rpm'].'</i></a>';
-                                    echo   '<a>Reverse Force :<i style="float: right">'.$job['reverse_force'].'</i></a>';
-                                    echo   '<a>Reverse Count :<i style="float: right">'.$job['reverse_cnt_mode'].'</i></a>';
-                                    echo   '<a>Rev.Threshold Q:<i style="float: right">'.$job['reverse_threshold_torque'].'</i></a>';
+                                    echo   '<a style="margin-top: 10%">'.$text['Controller_Type_text'].' :<i style="float: right">GTCS</i></a>';
+                                    echo   '<a>'.$text['Job_ID_text'].' :<i style="float: right">'.$job['job_id'].'</i></a>';
+                                    echo   '<a>'.$text['OK_Job_text'].' :<i style="float: right">'.$job['ok_job'].'</i></a>';
+                                    echo   '<a>'.$text['Job_Repeat_text'].' :<i style="float: right">'.$job['ok_job_stop'].'</i></a>';
+                                    echo   '<a>'.$text['Reverse_Button_text'].' :<i style="float: right">'.$job['reverse_direction'].'</i></a>';
+                                    echo   '<a>'.$text['Reverse_RPM_text'].' :<i style="float: right">'.$job['reverse_rpm'].'</i></a>';
+                                    echo   '<a>'.$text['Reverse_Force_text'].' :<i style="float: right">'.$job['reverse_force'].'</i></a>';
+                                    echo   '<a>'.$text['Reverse_Count_text'].' :<i style="float: right">'.$job['reverse_cnt_mode'].'</i></a>';
+                                    echo   '<a>'.$text['Rev_Threshold_Tor_text'].':<i style="float: right">'.$job['reverse_threshold_torque'].'</i></a>';
                                     echo '</div>
                                     <br>
-                                    <label><img src="./img/add-seq.png" style="height: 30px; float: left; margin-right: 5px" onclick="location.href = \'?url=Sequences/index/'.$job['job_id'].'\';"> Add Seq</label>
+                                    <label><img src="./img/add-seq.png" style="height: 30px; float: left; margin-right: 5px" onclick="location.href = \'?url=Sequences/index/'.$job['job_id'].'\';"> '.$text['Add_Seq_text'].' </label>
                                     </div>';
                                     echo '</td>';
                                     echo '</tr>';
@@ -188,50 +188,50 @@
                         <div class="modal-body">
                             <form id="new_job_form">
                                 <div class="row">
-                                    <div for="controller_type" class="col-5 t1">Controller Type :</div>
+                                    <div for="controller_type" class="col-5 t1"><?php echo $text['Controller_Type_text']; ?> :</div>
                                     <div class="col t2">
                       					<select id="controller_type" style="width: 183px">
-                       					    <option value="0">No</option>
+                       					    <option value="0"><?php echo $text['NO_text']; ?> </option>
                        					    <option value="1">GTCS</option>
                      					    <option value="2">TCG</option>
                          				</select>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="job_id" class="col-5 t1">Job ID :</div>
+                                    <div for="job_id" class="col-5 t1"><?php echo $text['Job_ID_text']; ?> :</div>
                                     <div class="col-4 t2">
                                         <input type="text" min=1 max=99 class="form-control input-ms" id="job_id" maxlength="5" disabled>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="job_name" class="col-5 t1">Job Name :</div>
+                                    <div for="job_name" class="col-5 t1"><?php echo $text['Job_Name_text']; ?> :</div>
                                     <div class="col-4 t2" >
                                         <input type="text" class="form-control input-ms" id="job_name" maxlength="12" required>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="barcode_start" class="col-5 t1">Barcode Start :</div>
+                                    <div for="barcode_start" class="col-5 t1"><?php echo $text['Barcode_Start_text']; ?> :</div>
                                     <div class="switch menu col-5 t2">
                                         <input id="barcode_start" type="checkbox">
                                         <label><i></i></label>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="job_repeat" class="col-5 t1">Job Repeat :</div>
+                                    <div for="job_repeat" class="col-5 t1"><?php echo $text['Job_Repeat_text']; ?> :</div>
                                     <div class="switch menu col-5 t2">
                                         <input id="job_repeat" type="checkbox">
                                         <label><i></i></label>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="ok_job" class="col-5 t1"> OK Job :</div>
+                                    <div for="ok_job" class="col-5 t1"> <?php echo $text['OK_Job_text']; ?> :</div>
                                     <div class="switch menu col-5 t2">
                                         <input id="ok_job" type="checkbox">
                                         <label><i></i></label>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="Tower-Light" class="col-5 t1">Tower Light :</div>
+                                    <div for="Tower-Light" class="col-5 t1"><?php echo $text['Tower_Light_text']; ?> :</div>
                                     <div class="switch menu col-5 t2">
                                         <input id="Tower-Light" type="checkbox">
                                         <label><i></i></label>
@@ -239,37 +239,41 @@
                                 </div>
                                 <hr>
                                 <div class="row">
-                                    <div for="reverse_button" class="col-5 t1">Reverse Button :</div>
+                                    <div for="reverse_button" class="col-5 t1"><?php echo $text['Reverse_Button_text']; ?> :</div>
                                     <div class="col t2">
                       					<select id="reverse_button" style="width: 183px">
-                       					    <option value="1">CCW</option>
-                     					    <option value="0">CW</option>
+                       					    <option value="1"><?php echo $text['CCW_text']; ?></option>
+                     					    <option value="0"><?php echo $text['CW_text']; ?></option>
                          				</select>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="reverse_rpm" class="col-5 t1">Reverse RPM :</div>
+                                    <div for="reverse_rpm" class="col-5 t1"><?php echo $text['Reverse_RPM_text']; ?> :</div>
                                     <div class="col-4 t2">
                                         <input id="reverse_rpm" type="text" class="form-control input-ms" maxlength="" >
                                     </div>
                                     <div class="col t1">
-                                        <label>Max 1000</label>
+                                        <label><?php echo $text['MAX_text']; ?> 1000</label>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="reverse_Force" class="col-5 t1">Reverse Force (&#37;) :</div>
+                                    <div for="reverse_Force" class="col-5 t1"><?php echo $text['Reverse_Force_text']; ?> (&#37;) :</div>
                                     <div class="col-4 t2">
                                         <input id="reverse_Force" type="text" class="form-control input-ms" maxlength="" >
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="reverse_count" class="col-5 t1">Reverse Count :</div>
+                                    <div for="reverse_count" class="col-5 t1"><?php echo $text['Reverse_Count_text']; ?> :</div>
                                     <div class="col-4 t2">
-                                        <input id="reverse_count" type="text" class="form-control input-ms" maxlength="" >
+                                        <!-- <input id="reverse_count" type="text" class="form-control input-ms" maxlength="" > -->
+                                        <select id="reverse_count" style="width: 183px">
+                                            <option value="1" selected><?php echo $text['ON_text']; ?></option>
+                                            <option value="0"><?php echo $text['OFF_text']; ?></option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="threshold_torque" class="col-5 t1">Rev.Threshold Tor :</div>
+                                    <div for="threshold_torque" class="col-5 t1"><?php echo $text['Rev_Threshold_Tor_text']; ?> :</div>
                                     <div class="col-4 t2">
                                         <input id="threshold_torque" type="text"  class="form-control input-ms" maxlength="" >
                                     </div>
@@ -278,7 +282,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class=" col-5 t1">Size :</div>
+                                    <div class=" col-5 t1"><?php echo $text['Size_text']; ?> :</div>
                                     <div class="circle" id="circle" style="margin: 20px 0"></div>
                                     <div class="col t2" style="margin: 20px 0">
                                         <input class="perspective-range" type="range" min="1" max="100" value="50" class="slider"  oninput="updateCircleSize(this.value)" data-units="px">
@@ -296,8 +300,8 @@
                 </div>
 
                 <div class="modal-footer justify-content-center">
-                    <button id="button1" class="button button3" onclick="save_job()">Save</button>
-                    <button id="button2" class="button button3" onclick="document.getElementById('JobNew').style.display='none'" class="cancelbtn">Cancel</button>
+                    <button id="button1" class="button button3" onclick="save_job()"><?php echo $text['Save_text']; ?></button>
+                    <button id="button2" class="button button3" onclick="document.getElementById('JobNew').style.display='none'" class="cancelbtn"><?php echo $text['Cancel_text']; ?></button>
                 </div>
             </div>
         </div>
@@ -310,37 +314,37 @@
                 <header class="w3-container modal-header">
                     <span onclick="document.getElementById('copyjob').style.display='none'"
                         class="w3-button w3-red w3-xxlarge w3-display-topright" style="padding: 7px; width: 60px">&times;</span>
-                    <h3>Copy Job</h3>
+                    <h3><?php echo $text['Copy_job_text']; ?></h3>
                 </header>
 
                 <div class="modal-body">
                     <form id="new_job_form">
-                        <div for="from_job_id" class="col" style="font-size: 20px; margin: 5px 0px 5px"><b>Copy From</b></div>
+                        <div for="from_job_id" class="col" style="font-size: 20px; margin: 5px 0px 5px"><b><?php echo $text['Copy_from_text']; ?></b></div>
                         <div style="padding-left: 20px;">
         		            <div class="row">
-        				        <div for="from_job_id" class="col-4 t1">Job ID :</div>
+        				        <div for="from_job_id" class="col-4 t1"><?php echo $text['Job_ID_text']; ?> :</div>
         				        <div class="col-5 t2">
         				            <input type="text" class="form-control" id="from_job_id" disabled>
         				        </div>
         				    </div>
                             <div class="row">
-                                <div for="from_job_name" class="col-4 t1">Job Name :</div>
+                                <div for="from_job_name" class="col-4 t1"><?php echo $text['Job_Name_text']; ?> :</div>
                                 <div class="col-5 t2">
                                     <input type="text" class="form-control" id="from_job_name" disabled>
                                 </div>
                             </div>
                         </div>
 
-                        <div for="from_job_id" class="col" style="font-size: 20px; margin: 5px 0px 5px"><b>Copy To</b></div>
+                        <div for="from_job_id" class="col" style="font-size: 20px; margin: 5px 0px 5px"><b><?php echo $text['Copy_to_text']; ?></b></div>
                         <div style="padding-left: 20px;">
                             <div class="row">
-                                <div for="to_job_id" class="col-4 t1">Job ID :</div>
+                                <div for="to_job_id" class="col-4 t1"><?php echo $text['Job_ID_text']; ?> :</div>
                 				<div class="col-5 t2">
                 				    <input type="text" class="form-control" id="to_job_id" >
                 				</div>
             				</div>
                             <div class="row">
-                                <div for="to_job_name" class="col-4 t1">Job Name :</div>
+                                <div for="to_job_name" class="col-4 t1"><?php echo $text['Job_Name_text']; ?> :</div>
                                 <div class="col-5 t2">
                                     <input type="text" class="form-control" id="to_job_name" >
                                 </div>
@@ -350,8 +354,8 @@
                 </div>
 
                 <div class="modal-footer justify-content-center">
-                    <button class="button button3" onclick="copy_job()">Save</button>
-                    <button class="button button3" onclick="document.getElementById('copyjob').style.display='none'" class="cancelbtn">Cancel</button>
+                    <button class="button button3" onclick="copy_job()"><?php echo $text['Save_text']; ?></button>
+                    <button class="button button3" onclick="document.getElementById('copyjob').style.display='none'" class="cancelbtn"><?php echo $text['Cancel_text']; ?></button>
                 </div>
             </div>
         </div>
@@ -368,49 +372,43 @@
                     </header>
 
                     <div class="modal-body">
-                        <form id="barcode_form">
+                        <form id="barcode_form" onsubmit="return false;">
           		            <div class="row">
-          				        <div class="col-3 t1">Barcode :</div>
-          				        <div class="col-5 t2">
-           				            <input type="text" class="t3 form-control input-ms" id="barcode-number">
+          				        <div class="col-3 t1"><?php echo $text['Barcode_text']; ?> :</div>
+          				        <div class="col-9 t2">
+           				            <input type="text" class="form-control input-ms" id="barcode-number" maxlength="99" onblur="autofill(this)">
            				        </div>
            				    </div>
                             <div class="row">
-                                <div class="col-3 t1">Match From :</div>
+                                <div class="col-3 t1"><?php echo $text['Match_From_text']; ?> :</div>
                                 <div class="col-3 t2">
                                     <input type="text" class="t3 form-control input-ms" id="match-from">
                                 </div>
 
-                                <div class="col-3 t1">Match To :</div>
+                                <div class="col-3 t1"><?php echo $text['Match_To_text']; ?> :</div>
                                 <div class="col-3 t2">
                                     <input type="text" class="t3 form-control input-ms" id="match-to">
                                 </div>
                             </div>
 
                             <div class="row">
-                                <div class="col-3 t1">Select Job ID :</div>
+                                <div class="col-3 t1"><?php echo $text['Select_Job_ID_text']; ?> :</div>
                  				<div class="col t2">
-                 				    <select id="Job-ID" style="width: 133px; height: 30px;border: 1px solid #B8B8B8; border-radius: 3px">
-                       				    <option value="1">1</option>
-                     					<option value="2">2</option>
-                    					<option value="3">3</option>
-    			                		<option value="4">4</option>
-    					                <option value="5">5</option>
+                 				    <select id="Job-ID" onchange="GetSeqList()" style="width: 133px; height: 30px;border: 1px solid #B8B8B8; border-radius: 3px;padding-left: .375rem;">
+                                        <?php foreach ($data['jobs'] as $key => $value) {
+                                            echo '<option value="'.$value['job_id'].'">'.$value['job_id'].'</option>';
+                                        } ?>
                          			</select>
                    				</div>
                				</div>
                             <div class="row">
-                                <div class="col-3 t1">Select Seq ID :</div>
+                                <div class="col-3 t1"><?php echo $text['Select_Seq_ID_text']; ?> :</div>
                  				<div class="col t2">
-                 				    <select id="Seq-ID" style="width: 133px; height: 30px;border: 1px solid #B8B8B8; border-radius: 3px">
-                       				    <option value="0">0</option>
-                     					<option value="1">1</option>
-                    					<option value="2">2</option>
-    			                		<option value="3">3</option>
-    					                <option value="4">4</option>
+                 				    <select id="Seq-ID" style="width: 133px; height: 30px;border: 1px solid #B8B8B8; border-radius: 3px;padding-left: .375rem;">
+                       				    
                          			</select>
                    				</div>
-                                <button class="button button3" style="margin-right: 15px">Save</button>
+                                <button class="button button3" style="margin-right: 15px" onclick="save_barcode()"><?php echo $text['Save_text']; ?></button>
                				</div>
                         </form>
                         <hr>
@@ -419,12 +417,14 @@
                                 <table class="table table-bordered table-hover" id="barcode-table">
                                     <thead id="header-table" style="text-align: center; vertical-align: middle">
                                         <tr>
-                                            <th>Job ID</th>
-                                            <th>Job Name</th>
-                                            <th>Seq ID</th>
-                                            <th>Seq Name</th>
-                                            <th>Barcode</th>
-                                            <th>Action</th>
+                                            <th><?php echo $text['Job_ID_text']; ?></th>
+                                            <th><?php echo $text['Job_Name_text']; ?></th>
+                                            <th><?php echo $text['Seq_ID_text']; ?></th>
+                                            <th><?php echo $text['Seq_Name_text']; ?></th>
+                                            <th><?php echo $text['Barcode_text']; ?></th>
+                                            <th><?php echo $text['Action_text']; ?></th>
+                                            <th style="display:none;">Match From</th>
+                                            <th style="display:none;">Match To</th>
                                         </tr>
                                     </thead>
 
@@ -436,14 +436,8 @@
                                             <td>2</td>
                                             <td>12345678</td>
                                             <td><i class="fa fa-times" style="font-size:22px"></i></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>nor-ad-61</td>
-                                            <td>1</td>
-                                            <td>seq2</td>
-                                            <td>****678**</td>
-                                            <td><i class="fa fa-times" style="font-size:22px"></i></td>
+                                            <td style="display:none;">666</td>
+                                            <td style="display:none;">666</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -587,36 +581,36 @@ function updateCircleSize(value)
     $(document).ready(function () {
         highlight_row('table-job');
         highlight_row('barcode-table');
+        GetSeqList();//先取得目前的seq list
     });
 
-    function highlight_row(tableId)
-{
-    var table = document.getElementById(tableId);
-    var cells = table.getElementsByTagName('td');
+    function highlight_row(tableId){
+        var table = document.getElementById(tableId);
+        var cells = table.getElementsByTagName('td');
 
-    for (var i = 0; i < cells.length; i++) {
-        // Take each cell
-        var cell = cells[i];
-        // do something on onclick event for cell
+        for (var i = 0; i < cells.length; i++) {
+            // Take each cell
+            var cell = cells[i];
+            // do something on onclick event for cell
 
-        cell.onclick = function ()
-        {
-            // Get the row id where the cell exists
-            var rowId = this.parentNode.rowIndex;
+            cell.onclick = function ()
+            {
+                // Get the row id where the cell exists
+                var rowId = this.parentNode.rowIndex;
 
-            var rowsNotSelected = table.getElementsByTagName('tr');
-            for (var row = 0; row < rowsNotSelected.length; row++) {
-                rowsNotSelected[row].style.backgroundColor = "";
-                rowsNotSelected[row].classList.remove('selected');
+                var rowsNotSelected = table.getElementsByTagName('tr');
+                for (var row = 0; row < rowsNotSelected.length; row++) {
+                    rowsNotSelected[row].style.backgroundColor = "";
+                    rowsNotSelected[row].classList.remove('selected');
+                }
+                var rowSelected = table.getElementsByTagName('tr')[rowId];
+                // rowSelected.style.backgroundColor = "red";
+                rowSelected.className += "selected";
+
+                //hide div
             }
-            var rowSelected = table.getElementsByTagName('tr')[rowId];
-            // rowSelected.style.backgroundColor = "red";
-            rowSelected.className += "selected";
-
-            //hide div
         }
-    }
-} //end of function
+    } //end of function
 
     function openFile(event){//顯示預覽圖
       var input = event.target; //取得上傳檔案
@@ -769,7 +763,7 @@ function updateCircleSize(value)
     }
 
     function new_job(argument) {
-        document.getElementById('modal_head').innerHTML = 'New Job'; //'New Job'
+        document.getElementById('modal_head').innerHTML = '<?php echo $text['New_Job_text']; ?>'; //'New Job'
         //帶入預設值
         document.getElementById("controller_type").value = 0;
         document.getElementById("job_id").value = '';
@@ -782,6 +776,7 @@ function updateCircleSize(value)
         document.getElementById("threshold_torque").value = 0.0;
         document.getElementById('barcode_start').checked = 1;
         document.getElementById('job_repeat').checked = 0;
+        document.getElementById('Tower-Light').checked = 1;
 
         // document.getElementById('size').value = response['point_size'];//另外處理
         document.getElementsByClassName('perspective-range')[0].value = 50;
@@ -834,7 +829,7 @@ function updateCircleSize(value)
             url: url,
             success: function(response) {
                 // 成功回調函數，處理伺服器的回應
-                // console.log(response); // 在控制台輸出伺服器的回應
+                console.log(response); // 在控制台輸出伺服器的回應
 
                 document.getElementById("controller_type").value = response['controller_id'];
                 document.getElementById("job_id").value = job_id;
@@ -843,10 +838,11 @@ function updateCircleSize(value)
                 document.getElementById("reverse_button").value = response['reverse_direction'];
                 document.getElementById("reverse_rpm").value = response['reverse_rpm'];
                 document.getElementById("reverse_Force").value = response['reverse_force'];
-                document.getElementById('reverse_count').checked = parseInt(response['reverse_cnt_mode']);
+                document.getElementById('reverse_count').value = parseInt(response['reverse_cnt_mode']);
                 document.getElementById("threshold_torque").value = response['reverse_threshold_torque'];
                 document.getElementById('barcode_start').checked = parseInt(response['barcode_start']);
-                document.getElementById('job_repeat').checked = parseInt(response['job_repeat']);
+                document.getElementById('job_repeat').checked = parseInt(response['ok_job_stop']);
+                document.getElementById('Tower-Light').checked = parseInt(response['tower_light']);
 
                 // document.getElementById('size').value = response['point_size'];//另外處理
                 document.getElementsByClassName('perspective-range')[0].value = response['point_size'];
@@ -864,7 +860,7 @@ function updateCircleSize(value)
                 //image
                 $('#output').attr('src', response['img']).show(); //將img的src設定為dataURL並顯示
 
-                document.getElementById('modal_head').innerHTML = 'Edit Job'; //'New Job'
+                document.getElementById('modal_head').innerHTML = '<?php echo $text['Edit_Job_text']; ?>'; //'New Job'
                 document.getElementById('JobNew').style.display='block'
             },
             error: function(error) {
@@ -922,7 +918,7 @@ function updateCircleSize(value)
         let rowSelected = document.getElementsByClassName('selected');
         let job_id = rowSelected[0].childNodes[0].innerHTML;
 
-        var yes = confirm('你確定嗎？');
+        var yes = confirm('<?php echo $text['Delete_confirm_text']; ?>');
 
         if (yes) {
             let url = '?url=Products/delete_job';
@@ -947,6 +943,252 @@ function updateCircleSize(value)
             
         }
     }
+
+    function save_barcode(argument) {
+        let barcode = document.getElementById('barcode-number').value
+        let match_from = document.getElementById('match-from').value
+        let match_to = document.getElementById('match-to').value
+        let job_id = document.getElementById('Job-ID').value
+        let seq_id = document.getElementById('Seq-ID').value
+
+        let url = '?url=Products/Edit_Barcode';
+        $.ajax({
+            type: "POST",
+            data: { 'barcode': barcode,
+                    'match_from': match_from,
+                    'match_to': match_to,
+                    'job_id': job_id,
+                    'seq_id': seq_id
+                },
+            dataType: "json",
+            url: url,
+            success: function(response) {
+                // 成功回調函數，處理伺服器的回應
+                get_all_barcode()
+            },
+            error: function(error) {
+                // 失敗回調函數，處理錯誤情況
+                // console.error('Error:', error); // 在控制台輸出錯誤訊息
+            }
+        }).fail(function() {
+            // history.go(0);//失敗就重新整理
+        });
+
+    }
+
+    function GetSeqList(seq_id) {
+        // alert(123456)
+        // let url = '?url=Products/get_seq_list_by_job_id';
+        var Seq_Select = document.getElementById("Seq-ID");
+        // 清空<select>元素的现有选项
+        Seq_Select.innerHTML = "";
+        
+        var jobIDSelect = document.getElementById("Job-ID").value;
+        // console.log(jobIDSelect);
+        let url = '?url=Products/get_seq_list_by_job_id';
+        $.ajax({
+            type: "POST",
+            data: { 'job_id': jobIDSelect },
+            dataType: "json",
+            url: url,
+            success: function(response) {
+                // 成功回調函數，處理伺服器的回應
+                // console.log(response); // 在控制台輸出伺服器的回應
+                // history.go(0);
+
+                // var optionsData = JSON.parse(response);
+                var optionsData = response;
+
+                // 添加新选项
+                optionsData.forEach(function(option, index) {
+                    var optionElement = document.createElement("option");
+                    optionElement.value = option.seq_id;
+                    optionElement.textContent = (index + 1);
+                    Seq_Select.appendChild(optionElement);
+                });
+
+                if (seq_id != undefined) {
+                    document.getElementById('Seq-ID').value = seq_id;
+                }else{
+                    document.getElementById('Seq-ID').value = 1;
+                }
+
+
+            },
+            error: function(error) {
+                // 失敗回調函數，處理錯誤情況
+                // console.error('Error:', error); // 在控制台輸出錯誤訊息
+            }
+        }).fail(function() {
+            // history.go(0);//失敗就重新整理
+        });
+    }
+
+    function autofill(element) {
+        let start = element.selectionStart;
+        let end = element.selectionEnd;
+
+        if (start == end) {
+            document.getElementById('match-from').value = '1';
+            document.getElementById('match-to').value = end;
+        }else{
+            document.getElementById('match-from').value = +start + 1;
+            document.getElementById('match-to').value = end;
+        }
+    }
+
+    function get_all_barcode() {
+
+        var tbody1 = document.getElementById("tbody1");
+        // 清空<select>元素的现有选项
+        tbody1.innerHTML = "";
+
+        let url = '?url=Products/Get_All_Barcode';
+        $.ajax({
+            type: "POST",
+            data: {},
+            dataType: "json",
+            url: url,
+            success: function(response) {
+                // 成功回調函數，處理伺服器的回應
+                // console.log(response); // 在控制台輸出伺服器的回應
+                // history.go(0);
+
+                // var optionsData = JSON.parse(response);
+                var tableData = response;
+                // console.log(typeof tableData)
+
+
+                // 添加新选项
+                tableData.forEach(function(option, index) {
+                    let trElement = document.createElement("tr");
+                    let delete_td = document.createElement("td");
+                    delete_td.innerHTML = '<i class="fa fa-times" style="font-size:22px" onclick="delete_barcode('+option.id+')"></i>';
+
+                    trElement.appendChild(create_td(option.barcode_selected_job))
+                    trElement.appendChild(create_td(option.job_name))
+                    trElement.appendChild(create_td(option.barcode_selected_seq))
+                    trElement.appendChild(create_td(option.seq_name))
+                    trElement.appendChild(create_td(option.barcode))
+                    // trElement.appendChild(create_td(option.action))//
+                    trElement.appendChild(delete_td)
+                    trElement.appendChild(create_td(option.barcode_mask_from,'none'))
+                    trElement.appendChild(create_td(option.barcode_mask_count,'none'))
+                    trElement.appendChild(create_td(option.barcode,'none'))
+
+                    let start = option.barcode_mask_from
+                    let end = option.barcode_mask_count
+                    let sub = option.barcode.substring(start-1, end);
+
+                    //加上*號
+                    trElement.childNodes[4].textContent = replaceWithAsterisks(option.barcode.toString(),start-1,end-start+1)
+
+                    tbody1.appendChild(trElement)
+                });
+
+
+                highlight_row('barcode-table');
+                autofill2();
+                document.getElementById('barcode-setting').style.display='block'
+
+            },
+            error: function(error) {
+            }
+        });
+    }
+
+    function create_td(value,display='') {
+        let tdElement = document.createElement("td");
+        tdElement.textContent = value;
+        tdElement.style.display = display;
+        return tdElement
+    }
+
+    function delete_barcode(id) {
+
+        var yes = confirm('<?php echo $text['Delete_confirm_text']; ?>');
+
+        if(yes){
+            let url = '?url=Products/Delete_Barcode';
+            $.ajax({
+                type: "POST",
+                data: { 'id': id },
+                dataType: "json",
+                url: url,
+                success: function(response) {
+                    // 成功回調函數，處理伺服器的回應
+                    // console.log(response); // 在控制台輸出伺服器的回應
+                    // history.go(0);
+                    get_all_barcode()
+                },
+                error: function(error) {
+                    // 失敗回調函數，處理錯誤情況
+                    // console.error('Error:', error); // 在控制台輸出錯誤訊息
+                }
+            }).fail(function() {
+                // history.go(0);//失敗就重新整理
+            });
+        }
+    }
+
+    //click row will fill input
+    function autofill2(argument) {
+        var table = document.getElementById("barcode-table");
+        var rows = table.getElementsByTagName("tr");
+
+        for (var i = 0; i < rows.length; i++) {
+            var row = rows[i];
+            row.addEventListener("click", function() {
+                var cells = this.getElementsByTagName("td");
+                var barcodeInput = document.getElementById("barcode-number");
+                var matchFromInput = document.getElementById("match-from");
+                var matchToInput = document.getElementById("match-to");
+                var jobIDSelect = document.getElementById("Job-ID");
+                var seqIDSelect = document.getElementById("Seq-ID");
+
+                barcodeInput.value = cells[8].innerText; // Thay đổi chỉ số để lấy giá trị Barcode
+                matchFromInput.value = cells[6].innerText;
+                matchToInput.value = cells[7].innerText;
+
+                // Lấy giá trị Job ID và Seq ID từ dòng được click và đặt lại cho các select tương ứng
+                var jobID = cells[0].innerText;
+                var seqID = cells[2].innerText;
+
+                // Tìm option có giá trị bằng Job ID và Seq ID và đặt làm selected
+                for (var j = 0; j < jobIDSelect.options.length; j++) {
+                    if (jobIDSelect.options[j].value === jobID) {
+                        jobIDSelect.selectedIndex = j;
+                        break;
+                    }
+                }
+                GetSeqList(seqID);
+
+            });
+        }
+    }
+
+    function replaceWithAsterisks(str, from, count) {
+
+        // 使用 parseInt() 将 from、count 和 str.length 转换为整数
+        from = parseInt(from, 10);
+        count = parseInt(count, 10);
+        
+        if (typeof str !== 'string' || isNaN(from) || isNaN(count) || from < 0 || count <= 0 || parseInt(from) + parseInt(count) > str.length) {
+            return 'Invalid input';
+        }
+
+        let prefixLength = from; // 从字符串开头到 from 的字符数
+        let preservedLength = count; // 保留的字符数
+        let suffixLength = str.length - from - count; // 从 from + count 到字符串末尾的字符数
+
+        let prefix = '*'.repeat(prefixLength); // 生成前缀的 *
+        let preserved = str.substring(from, from + preservedLength); // 保留的部分
+        let suffix = '*'.repeat(suffixLength); // 生成后缀的 *
+
+        return prefix + preserved + suffix;
+
+    }
+
 
 
 </script>

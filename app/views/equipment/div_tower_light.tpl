@@ -1,19 +1,19 @@
 <!-- Tower Light Edit Setting -->
     <div id="TowerLight_Edit_Setting" style="display: none">
         <div class="topnav">
-            <label type="text" style="font-size: 20px; margin: 4px; padding-left: 2%">Tower Light Setting</label>
+            <label type="text" style="font-size: 20px; margin: 4px; padding-left: 5%">Tower Light Setting</label>
             <button class="btn" id="back-btn" type="button" onclick="cancelSetting()">
-                <img id="img-back" src="./img/back.svg" alt="">back
+                <img id="img-back" src="./img/back.svg" alt=""><?php echo $text['Back_text']; ?>
             </button>
         </div>
         <div class="center-content">
-            <div id="container">
+            <div class="container">
                 <div class="wrapper" style="top: 0">
                     <div class="navbutton active" onclick="handleButtonClick(this, 'towerlight')">
-                        <span data-content="Connect setting" onclick="showContent('towerlight')"></span>Connect setting
+                        <span data-content="<?php echo $text['Connection_setting_text']; ?>" onclick="showContent('towerlight')"></span><?php echo $text['Connection_setting_text']; ?>
                     </div>
                     <div class="navbutton" onclick="handleButtonClick(this, 'towerlightsetting')">
-                        <span data-content="Light setting" onclick="showContent('towerlightsetting')"></span>Light setting
+                        <span data-content="<?php echo $text['Light_Setting_text']; ?>" onclick="showContent('towerlightsetting')"></span><?php echo $text['Light_Setting_text']; ?>
                     </div>
                 </div>
 
@@ -21,7 +21,7 @@
                 <div id="towerlightContent" class="content">
                     <div style="padding: 40px">
                         <div class="row" style="padding-left: 5.5%">
-                            <div class="col-1 t3">Name:</div>
+                            <div class="col-1 t3"><?php echo $text['Name_text']; ?>:</div>
                             <div class="col-2 t3">
                                 <input type="text" id="connect-name" class="t5 form-control input-ms" value="" maxlength="">
                             </div>
@@ -32,7 +32,7 @@
                                 <div style="padding: 5px">
                                     <label style="font-size: 18px">
                                         <img style="height: 25px; width: 25px" class="images" src="./img/connection-control.svg" alt="">&nbsp;
-                                        <b>Connection control</b>
+                                        <b><?php echo $text['Connection_control_text']; ?></b>
                                     </label>
                                 </div>
                                 <!-- <div class="row t3">
@@ -43,7 +43,7 @@
                                 </div> -->
 
                                 <div class="row t3">
-                                    <div class="col-3 t3">RED</div>
+                                    <div class="col-3 t3"><?php echo $text['Red_text']; ?></div>
                                     <div class="col-1 t3">
                                         <select id="unit" style="width: auto" disabled>
                                             <option value="0"></option>
@@ -57,7 +57,7 @@
                                     </div>
                                 </div>
                                 <div class="row t3">
-                                    <div class="col-3 t3">Green</div>
+                                    <div class="col-3 t3"><?php echo $text['Green_text']; ?></div>
                                     <div class="col-1 t3">
                                         <select id="unit" style="width: auto" disabled>
                                             <option value="0"></option>
@@ -71,7 +71,7 @@
                                     </div>
                                 </div>
                                 <div class="row t3">
-                                    <div class="col-3 t3">Yellow</div>
+                                    <div class="col-3 t3"><?php echo $text['Yellow_text']; ?></div>
                                     <div class="col-1 t3">
                                         <select id="unit" style="width: auto" disabled>
                                             <option value="0"></option>
@@ -86,7 +86,7 @@
                                 </div>
                                 
                                 <div class="row t3">
-                                    <div class="col-3 t3">Buzzer</div>
+                                    <div class="col-3 t3"><?php echo $text['Buzzer_text']; ?></div>
                                     <div class="col-1 t3">
                                         <select id="unit" style="width: auto" disabled>
                                             <option selected value="0">pin0</option>
@@ -105,24 +105,24 @@
                                 <div style="padding: 5px">
                                     <label style="font-size: 18px">
                                         <img style="height: 25px; width: 25px" class="images" src="./img/test-adjust.png" alt="">&nbsp;
-                                        <b>Test adjust</b>
+                                        <b><?php echo $text['Test_adjust_text']; ?></b>
                                     </label>
                                 </div>
                                 <div class="row t4">
                                     <div class="col t3 coler-setting">
-                                        <label class="light_test">RED
+                                        <label class="light_test"><?php echo $text['Red_text']; ?>
                                           <input id="test_Red" type="checkbox" checked="checked">
                                           <span class="checkmark checkmark_red"></span>
                                         </label>
-                                        <label class="light_test">GREEN
+                                        <label class="light_test"><?php echo $text['Green_text']; ?>
                                           <input id="test_Green" type="checkbox">
                                           <span class="checkmark checkmark_green"></span>
                                         </label>
-                                        <label class="light_test">YELLOW
+                                        <label class="light_test"><?php echo $text['Yellow_text']; ?>
                                           <input id="test_Yellow" type="checkbox">
                                           <span class="checkmark checkmark_yellow"></span>
                                         </label>
-                                        <label class="light_test">BUZZER
+                                        <label class="light_test"><?php echo $text['Buzzer_text']; ?>
                                           <input id="test_Buzzer" type="checkbox">
                                           <span class="checkmark checkmark_buzzer"></span>
                                         </label>
@@ -130,18 +130,18 @@
                                 </div>
 
                                 <div class="row t4">
-                                    <div class="col-3 t3">Status:
+                                    <div class="col-3 t3"><?php echo $text['Status_text']; ?>:
                                         <label style="color: red; padding-left: 3%"> </label>
                                     </div>
                                     <div class="col-3 t1">
-                                        <button type="button" class="btn btn-Reconnect" onclick="connect_test()">TEST</button>
+                                        <button type="button" class="btn btn-Reconnect" onclick="connect_test()"><?php echo $text['TEST_text']; ?></button>
                                     </div>
                                 </div>
                                 <div class="row t4">
-                                    <div class="col t3"><b>Communication log</b></div>
+                                    <div class="col t3"><b><?php echo $text['Communication_log_text']; ?></b></div>
                                 </div>
-                                <div class="scrollbar-Communicationlog" id="style-Communicationlog">
-                                    <div id="connect_log" class="force-overflow-Communicationlog">
+                                <div class="scrollbar-Communicationlog" id="style-Communicationlog-towerlight">
+                                    <div id="connect_log" class="force-overflow-Communicationlog" style="padding-left: 5%">
                                     </div>
                                 </div>
                             </div>
@@ -154,19 +154,19 @@
                         <div style="padding: 5px">
                             <label style="font-size: 18px;font-weight: bold">
                                 <img style="height: 25px; width: 25px" class="images" src="./img/connection-control.svg" alt="">&nbsp;
-                                    Light Setting
+                                    <?php echo $text['Light_Setting_text']; ?>
                             </label>
                         </div>
 
                         <div class="row t4">
                             <div class="col-2 t3">
-                                <label>Type</label>
+                                <label><?php echo $text['Type_text']; ?></label>
                             </div>
                             <div class="col-4 t1">
-                                <label style="font-weight: bold">Color Configuration</label>
+                                <label style="font-weight: bold"><?php echo $text['Color_Configuration_text']; ?></label>
                             </div>
                             <div class="col t3">
-                                <label style="font-weight: bold">Length of time</label>
+                                <label style="font-weight: bold; margin-left: 6.2%"><?php echo $text['Length_of_time_text']; ?></label>
                             </div>
                         </div>
                         <!-- <div class="col t3" style="padding-left: 18%">
@@ -192,7 +192,7 @@
                                 </label>
                                 <label class="light_test">
                                     <input id="OK_Buzzer" type="checkbox">
-                                    <span class="checkmark checkmark_buzzer">buzzer</span>
+                                    <span class="checkmark checkmark_buzzer"><?php echo $text['Buzzer_text']; ?></span>
                                 </label>
                             </div>
                             <div class="col t3">
@@ -204,7 +204,7 @@
                                 </div>
                                 <div>
                                     <input id="OK_time" class="lighttime" type="" name="">
-                                    <span>ms</span>
+                                    <span><?php echo $text['ms_text']; ?></span>
                                 </div>
                             </div>
                         </div>
@@ -228,7 +228,7 @@
                                 </label>
                                 <label class="light_test">
                                     <input id="NG_Buzzer" type="checkbox">
-                                    <span class="checkmark checkmark_buzzer">buzzer</span>
+                                    <span class="checkmark checkmark_buzzer"><?php echo $text['Buzzer_text']; ?></span>
                                 </label>
                             </div>
                             <div class="col t3">
@@ -240,7 +240,7 @@
                                 </div>
                                 <div>
                                     <input id="NG_time" class="lighttime" type="" name="">
-                                    <span>ms</span>
+                                    <span><?php echo $text['ms_text']; ?></span>
                                 </div>
                             </div>
                         </div>
@@ -264,7 +264,7 @@
                                 </label>
                                 <label class="light_test">
                                     <input id="OK_SEQ_Buzzer" type="checkbox">
-                                    <span class="checkmark checkmark_buzzer">buzzer</span>
+                                    <span class="checkmark checkmark_buzzer"><?php echo $text['Buzzer_text']; ?></span>
                                 </label>
                             </div>
                             <div class="col t3">
@@ -276,14 +276,14 @@
                                 </div>
                                 <div>
                                     <input id="OK_SEQ_time" class="lighttime" type="" name="">
-                                    <span>ms</span>
+                                    <span><?php echo $text['ms_text']; ?></span>
                                 </div>
                             </div>
                         </div>
 
                         <div class="row t4">
                             <div class="col-2 t3">
-                                <label>OK/OKALL Job</label>
+                                <label>OK-ALL</label>
                             </div>
                              <div class="col-4 t1 coler-setting">
                                 <label class="light_test">
@@ -300,7 +300,7 @@
                                 </label>
                                 <label class="light_test">
                                     <input id="OKALL_Buzzer" type="checkbox">
-                                    <span class="checkmark checkmark_buzzer">buzzer</span>
+                                    <span class="checkmark checkmark_buzzer"><?php echo $text['Buzzer_text']; ?></span>
                                 </label>
                             </div>
                            <div class="col t3">
@@ -312,7 +312,7 @@
                                 </div>
                                 <div>
                                     <input id="OKALL_time" class="lighttime" type="" name="">
-                                    <span>ms</span>
+                                    <span><?php echo $text['ms_text']; ?></span>
                                 </div>
                             </div>
                         </div>
@@ -336,7 +336,7 @@
                                 </label>
                                 <label class="light_test">
                                     <input id="ERROR_Buzzer" type="checkbox">
-                                    <span class="checkmark checkmark_buzzer">buzzer</span>
+                                    <span class="checkmark checkmark_buzzer"><?php echo $text['Buzzer_text']; ?></span>
                                 </label>
                             </div>
                             <div class="col t3">
@@ -348,14 +348,14 @@
                                 </div>
                                 <div>
                                     <input id="ERROR_time" class="lighttime" type="" name="">
-                                    <span>ms</span>
+                                    <span><?php echo $text['ms_text']; ?></span>
                                 </div>
                            </div>
                         </div>
 
                     </div>
                 </div>
-                <button class="saveButton" id="saveButton" onclick="save_setting()">Save</button>
+                <button class="saveButton" id="saveButton" onclick="save_setting()"><?php echo $text['Save_text']; ?></button>
             </div>
         </div>
     </div>
@@ -372,26 +372,19 @@
         let yellow_light = +document.getElementById("test_Yellow").checked;
         let buzzer = +document.getElementById("test_Buzzer").checked;
 
-        const log_div = document.getElementById('connect_log')
+        let log_div = document.getElementById('connect_log')
 
         console.log(red_light,green_light,yellow_light,buzzer);
         $.ajax({
-            url: '?url=Equipments/IO_tes', // 指向服務器端檢查更新的 PHP 腳本
+            url: '?url=Equipments/TowerLightTest', // 指向服務器端檢查更新的 PHP 腳本
             // async: false,
             method: 'GET',
             data: { 
-                'pin0': buzzer,
-                'pin1': yellow_light,
-                'pin2': 0,
-                'pin3': 0,
-                'pin4': green_light,
-                'pin5': red_light,
-                'pin6': 0,
-                'pin7': 0,
-                'pin8': 0,
-                'pin9': 0,
-                'pin10': 0,
-                'pin11': 0
+                'light_signal': 'io_test',
+                'red_light': red_light,
+                'green_light': green_light,
+                'yellow_light': yellow_light,
+                'buzzer': buzzer
             },
             dataType: "json",
             beforeSend: function(){
@@ -404,23 +397,30 @@
                 let log = document.createElement('div');
                     log.className = 'col t3';
                     log.innerText = momo + ' connect try';
-                log_div.appendChild(log);
+                // log_div.appendChild(log);
+                log_div.insertBefore(log,log_div.childNodes[0]);
 
             },
             success: function(response) {
                 // 處理服務器返回的響應
+                console.log(response);
                 let momo = moment().format('YYYY/MM/DD HH:mm:ss A');
-                if(response == true){
+                if(response.result == true){
                     let log = document.createElement('div');
                     log.className = 'col t3';
                     log.innerText = momo + ' connect success';
-                    log_div.appendChild(log);
+                    // log_div.appendChild(log);
+                    log_div.insertBefore(log,log_div.childNodes[0]);
                 }else{
                     let log = document.createElement('div');
                     log.className = 'col t3';
                     log.innerText = momo + ' connect fail';
-                    log_div.appendChild(log);
+                    // log_div.appendChild(log);
+                    log_div.insertBefore(log,log_div.childNodes[0]);
                 }
+                let divElement = document.getElementById('connect_log');
+                // Scroll to the bottom of the div
+                divElement.scrollTop = divElement.scrollHeight;
 
             },
             complete: function(XHR, TS) {
@@ -652,4 +652,5 @@
       -ms-transform: rotate(45deg);
       transform: rotate(45deg);
     }
+
 </style>

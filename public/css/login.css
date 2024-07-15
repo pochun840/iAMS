@@ -28,7 +28,6 @@ body
     height: 100vh;
     display: flex;
     align-items: center;
-    text-align: center;
     font-family: sans-serif;
     justify-content: center;
     background-image: url(../img/backgroud.jpg);
@@ -44,56 +43,134 @@ body
     position: relative;
     width: 400px;
     background: #2C3752;
-    padding: 60px 40px;
+    padding: 30px 40px;
 }
 
 header
 {
     font-size: 40px;
     color: #FFFFFF;
+    text-align: center;
     margin-bottom: 60px;
     font-family: 'Montserrat', sans-serif;
 }
 
-.input-field, form .button
+
+:focus { outline: none; }
+::-webkit-input-placeholder { color: #DEDFDF; }
+::-moz-placeholder { color: #DEDFDF; }
+:-moz-placeholder { color: #DEDFDF; }
+::-ms-input-placeholder { color: #DEDFDF; }
+
+
+#wrapper, label, #arrow, button span { transition: all .5s cubic-bezier(.6,0,.4,1); }
+
+#wrapper { overflow: hidden; }
+
+#login:checked ~ #wrapper { height: 140px; }
+#login:checked ~ #wrapper #arrow { left:32px; }
+
+#idlogin:checked ~ #wrapper { height:68px; }
+#idlogin:checked ~ #wrapper #arrow { left: 125px; }
+
+input[type=radio] { display: none; }
+
+label
 {
-    margin: 25px 0;
-    position: relative;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 22px;
+    font-weight: 800;
+    opacity: .5;
+    margin-bottom: 0px;
+}
+
+label:hover
+{
+    transition: all .3s cubic-bezier(.6,0,.4,1);
+    opacity: 1;
+}
+
+label[for="login"] { margin-right: 50px;}
+input[type=radio]:checked + label { opacity: 1; }
+
+input[type=text],
+input[type=password] {
+    background: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 20px;
+    font-family: 'Raleway', sans-serif;
     height: 50px;
     width: 100%;
+    margin-bottom: 10px;
+    opacity: 1;
+    text-indent: 20px;
+    transition: all .2s ease-in-out;
 }
 
-.input-field input
-{
-    height: 100%;
-    width: 100%;
-    border: 1px solid silver;
-    padding-left: 15px;
-    outline: none;
-    font-size: 19px;
-    transition: .4s;
-}
-
-input:focus
-{
-    border: 1px solid #1DA1F2;
-}
-
-.input-field label, span.show
+.button .inner
 {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+    height: 100%;
+    width: 300%;
+    left: -100%;
+    z-index: -1;
+    transition: all .4s;
+    background: #E60012;
 }
 
-.input-field label
+.button:hover .inner
 {
-    left: 15px;
-    pointer-events: none;
-    color: grey;
-    font-size: 18px;
-    transition: .4s;
+    left: 0;
 }
+
+
+button
+{
+    background: red;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 20px;
+    height: 50px;
+    width: 100%;
+    overflow: hidden;
+    transition: all .3s cubic-bezier(.6,0,.4,1);
+}
+
+button span
+{
+        display: block;
+        line-height: 65px;
+        position: relative;
+        text-align: center;
+        vertical-align: middle;
+        transform: translate3d(0,0,0);
+}
+
+#arrow {
+    height: 0;
+    width: 0;
+    border-bottom: 8px solid #fff;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    position: relative;
+    left: 32px;
+}
+
+
+#hint
+{
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    bottom: 20px;
+}
+
+
+
 
 span.show
 {
@@ -121,47 +198,5 @@ input:valid ~ label
     color: #999966;
 }
 
-form .button
-{
-    margin-top: 30px;
-    overflow: hidden;
-    z-index: 111;
-}
 
-.button .inner
-{
-    position: absolute;
-    height: 100%;
-    width: 300%;
-    left: -100%;
-    z-index: -1;
-    transition: all .4s;
-    background: #E60012;
-}
-
-.button:hover .inner
-{
-    left: 0;
-}
-
-.button button
-{
-    width: 100%;
-    height: 100%;
-    border: none;
-    background: none;
-    outline: none;
-    color: white;
-    font-size: 20px;
-    cursor: pointer;
-    font-family: 'Montserrat', sans-serif;
-}
-
-.input-field .icon
-{
-    position: absolute;
-    top: 13px;
-    right: 0;
-    font-size: 24px;
-}
 

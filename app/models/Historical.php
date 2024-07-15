@@ -47,7 +47,7 @@ class Historical{
             $info_arr['fromdate'] = str_replace("-","",$info_arr['fromdate'])." 00:00:00";
             $info_arr['todate']   = str_replace("-","",$info_arr['todate'])." 23:59:59";
 
-            $sql .= " AND data_time BETWEEN :fromdate AND :todate"; 
+            $sql .= " AND data_time BETWEEN :fromdate AND :todate "; 
             $params['fromdate'] = $info_arr['fromdate'];
             $params['todate'] = $info_arr['todate'];
         }
@@ -60,10 +60,11 @@ class Historical{
                 $sql .="AND fasten_status !='' ";
 
             }else if($info_arr['status_val'] =="1"){
-                $sql .="AND fasten_status = '4' ";
-
+                $sql .="AND fasten_status = '4' or fasten_status = '5' or fasten_status = '6' ";
+                // $sql .="AND fasten_status = '4' ";
             }else if($info_arr['status_val'] =="2"){
-                $sql .=" AND fasten_status = '5' or fasten_status = '6' ";
+                $sql .="AND fasten_status = '4' ";
+                // $sql .=" AND fasten_status = '5' or fasten_status = '6' ";
             }else{
                 $sql .=" AND fasten_status = '7' or fasten_status = '8'  ";
 
@@ -146,14 +147,24 @@ class Historical{
     #status 轉換
     public function status_code_change(){
 
+        //multi language
+        $data['language'] = $_SESSION['language'];
+        //權限
+        // 如果檔案存在就引入它
+        if(file_exists('../app/language/' . $data['language'] . '.php')){
+            require '../app/language/' . $data['language'] . '.php';
+        } else { //預設採用簡體中文
+            require '../app/language/zh-cn.php';
+        }
+
         $status_arr = array(
             0 => 'INIT', 
             1 => 'READY',
             2 => 'RUNNING',
             3 => 'REVERSE',
             4 => 'OK',
-            5 => 'OK-SEQ',
-            6 => 'OK-JOB',
+            5 => 'OK',//'OK-SEQ'
+            6 => 'OK',//'OK-JOB'
             7 => 'NG',
             8 => 'NS',
             9 => 'SETTING',
@@ -175,8 +186,8 @@ class Historical{
             2 => '',
             3 => '#007AB8;',
             4 => '#99CC66;',
-            5 => '#FFCC00;',
-            6 => '#FFCC00;',
+            5 => '#99CC66;',//'#FFCC00;'
+            6 => '#99CC66;',//'#FFCC00;'
             7 => 'red;',
             8 => 'red;',
             9 => '',
@@ -194,34 +205,40 @@ class Historical{
 
         $error_msg = array(
             0 => '',
-            1 => 'ERR-CONT-TEMP',
-            2 => 'ERR-MOT-TEMP',
-            3 => 'ERR-MOT-CURR',
-            4 => 'ERR-MOT-PEAK-CURR',
-            5 => 'ERR-HIGH-TORQUE',
-            6 => 'ERR-DEADLOCK',
-            7 => 'ERR-PROC-MINTIME',
-            8 => 'ERR-PROC-MAXTIME',
-            9 => 'ERR-ENCODER',
-            10 => 'ERR-HALL',
-            11 => 'ERR-BUSVOLT-HIGH',
-            12 => 'ERR-BUSVOLT-LOW',
-            13 => 'ERR-PROC-NA',
-            14 => 'ERR-STEP-NA',
-            15 => 'ERR-DMS-COMM',
-            16 => 'ERR-FLASH',
-            17 => 'ERR-FRAM',
-            18 => 'ERR-HIGH-ANGLE',
-            19 => 'ERR-PROTECT-CIRCUIT',
-            20 => 'ERR-SWITCH-CONFIG',
-            21 => 'ERR-STEP-NOT-REC',
-            22 => 'ERR-TMD-FRAM',
-            23 => 'ERR-LOW-TORQUE',
-            24 => 'ERR-LOW-ANGLE',
-            25 => 'ERR-PROC-NOT-FINISH',
-            26 => 'SEQ-COMPLETED',
-            27 => 'JOB-COMPLETED',
-            28 => 'WORKPIECE-RECOVERY'
+            1 => $error_message['ERR_CONT_TEMP'],
+            2 => $error_message['ERR_MOT_TEMP'],
+            3 => $error_message['ERR_MOT_CURR'],
+            4 => $error_message['ERR_MOT_PEAK_CURR'],
+            5 => $error_message['ERR_HIGH_TORQUE'],
+            6 => $error_message['ERR_DEADLOCK'],
+            7 => $error_message['ERR_PROC_MINTIME'],
+            8 => $error_message['ERR_PROC_MAXTIME'],
+            9 => $error_message['ERR_ENCODER'],
+            10 =>$error_message['ERR_HALL'],
+            11 =>$error_message['ERR_BUSVOLT_HIGH'],
+            12 =>$error_message['ERR_BUSVOLT_LOW'],
+            13 =>$error_message['ERR_PROC_NA'],
+            14 =>$error_message['ERR_STEP_NA'],
+            15 =>$error_message['ERR_DMS_COMM'],
+            16 =>$error_message['ERR_FLASH'],
+            17 =>$error_message['ERR_FRAM'],
+            18 =>$error_message['ERR_HIGH_ANGLE'],
+            19 =>$error_message['ERR_PROTECT_CIRCUIT'],
+            20 =>$error_message['ERR_SWITCH_CONFIG'],
+            21 =>$error_message['ERR_STEP_NOT_REC'],
+            22 =>$error_message['ERR_TMD_FRAM'],
+            23 =>$error_message['ERR_LOW_TORQUE'],
+            24 =>$error_message['ERR_LOW_ANGLE'],
+            25 =>$error_message['ERR_PROC_NOT_FINISH'],
+            26 =>'',
+            27 =>'',
+            28 =>'',
+            29 =>'',
+            30 =>'',
+            31 =>$error_message['ERR_LOW_ANGLE'],
+            32 =>$error_message['ERR_PROC_NOT_FINISH'],
+            33 =>$error_message['SEQ_COMPLETED'],
+            34 => $error_message['JOB_COMPLETED']
         );
 
    
@@ -456,7 +473,8 @@ class Historical{
         foreach ($no_arr as $key => $val) {
             if (!empty($val)) {
                 foreach ($file_arr as $file_suffix) {
-                    $infile = "../public/data/DATALOG_000000" . $val . $file_suffix . ".csv";
+                    // $infile = "../public/data/DATALOG_000000" . $val . $file_suffix . ".csv";
+                    $infile = '../public/data/DATALOG_'.str_pad($val,10,"0",STR_PAD_LEFT).$file_suffix.".csv";
                     if (file_exists($infile)) {
                         $csvdata = file_get_contents($infile);
                         $rows = explode("\n", $csvdata);
@@ -506,9 +524,8 @@ class Historical{
             $csv_array = array();
             $resultarr = array();
             foreach ($file_arr as $v_f) {
-                $infile = "../public/data/DATALOG_000000".$no.$v_f.".csv";
-
-                
+                // $infile = "../public/data/DATALOG_000000".$no.$v_f.".csv";
+                $infile = '../public/data/DATALOG_'.str_pad($no,10,"0",STR_PAD_LEFT).$v_f.".csv";
                 if (file_exists($infile)) {
                     $csvdata_tmp = file_get_contents($infile);
                     if (!empty($csvdata_tmp)) {
@@ -526,10 +543,11 @@ class Historical{
                 $position = (int)$chat_mode;
     
                 foreach ($csv_array as $subarray) {
-                    if(isset($subarray[$position])){
+                    if(isset($subarray[1])){
                         if($chat_mode =="5" || $chat_mode =="6"){
-                            if($chat_mode =="6" && $position == 6) {
+                            if($position === 5 || $position === 6) {
                                 $resultarr['torque'][] = $subarray[1];
+                                $resultarr['angle'][] = $subarray[2];
                             } else {
                                 $resultarr['torque'][] = $subarray[$position];
                             }
@@ -540,7 +558,7 @@ class Historical{
                 }
             }
         }
-        
+        // var_dump($resultarr);
         return $resultarr;
     }
     

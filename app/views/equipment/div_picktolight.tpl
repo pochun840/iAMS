@@ -1,13 +1,13 @@
 <!-- Pick To Light Edit Setting -->
     <div id="PickToLight_Edit_Setting" style="display: none">
         <div class="topnav">
-            <label type="text" style="font-size: 20px; margin: 4px; padding-left: 2%">Pick-To-Light Setting</label>
+            <label type="text" style="font-size: 20px; margin: 4px; padding-left: 5%">Pick-To-Light Setting</label>
             <button class="btn" id="back-btn" type="button" onclick="cancelSetting()">
                 <img id="img-back" src="./img/back.svg" alt="">back
             </button>
         </div>
         <div class="center-content">
-            <div id="container">
+            <div class="container">
                 <div class="wrapper" style="top: 0">
                     <div class="navbutton active" onclick="handleButtonClick(this, 'picktolight')">
                         <span data-content="Connect setting" onclick="showContent('picktolight')"></span>Connect setting

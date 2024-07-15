@@ -4,364 +4,402 @@ $text = array();
 
 //login page
 $text['login_text'] = 'Login';
-$text['password_text'] = 'password';
+$text['logout_text'] = 'Logout';
+$text['account_text'] = 'Account';
+$text['password_text'] = 'Password';
+$text['select_language_text'] = 'Select Language';
 
-$text['delete_confirm_text'] = 'Do you want to delete job id: ';
-$text['delete_text'] = 'Delete';
+//main page
+$text['main_home_text'] = 'Home';
+$text['main_product_text'] = 'Product';
+$text['main_equipment_text'] = 'Equipment';
+$text['main_plugins_text'] = 'Plugins';
+$text['main_charts_text'] = 'Charts';
+$text['main_operation_text'] = 'Operation';
+$text['main_monitor_text'] = 'Monitor';
+$text['main_setting_text'] = 'Setting';
+$text['main_calibration_text'] = 'Calibration';
+$text['main_user_text'] = 'User';
+$text['main_historical_text'] = 'Historical';
+$text['main_template_text'] = 'Template'; //GTCS-DB Sync
+$text['main_DB_SYNC_text'] = 'GTCS-DB Sync';
 
-$text['cover_confirm_text'] = 'The job id already exists, do you want to overwrite it?';
-$text['cover_text'] = 'Cover';
+//product page
+$text['Barcode_text'] = 'Barcode';
+$text['Setting_text'] = 'Setting';
+$text['Add_Job_text'] = 'Add Job';
+$text['Copy_text'] = 'Copy';
+$text['Edit_text'] = 'Edit';
+$text['Job_ID_text'] = 'Job ID';
+$text['Job_Name_text'] = 'Job Name';
+$text['Picture_text'] = 'Picture';
+$text['More_Info_text'] = 'More Info';
+$text['Action_text'] = 'Action';
+$text['Seq_text'] = 'Seq';
+$text['Task_text'] = 'Task';
+$text['Arm_text'] = 'Arm';
+$text['Detail_text'] = 'Detail';
+$text['Add_Seq_text'] = 'Add Seq';
+$text['Delete_text'] = 'Delete';
+$text['Match_From_text'] = 'Match From';
+$text['Match_To_text'] = 'Match To';
+$text['Select_Job_ID_text'] = 'Select Job ID';
+$text['Select_Seq_ID_text'] = 'Select Seq ID';
 
-//job management
-$text['normal_job_management'] = 'Normal Job Management';
-$text['advanced_job_management'] = 'Advanced Job Management';
-$text['job_id'] = 'Job ID';
-$text['job_name'] = 'Job Name';
-$text['job_ok'] = 'Ok Job';
-$text['job_ok_stop'] = 'Ok Job Stop';
-$text['total_seq'] = 'Total Seq';
-$text['add_seq'] = 'Add Seq';
+//product page - add job
+$text['Controller_Type_text'] = 'Controller Type';
+$text['Barcode_Start_text'] = 'Barcode Start';
+$text['Job_Repeat_text'] = 'Job Repeat';
+$text['OK_Job_text'] = 'OK Job';
+$text['Tower_Light_text'] = 'Tower Light';
+$text['Reverse_Button_text'] = 'Reverse Button';
+$text['Reverse_RPM_text'] = 'Reverse RPM';
+$text['Reverse_Force_text'] = 'Reverse Force';
+$text['Reverse_Count_text'] = 'Reverse Count';
+$text['Rev_Threshold_Tor_text'] = 'Rev.Threshold Tor';
+$text['Size_text'] = 'Size';
+$text['ON_text'] = 'ON';
+$text['OFF_text'] = 'OFF';
+$text['CW_text'] = 'CW';
+$text['CCW_text'] = 'CCW';
+$text['MAX_text'] = 'Max';
+$text['NO_text'] = 'No';
+$text['YES_text'] = 'Yes';
+$text['New_Job_text'] = 'New Job';
+$text['Edit_Job_text'] = 'Edit Job';
+$text['Save_text'] = 'Save';
+$text['Cancel_text'] = 'Cancel';
 
-$text['New'] = 'New';
-$text['Edit'] = 'Edit';
-$text['Copy'] = 'Copy';
-$text['Delete'] = 'Del';
+//product page - copy job
+$text['Copy_job_text'] = 'Copy Job';
+$text['Copy_from_text'] = 'Copy From';
+$text['Copy_to_text'] = 'Copy To';
+$text['Delete_confirm_text'] = 'are you sure?';
 
-$text['total_job'] = 'Total Jobs';
-$text['total_seq'] = 'Total Seq';
-$text['page'] = 'Page';
-$text['page_of'] = 'of';
+//sequence page
+$text['Squence_text'] = 'Sequence';
+$text['Seq_count_text'] = 'Seq Count';
+$text['Add_Seq_text'] = 'Add Seq';
+$text['Edit_Seq_text'] = 'Edit Seq';
+$text['Back_text'] = 'Back';
+$text['Seq_ID_text'] = 'Seq ID';
+$text['Seq_Name_text'] = 'Seq Name';
+$text['Enalbe_text'] = 'Enable';
+$text['Add_Task_text'] = 'Add Task';
+//sequence page - add seq
+$text['New_Seq_text'] = 'New Seq';
+$text['Barcode_Enable_text'] = 'Barcode Enable';
+$text['Add_Picture_text'] = 'Add Picture';
+$text['NG_Stop_text'] = 'Stop on NG';
+$text['Sequence_OK_text'] = 'Sequence OK';
+$text['Timeout_text'] = 'Timeout';
+//sequence page - copy seq
+$text['Copy_seq_text'] = 'Copy Sequence';
 
-$text['new_job'] = 'New job';
-$text['edit_job'] = 'Edit Job';
+//task page
+$text['Task_text'] = 'Task';
+$text['Task_Count_text'] = 'Task Count';
+$text['Hi_text'] = 'Hi';
+$text['Lo_text'] = 'Lo';
+$text['Step_text'] = 'Step';
+//task page - new modal
+$text['Task_id_text'] = 'Task ID';
+$text['Controller_text'] = 'Controller';
+$text['Sensor_text'] = 'Sensor';
+$text['Arm_text'] = 'Arm';
+$text['Virtual_message_text'] = 'Virtual message';
+$text['Socket_Tray_text'] = 'Socket Tray';
+$text['Screw_feeder_position_text'] = 'Screw feeder position';
+$text['Program_controller_text'] = 'Program(controller)';
+$text['Task_screw_position_text'] = 'Task screw position';
+$text['Confirm_text'] = 'Confirm';
+$text['Encoder_text'] = 'Encoder';
+$text['Tolerance_setting_text'] = 'Tolerance setting';
+$text['Text_text'] = 'Text';
+$text['Encoder_text'] = 'Encoder';
+$text['New_Task_text'] = 'New Task';
+$text['Edit_Task_text'] = 'Edit Task';
 
-$text['unfasten_direction'] = 'Unfasten direction';
-$text['unfasten_rpm'] = 'Unfasten RPM';
-$text['unfasten_force'] = 'Unfasten Force';
+//operation page
+$text['barcode_text'] = 'barcode';
+$text['Call_Job_text'] = 'Call Job';
+$text['TR_text'] = 'TR';
+$text['Job_Time_text'] = 'Job Time';
+$text['Error_text'] = 'Error';
+$text['Screw_info_text'] = 'Screw info';
+$text['Tool_text'] = 'Tool';
+$text['Picking_Module_text'] = 'Picking Module';
+$text['Recycle_box_text'] = 'Recycle box';
+$text['Button_text'] = 'Button';
+$text['Count_text'] = 'Count';
+$text['Job_List_text'] = 'Job List';
+$text['Seq_List_text'] = 'Seq List';
+$text['OK_text'] = 'OK';
+$text['Screw_Feeder_text'] = 'Screw Feeder';
+$text['Identity_verify_text'] = 'Identity Verify';
+$text['Enter_identity_text'] = 'Enter identity verification';
+$text['Verify_text'] = 'Verify';
+$text['Total_Seq_text'] = 'Total Seq';
 
-$text['enable'] = 'Enable';
-$text['disable'] = 'Disable';
-$text['max_torque'] = 'Max';
-$text['max_rpm'] = 'Max';
+//history page
+$text['Historical_Record_text'] = 'Historical Record';
+$text['Fastening_Record_text'] = 'Fastening Record';
+$text['Work_Flow_Log_text'] = 'Work Flow Log';
+$text['User_Access_Logging_text'] = 'User Access Logging';
+$text['BarcodeSN_text'] = 'BarcodeSN';
+$text['Operator_text'] = 'Operator';
+$text['Select_Job_text'] = 'Select Job';
+$text['From_text'] = 'From';
+$text['To_text'] = 'To';
+$text['Result_Status_text'] = 'Result Status';
+$text['program_text'] = 'program';
+$text['Search_text'] = 'Search';
+$text['Export_text'] = 'Export';
+$text['Export_Report_text'] = 'Export Report';
+$text['Combine_Data_text'] = 'Combine Data';
+$text['Clear_text'] = 'Clear';
+$text['Nopage_text'] = 'Nopage';
+$text['Index_text'] = 'Index';
+$text['Time_text'] = 'Time';
+$text['Station_text'] = 'Station';
+$text['Torque_range_text'] = 'Torque range';
+$text['Angle_range_text'] = 'Angle range';
+$text['Final_Torque_text'] = 'Final Torque';
+$text['Final_Angle_text'] = 'Final Angle';
+$text['Status_text'] = 'Status';
+$text['Pset_text'] = 'Pset';
+$text['Click_here_text'] = 'Click here';
+$text['Export_text'] = 'Export';
+//history page - nextinfo
+$text['Info_text'] = 'Info';
+$text['Job_info_text'] = 'Job info';
+$text['Error_code_text'] = 'Error code';
+$text['Actual_Torque_text'] = 'Actual Torque';
+$text['Direction_text'] = 'Direction';
+$text['Member_text'] = 'Member';
+$text['Note_text'] = 'Note';
+$text['Display_lilo_text'] = 'display the high/low auxiliary lines.';
+$text['Chart_Setting_text'] = 'Chart Setting';
+$text['Torque_Unit_text'] = 'Torque Unit';
+$text['Diagram_Display_text'] = 'Diagram Display';
+$text['Torque_text'] = 'Torque';
+$text['Angle_text'] = 'Angle';
+$text['RPM_text'] = 'RPM';
+$text['Power_text'] = 'Power';
+$text['MS_text'] = 'MS';
+$text['Download_text'] = 'Download';
+//history page - combine
+$text['Combine_data_text'] = 'Combine data';
 
-$text['save'] = 'Save';
-$text['close'] = 'Close';
+//template page 
+$text['Program_Template_text'] = 'Program Template';
+$text['Choose_Controller_text'] = 'Choose Controller';
+$text['Screw_Tool_text'] = 'Screw Tool';
+$text['Normal_text'] = 'Normal';
+$text['Advanced_text'] = 'Advanced';
+$text['Choose_Mode_text'] = 'Choose Mode';
+$text['Choose_Mode_combo_text'] = $text['Choose_Mode_text'].' ('.$text['Normal_text'].' / '.$text['Advanced_text'].')';
+$text['Next_text'] = 'Next';
+$text['Select_text'] = 'Select';
 
-$text['copy_job'] = 'Copy Job';
-$text['copy_from'] = 'Copy from';
-$text['copy_to'] = 'Copy to';
+//template page - normal
+$text['Program_Normal_text'] = 'Program - Normal';
+$text['Add_Program_text'] = 'Add Program';
+$text['Program_ID_text'] = 'Program ID';
+$text['Program_Name_text'] = 'Program Name';
+$text['Target_Q_text'] = 'Target Q';
+$text['Target_A_text'] = 'Target A';
+$text['HiLo_text'] = 'Hi / Lo';
+$text['Add_text'] = 'Add';
 
-$text['rev_count'] = 'Reverse Count';
-$text['rev_tor_threshold'] = 'Rev. Threshold Tor.';
+//template page - normal - torque parameter
+$text['Parameter_text'] = 'Parameter';
+$text['Target_Type_text'] = 'Target Type';
+$text['New_Program_text'] = 'New Program';
+$text['Max_Torque_text'] = 'Max Torque';
+$text['Target_Torque_text'] = 'Target Torque';
+$text['Joint_Offset_text'] = 'Joint Offset';
+$text['Hi_Torque_text'] = 'Hi Torque';
+$text['Lo_Torque_text'] = 'Lo Torque';
+$text['RunDownSpeed_text'] = 'Run Down Speed';
+$text['max_rpm_text'] = 'max rpm';
+$text['Threshold_Type_text'] = 'Threshold Type';
+$text['Threshold_Torque_text'] = 'Threshold Torque';
+$text['Threshold_Angle_text'] = 'Threshold Angle';
+$text['Downshift_Enable_text'] = 'Downshift Enable';
+$text['Downshift_Torque_text'] = 'Downshift Torque';
+$text['Downshift_Speed_text'] = 'Downshift Speed';
+$text['Monitoring_Angle_text'] = 'Monitoring Angle';
+$text['Hi_Angle_text'] = 'Hi Angle';
+$text['Lo_Angle_text'] = 'Lo Angle';
+$text['PreRun_text'] = 'Pre-Run';
+$text['PreRun_RPM_text'] = 'Pre-Run RPM';
+$text['PreRun_Angle_text'] = 'Pre-Run Angle';
+$text['Target_Angle_text'] = 'Target Angle';
+$text['Program_text'] = 'Program';
 
-//job sequence management
-$text['normal_seq_management'] = 'Normal Job- Sequence Management';
-$text['advanced_seq_management'] = 'Advanced Job - Sequence Management';
-$text['seq_id'] = 'Seq ID';
-$text['seq_name'] = 'Seq name';
-$text['target_type'] = 'Target Type';
-$text['tightening_repeat'] = 'TR';
+//template page - advanced
+$text['Program_Advanced_text'] = 'Program - Advanced';
+$text['Add_Step_text'] = 'Add Step';
+$text['Test_text'] = 'Test';
 
-$text['return'] = 'Return';
-$text['up'] = 'Up';
-$text['down'] = 'Down';
-$text['step'] = 'Step';
-$text['setting'] = 'Setting';
+//template page - advanced - step
+$text['Advanced_Step_text'] = 'Advanced Step';
+$text['Step_ID_text'] = 'Step ID';
+$text['Step_Name_text'] = 'Step Name';
+$text['Hi_Q_text'] = 'Hi Q';
+$text['Lo_Q_text'] = 'Lo Q';
+$text['Hi_A_text'] = 'Hi A';
+$text['Lo_A_text'] = 'Lo A';
+$text['New_Step_text'] = 'New Step';
+$text['Monitor_Mode_text'] = 'Monitor Mode';
+$text['Monitor_Angle_text'] = 'Monitor Angle';
+$text['Over_Angle_Stop_text'] = 'Over Angle Stop';
+$text['Window_text'] = 'Window';
+$text['Hi_Low_text'] = 'Hi-Low';
+$text['Delay_Time_text'] = 'Delay Time';
+$text['Torque_Window_text'] = 'Torque Window';
+$text['Angle_Window_text'] = 'Angle Window';
+$text['Record_Angle_Val_text'] = 'Record Angle Val';
+$text['skip_text'] = 'skip';
 
-$text['new_seq'] = 'New Sequence';
-$text['edit_seq'] = 'Edit Sequence';
+//equipment page - gtcs
+$text['Equipment_text'] = 'Equipment';
+$text['Add_Device_text'] = 'Add Device';
+$text['Tower_Light_sensors_text'] = 'Tower Light sensors';
+$text['Connection_setting_text'] = 'Connection Setting';
+$text['Connection_control_text'] = 'Connection control';
+$text['Test_adjust_text'] = 'Test adjust';
+$text['Online_text'] = 'Online';
+$text['Offline_text'] = 'Offline';
+$text['Communication_log_text'] = 'Communication log';
+$text['Connect_Test_text'] = 'Connect Test';
+$text['Connect_try_text'] = 'Connect try';
+$text['response_text'] = 'response';
+$text['connect success_text'] = 'connect success';
+$text['ID_text'] = 'ID';
+$text['Name_text'] = 'Name';
+$text['Unit_text'] = 'Unit';
+$text['Language_text'] = 'Language';
+$text['Batch_Mode_text'] = 'Batch Mode';
+$text['Blackout_Recovery_text'] = 'Blackout Recovery';
+$text['Diskfull_Warning_text'] = 'Diskfull Warning';
+$text['Disk_Storage_Space_text'] = 'Disk Storage Space';
+$text['Export_data_text'] = 'Export data';
+$text['Import_data_text'] = 'Import data';
+$text['Firmware_update_text'] = 'Firmware update';
+$text['Export_text'] = 'Export';
+$text['Copy_data_text'] = 'Copy data';
+$text['Import_text'] = 'Import';
+$text['Update_text'] = 'Update';
+$text['Contrller_Setting_text'] = 'Contrller Setting';
+$text['Tool_Information_text'] = 'Tool Information';
+$text['Tool_Type_text'] = 'Tool Type';
+$text['Tool_SN_text'] = 'Tool SN';
+$text['SW_Version_text'] = 'S/W Version';
+$text['Total_Counts_text'] = 'Total Counts';
+$text['Max_Torque_text'] = 'Max Torque';
+$text['Max_Speed_text'] = 'Max Speed';
+$text['Calibration_Value_text'] = 'Calibration Value';
+$text['Maintain_Counts_text'] = 'Maintain Counts';
+$text['Controller_Information_text'] = 'Controller Information';
+$text['Controller_SN_text'] = 'Controller S/N';
+$text['Controller_Ver_text'] = 'Controller Ver';
+$text['MCB_Version_text'] = 'MCB Version';
+$text['Image_Version_text'] = 'Image Version';
+$text['Refresh_text'] = 'Refresh';
+$text['Information_text'] = 'Information';
+$text['Torque_Filter_text'] = 'Torque Filter';
 
-$text['NG_Stop'] = 'NG Stop';
-$text['Choose_option'] = 'Option';
-$text['OK_Sequence'] = 'OK Sequence';
-$text['OK_Sequence_Stop'] = 'OK Sequence Stop';
-$text['Timeout'] = 'Timeout';
-$text['total_step'] = 'Total steps';
-$text['add_step'] = 'Add step';
+//equipment page - arm
+$text['ARM_Setting_text'] = 'ARM Setting';
+$text['Arm_Encoders_setting_text'] = 'Arm Encoders setting';
+$text['Zero_point_cali_text'] = 'Zero point calibration';
+$text['Zero_reset_text'] = 'Zero reset';
+$text['Test_adjust_text'] = 'Test adjust';
+$text['Service_Start_text'] = 'Service Start';
+$text['Service_Stop_text'] = 'Service Stop';
+$text['Service_Check_text'] = 'Service Check';
+$text['Screws_text'] = 'Screws';
+$text['Adjustment_text'] = 'Adjustment';
+$text['Encoder_text'] = 'Encoder';
+$text['Tolerance_setting_text'] = 'Tolerance setting';
+$text['Picking_area_text'] = 'Picking area';
 
-$text['switch_on'] = 'ON';
-$text['switch_off'] = 'OFF';
+//equipment page - tower light
+$text['Tower_Light_Setting_text'] = 'Tower Light Setting';
+$text['Light_Setting_text'] = 'Light Setting';
+$text['Test_adjust_text'] = 'Test adjust';
+$text['Red_text'] = 'Red';
+$text['Green_text'] = 'Green';
+$text['Yellow_text'] = 'Yellow';
+$text['Buzzer_text'] = 'Buzzer';
+$text['TEST_text'] = 'TEST';
+$text['Type_text'] = 'Type';
+$text['Color_Configuration_text'] = 'Color Configuration';
+$text['Length_of_time_text'] = 'Length of time';
+$text['ms_text'] = 'ms';
 
-$text['CW'] = 'CW';
-$text['CCW'] = 'CCW';
-$text['option_no'] = 'No';
-$text['Second'] = 'Sec';
+//equipment page - socket tray setting
+$text['Socket_tray_Setting_text'] = 'Socket tray Setting';
+$text['Output_text'] = 'Output';
+$text['Input_text'] = 'Input';
+$text['SET_text'] = 'SET';
+
+//plugins
+$text['Add_Plugins_text'] = 'Add Plugins';
+$text['Upload_new_software_text'] = 'Upload new software';
+$text['Upload_plugins_text'] = 'Upload plugins';
+$text['Upload_progress_text'] = 'Upload progress';
+
+//setting
+$text['Operation_Setting_text'] = 'Operation Setting';
+$text['System_Setting_text'] = 'System Setting';
+$text['Manager_Verify_text'] = 'Manager Verify';
+$text['Skip_Button_Access_text'] = 'Skip Button Access';
+$text['Back_Button_Access_text'] = 'Back Button Access';
+$text['Task_Reset_Button_Access_text'] = 'Task Reset Button Access';
+$text['Job_Selection_Access_text'] = 'Job Selection Access';
+$text['Seq_Selection_Access_text'] = 'Seq Selection Access';
+$text['Stop_On_NG_text'] = 'Stop On NG';
+$text['Current_iAMS_version_text'] = 'Current iAMS version';
+$text['Export_specific_JOB_data_text'] = 'Export specific JOB data';
+$text['Export_iAMS_data_text'] = 'Export iAMS data';
+$text['Import_specific_JOB_data_text'] = 'Import specific JOB data';
+$text['Import_data_text'] = 'Import data';
+$text['iAMS_Update_text'] = 'iAMS Update';
+$text['Blackout_Recovery_text'] = 'Blackout Recovery';
+
+//user
+$text['Member_List_text'] = 'Member List';
+$text['Role_Setting_text'] = 'Role Setting';
+$text['Station_Setting_text'] = 'Station Setting';
+$text['Add_member_text'] = 'Add member';
+$text['Edit_member_text'] = 'Edit member';
+$text['Filter_text'] = 'Filter';
+$text['User_Name_text'] = 'User Name';
+$text['Role_text'] = 'Role';
+$text['Created_Date_text'] = 'Created Date';
+$text['Employee_Number_text'] = 'Employee Number';
+$text['Card_text'] = 'Card';
+$text['Authority_text'] = 'Authority';
+$text['Role_permissions_setting_text'] = 'Role permissions setting';
+$text['Role_Name_text'] = 'Role Name';
+$text['Permissions_text'] = 'Permissions';
+$text['Access_text'] = 'Access';
+$text['Read_text'] = 'Read';
+$text['Write_text'] = 'Write';
+$text['Bulk_Change_text'] = 'Bulk Change';
+$text['Serial_Number_text'] = 'Serial Number';
+$text['Choose_text'] = 'Choose';
 
 
-$text['Copy_Sequence'] = 'Copy Sequence';
-
-
-//normal step
-$text['normal_step'] = 'Normal Step';
-$text['torque'] = 'Torque';
-$text['angle'] = 'Angle';
-$text['time'] = 'Time';
-$text['rpm'] = 'RPM';
-$text['delay_time'] = 'Delay time';
-$text['Tool_Max_Torque'] = 'Tool Max Torque';
-$text['Target_Torque'] = 'Target Torque';
-$text['Target_Angle'] = 'Target Angle';
-
-$text['Run_Down_Speed'] = 'Run Down Speed';
-
-$text['Downshift_Enable'] = 'Downshift Enable';
-$text['Downshift_Torque'] = 'Downshift Torque';
-$text['Downshift_Speed'] = 'Downshift Speed';
-$text['Monitor_Angle'] = 'Monitor Angle';
-$text['Over_Angle_Stop'] = 'Over Angle Stop';
-$text['High_Angle'] = 'High Angle ( &#870 )'; //High Angle( &#870 )
-$text['Low_Angle'] = 'Low Angle ( &#870 )';
-$text['Pre_Run'] = 'Pre Run';
-$text['Pre_Run_RPM'] = 'Pre Run RPM';
-$text['Pre_Run_Angle'] = 'Pre Run Angle';
-
-$text['High_Torque'] = 'High Torque';
-$text['Low_Torque'] = 'Low Torque';
-$text['Threshold_Torque'] = 'Threshold Torque';
-$text['Joint_Offset'] = 'Joint Offset';
-
-$text['Nm'] = 'Nm';
-
-//advanced step
-$text['advancedstep_management'] = 'Advanced Step Management';
-
-$text['step_id'] = 'Step ID';
-$text['step_name'] = 'Step name';
-$text['step_target_type'] = 'Target Type';
-$text['total_step'] = 'Total steps';
-
-$text['new_step'] = 'New step';
-$text['edit_step'] = 'Edit Step';
-$text['direction'] = 'Direction';
-$text['Monitor_Mode'] = 'Monitor Mode';
-$text['Window'] = 'Window';
-$text['Hi-Lo'] = 'Hi-Lo';
-
-$text['Torque_Window'] = 'Torque Window';
-$text['Angle_Window'] = 'Angle Window';
-$text['copy_step'] = 'Copy step';
-$text['record_angle'] = 'Record Angle Val.';
-$text['skip'] = 'Skip';
-
-
-
-//operation
-$text['operation_result'] = 'Result';
-$text['job'] = 'Job';
-$text['sequence'] = 'Sequence';
-$text['screws'] = 'Screws';
-$text['final_torque'] = 'TORQUE (Nm)';//TORQUE (Nm)
-$text['final_angle'] = 'ANGLE (Deg)';//ANGLE (Deg)
-$text['final_result'] = 'RESULT';//RESULT
-$text['final_message'] = 'MESSAGE';//MESSAGE
-
-// Input/Output
-$text['input'] = 'Input'; //I/O INPUT
-$text['output'] = 'Output'; //I/O OUTPUT
-$text['select'] = 'Select'; //Select
-$text['event'] = 'Event'; //Select
-$text['job_select'] = 'Job Select'; //Job Select
-$text['confirm'] = 'Confirm';
-$text['Table'] = 'Table';
-$text['Align'] = 'Unified';
-$text['new_event'] = 'Create Event';
-$text['edit_event'] = 'Edit Event';
-$text['copy_input'] = 'Copy input';
-$text['copy_output'] = 'Copy output';
-
-$text['START_IN'] = 'Start IN(Remote)';
-$text['REVERSE_IN'] = 'Reverse(Remote)';
-$text['DISABLE'] = 'Disable';
-$text['ENABLE'] = 'Enable';
-$text['CONFIRM'] = 'Confirm';
-$text['CLEAR'] = 'Clear';
-$text['SEQ_CLEAR'] = 'Sequence Clear';
-$text['GATE_ONCE'] = 'Gate Once';
-$text['GATE_TWICE'] = 'Gate Twice';
-$text['REBOOT'] = 'Reboot';
-$text['UDEFINE1'] = 'UserDefine1';
-$text['UDEFINE2'] = 'UserDefine2';
-
-$text['OK'] = 'OK';
-$text['NG'] = 'NG';
-$text['NG_HIGH'] = 'NG-High';
-$text['NG_LOW'] = 'NG-Low';
-$text['OK_SEQ'] = 'OK-Sequence';
-$text['OK_JOB'] = 'OK-JOB';
-$text['TOOL_RUNNING'] = 'Tool Running';
-$text['TOOL_TRIGGER'] = 'Tool Trigger';
-$text['REVERSE'] = 'Reverse';
-$text['UDEFINE1'] = 'UserDefine1';
-$text['UDEFINE2'] = 'UserDefine2';
-$text['SYS_READY'] = 'System Ready';
-
-$text['output_replace_notice'] = 'If the job output already exists, it will replace the original setting';
-$text['input_replace_notice'] = 'If the job input already exists, it will replace the original setting';
-$text['input_delete_notice'] = 'Do you want to delete';
-$text['delete_success'] = 'Delete completed';
-$text['copy_success'] = 'Copy completed';
-$text['select_job'] = 'select job';
-
-// Data
-$text['data'] = 'Data';
-$text['data_history'] = 'History';
-$text['data_export'] = 'Export Data';
-$text['data_history_success'] = 'Data';
-$text['data_history_fail'] = 'Error';
-$text['start_date'] = 'Start date';
-$text['end_date'] = 'End date';
-
-$text['column_no'] = 'No';
-$text['column_datetime'] = 'Date Time';
-$text['column_unit'] = 'Unit';
-$text['column_total'] = 'Total';
-$text['column_count'] = 'Count';
-$text['column_status'] = 'Status';
-
+//----------------------------------------------------------------------------------------------------------------
+//扭力單位
 $text['unit_status_0'] = 'Kgf-m';
 $text['unit_status_1'] = 'N-m';
 $text['unit_status_2'] = 'Kgf-cm';
 $text['unit_status_3'] = 'In-lbs';
-
-//fasten_status
-$text['fasten_status_0'] = 'INIT';
-$text['fasten_status_1'] = 'READY';
-$text['fasten_status_2'] = 'RUNNING';
-$text['fasten_status_3'] = 'REVERSE';
-$text['fasten_status_4'] = 'OK';
-$text['fasten_status_5'] = 'OK-SEQ';
-$text['fasten_status_6'] = 'OK-JOB';
-$text['fasten_status_7'] = 'NG';
-$text['fasten_status_8'] = 'NS';
-$text['fasten_status_9'] = 'SETTING';
-$text['fasten_status_10'] = 'EOC';
-$text['fasten_status_11'] = 'C1';
-$text['fasten_status_12'] = 'C1_ERR';
-$text['fasten_status_13'] = 'C2';
-$text['fasten_status_14'] = 'C2_ERR';
-$text['fasten_status_15'] = 'C4';
-$text['fasten_status_16'] = 'C4_ERR';
-$text['fasten_status_17'] = 'C5';
-$text['fasten_status_18'] = 'C5_ERR';
-$text['fasten_status_19'] = 'BS';
-
-//Tool
-$text['tool_info'] = 'Tool Information';
-$text['tool'] = 'Tool';
-$text['tool_type'] = 'Tool Type';
-$text['tool_sn'] = 'Tool SN';
-$text['sw_version'] = 'S/W Version';
-$text['maintain_counts'] = 'Maintain Counts';
-$text['total_counts'] = 'Total Counts';
-$text['tool_max_torque2'] = 'Max Torque';
-$text['tool_max_speed'] = 'Max Speed';
-$text['calibration_value'] = 'Calibration Value';
-
-$text['controller_info'] = 'Controller Information';
-$text['controller_sn'] = 'Controller SN';
-$text['controller_version'] = 'Controller Version';
-$text['mcb_version'] = 'MCB Version';
-$text['image_version'] = 'Image Version';
-$text['network_ip'] = 'Netword IP';
-$text['Mac'] = 'Mac';
-$text['refresh'] = 'Refresh';
-
-//Setting
-$text['controller_setting'] = 'Controller Setting';
-$text['system_setting'] = 'System Setting';
-$text['system_id'] = 'ID';
-$text['system_name'] = 'Name';
-$text['system_unit'] = 'Unit';
-$text['system_language'] = 'Language';
-$text['system_batch'] = 'Counting Method';
-$text['system_buzzer'] = 'Buzzer Mode';
-$text['system_blackout'] = 'Blackout Recovery';
-$text['system_diskfull_warning'] = 'Diskfull Wraning(%)';
-$text['system_torque_filter'] = 'Torque Filter';
-$text['system_dec'] = 'DEC';
-$text['system_inc'] = 'INC';
-
-$text['system_password'] = 'Password';
-$text['system_new_password'] = 'New Password';
-$text['system_confirm_password'] = 'Confirm Password';
-$text['system_func_permissions'] = 'Function Permissions';
-$text['system_page_block'] = 'PAGE_BLOCK';
-$text['system_sys_date'] = 'System Date';
-$text['system_export_config'] = 'Export Config';
-$text['system_delete_database'] = 'Delete Tightening Data';
-$text['system_firmware_reset'] = 'Defaults Setting Resets';
-$text['system_firmware_update'] = 'Firmware Update';
-$text['system_db_exchange'] = 'Database Exchange';
-$text['system_db_C2D'] = 'Controller -> iDas';
-$text['system_db_D2C'] = 'iDas -> Controller';
-$text['system_disc_space'] = 'Disk Storage Space';
-$text['system_seq_clear'] = 'Seq Clear';
-$text['system_sw_job_seq'] = 'SW JOB/SEQ';
-$text['system_export_import'] = 'Export/Import';
-$text['system_barcode'] = 'Barcode';
-
-$text['system_password_notice'] = 'need re-login after changing password';
-$text['system_password_diff'] = 'Passwords do not match';
-$text['system_db_del_notice'] = 'Please select files to delete';
-$text['system_db_exchange_D2C_t'] = "Sync iDas DB to controller";
-$text['system_db_exchange_D2C_m'] = "After synchronization, the data on the controller will be overwritten";
-$text['system_db_exchange_C2D_t'] = "Sync controller DB to iDas";
-$text['system_db_exchange_C2D_m'] = "After synchronization, the current data on iDas will be overwritten";
-
-$text['system_sync_notice'] = 'Controller last update time (UTC):';
-$text['system_sync_warning'] = 'The DB version of iDas is smaller than the controller';
-$text['system_sync_warning_title'] = 'iDas update time is older than the controller, do you still need to synchronize';
-$text['system_sync_warning_login'] = 'Controller has logged in';
-
-//barcode setting
-$text['system_barcode_setting'] = 'Barcode Setting';
-$text['system_barcode_from'] = 'From';
-$text['system_barcode_to'] = 'To';
-$text['system_barcode_match_from'] = 'Match From';
-$text['system_barcode_match_to'] = 'Match To';
-$text['system_barcode_mode'] = 'Barcode Mode';
-$text['system_barcode_select_job'] = 'Select Job';
-$text['system_barcode_select_seq'] = 'Select Sequence';
-$text['system_barcode_mode_0'] = 'BS';//BS
-$text['system_barcode_mode_1'] = 'BS (free)';//BS (free)
-$text['system_barcode_mode_2'] = 'Switch Job / Seq';//Switch Job / Seq
-$text['system_barcode_select_job_m'] = 'Please Select Job';//Switch Job / Seq
-$text['system_barcode_select_seq_m'] = 'Please Select Seq';//Switch Job / Seq
-$text['system_barcode_del_notice'] = 'Please select the barcode to delete';
-$text['system_barcode_notice_1'] = 'Please Select Job';//Please Select Job
-$text['system_barcode_notice_2'] = 'Match from out of range 1-54';//Match From Error
-$text['system_barcode_notice_3'] = 'Match to out of range';//Match To Error
-$text['system_barcode_notice_4'] = 'Please scan barcode';//Match To Error
-$text['system_barcode_del_notice2'] = 'Are you sure you want to delete this barcode';
-$text['cancel'] = 'Cancel';
-
-//admin setting
-$text['system_connect_setting'] = 'Connection Setting';
-$text['system_connect_number'] = 'Number of connections';
-$text['system_connect_max_number'] = 'maximum number of connect';
-$text['system_connect_guest_pwd'] = 'Guest password';
-$text['system_connect_username'] = 'User';
-$text['system_connect_timestamp'] = 'Last connection time';
-
-//main 主畫面image url
-$text['img_normal_job'] = '../public/img/home_norjob_en.png';
-$text['img_normal_job_hover'] = '../public/img/home_m_norjob_en.png';
-$text['img_advanced_job'] = '../public/img/home_advjob_en.png';
-$text['img_advanced_job_hover'] = '../public/img/home_m_advjob_en.png';
-$text['img_io_input'] = '../public/img/home_input_en.png';
-$text['img_io_input_hover'] = '../public/img/home_m_input_en.png';
-$text['img_io_output'] = '../public/img/home_output_en.png';
-$text['img_io_output_hover'] = '../public/img/home_m_output_en.png';
-$text['img_operation'] = '../public/img/home_operation_en.png';
-$text['img_operation_hover'] = '../public/img/home_m_operation_en.png';
-$text['img_data'] = '../public/img/home_data_en.png';
-$text['img_data_hover'] = '../public/img/home_m_data_en.png';
-$text['img_tool'] = '../public/img/home_tool_en.png';
-$text['img_tool_hover'] = '../public/img/home_m_tool_en.png';
-$text['img_setting'] = '../public/img/home_setting_en.png';
-$text['img_setting_hover'] = '../public/img/home_m_setting_en.png';
-
-
 //------------------------------------------------ -------------------------------------------------- ------------
 
 

@@ -607,6 +607,21 @@ select:focus~.selectIcon svg.icon
     vertical-align: middle;
 }
 
+#nopage
+{
+    height: 38px;
+    margin-top: 3px;
+    width: auto;
+    background: linear-gradient(to left top, #00676B, #00B2BF);
+    border-radius: 5px;
+    font-size:16px;
+    color: #fff;
+    border: 0px solid #444E66;
+    box-shadow: 2px 2px 2px 0px rgba(0,0,0,0.2);
+    text-align: center;
+    vertical-align: middle;
+}
+
 #Combine-btn
 {
     height: 38px;
@@ -647,14 +662,14 @@ table
 .scrollbar-fastening
 {
     float: left;
-    height: calc(100vh - 270px);
+    height: calc(100vh - 295px);
     width: 100%;
     overflow-y: scroll;
 }
 
 .force-overflow-fastening
 {
-    min-height: 62vh;
+    min-height: 50vh;
 }
 
 #wrapper
@@ -821,6 +836,7 @@ svg
     top: 10px;
     right: 10px;
     cursor: pointer;
+    z-index: 999;
 }
 
 .menu-content
@@ -1122,5 +1138,4 @@ svg
     background-color: yellow;
     margin-right: 10px;
 }
-
 

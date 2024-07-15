@@ -13,13 +13,13 @@
 
     <header>
         <div class="plugin">
-            <img id="header-img" src="./img/plugin-head.svg">Plugin
+            <img id="header-img" src="./img/plugin-head.svg"><?php echo $text['main_plugins_text']; ?>
         </div>
         <div class="notification">
             <i style=" width:auto; height: 40px;" class="fa fa-bell" onclick="ClickNotification()"></i>
             <span id="messageCount" class="badge"></span>
         </div>
-        <div class="personnel"><i style="width:auto; height: 40px;font-size: 26px" class="fa fa-user"></i> Esther</div>
+        <div class="personnel"><i style="width:auto; height: 40px;font-size: 26px" class="fa fa-user"></i> <?php echo $_SESSION['user']; ?></div>
     </header>
 
     <!-- Notification -->
@@ -90,7 +90,7 @@
     <div class="topnav">
         <div class="topnav-right">
             <button id="button_AddPlugin" type="button" onclick="document.getElementById('AddPlugin').style.display='block'">
-                <img id="img-plugins" src="./img/add-plugins.svg">Add Plugins
+                <img id="img-plugins" src="./img/add-plugins.svg"><?php echo $text['Add_Plugins_text']; ?>
             </button>
         </div>
     </div>
@@ -133,7 +133,7 @@
                     <img src="./img/ep_picture.png" alt="">
                 </div>
                 <div class="col-3" style="line-height: 32px; padding-left: 5%">
-                    <div style="font-size: 20px"><b>ARM</b></div>
+                    <div style="font-size: 20px"><b><?php echo $text['Arm_text']; ?></b></div>
                     <div>V.1.1.0</div>
                     <div>Nov 11.23 10:55</div>
                 </div>
@@ -199,22 +199,22 @@
                 <header class="w3-container modal-header">
                     <span onclick="document.getElementById('AddPlugin').style.display='none'"
                         class="w3-button w3-red w3-xxlarge w3-display-topright" style="padding: 7px; width: 60px">&times;</span>
-                    <h2>Add Plugins</h2>
+                    <h2><?php echo $text['Add_Plugins_text']; ?></h2>
                 </header>
 
                 <div class="modal-body">
                     <form id="add_plugins_form">
-                        <div style="font-size: 20px; margin: 5px 0px 5px;"><b>Upload new software</b></div>
+                        <div style="font-size: 20px; margin: 5px 0px 5px;"><b><?php echo $text['Upload_new_software_text']; ?></b></div>
                         <div class="add-plugin">
            		            <div class="row" style="width: 230px; height: 210px; background-color: #EEEED1;box-shadow: none; margin-bottom: 10px">
           				        <div class="col" style="display: flex; flex-direction: column; align-items: center">
           				            <img src="./img/upload.svg" alt="" style="width: 80px; height: 75px; margin-top: 50px">
-                                    <label>upload plugins</label>
+                                    <label><?php echo $text['Upload_plugins_text']; ?></label>
            				        </div>
            				    </div>
                         </div>
        		            <div class="row" style="box-shadow: none; border: none">
-                            <div class="col-3" style="margin: 5px; font-size: 18px; padding-top: 5px">Upload progress: 1/5</div>
+                            <div class="col-3" style="margin: 5px; font-size: 18px; padding-top: 5px"><?php echo $text['Upload_progress_text']; ?>: 1/5</div>
        				        <div class="col" style="margin: 5px 0 5px">
        				            <img id="img-progress" src="./img/progress.svg" alt="" style="font-size:40px; width: 40px; height: 40px">
        				        </div>

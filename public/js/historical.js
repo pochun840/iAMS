@@ -77,7 +77,13 @@ function NextToCombineData()
     }
 
     if(checkedValues.length < 2){
+        // alert('請選擇2筆鎖附記錄的資料');  
         alert('請選擇2筆鎖附記錄的資料');  
+    }
+    
+    if(checkboxes[0].parentNode.parentNode.cells[12].innerHTML == '0 deg' || checkboxes[1].parentNode.parentNode.cells[12].innerHTML == '0 deg' ){
+        alert('請選擇鎖附角度不為0的資料');
+        return; 
     }
 
     if(checkedValues.length == 2){
@@ -455,9 +461,10 @@ function nopage(){
 //回到上一頁
 function goBack() {
     if (window.history.length > 1) {
-        window.history.back(); 
+        // window.history.back(); 
+        window.location.href = '?url=Historicals';
     } else {
-        window.location.href = '?url=Historicals'; 
+        window.location.href = '?url=Historicals';
     }
 }
 

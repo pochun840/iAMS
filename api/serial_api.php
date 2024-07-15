@@ -18,6 +18,10 @@ function connectcomport($port, $baudRate, $dataBits, $stopBits, $parity) {
 
     if($response['success'] == true){
 
+        // 設置讀取超時 時間
+        stream_set_timeout($fd, 100);
+
+
         $bytesWritten = dio_write($fd, 'hello');
         if ($bytesWritten === false) {
             $response['success'] = false;
