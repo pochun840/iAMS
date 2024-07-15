@@ -1,11 +1,7 @@
 <?php require APPROOT . 'views/inc/header.tpl'; ?>
 
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/w3.css" type="text/css">
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/nav.css" type="text/css">
-<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/datatables.min.css">
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/calibration.css?v=202405221200" type="text/css">
+
 <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
-<script src="<?php echo URLROOT; ?>js/calibrations.js?v=202406251300"></script>
 <?php echo $data['nav']; ?>
 
 <div class="container-ms">

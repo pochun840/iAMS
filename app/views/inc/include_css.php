@@ -8,12 +8,16 @@ function includecss_file($part, $cssFileName) {
 
     if($firstPart == $part){
         if($extension == 'css'){ ?>
-            <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/<?php echo $cssFileName; ?>?v=<?php echo date('YmdHi');?>">
+<link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/<?php echo $cssFileName; ?>?v=<?php echo date('YmdHi');?>">
         <?php }elseif($extension == 'js'){ ?>
-            <script src="<?php echo URLROOT; ?>js/<?php echo $cssFileName; ?>?v=<?php echo date('YmdHi'); ?>"></script>
+<script src="<?php echo URLROOT; ?>js/<?php echo $cssFileName; ?>?v=<?php echo date('YmdHi'); ?>"></script>
         <?php }
     }
 }
+
+
+includecss_file("Calibrations", "calibration.css");
+includecss_file("Calibrations", "calibrations.js");
    
 ?>
     

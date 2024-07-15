@@ -12,12 +12,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#000000">
 
-    <!-- <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/style.css"> -->
-    <!-- <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/datatables.min.css"> -->
-    <!-- <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/sweetalert2.css"> -->
-    <!-- <script src="<?php echo URLROOT; ?>/js/datatables.min.js"></script> -->
-    <!-- <script src="<?php echo URLROOT; ?>/js/sweetalert2.js"></script> -->
-    <!-- <script src="<?php echo URLROOT; ?>/js/main.js"></script> -->
+
 
     <script src="<?php echo URLROOT; ?>/js/jquery-3.7.1.min.js"></script>
     <script src="<?php echo URLROOT; ?>/js/sweetalert2.js"></script>
@@ -27,7 +22,7 @@
     <link rel="stylesheet" href="<?php echo URLROOT; ?>css/nav.css" type="text/css">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/datatables.min.css">
 
-    
+    <?php require APPROOT . 'views/inc/include_css.php'; ?>
     <title><?php echo SITENAME; ?></title>
 
     

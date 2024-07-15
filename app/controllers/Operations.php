@@ -233,7 +233,6 @@ class Operations extends Controller
 
             //check seq enable or not
             $enable_seq_list = $this->OperationModel->GetSeqEnable($job_id);
-            // var_dump($enable_seq_list);
             if($enable_seq_list[$seq_id-1]['sequence_enable'] == 1 ){
                 $current_job_id = $this->OperationModel->SetConfigValue('current_job_id',$job_id);
                 $current_job_id = $this->OperationModel->SetConfigValue('current_seq_id',$seq_id);
@@ -250,7 +249,7 @@ class Operations extends Controller
                         }
                     }
                 }
-                // var_dump($seq_id);
+  
 
                 if($direction == 'previous'){
                     for ($i=$seq_id-1; $i >= 0; $i--) { 
@@ -261,9 +260,7 @@ class Operations extends Controller
                     }
                 }
 
-                // var_dump($enable_seq_list);
-                // var_dump($seq_id);
-
+    
                 $current_job_id = $this->OperationModel->SetConfigValue('current_job_id',$job_id);
                 $current_job_id = $this->OperationModel->SetConfigValue('current_seq_id',$seq_id);
                 $current_job_id = $this->OperationModel->SetConfigValue('current_task_id',$task_id);
@@ -272,11 +269,7 @@ class Operations extends Controller
 
             }
 
-            // $current_job_id = $this->OperationModel->SetConfigValue('current_job_id',$job_id);
-            // $current_job_id = $this->OperationModel->SetConfigValue('current_seq_id',$seq_id);
-            // $current_job_id = $this->OperationModel->SetConfigValue('current_task_id',$task_id);
-            // echo json_encode(array('error' => $error_message));
-            // exit();
+    
         }else{
             echo json_encode(array('error' => $error_message));
             exit();

@@ -15,7 +15,6 @@ class Navs extends Controller
         //multi language
         $language = array("language"=>$_SESSION['language']);
         // $data = array_merge($data,$language);
-        // var_dump($language);
         $data['language'] = $language['language'];
         //權限
         // 如果檔案存在就引入它
@@ -25,8 +24,6 @@ class Navs extends Controller
             require '../app/language/zh-cn.php';
         }
 
-
-        //var_dump($_SESSION['user']);
         $account = '';
         if (isset($_SESSION['user']) ) {
             $account = $_SESSION['user'];
@@ -51,8 +48,6 @@ class Navs extends Controller
             if( in_array($value['controller'], $permissions) || $value['name'] == 'home' ){//有權限才顯示
                 $nav_body .= '<li>';
                 $nav_body .= '<a href="'.$value['link'].'">';
-                // $nav_body .= '<i class="'.$value['icon'].'"></i>';
-                // $nav_body .= '<img src="'.$value['img'].'" style="width:35px;"></i>';
                 $nav_body .= '<object class="nav-image" type="image/svg+xml" data="'.$value['img'].'" width="40" height="40">Edit Icon</object>';
 
                 $nav_body .= '<span class="nav-text"> '.$text['main_'.$value['name'].'_text'].' </span>';
@@ -62,9 +57,6 @@ class Navs extends Controller
         }
 
         $result = $nav_head.$nav_body.$nav_foot;
-
-        //
-
         return $result;
     }
 

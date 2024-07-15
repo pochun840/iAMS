@@ -18,8 +18,6 @@ header("Access-Control-Allow-Headers: Content-Type, Depth, User-Agent, X-File-Si
 
 //echo $ps_text;
 # 輸出結果
-
-//ar_dump($data);
 if(!empty($data['type'])){
 
     switch($data['type']){
@@ -53,9 +51,6 @@ if(!empty($data['type'])){
                 $xml.= '<fasten_torque><![CDATA['.$v['fasten_torque'].']]></fasten_torque>'."\n";
                 $xml.= '<torque_unit><![CDATA['.$v['torque_unit'].']]></torque_unit>'."\n";
                 $xml.= '<fasten_time><![CDATA['.$v['fasten_time'].']]></fasten_time>'."\n";
-
-
-
                 $xml.= '  </item>'."\n";
 
 

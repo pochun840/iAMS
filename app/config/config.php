@@ -10,4 +10,4 @@ define('URLROOT', '../public/'); //local用
 // 網站名稱
 define('SITENAME', 'iAMS');
 
-define('CONTROLLER_IP', '192.168.0.186');
+//define('CONTROLLER_IP', '192.168.0.186');
