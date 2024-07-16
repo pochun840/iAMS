@@ -15,10 +15,13 @@ function includecss_file($part, $cssFileName) {
     }
 }
 
+#載入css
 includecss_file("Mains", "main.css");
 includecss_file("Calibrations", "calibration.css");
 includecss_file("Users", "identification.css");
+includecss_file("Settings", "setting.css");
 
+#載入js
 includecss_file("Calibrations", "calibrations.js");
    
 ?>

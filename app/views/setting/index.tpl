@@ -1,26 +1,10 @@
 <?php require APPROOT . 'views/inc/header.tpl'; ?>
 
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/w3.css" type="text/css">
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/nav.css" type="text/css">
-<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/datatables.min.css">
 
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/setting.css" type="text/css">
 
 <?php echo $data['nav']; ?>
 
-<style>
-.t1{font-size: 18px; margin: 5px 0px; display: flex; align-items: center; padding-left: 3%}
-.t2{font-size: 18px; margin: 5px 0px;}
-
-.t3{font-size: 18px; margin: 5px 0px; display: flex; align-items: center; padding-left: 3%}
-.t4{font-size: 15px; margin: 5px 0px;}
-
-.form-check-inline
-{
-    display: inline-block;
-    margin-right: 20px;
-}
-</style>
 
 <div class="container-ms">
 
@@ -335,13 +319,13 @@ function handleButtonClick(button, content)
             },
             dataType: "json",
             url: "?url=Settings/Operation_Setting",
-        }).done(function(notice) { //¦¨¥\¥B¦³¦^¶Ç­È¤~·|°õ¦æ
+        }).done(function(notice) { //ï¿½ï¿½ï¿½\ï¿½Bï¿½ï¿½ï¿½^ï¿½Ç­È¤~ï¿½|ï¿½ï¿½ï¿½ï¿½
             if (notice.error != '') {} else {
                 Swal.fire('Saved!', '', 'success');
                 // window.location = window.location.href;
             }
         }).fail(function() {
-            // history.go(0);//¥¢±Ñ´N­«·s¾ã²z
+            // history.go(0);//ï¿½ï¿½ï¿½Ñ´Nï¿½ï¿½ï¿½sï¿½ï¿½z
         });
 
 
@@ -352,3 +336,16 @@ function handleButtonClick(button, content)
 </div>
 
 <?php require APPROOT . 'views/inc/footer.tpl'; ?>
+<style>
+.t1{font-size: 18px; margin: 5px 0px; display: flex; align-items: center; padding-left: 3%}
+.t2{font-size: 18px; margin: 5px 0px;}
+
+.t3{font-size: 18px; margin: 5px 0px; display: flex; align-items: center; padding-left: 3%}
+.t4{font-size: 15px; margin: 5px 0px;}
+
+.form-check-inline
+{
+    display: inline-block;
+    margin-right: 20px;
+}
+</style>
