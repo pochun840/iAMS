@@ -225,9 +225,7 @@ if ("<?php echo $data['type']; ?>" == "download") {
     
         var images = document.getElementsByTagName('img');
         var baseUrl = window.location.origin;
-        console.log(baseUrl);
-        console.log(images);
-        exit();
+      
 
         var imagesHTML = Array.from(images)
             .map(image => {
