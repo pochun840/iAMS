@@ -1,10 +1,5 @@
 <?php require APPROOT . 'views/inc/header.tpl'; ?>
 
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/w3.css" type="text/css">
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/nav.css" type="text/css">
-<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/datatables.min.css">
-
-
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/program.css" type="text/css">
 
 <?php echo $data['nav']; ?>

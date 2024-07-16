@@ -162,8 +162,8 @@ class Historical{
             2 => 'RUNNING',
             3 => 'REVERSE',
             4 => 'OK',
-            5 => 'OK',//'OK-SEQ'
-            6 => 'OK',//'OK-JOB'
+            5 => 'OK-SEQ',
+            6 => 'OK-JOB',
             7 => 'NG',
             8 => 'NS',
             9 => 'SETTING',
@@ -185,8 +185,8 @@ class Historical{
             2 => '',
             3 => '#007AB8;',
             4 => '#99CC66;',
-            5 => '#99CC66;',//'#FFCC00;'
-            6 => '#99CC66;',//'#FFCC00;'
+            5 => '#FFCC00;',//'#FFCC00;'
+            6 => '#FFCC00;',//'#FFCC00;'
             7 => 'red;',
             8 => 'red;',
             9 => '',

@@ -58,6 +58,32 @@ class Operation{
             return 0;
         }
 
+
+        /*
+        OK JOB  信號開啟:最後一個seq 傳出OK-JOB信號
+        OK sequence 信號開啟:每一個seq 傳出OK-SEQ信號
+        若OK Job 關閉，OK sequence 開啟，每一個sequence 傳出OK-SEQ信號 
+        若OK Job 開啟，OK sequence 開啟，每一個sequence 傳出OK-SEQ信號，最後一個sequence 是傳出OK-Job信號
+        若OK Job 開啟，Oksequence，關閉，最後一個seq 傳出OK-JOB信號
+        若OK Job 關閉，OK sequence 關閉，則都是OK信號
+
+        */
+     
+        #若OK Job 關閉，OK sequence 開啟  = OK-SEQ
+        if($data['ok_job'] == 0 && $data['ok_sequence'] == 1){
+            $data['fasten_status'] = 5;
+        }
+
+        #若OK Job 開啟，Oksequence，關閉 = OK-JOB
+        else if($data['ok_job'] == 1 && $data['ok_sequence'] == 0){
+            $data['fasten_status'] = 6;
+        }
+
+        #若OK Job 關閉，OK sequence 關閉 = OK
+        else if($data['ok_job'] == 0 && $data['ok_sequence'] == 0){
+            $data['fasten_status'] = 4;
+        }
+
         $sql = "INSERT INTO `fasten_data` ('cc_barcodesn','cc_station','cc_job_id','cc_seq_id','cc_task_id','cc_equipment','cc_operator','system_sn','data_time','device_type','device_id','device_sn','tool_type','tool_sn','tool_status','job_id','job_name','sequence_id','sequence_name','step_id','fasten_torque','torque_unit','fasten_time','fasten_angle','count_direction','last_screw_count','max_screw_count','fasten_status','error_message','step_targettype','step_tooldirection','step_rpm','step_targettorque','step_hightorque','step_lowtorque','step_targetangle','step_highangle','step_lowangle','step_delayttime','threshold_torque','step_threshold_angle','downshift_torque','downshift_speed','step_prr_rpm','step_prr_angle','barcode','total_angle')
         VALUES(:cc_barcodesn,:cc_station,:cc_job_id,:cc_seq_id,:cc_task_id,:cc_equipment,:cc_operator,:system_sn,:data_time,:device_type,:device_id,:device_sn,:tool_type,:tool_sn,:tool_status,:job_id,:job_name,:sequence_id,:sequence_name,:step_id,:fasten_torque,:torque_unit,:fasten_time,:fasten_angle,:count_direction,:last_screw_count,:max_screw_count,:fasten_status,:error_message,:step_targettype,:step_tooldirection,:step_rpm,:step_targettorque,:step_hightorque,:step_lowtorque,:step_targetangle,:step_highangle,:step_lowangle,:step_delayttime,:threshold_torque,:step_threshold_angle,:downshift_torque,:downshift_speed,:step_prr_rpm,:step_prr_angle,:barcode,:total_angle)
         ";
