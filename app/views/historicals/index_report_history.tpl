@@ -32,7 +32,7 @@
                     <td>Screw drivers : 3</td>
                     <td>Program : 3</td>
                     <td>Sample quantity : 65</td>
-                    <td>Operator : Esther</td>
+                    <td>Operator : <?php echo $_SESSION['user']; ?></td>
                 </tr>
                 <tr>
                     <td>Station : station1</td>
@@ -63,7 +63,7 @@
             <img src="img/station-time.png" width="70%" height="200" alt="">
         </div>-->
         
-        <!--<label style="font-weight: bold; margin-top: 5%">NG Reason</label>-->
+        
         <div style="padding-bottom: 20px">
             <div id="chart" style="width: 600px; height: 400px;"></div>
         </div>
@@ -81,7 +81,8 @@
     var option = {
         title: {
             text: 'NG Reason',
-            left: 'center'
+            left: 'center',
+            
         },
         tooltip: {
             trigger: 'item',
