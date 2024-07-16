@@ -1527,15 +1527,14 @@ async function force_switch_tool(status) {
 
     function save_result(data) {
         // console.log(data);
+
         data.cc_job_id = document.getElementById('job_id').value;
         data.cc_seq_id = document.getElementById('seq_id').value;
         data.cc_task_id = document.getElementById('task_id').value;
         data.cc_equipment = '';
-        data.cc_barcodesn = document.getElementById('barcode').value;
+        data.cc_barcodesn = document.getElementById('barcode').placeholder;
         data.cc_station = '';
         data.cc_operator = '<?php echo $_SESSION['user']; ?>';
-
-        
         $.ajax({
             url: '?url=Operations/Save_Result', // 指向服務器端檢查更新的 PHP 腳本
             // async: false,
