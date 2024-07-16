@@ -36,11 +36,10 @@ class Historical{
         $params = array();
         $sql = "SELECT * FROM `fasten_data` WHERE    on_flag ='0' ";
         #barcodesn 
-        if(!empty($info_arr['barcodesn'])){
-            $sql .= " AND cc_barcodesn = :barcodesn";
-            $params['barcodesn'] = $info_arr['barcodesn'];
+        if (!empty($info_arr['barcodesn'])) {
+            $sql .= " AND cc_barcodesn LIKE :barcodesn";
+            $params['barcodesn'] = '%' .$info_arr['barcodesn']. '%';
         }
-
 
         #日期
         if(!empty($info_arr['fromdate']) && !empty($info_arr['todate'])){
