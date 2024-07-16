@@ -1084,10 +1084,8 @@ tt.set('start_time',new Date())
                                 updateParameters(task_id)
                                 call_job();
                                 // document.getElementById('modbus_switch').value = 1;
-
-                                var taskid_bk =  task_id-1;
                                 let next_circle = document.querySelector("div[data-id='"+task_id+"']");
-                                let pre_circle = document.querySelector("div[data-id='"+taskid_bk"']");
+                                //let next_circle = document.querySelector("div[data-id='"+task_id+"']");
                                 // next_circle.classList.add('running')
                                 next_circle.childNodes[1].classList.add('running')
 
@@ -1102,8 +1100,8 @@ tt.set('start_time',new Date())
                                     document.getElementById('tightening_status').style.backgroundColor = 'green';
                                     document.getElementById('tightening_status_div').style.backgroundColor = 'green';
                                     document.getElementById('step'+(task_id-1)).style.backgroundColor = 'green';
-                                    document.getElementById('step'+(task_id-1)).style.borderColor = 'green';
-                                    next_circle.style.backgroundColor = 'green';
+                                    //document.getElementById('step'+(task_id-1)).style.borderColor = 'green';
+                                    //next_circle.style.backgroundColor = 'green';
 
                                 }
 
@@ -1112,7 +1110,7 @@ tt.set('start_time',new Date())
                                     document.getElementById('tightening_status').style.backgroundColor = '#FFCC00';
                                     document.getElementById('tightening_status_div').style.backgroundColor = '#FFCC00';
                                     document.getElementById('step'+(task_id-1)).style.backgroundColor = '#FFCC00';
-                                    document.getElementById('step'+(task_id-1)).style.borderColor = '#FFCC00';
+                                    //document.getElementById('step'+(task_id-1)).style.borderColor = '#FFCC00';
                                     
                                 }
 
@@ -1122,7 +1120,7 @@ tt.set('start_time',new Date())
                                     document.getElementById('tightening_status').style.backgroundColor = '#FFCC00';
                                     document.getElementById('tightening_status_div').style.backgroundColor = '#FFCC00';
                                     document.getElementById('step'+(task_id-1)).style.backgroundColor = '#FFCC00';
-                                    document.getElementById('step'+(task_id-1)).style.borderColor = '#FFCC00';
+                                    //document.getElementById('step'+(task_id-1)).style.borderColor = '#FFCC00';
                                 }
 
                                 light_signal = 'ok';
