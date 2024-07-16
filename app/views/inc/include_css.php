@@ -15,8 +15,10 @@ function includecss_file($part, $cssFileName) {
     }
 }
 
-
+includecss_file("Mains", "main.css");
 includecss_file("Calibrations", "calibration.css");
+includecss_file("Users", "identification.css");
+
 includecss_file("Calibrations", "calibrations.js");
    
 ?>

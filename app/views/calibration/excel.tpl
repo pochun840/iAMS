@@ -1,5 +1,4 @@
 
-<?php date_default_timezone_set('Asia/Taipei');?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -31,7 +30,7 @@
 
     <div class="excel-sheet">
         <header class="border-bottom">
-            <h2><img src="/imas/public/img/logo.jpg" alt="Logo"></h2>
+            <h2><img src="http://localhost/imas/public/img/logo.jpg" alt="Logo"></h2>
             <p style="font-weight: bold; font-size: 34px; padding-bottom: 5px">Certificate of Calibration</p>
             <p>Kilews Industrial Co., Ltd.</p>
             <p>No. 30, Lane 83, Hwa Cheng Rd., Hsin Chuang Dist., New Taipei City, Taiwan, R.O.C</p>
@@ -70,12 +69,10 @@
                     </thead>
                     <tbody>
                         <?php for ($i = 1; $i <= $data['count']; $i++) { ?>
-
                             <tr>
                                 <td><?php echo $i; ?></td>
                                 <td><?php echo $data['meter']['res_total'][$i - 1]['torque']; ?></td>
                             </tr>
-
                         <?php } ?>
 
                     </tbody>
@@ -152,6 +149,7 @@
 </body>
 
 </html>
+<?php date_default_timezone_set('Asia/Taipei');?>
 <script>
      var myChart = echarts.init(document.getElementById('mychart'));
 
@@ -227,8 +225,9 @@ if ("<?php echo $data['type']; ?>" == "download") {
     
         var images = document.getElementsByTagName('img');
         var baseUrl = window.location.origin;
-        //console.log(baseUrl);
-        //exit();
+        console.log(baseUrl);
+        console.log(images);
+        exit();
 
         var imagesHTML = Array.from(images)
             .map(image => {
