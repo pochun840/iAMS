@@ -199,8 +199,11 @@ class Tasks extends Controller
         if ($data_array['virtual_message_check'] == 'false') {
             // 刪除vurtaul message
             $file_location = $this->TaskModel->DeleteVirtualMessage($data_array['job_id'],$data_array['seq_id'],$data_array['task_id']);
-            // 同時刪除資料夾中的資料，避免重複上傳資料量過大
-            unlink($file_location);
+            if($file_location != false){
+                // 同時刪除資料夾中的資料，避免重複上傳資料量過大
+                unlink($file_location);
+            }
+           
 
         }else{
             if (!empty($_FILES) && $input_check) {

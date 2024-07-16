@@ -639,7 +639,6 @@ class Task{
         $rows = $statement->fetch();
         
         
-
         if ($rows['count'] > 0) {
             return true; // task 已存在
         }else{
@@ -658,14 +657,29 @@ class Task{
         $statement->execute();
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
-        $sql= "DELETE FROM `task_message` WHERE job_id = :job_id AND seq_id = :seq_id AND task_id = :task_id ";
+
+        if(!empty($row)){
+
+            $sql= "DELETE FROM `task_message` WHERE job_id = :job_id AND seq_id = :seq_id AND task_id = :task_id ";
+            $statement = $this->db->prepare($sql);
+            $statement->bindValue(':job_id', $job_id);
+            $statement->bindValue(':seq_id', $seq_id);
+            $statement->bindValue(':task_id', $task_id);
+            $statement->execute(); 
+            return $row['img'];
+
+        }else{
+            return false;
+        }
+
+        /*$sql= "DELETE FROM `task_message` WHERE job_id = :job_id AND seq_id = :seq_id AND task_id = :task_id ";
         $statement = $this->db->prepare($sql);
         $statement->bindValue(':job_id', $job_id);
         $statement->bindValue(':seq_id', $seq_id);
         $statement->bindValue(':task_id', $task_id);
-        $statement->execute();
+        $statement->execute();*/
 
-        return $row['img'];
+        //return $row['img'];
     }
 
 }
