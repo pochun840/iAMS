@@ -286,8 +286,8 @@ if(!empty($_COOKIE['chat_mode_change'])){
                             <div for="Program" class="col-2 t1"><?php echo $text['program_text']; ?>:</div>
                             <div class="col-2 t3"  style="margin-left: -100px">
                                 <select id="Program" style="width: 190px;">
-                                     <?php foreach($data['res_program'] as $key_res_2 =>$val_res_2){?>
-                                            <option value="<?php echo $key_res_2;?>"><?php echo $val_res_2;?></option>
+                                     <?php foreach($data['res_program'] as $key_res_2 => $val_res_2){?>
+                                            <option  id ='cc_program_id' value="<?php echo $val_res_2['template_program_id'];?>"><?php echo $val_res_2['template_program_id'];?></option>
                                     <?php }?>
                                 </select>
                             </div>
@@ -350,11 +350,11 @@ if(!empty($_COOKIE['chat_mode_change'])){
                                             </td>
                                             <td><?php echo $v_info['system_sn'];?></td>
                                             <td><?php echo $v_info['data_time'];?></td>
-                                            <td></td>
+                                            <td><?php echo $v_info['cc_task_id'];?></td>
                                             <td><?php echo $v_info['cc_barcodesn'];?></td>
                                             <td><?php echo $v_info['job_name'];?></td>
                                             <td><?php echo $v_info['sequence_name'];?></td>
-                                            <td><?php echo $v_info['cc_task_name'];?></td>
+                                            <td><?php echo $v_info['cc_task_id'];?></td>
                                             <td><?php echo $data['res_controller_arr'][$v_info['cc_equipment']];?></td>
                                             <td><?php echo $v_info['step_lowtorque']." ~ ".$v_info['step_hightorque'];?></td>
                                             <td><?php echo $v_info['step_lowangle']." ~ ".$v_info['step_highangle'];?></td>

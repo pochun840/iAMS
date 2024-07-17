@@ -157,6 +157,8 @@ function search_info(){
         checkedjobidarr.push(checkbox.value);
     });
       
+    //alert(checkedjobidarr);
+
     //seq 
     var checked_seqid = document.querySelectorAll('input[type="checkbox"][name="seqid"]:checked');
     var checkedseqidarr = [];
@@ -173,15 +175,19 @@ function search_info(){
 
     $.ajax({
         type: "POST",
-        data: {barcodesn: barcodesn,
-              fromdate: fromdate,
-              todate: todate,
-              status_val: status_val,
-              sname: sname,
-              job_id: checkedjobidarr,
-              sequence_id: checkedseqidarr,
-              cc_task_id:checkedtaskidarr,
-              controller_val :controller_val
+        data: {
+                barcodesn: barcodesn,
+                fromdate: fromdate,
+                todate: todate,
+                status_val: status_val,
+                sname: sname,
+                job_id: checkedjobidarr,
+                sequence_id: checkedseqidarr,
+                cc_task_id:checkedtaskidarr,
+                controller_val:controller_val,
+                checkedjobidarr:checkedjobidarr,
+                checkedseqidarr:checkedseqidarr,
+                checkedtaskidarr:checkedtaskidarr
               },
         url: '?url=Historicals/search_info_list',
         success: function(response) {

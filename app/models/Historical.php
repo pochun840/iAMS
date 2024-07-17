@@ -74,9 +74,7 @@ class Historical{
         if(!empty($info_arr['controller_val'])){
             $sql .="AND  cc_equipment = :cc_equipment";
             $params['cc_equipment'] = $info_arr['controller_val'];
-            //echo "eeeeeeeee";die();
-
-
+    
         }
 
         #search_name(模糊搜尋)
@@ -87,24 +85,25 @@ class Historical{
       
 
         #job_id && seq_id && task_id 
-        if(!empty($info_arr['job_id'][0]) && empty($info_arr['sequence_id'][0]) && empty($info_arr['cc_task_id'][0])) {
-
-            $sql .= " AND job_id = :job_id";
-            $params[':job_id'] = $info_arr['job_id'][0];
+        if(!empty($info_arr['checkedjobidarr'][0]) && empty($info_arr['checkedseqidarr'][0]) && empty($info_arr['checkedtaskidarr'][0])) {
+     
+            $sql .= " AND cc_job_id = :job_id";
+            $params[':job_id'] = $info_arr['checkedjobidarr'][0];
         }
 
-        if(!empty($info_arr['job_id'][0]) && !empty($info_arr['sequence_id'][0]) && empty($info_arr['cc_task_id'][0])) {
+       
+        if(!empty($info_arr['checkedjobidarr'][0]) && !empty($info_arr['checkedseqidarr'][0]) && empty($info_arr['checkedtaskidarr'][0])) {
 
-            $sql .= " AND job_id = :job_id AND sequence_id = :sequence_id";
-            $params[':job_id'] = $info_arr['job_id'][0];
-            $params[':sequence_id'] = $info_arr['sequence_id'][0];
+            $sql .= " AND cc_job_id = :job_id AND cc_seq_id = :sequence_id";
+            $params[':job_id'] = $info_arr['checkedjobidarr'][0];
+            $params[':sequence_id'] = $info_arr['checkedseqidarr'][0];
         }
 
-        if(!empty($info_arr['job_id'][0]) && !empty($info_arr['sequence_id'][0]) && !empty($info_arr['cc_task_id'][0])) {
-            $sql .= " AND job_id = :job_id AND sequence_id = :sequence_id AND cc_task_id =:cc_task_id";
-            $params[':job_id'] = $info_arr['job_id'][0];
-            $params[':sequence_id'] = $info_arr['sequence_id'][0];
-            $params[':cc_task_id'] = $info_arr['cc_task_id'][0];
+        if(!empty($info_arr['checkedjobidarr'][0]) && !empty($info_arr['checkedseqidarr'][0]) && !empty($info_arr['checkedtaskidarr'][0])) {
+            $sql .= " AND cc_job_id = :job_id AND cc_seq_id = :sequence_id AND cc_task_id =:cc_task_id";
+            $params[':job_id'] = $info_arr['checkedjobidarr'][0];
+            $params[':sequence_id'] = $info_arr['checkedseqidarr'][0];
+            $params[':cc_task_id'] = $info_arr['checkedtaskidarr'][0];
         
         }
 
@@ -275,7 +274,7 @@ class Historical{
 
     public function get_job_id(){
         
-        $sql = "SELECT * FROM `fasten_data` WHERE job_id != '' AND on_flag = '0' ";
+        $sql = "SELECT * FROM `job` WHERE job_id != '' ";
         $statement = $this->db->prepare($sql);
         $statement->execute();
         $result = $statement->fetchall(PDO::FETCH_ASSOC);
@@ -313,6 +312,32 @@ class Historical{
             );
 
         }
+
+        if($mode =="program"){
+
+            //normal
+            $sql = "SELECT template_program_id FROM `gtcs_normalstep_template` ORDER BY template_program_id ";
+            $statement = $this->db->prepare($sql);
+            $statement->execute();
+            $result = $statement->fetchall(PDO::FETCH_ASSOC);
+        
+            
+            //advancedstep
+            $sql1 = "SELECT template_program_id FROM `gtcs_advancedstep_template` 
+                GROUP BY template_program_id  
+                ORDER BY template_program_id,MAX(template_step_id ) DESC ";
+            $statement1 = $this->db->prepare($sql1);
+            $statement1->execute();
+            $result1 = $statement1->fetchall(PDO::FETCH_ASSOC);
+
+         
+
+            
+            $details = array_merge($result, $result1);
+           
+
+    
+        }
         return $details;
 
     }
@@ -320,7 +345,7 @@ class Historical{
     #用job_id 找出對應的sequence_id
     public function get_seq_id($job_id){
 
-        $sql = "SELECT * FROM `fasten_data` WHERE on_flag = '0' AND job_id = :job_id ";
+        $sql = "SELECT * FROM `sequence` WHERE sequence_enable = '1' AND job_id = :job_id ";
         $params[':job_id'] = $job_id;
         $statement = $this->db->prepare($sql);
         $statement->execute($params);
@@ -331,9 +356,9 @@ class Historical{
     #用job_id及sequence_id 找出對應的task_id
     public function get_task_id($job_id, $seq_id) {
 
-        $sql = "SELECT * FROM `fasten_data` WHERE job_id = :job_id AND sequence_id = :sequence_id AND on_flag = '0'";
+        $sql = "SELECT * FROM `task` WHERE job_id = :job_id AND seq_id = :seq_id ";
         $params[':job_id'] = $job_id;
-        $params[':sequence_id'] = $seq_id;
+        $params[':seq_id'] = $seq_id;
         $statement = $this->db->prepare($sql);
         $statement->execute($params);
 

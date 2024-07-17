@@ -21,13 +21,13 @@
 
 </style>
 <?php 
-    echo "<pre>";
-    print_r($data['job_data']['controller_id']);
+    /*echo "<pre>";
+    print_r($data['job_data']);
     echo "</pre>";
 
     echo "<pre>";
     print_r($data['seq_list']);
-    echo "</pre>";
+    echo "</pre>";*/
 
 ?>
 <div class="container-ms">

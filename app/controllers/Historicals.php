@@ -38,10 +38,11 @@ class Historicals extends Controller
         $nav = $this->NavsController->get_nav();
         $all_roles = array_slice($this->UserModel->GetAllRole(), 0, 3);
         $res_status_arr = ['ALL', 'OK', 'OKALL', 'NG'];
-        $res_controller_arr = ['GTCS', 'TCG'];
         $res_controller_arr = array(1 => 'GTCS', 2 =>'TCG'); 
-        $res_program = ['P1', 'P2', 'P3', 'P4'];
+
         $torque_arr = $this->Historicals_newModel->details('torque');
+
+        $res_program = $this->Historicals_newModel->details('program');
 
         #取得所有的job_id
         $job_arr = $this->Historicals_newModel->get_job_id();
@@ -112,7 +113,7 @@ class Historicals extends Controller
                 $info_data .= "<td>".$v['cc_barcodesn']."</td>";
                 $info_data .= "<td>".$v['job_name']."</td>";
                 $info_data .= "<td>".$v['sequence_name']."</td>";
-                $info_data .= "<td>".$v['cc_task_name']."</td>";
+                $info_data .= "<td>".$v['cc_task_id']."</td>";
                 $info_data .= "<td>".$res_controller_arr[$v['cc_equipment']]."</td>";
                 $info_data .= "<td>".$v['step_lowtorque']." ~ ".$v['step_hightorque']."</td>";
                 $info_data .= "<td>".$v['step_lowangle']." ~ ".$v['step_highangle']."</td>";
@@ -164,10 +165,15 @@ class Historicals extends Controller
             #狀態轉換 
             $status_arr = $this->Historicals_newModel->status_code_change();
 
+
+            #控制器轉換
+            $res_controller_arr = array(1 => 'GTCS', 2 =>'TCG'); 
+
             //整理陣列 
             foreach($info_final as $kk =>$vv){
                 $info_final[$kk]['torque_unit']  = $torque_change[$vv['torque_unit']];
                 $info_final[$kk]['fasten_status']  = $status_arr['status_type'][$vv['fasten_status']];
+                $info_final[$kk]['cc_equipment']  = $res_controller_arr[$vv['fasten_status']];
             }
 
             #CSV檔名
@@ -435,7 +441,7 @@ class Historicals extends Controller
                 #組checkbox的seq的html
                 if(!empty($info_seq)){
                     foreach($info_seq as $k_seq => $v_seq){
-                        echo $this->generatecheckboxhtml($v_seq['sequence_id'], $v_seq['sequence_name'], 'seqid', 'JobCheckbox_seq');
+                        echo $this->generatecheckboxhtml($v_seq['seq_id'], $v_seq['seq_name'], 'seqid', 'JobCheckbox_seq');
                     }
                 }
             }
@@ -448,7 +454,7 @@ class Historicals extends Controller
                 #組checkbox的task的html
                 if(!empty($info_task)){
                     foreach($info_task as $k_task => $v_task){
-                        echo $this->generatecheckboxhtml($v_task['cc_task_id'], $v_task['cc_task_name'], 'taskid', 'JobCheckbox_task');
+                        echo $this->generatecheckboxhtml($v_task['task_id'], $v_task['task_id'], 'taskid', 'JobCheckbox_task');
                     }
                 }
             }
