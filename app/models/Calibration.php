@@ -81,13 +81,12 @@ class Calibration{
     }
 
     public function getjobid(){
-
-        $sql =" SELECT * FROM job  ORDER BY job_id DESC ";
+   
+        $sql = "SELECT * FROM `job` WHERE job_id != '' ";
         $statement = $this->db->prepare($sql);
         $statement->execute();
-        
-        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-        return $result;        
+        $result = $statement->fetchall(PDO::FETCH_ASSOC);
+        return $result;      
     }
 
     public function get_job_name($job_id){
@@ -102,7 +101,7 @@ class Calibration{
 
     public function get_seq_id($job_id){
 
-        $sql = "SELECT * FROM `sequence` WHERE  job_id = :job_id ";
+        $sql = "SELECT * FROM `sequence` WHERE  sequence_enable = '1' AND job_id = :job_id ";
         $params[':job_id'] = $job_id;
         $statement = $this->db->prepare($sql);
         $statement->execute($params);
