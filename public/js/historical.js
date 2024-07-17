@@ -146,6 +146,10 @@ function search_info(){
     var selectElement = document.getElementById("status");
     var status_val    = selectElement.value;
 
+    var select_controller = document.getElementById("Controller");
+    var controller_val        = select_controller.value;
+
+
     //job 
     var checked_jobid = document.querySelectorAll('input[type="checkbox"][name="jobid"]:checked');
     var checkedjobidarr = [];
@@ -176,7 +180,8 @@ function search_info(){
               sname: sname,
               job_id: checkedjobidarr,
               sequence_id: checkedseqidarr,
-              cc_task_id:checkedtaskidarr
+              cc_task_id:checkedtaskidarr,
+              controller_val :controller_val
               },
         url: '?url=Historicals/search_info_list',
         success: function(response) {

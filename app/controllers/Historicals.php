@@ -39,6 +39,7 @@ class Historicals extends Controller
         $all_roles = array_slice($this->UserModel->GetAllRole(), 0, 3);
         $res_status_arr = ['ALL', 'OK', 'OKALL', 'NG'];
         $res_controller_arr = ['GTCS', 'TCG'];
+        $res_controller_arr = array(1 => 'GTCS', 2 =>'TCG'); 
         $res_program = ['P1', 'P2', 'P3', 'P4'];
         $torque_arr = $this->Historicals_newModel->details('torque');
 
@@ -94,6 +95,9 @@ class Historicals extends Controller
         $status_arr = $this->Historicals_newModel->status_code_change();
 
 
+        $res_controller_arr = array(1 => 'GTCS', 2 =>'TCG'); 
+
+
         if(!empty($info)){
             $info_data ="";
             foreach($info as $k =>$v){
@@ -109,7 +113,7 @@ class Historicals extends Controller
                 $info_data .= "<td>".$v['job_name']."</td>";
                 $info_data .= "<td>".$v['sequence_name']."</td>";
                 $info_data .= "<td>".$v['cc_task_name']."</td>";
-                $info_data .= "<td></td>";
+                $info_data .= "<td>".$res_controller_arr[$v['cc_equipment']]."</td>";
                 $info_data .= "<td>".$v['step_lowtorque']." ~ ".$v['step_hightorque']."</td>";
                 $info_data .= "<td>".$v['step_lowangle']." ~ ".$v['step_highangle']."</td>";
                 $info_data .= "<td>".$v['fasten_torque'] .$torque_arr[$v['torque_unit']]."</td>";

@@ -355,7 +355,7 @@ if(!empty($_COOKIE['chat_mode_change'])){
                                             <td><?php echo $v_info['job_name'];?></td>
                                             <td><?php echo $v_info['sequence_name'];?></td>
                                             <td><?php echo $v_info['cc_task_name'];?></td>
-                                            <td></td>
+                                            <td><?php echo $data['res_controller_arr'][$v_info['cc_equipment']];?></td>
                                             <td><?php echo $v_info['step_lowtorque']." ~ ".$v_info['step_hightorque'];?></td>
                                             <td><?php echo $v_info['step_lowangle']." ~ ".$v_info['step_highangle'];?></td>
                                             <td><?php echo $v_info['fasten_torque'].$data['torque_arr'][$v_info['torque_unit']] ;?></td>

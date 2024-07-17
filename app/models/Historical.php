@@ -68,8 +68,15 @@ class Historical{
                 $sql .=" AND fasten_status = '7' or fasten_status = '8'  ";
 
             }
+        }
 
-          
+        #控制器搜尋
+        if(!empty($info_arr['controller_val'])){
+            $sql .="AND  cc_equipment = :cc_equipment";
+            $params['cc_equipment'] = $info_arr['controller_val'];
+            //echo "eeeeeeeee";die();
+
+
         }
 
         #search_name(模糊搜尋)
