@@ -96,8 +96,8 @@ class Operation{
             $data['fasten_status'] = 7;
         }
 
-        $sql = "INSERT INTO `fasten_data` ('cc_barcodesn','cc_station','cc_job_id','cc_seq_id','cc_task_id','cc_equipment','cc_operator','system_sn','data_time','device_type','device_id','device_sn','tool_type','tool_sn','tool_status','job_id','job_name','sequence_id','sequence_name','step_id','fasten_torque','torque_unit','fasten_time','fasten_angle','count_direction','last_screw_count','max_screw_count','fasten_status','error_message','step_targettype','step_tooldirection','step_rpm','step_targettorque','step_hightorque','step_lowtorque','step_targetangle','step_highangle','step_lowangle','step_delayttime','threshold_torque','step_threshold_angle','downshift_torque','downshift_speed','step_prr_rpm','step_prr_angle','barcode','total_angle')
-        VALUES(:cc_barcodesn,:cc_station,:cc_job_id,:cc_seq_id,:cc_task_id,:cc_equipment,:cc_operator,:system_sn,:data_time,:device_type,:device_id,:device_sn,:tool_type,:tool_sn,:tool_status,:job_id,:job_name,:sequence_id,:sequence_name,:step_id,:fasten_torque,:torque_unit,:fasten_time,:fasten_angle,:count_direction,:last_screw_count,:max_screw_count,:fasten_status,:error_message,:step_targettype,:step_tooldirection,:step_rpm,:step_targettorque,:step_hightorque,:step_lowtorque,:step_targetangle,:step_highangle,:step_lowangle,:step_delayttime,:threshold_torque,:step_threshold_angle,:downshift_torque,:downshift_speed,:step_prr_rpm,:step_prr_angle,:barcode,:total_angle)
+        $sql = "INSERT INTO `fasten_data` ('cc_barcodesn','cc_station','cc_job_id','cc_seq_id','cc_task_id','cc_program_id','cc_equipment','cc_operator','system_sn','data_time','device_type','device_id','device_sn','tool_type','tool_sn','tool_status','job_id','job_name','sequence_id','sequence_name','step_id','fasten_torque','torque_unit','fasten_time','fasten_angle','count_direction','last_screw_count','max_screw_count','fasten_status','error_message','step_targettype','step_tooldirection','step_rpm','step_targettorque','step_hightorque','step_lowtorque','step_targetangle','step_highangle','step_lowangle','step_delayttime','threshold_torque','step_threshold_angle','downshift_torque','downshift_speed','step_prr_rpm','step_prr_angle','barcode','total_angle')
+        VALUES(:cc_barcodesn,:cc_station,:cc_job_id,:cc_seq_id,:cc_task_id,:cc_program_id,:cc_equipment,:cc_operator,:system_sn,:data_time,:device_type,:device_id,:device_sn,:tool_type,:tool_sn,:tool_status,:job_id,:job_name,:sequence_id,:sequence_name,:step_id,:fasten_torque,:torque_unit,:fasten_time,:fasten_angle,:count_direction,:last_screw_count,:max_screw_count,:fasten_status,:error_message,:step_targettype,:step_tooldirection,:step_rpm,:step_targettorque,:step_hightorque,:step_lowtorque,:step_targetangle,:step_highangle,:step_lowangle,:step_delayttime,:threshold_torque,:step_threshold_angle,:downshift_torque,:downshift_speed,:step_prr_rpm,:step_prr_angle,:barcode,:total_angle)
         ";
         $statement = $this->db->prepare($sql);
         $statement->bindValue(':cc_barcodesn', $data['cc_barcodesn']);
@@ -105,6 +105,7 @@ class Operation{
         $statement->bindValue(':cc_job_id', $data['cc_job_id']);
         $statement->bindValue(':cc_seq_id', $data['cc_seq_id']);
         $statement->bindValue(':cc_task_id', $data['cc_task_id']);
+        $statement->bindValue(':cc_program_id', $data['cc_program_id']);
         $statement->bindValue(':cc_equipment', $data['cc_equipment']);
         $statement->bindValue(':cc_operator', $data['cc_operator']);
         $statement->bindValue(':system_sn', $data['system_sn']);

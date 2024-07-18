@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/historical.css?v=202404111200" type="text/css">
 
 <script src="<?php echo URLROOT; ?>js/flatpickr.js"></script>
-<script src="<?php echo URLROOT; ?>js/historical.js?v=202405081700"></script>
+<script src="<?php echo URLROOT; ?>js/historical.js?v=202407181100"></script>
 
 <script src="<?php echo URLROOT; ?>js/echarts_min.js?v=202405080900"></script>
 <script src="<?php echo URLROOT; ?>js/html2canvas_min.js?v=202405080900"></script>
@@ -276,7 +276,8 @@ if(!empty($_COOKIE['chat_mode_change'])){
 
                             <div for="Controller" class="col-2 t1"><?php echo $text['Controller_text']; ?>:</div>
                             <div class="col-2 t3" style="margin-left: -100px">
-                                <select id="Controller" style="width: 190px;">
+                                <select id="controller" style="width: 190px;">
+                                    <option value = '0'>select</option>
                                     <?php foreach($data['res_controller_arr'] as $key_res_1 =>$val_res_1){?>
                                             <option value="<?php echo $key_res_1;?>"><?php echo $val_res_1;?></option>
                                     <?php }?>
@@ -285,9 +286,10 @@ if(!empty($_COOKIE['chat_mode_change'])){
 
                             <div for="Program" class="col-2 t1"><?php echo $text['program_text']; ?>:</div>
                             <div class="col-2 t3"  style="margin-left: -100px">
-                                <select id="Program" style="width: 190px;">
+                                <select id="program" style="width: 190px;">
+                                    <option value = '0'>select</option>
                                      <?php foreach($data['res_program'] as $key_res_2 => $val_res_2){?>
-                                            <option  id ='cc_program_id' value="<?php echo $val_res_2['template_program_id'];?>"><?php echo $val_res_2['template_program_id'];?></option>
+                                            <option   value="<?php echo $val_res_2['template_program_id'];?>"><?php echo $val_res_2['template_program_id'];?></option>
                                     <?php }?>
                                 </select>
                             </div>

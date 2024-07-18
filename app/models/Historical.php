@@ -59,23 +59,35 @@ class Historical{
                 $sql .="AND fasten_status !='' ";
 
             }else if($info_arr['status_val'] =="1"){
-                $sql .="AND fasten_status = '4' or fasten_status = '5' or fasten_status = '6' ";
-                // $sql .="AND fasten_status = '4' ";
+                $sql .="AND fasten_status  in('4')";
             }else if($info_arr['status_val'] =="2"){
-                $sql .="AND fasten_status = '4' ";
+               // $sql .="AND fasten_status = '4' ";
+
+                $sql .="AND fasten_status in('4','5','6') ";
                 // $sql .=" AND fasten_status = '5' or fasten_status = '6' ";
             }else{
-                $sql .=" AND fasten_status = '7' or fasten_status = '8'  ";
+                $sql .=" AND fasten_status  in('7','8') ";
 
             }
         }
 
         #控制器搜尋
-        if(!empty($info_arr['controller_val'])){
+        if(!empty($info_arr['controller_val'])  && $info_arr['controller_val'] != "0" ){
+            $info_arr['controller_val'] = (int)$info_arr['controller_val'];
             $sql .="AND  cc_equipment = :cc_equipment";
             $params['cc_equipment'] = $info_arr['controller_val'];
     
         }
+        
+        #program 搜尋
+        if(!empty($info_arr['program_val']) && $info_arr['program_val'] != "0"){
+
+            $info_arr['program_val'] = (int)$info_arr['program_val'];
+            $sql .="AND cc_program_id = :cc_program_id";
+            $params['cc_program_id'] = $info_arr['program_val'];
+    
+        } 
+
 
         #search_name(模糊搜尋)
         if (!empty($info_arr['sname'])) {
@@ -108,9 +120,10 @@ class Historical{
         }
 
         $sql .= " ORDER BY data_time DESC LIMIT :offset, :limit";
+        
         $params[':offset'] = $offset;
         $params[':limit'] = $limit;
-
+  
         $statement = $this->db->prepare($sql);
         $statement->execute($params);
 

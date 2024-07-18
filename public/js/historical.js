@@ -146,8 +146,11 @@ function search_info(){
     var selectElement = document.getElementById("status");
     var status_val    = selectElement.value;
 
-    var select_controller = document.getElementById("Controller");
-    var controller_val        = select_controller.value;
+    var select_controller = document.getElementById("controller");
+    var controller_val    = select_controller.value;
+
+    var select_program    = document.getElementById("program");
+    var program_val       = select_program.value;
 
 
     //job 
@@ -185,6 +188,7 @@ function search_info(){
                 sequence_id: checkedseqidarr,
                 cc_task_id:checkedtaskidarr,
                 controller_val:controller_val,
+                program_val:program_val,
                 checkedjobidarr:checkedjobidarr,
                 checkedseqidarr:checkedseqidarr,
                 checkedtaskidarr:checkedtaskidarr

@@ -22,7 +22,7 @@
 </style>
 <?php 
     //echo "<pre>";
-    //print_r($data['job_data']);
+    //print_r($data['task_list'][0]['template_program_id']);
     //echo "</pre>";
 
     //echo "<pre>";
@@ -1576,6 +1576,7 @@ async function force_switch_tool(status) {
         data.ok_job = '<?php echo $data['job_data']['ok_job']; ?>';
         data.ok_sequence  = '<?php echo $data['seq_list'][0]['ok_sequence']; ?>';
         data.task_count_final = '<?php echo $data['task_count'];?>';
+        data.cc_program_id = '<?php echo $data['task_list'][0]['template_program_id'];?>';
 
         
         $.ajax({
