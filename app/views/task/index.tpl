@@ -707,8 +707,6 @@ function new_task_save() {
     let circle_left = document.querySelector('div[data-id="'+task_id+'"]').style.left
 
     img_div = `style="width: `+circle_width+`; height: `+circle_height+`; top: `+circle_top+`; left: `+circle_left+`;"`
-    // console.log(styyle);
-    // alert(123)
 
     if (!document.getElementById('socket-tray').checked){//沒有打勾
         sockect_hole = -1;

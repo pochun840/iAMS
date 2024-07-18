@@ -26,7 +26,7 @@ class Calibrations extends Controller
         $job_arr = $this->CalibrationModel->getjobid();
 
         #echarts
-        $echart_data = $this->CalibrationModel->echarts_data();
+        $echart_data = $this->CalibrationModel->datainfo_search($job_id);
 
         $meter = $this->val_traffic();
 
@@ -206,47 +206,51 @@ class Calibrations extends Controller
 
     
     #產生XML的API
-    public function get_xml(){
+    public function get_xml($index){
 
-        $info = $this->CalibrationModel->datainfo();
-        $torque_type = $this->CalibrationModel->details('torque');
-        $controller_type = $this->CalibrationModel->details('controller');
-        $ktm_type = $this->CalibrationModel->details('torquemeter');
-
-        $xml = new XMLWriter();
-        $xml->openMemory();
-        $xml->setIndent(true);
-        $xml->startDocument('1.0', 'UTF-8');
-        $xml->startElement('calibrations');
-
-        foreach ($info as $row) {
-            $xml->startElement('item');
-            foreach ($row as $key => $value) {
-                $xml->startElement($key);
-                if ($key == 'unit') {
-                    $value = $torque_type[$value];
+        if(!empty($index)) {
+            $info = $this->CalibrationModel->datainfo($index);
+            $torque_type = $this->CalibrationModel->details('torque');
+            $controller_type = $this->CalibrationModel->details('controller');
+            $ktm_type = $this->CalibrationModel->details('torquemeter');
+    
+            $xml = new XMLWriter();
+            $xml->openMemory();
+            $xml->setIndent(true);
+            $xml->startDocument('1.0', 'UTF-8');
+            $xml->startElement('calibrations');
+    
+            foreach ($info as $row) {
+                $xml->startElement('item');
+                foreach ($row as $key => $value) {
+                    $xml->startElement($key);
+                    if ($key == 'unit') {
+                        $value = $torque_type[$value];
+                    }
+    
+                    if ($key == 'high_percent' ||  $key == 'low_percent') {
+                        $value = $value ." % ";
+                    }
+                    if($key == 'controller_type'){
+                        $value = $controller_type[$value];
+                    }   
+                    if($key == 'ktm_type'){
+                        $value = $ktm_type[$value];
+                    }  
+    
+                    $xml->writeCData($value);
+                    $xml->endElement();
                 }
-
-                if ($key == 'high_percent' ||  $key == 'low_percent') {
-                    $value = $value ." % ";
-                }
-                if($key == 'controller_type'){
-                    $value = $controller_type[$value];
-                }   
-                if($key == 'ktm_type'){
-                    $value = $ktm_type[$value];
-                }  
-
-                $xml->writeCData($value);
-                $xml->endElement();
+                $xml->endElement(); 
             }
+        
             $xml->endElement(); 
+            $xml->endDocument();
+            header('Content-type: text/xml; charset=utf-8');
+            echo $xml->outputMemory();
+
         }
     
-        $xml->endElement(); 
-        $xml->endDocument();
-        header('Content-type: text/xml; charset=utf-8');
-        echo $xml->outputMemory();
     }
     
     

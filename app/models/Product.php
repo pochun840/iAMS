@@ -192,6 +192,8 @@ class Product{
         return $results = $stmt->execute();
     }
 
+
+    
     //取得job id，依job_type判斷
     public function get_head_job_id(){
 

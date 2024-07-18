@@ -641,7 +641,20 @@ class Historical{
             break;
 
             case "job_time":
-                $sql = "SELECT job_id, COUNT(job_id) AS duplicate_count, job_name, fasten_time, SUM(fasten_time) AS total_fasten_time, AVG(fasten_time) AS average_fasten_time FROM fasten_data WHERE on_flag = 0 AND step_targettype IN ('1','2') GROUP BY job_id HAVING COUNT(job_id) > 1 ORDER BY data_time DESC";
+                $sql = "SELECT 
+                            COUNT(fasten_data.job_id) AS duplicate_count, 
+                            fasten_data.job_name, 
+                            fasten_data.fasten_time, 
+                            SUM(fasten_data.fasten_time) AS total_fasten_time, 
+                            AVG(fasten_data.fasten_time) AS average_fasten_time 
+                        FROM fasten_data 
+                        WHERE fasten_data.on_flag = 0 
+                        AND fasten_data.step_targettype IN ('1', '2') 
+                        AND fasten_data.job_name != ''
+                        GROUP BY fasten_data.job_id, fasten_data.job_name, fasten_data.fasten_time 
+                        HAVING COUNT(fasten_data.job_id) > 1 
+                        ORDER BY fasten_data.data_time DESC;
+                        ";
             break;
             default:
                 

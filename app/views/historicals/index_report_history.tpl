@@ -19,7 +19,7 @@
     
     <div class="excel-sheet" id='excelsheet'>
         <header class="border-bottom">
-            <h2><img src="http://localhost/imas/public/img/logo.jpg" alt="Logo"></h2>
+            <h2><img src="http://localhost/imas_test/public/img/logo.jpg" alt="Logo"></h2>
             <p  style="font-weight: bold; font-size: 34px; padding-bottom: 5px">Fastening Statistics Report</p>
         </header>
 
@@ -64,7 +64,7 @@
         </div>-->
         
         
-        <div style="padding-bottom: 20px">
+        <div style="padding-bottom: 40px">
             <div id="chart" style="width: 600px; height: 400px;"></div>
         </div>
         <hr>
@@ -81,18 +81,20 @@
     var option = {
         title: {
             text: 'NG Reason',
-            left: 'center',
+            top: 'top', // 調整標題的位置到最上方
+            left: 'center'
             
         },
         tooltip: {
             trigger: 'item',
             formatter: '{a} <br/>{b} : {c} ({d}%)'
         },
-        legend: {
+        /*legend: {
             orient: 'vertical',
             left: 'left',
+            top: 'bottom',
             data: ng_reason.map(function(item) { return item.name; })
-        },
+        },*/
         series: [
             {
                 name: 'Error Type',
@@ -150,11 +152,12 @@
             trigger: 'item',
             formatter: '{a} <br/>{b} : {c} ({d}%)'
         },
-        legend: {
+        /*legend: {
             orient: 'vertical',
             left: 'left',
+            top: 'bottom',
             data: fastening_status.map(function(item) { return item.name; })
-        },
+        },*/
         series: [
             {
                 name: 'Status',

@@ -70,7 +70,12 @@ class Operations extends Controller
                 }
             }else{
                 $task_list[$key]['last_job_type'] = 'normal';
-                $task_list[$key]['last_targettype'] = $value['program']['step_targettype'];
+                $last_targettype = $value['program']['step_targettype'] ?? 'default_value';
+                $task_list[$key]['last_targettype'] = $last_targettype;
+
+                $last_step_targetangle = $value['program']['step_targetangle'] ?? 'default_value';
+                $task_list[$key]['last_step_targetangle'] = $last_step_targetangle;
+
                 $task_list[$key]['last_step_targetangle'] = $value['program']['step_targetangle'];
                 $task_list[$key]['last_step_highangle'] = $value['program']['step_highangle'];
                 $task_list[$key]['last_step_lowangle'] = $value['program']['step_lowangle'];
