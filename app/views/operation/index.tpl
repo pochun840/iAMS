@@ -21,13 +21,14 @@
 
 </style>
 <?php 
-    /*echo "<pre>";
-    print_r($data['job_data']);
-    echo "</pre>";
+    //echo "<pre>";
+    //print_r($data['job_data']);
+    //echo "</pre>";
 
-    echo "<pre>";
-    print_r($data['seq_list']);
-    echo "</pre>";*/
+    //echo "<pre>";
+    //print_r($data['task_count']);
+    //echo "</pre>";
+    //echo $data['task_count'];
 
 ?>
 <div class="container-ms">
@@ -371,7 +372,7 @@
                 </div>
 
                 <div class="column column-target" style="margin-right: 20px">
-                    <div id="tightening_status_div" class="row target_style" D>
+                    <div id="tightening_status_div" class="row target_style" style="background-color: #7ECA86;">
                         <div class="w3-display-container" style="font-size: 5vmin">
                             <div id="tightening_status" class="w3-display-middle">OK</div>
                         </div>
@@ -681,8 +682,8 @@ window.onclick = function(event) {
         //smaller index-1 bg-color = green => finished
         if(last_step != null){
             last_step.style.color = 'white';
-            //last_step.style.backgroundColor = 'green';
-            //last_step.style.borderColor = 'green';
+            last_step.style.backgroundColor = 'green';
+            last_step.style.borderColor = 'green';
         }
 
         console.log('task_'+index+'_targettype')
@@ -690,7 +691,6 @@ window.onclick = function(event) {
         console.log(target_hi.value);
         console.log(target_lo.value);
         console.log(target_value.value);
-
         if(targettype.value == 1){//angle
             document.getElementById('target_angle').innerHTML = target_value.value;
             document.getElementById('target_angle').value = target_value.value;
@@ -743,7 +743,7 @@ function initail() {
     // body...
     document.getElementById('barcode').value = '';
     document.getElementById('job_name').value = '<?php echo $data['job_data']['job_name']; ?>';
-    document.getElementById('seq_name').value = '<?php echo $data['seq_list'][0]['seq_name']; ?>';
+    document.getElementById('seq_name').value = '<?php echo $data['seq_data']['seq_name']; ?>';
     // document.getElementById('task_time') = '';
     document.getElementById('tightening_status').innerHTML = '';
     document.getElementById('tightening_repeat').value = ' 0 / 1';
@@ -983,6 +983,7 @@ let retry_time = 0;
 const tt = new Map();
 tt.set('start_time',new Date())
 // var date = new Date();
+// console.log(tt)
 
   function handleWebSocketMessage(event) {
       const message = event.data;
@@ -997,6 +998,8 @@ tt.set('start_time',new Date())
           try {
               const data = JSON.parse(jsonMessage);
 
+              // console.log(data);
+              
               // tt.set(ket,value);
               //判斷是否要更新
               let record_data_time = data.data_time
@@ -1011,6 +1014,9 @@ tt.set('start_time',new Date())
               let task_count = document.getElementById('task_count').value;
               let start_time = tt.get('start_time');
 
+              console.log(start_time)
+              console.log(date)
+              console.log(data.job_id,gtcs_job_id,data.system_sn)
 
               if(date > start_time){//紀錄比開啟網頁的時間還新
 
@@ -1057,50 +1063,32 @@ tt.set('start_time',new Date())
                         document.getElementById('low_angle').value = data.step_lowangle;
                     }
 
-                    if(task_id <= task_count){ 
+                    if(task_id <= task_count){
                         let current_circle = document.querySelector("div[data-id='"+task_id+"']");
                         current_circle.childNodes[1].classList.remove('running')
                         // current_circle.classList.remove('running')
                         current_circle.classList.remove('ng')
 
                         if(data.fasten_status == 4 || data.fasten_status == 5 || data.fasten_status == 6 ){
-
                             //OK、OK-JOB、OK-SEQ
                             save_result(data);
                             retry_time = 0;//retry測試歸零
                             document.getElementById('screw_info').innerHTML = retry_time + ' / '+ stop_on_ng;
-
-                            /*if(data.fasten_status == 4){
-                                 current_circle.classList.add('finished');
-                            }
-
-                            if(data.fasten_status == 5){
-                                 current_circle.classList.add('finished_seq');
-                            }
-                             if(data.fasten_status == 6){
-                                 current_circle.classList.add('finished_job');
-                            }*/
-
-
-                            //current_circle.classList.add('finished')
-                            current_circle.childNodes[1].classList.remove('circle-border');
+                            current_circle.classList.add('finished')
+                            current_circle.childNodes[1].classList.remove('circle-border')
+                            // current_circle.childNodes[0].classList.remove('inner-text');
                             task_id = task_id + 1;
-                            
 
                             
-                            if(task_id < task_count){
+                            if(task_id <= task_count){
                                 document.getElementById('task_id').value = task_id;
                                 updateParameters(task_id)
                                 call_job();
                                 // document.getElementById('modbus_switch').value = 1;
                                 let next_circle = document.querySelector("div[data-id='"+task_id+"']");
-                                //let next_circle = document.querySelector("div[data-id='"+task_id+"']");
                                 // next_circle.classList.add('running')
                                 next_circle.childNodes[1].classList.add('running')
-
-
-                                //next_circle.style.backgroundColor = '#44d0ff';
-
+                                next_circle.style.backgroundColor = '#44d0ff';
                                 // next_circle.childNodes[0].classList.add('inner-text');
                                 document.getElementById('task_serail').value = task_id+' / '+task_count;
 
@@ -1108,41 +1096,45 @@ tt.set('start_time',new Date())
                                 document.getElementById('tightening_status').style.backgroundColor = 'green';
                                 document.getElementById('tightening_status_div').style.backgroundColor = 'green';
 
-                                light_signal = 'ok';                             
+                                light_signal = 'ok';
+                                console.log('aaa')
                                 afterward();
-                            }else if(task_id == task_count ){
-
-                                let current_circle = document.querySelector("div[data-id='"+task_id+"']");
-                                current_circle.childNodes[1].classList.remove('running');
-                                // current_circle.classList.remove('running');
-                                current_circle.classList.remove('ng');
-
-
-                                if(data.fasten_status == 4){
-
-                                }
-
-                                if(data.fasten_status == 5){
-                                    
-                                }
-
-                                if(data.fasten_status == 6){
-                                    
-                                }
-
-
-
-                                    
-
-
-
-
+                                console.log('bbb')
                             }else{
-                                document.getElementById('step'+(task_id-1)).style.color = 'white';
-                                
-                                document.getElementById('tightening_status').innerHTML = 'OK-ALL';
-                                document.getElementById('tightening_status').style.backgroundColor = 'yellow';
-                                document.getElementById('tightening_status_div').style.backgroundColor = 'yellow';
+
+                                if(data.fasten_status == 4 ){
+                                    document.getElementById('tightening_status').innerHTML = 'OK';
+                                    document.getElementById('step'+(task_id-1)).style.backgroundColor = 'green';
+                                    document.getElementById('step'+(task_id-1)).style.borderColor = 'green';
+                                    document.getElementById('tightening_status').style.backgroundColor = 'green';
+                                    document.getElementById('tightening_status_div').style.backgroundColor = 'reen';
+                                    current_circle.classList.add('finished');
+                                }
+
+                                if(data.fasten_status == 5 ){
+                                    document.getElementById('tightening_status').innerHTML = 'OK-SEQ';
+                                    document.getElementById('step'+(task_id-1)).style.backgroundColor = '#FFCC00';
+                                    document.getElementById('step'+(task_id-1)).style.borderColor = '#FFCC00';
+                                    document.getElementById('tightening_status').style.backgroundColor = '#FFCC00';
+                                    document.getElementById('tightening_status_div').style.backgroundColor = '#FFCC00';
+                                    current_circle.classList.add('finished_seq');
+                                }
+
+                                 if(data.fasten_status == 6 ){
+                                    document.getElementById('tightening_status').innerHTML = 'OK-JOB';
+                                    document.getElementById('step'+(task_id-1)).style.backgroundColor = '#FFCC00';
+                                    document.getElementById('step'+(task_id-1)).style.borderColor = '#FFCC00';
+                                    document.getElementById('tightening_status').style.backgroundColor = '#FFCC00';
+                                    document.getElementById('tightening_status_div').style.backgroundColor = '#FFCC00';
+                                    current_circle.classList.add('finished_job');
+
+                                }
+                                //document.getElementById('step'+(task_id-1)).style.color = 'white';
+                                //document.getElementById('step'+(task_id-1)).style.backgroundColor = 'green';
+                                //document.getElementById('step'+(task_id-1)).style.borderColor = 'green';
+                                //document.getElementById('tightening_status').innerHTML = 'OK-ALL';
+                                //document.getElementById('tightening_status').style.backgroundColor = 'yellow';
+                                //document.getElementById('tightening_status_div').style.backgroundColor = 'yellow';
                                 // document.getElementById('step'+task_id);
                                 // isSendingRequest = false;
                                 // setTimeout(() => { force_switch_tool(0); }, 1000);
@@ -1168,8 +1160,6 @@ tt.set('start_time',new Date())
                                 afterward();
                             }
                         }else if(data.fasten_status == 7 || data.fasten_status == 8){
-
-
                             //NG、NG-STOP
                             save_result(data);
                             current_circle.childNodes[1].classList.add('running')
@@ -1195,11 +1185,7 @@ tt.set('start_time',new Date())
                                 // function_auth_check('stop_on_ng')
                             }
                         }
-
-                        
-                    } 
-
-                    
+                    }
                 }
 
               }
@@ -1579,8 +1565,7 @@ async function force_switch_tool(status) {
     }
 
     function save_result(data) {
-
-
+        // console.log(data);
         data.cc_job_id = document.getElementById('job_id').value;
         data.cc_seq_id = document.getElementById('seq_id').value;
         data.cc_task_id = document.getElementById('task_id').value;
@@ -1590,6 +1575,8 @@ async function force_switch_tool(status) {
         data.cc_operator = '<?php echo $_SESSION['user']; ?>';
         data.ok_job = '<?php echo $data['job_data']['ok_job']; ?>';
         data.ok_sequence  = '<?php echo $data['seq_list'][0]['ok_sequence']; ?>';
+        data.task_count_final = '<?php echo $data['task_count'];?>';
+
         
         $.ajax({
             url: '?url=Operations/Save_Result', // 指向服務器端檢查更新的 PHP 腳本

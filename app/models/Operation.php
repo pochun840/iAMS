@@ -68,22 +68,24 @@ class Operation{
         若OK Job 關閉，OK sequence 關閉，則都是OK信號
 
         */
+
+        if( $data['cc_task_id'] ==  $data['task_count_final']){
+
+            #若OK Job 關閉，OK sequence 開啟  = OK-SEQ
+            if($data['ok_job'] == 0 && $data['ok_sequence'] == 1){
+                $data['fasten_status'] = 5;
+            }
+
+             #若OK Job 開啟，Oksequence，關閉 = OK-JOB
+            else if($data['ok_job'] == 1 && $data['ok_sequence'] == 0){
+                $data['fasten_status'] = 6;
+            }
+
+            else if($data['ok_job'] == 0 && $data['ok_sequence'] == 0){
+                $data['fasten_status'] = 4;
+            }
+        }
      
-        #若OK Job 關閉，OK sequence 開啟  = OK-SEQ
-        if($data['ok_job'] == 0 && $data['ok_sequence'] == 1){
-            $data['fasten_status'] = 5;
-        }
-
-        #若OK Job 開啟，Oksequence，關閉 = OK-JOB
-        else if($data['ok_job'] == 1 && $data['ok_sequence'] == 0){
-            $data['fasten_status'] = 6;
-        }
-
-        #若OK Job 關閉，OK sequence 關閉 = OK
-        else if($data['ok_job'] == 0 && $data['ok_sequence'] == 0){
-            $data['fasten_status'] = 4;
-        }
-
         if(!empty($data['error_message'])){
             $data['fasten_status'] = 7;
         }
