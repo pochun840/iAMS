@@ -84,6 +84,12 @@ class Operation{
             else if($data['ok_job'] == 0 && $data['ok_sequence'] == 0){
                 $data['fasten_status'] = 4;
             }
+        }else{
+        
+            if(empty($data['error_message'])){
+                $data['fasten_status'] = 4;
+            }
+
         }
      
         if(!empty($data['error_message'])){
