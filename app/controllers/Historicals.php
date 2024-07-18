@@ -167,19 +167,19 @@ class Historicals extends Controller
 
 
             #控制器轉換
-            $res_controller_arr = array(1 => 'GTCS', 2 =>'TCG'); 
+            $res_controller_arr = array(0 => '', 1 => 'GTCS', 2 =>'TCG'); 
 
             //整理陣列 
             foreach($info_final as $kk =>$vv){
-                $info_final[$kk]['torque_unit']  = $torque_change[$vv['torque_unit']];
+                $info_final[$kk]['torque_unit']    = $torque_change[$vv['torque_unit']];
                 $info_final[$kk]['fasten_status']  = $status_arr['status_type'][$vv['fasten_status']];
-                $info_final[$kk]['cc_equipment']  = $res_controller_arr[$vv['fasten_status']];
+                $info_final[$kk]['cc_equipment']   = $res_controller_arr[$vv['cc_equipment']];
             }
 
             #CSV檔名
             $filename = 'data.csv';
             $file = fopen($filename, 'w');
-            fputcsv($file,  array('cc_barcodesn','cc_station','cc_job_id','cc_seq_id','cc_task_id','cc_equipment','cc_operator','system_sn','data_time','device_type','device_id','device_sn','tool_type','tool_sn','tool_status','job_id','job_name','sequence_id','sequence_name','step_id','fasten_torque','torque_unit','fasten_time','fasten_angle','count_direction','last_screw_count','max_screw_count','fasten_status','error_message','step_targettype','step_tooldirection','step_rpm','step_targettorque','step_hightorque','step_lowtorque','step_targetangle','step_highangle','step_lowangle','step_delayttime','threshold_torque','step_threshold_angle','downshift_torque','downshift_speed','step_prr_rpm','step_prr_angle','barcode','total_angle','on_flag','cc_task_name'));
+            fputcsv($file,  array('cc_barcodesn','cc_station','cc_job_id','cc_seq_id','cc_task_id','cc_program_id','cc_equipment','cc_operator','system_sn','data_time','device_type','device_id','device_sn','tool_type','tool_sn','tool_status','job_id','job_name','sequence_id','sequence_name','step_id','fasten_torque','torque_unit','fasten_time','fasten_angle','count_direction','last_screw_count','max_screw_count','fasten_status','error_message','step_targettype','step_tooldirection','step_rpm','step_targettorque','step_hightorque','step_lowtorque','step_targetangle','step_highangle','step_lowangle','step_delayttime','threshold_torque','step_threshold_angle','downshift_torque','downshift_speed','step_prr_rpm','step_prr_angle','barcode','total_angle','on_flag','cc_task_name'));
             foreach ($info_final as $row) {
                 fputcsv($file, $row);
             }
