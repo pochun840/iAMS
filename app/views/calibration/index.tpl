@@ -273,16 +273,14 @@
 
                 <div id="chart-setting">
                     <div class="column column-chart">
-                         <div class="chart-container" id='chart_block'>
+                        <div class="chart-container" id='chart_block' style="display:none;">
                             <!---曲線圖---->
                             <div  id="mychart" width="500px" height="300px"></div>
-                        
-                           
                         </div>
                     </div>
 
                     <div class="column column-meter-model">
-                        <div class="meter-model">
+                        <div class="meter-model" id='item_data' style="display:none;">
                             <div class="row t1 border-bottom">
                                 <div class="col-5" style=" padding-left: 5%; color: #000"><b>Item</b></div>
                                 <div class="col-5" style=" padding-left: 5%; color: #000"><b>Meter</b></div>
@@ -538,8 +536,7 @@ function submit_check() {
     // 將作業 ID 和名稱設置到對應的 input 欄位中
     document.getElementById("job-id").value = job_id;
     document.getElementById("job-name").value = job_name;
-    
-    // 如果 job_id 存在，則發送 AJAX 請求
+
     if (job_id) {
         $.ajax({
             url: "?url=Calibrations/get_data",
@@ -550,6 +547,8 @@ function submit_check() {
             success: function(response) {
                 document.getElementById("datainfo").innerHTML = response;
                 document.getElementById("get_joball").style.display = "none";
+                document.getElementById("chart_block").style.display = "block";
+                document.getElementById("item_data").style.display = "block";
             },
             error: function(xhr, status, error) {
                 //console.error("Ajax request error:", error); 

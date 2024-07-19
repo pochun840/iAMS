@@ -26,17 +26,20 @@ class Calibrations extends Controller
         $job_arr = $this->CalibrationModel->getjobid();
 
         #echarts
-        $echart_data = $this->CalibrationModel->datainfo_search($job_id);
-
-        $meter = $this->val_traffic();
-
-        if(!empty($echart_data)){
-            #整理圖表所需要的資料
-            $tmp['x_val'] = json_encode(array_column($echart_data, 'id'));
-            $tmp['y_val'] = json_encode(array_column($echart_data, 'torque'));
+        $job_id = $_COOKIE['job_id'] ?? null;
+        if(!empty($job_id)){
+            $echart_data = $this->CalibrationModel->datainfo_search($job_id);
+            $meter = $this->val_traffic();
+            if(!empty($echart_data)){
+                #整理圖表所需要的資料
+                $tmp['x_val'] = json_encode(array_column($echart_data, 'id'));
+                $tmp['y_val'] = json_encode(array_column($echart_data, 'torque'));
+    
+            }
+           
 
         }
-
+    
         $data = array(
             'isMobile' => $isMobile,
             'nav' => $this->NavsController->get_nav(),

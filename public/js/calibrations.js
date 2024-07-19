@@ -82,6 +82,8 @@ function html_download() {
              
     }else if(save_type3 === "xml") {
         // 下載 XML 檔案
+        let variable = 8;
+        //fetch(`/imas/public/index.php?url=Calibrations/get_xml/${variable}`)
         fetch('/imas/public/index.php?url=Calibrations/get_xml')
             .then(response => response.text())
             .then(xmlData => {
