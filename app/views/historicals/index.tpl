@@ -352,7 +352,7 @@ if(!empty($_COOKIE['chat_mode_change'])){
                                             </td>
                                             <td><?php echo $v_info['system_sn'];?></td>
                                             <td><?php echo $v_info['data_time'];?></td>
-                                            <td><?php echo $v_info['cc_task_id'];?></td>
+                                            <td></td>
                                             <td><?php echo $v_info['cc_barcodesn'];?></td>
                                             <td><?php echo $v_info['job_name'];?></td>
                                             <td><?php echo $v_info['sequence_name'];?></td>
