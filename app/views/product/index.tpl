@@ -230,7 +230,7 @@
                                         <label><i></i></label>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row" style="display:none;">
                                     <div for="Tower-Light" class="col-5 t1"><?php echo $text['Tower_Light_text']; ?> :</div>
                                     <div class="switch menu col-5 t2">
                                         <input id="Tower-Light" type="checkbox">
@@ -643,8 +643,8 @@ function updateCircleSize(value)
         let size = document.getElementById('size').value;
         let barcode_start = document.getElementById('barcode_start').checked; // $('input[name=Downshift_Enable]:checked').val();
         let job_repeat = document.getElementById('job_repeat').checked; // $('input[name=Downshift_Enable]:checked').val();
-        let tower_light = document.getElementById('Tower-Light').checked; // $('input[name=Downshift_Enable]:checked').val();
-
+        //let tower_light = document.getElementById('Tower-Light').checked; // $('input[name=Downshift_Enable]:checked').val();
+        let tower_light  = 0;
         var formData = new FormData();
         // 添加表单数据
         var form = $('new_job_form');

@@ -79,7 +79,7 @@ class Product{
             $results = $statement->execute();
 
         }else{ //不存在，用insert
-
+            $data['tower_light'] = 0;
             $sql = "INSERT INTO `job` ('job_id','job_name','controller_id','ok_job','ok_job_stop','reverse_direction','reverse_rpm','reverse_force','reverse_cnt_mode','reverse_threshold_torque','point_size','barcode_start','tower_light' )
                     VALUES (:job_id,:job_name,:controller_id,:ok_job,:ok_job_stop,:reverse_direction,:reverse_rpm,:reverse_force,:reverse_cnt_mode,:reverse_threshold_torque,:point_size,:barcode_start,:tower_light)";
             $statement = $this->db->prepare($sql);
