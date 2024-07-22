@@ -146,7 +146,7 @@ class Operations extends Controller
             'barcode' => $barcode,
             'controller_ip' => $controller_ip,
             'max_seq_id' => $total_seq[array_key_last($total_seq)]['seq_id'],
-            'total_seq' => count($seq_list)
+            'seq_count' => $total_seq_count,
         ];
         
         $this->view('operation/index', $data);

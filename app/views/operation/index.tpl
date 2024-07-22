@@ -21,14 +21,18 @@
 
 </style>
 <?php 
-    //echo "<pre>";
-    //print_r($data['task_list'][0]['template_program_id']);
-    //echo "</pre>";
+    /*$new_seq_id_temp  = intval($data['seq_id']);
+    $new_seq_id = $new_seq_id_temp - 1;
 
-    //echo "<pre>";
-    //print_r($data['task_count']);
-    //echo "</pre>";
-    //echo $data['task_count'];
+    $temp_task_list = $data['task_list'];
+    $temp_task_list_zero_based = array_values($temp_task_list);
+
+    //將key調整為從 1 開始
+    $temp_task_list_one_based = array();
+    foreach ($temp_task_list_zero_based as $index => $value) {
+        $temp_task_list_one_based[$index + 1] = $value;
+    }*/
+
 
 ?>
 <div class="container-ms">
@@ -58,6 +62,9 @@
             <input id="modbus_switch" value="1" >
             <input id="tool_status" value="-1" > 
         </div>
+
+
+
         <div id="task_coordinate" style="display:none;">
             <?php foreach ($data['task_list'] as $key => $task){
                 echo '<input id="task_'.$task['task_id'].'_enable_arm" value="'.$task['enable_arm'].'">';
@@ -821,11 +828,7 @@ function initail() {
         let x = L1 * Math.cos(theta1) + L2 * Math.cos(theta1 + theta2);
         let y = L1 * Math.sin(theta1) + L2 * Math.sin(theta1 + theta2);
 
-        // document.getElementById('axis_x').value = x;
-        // document.getElementById('axis_y').value = y;
-        // console.log(`theta1: ${theta1}, theta2: ${theta2}`);
-        // console.log(`x: ${x}, y: ${y}`);
-        
+
         let round_x = Math.round(x*100);
         let round_y = Math.round(y*100);
         // document.getElementById('coordinate').innerHTML = round_x+','+round_y+'['++']';
@@ -838,9 +841,6 @@ function initail() {
 
         document.getElementById('coordinate').innerHTML = round_x+','+round_y+'['+bias+']';
 
-        // console.log(target_x)
-        // console.log(target_y)
-        // console.log(bias)
         let arm_status = +document.getElementById('arm_status').value
         if (arm_status == 0) {
             right_position = true;
@@ -1014,16 +1014,14 @@ tt.set('start_time',new Date())
               let task_count = document.getElementById('task_count').value;
               let start_time = tt.get('start_time');
 
-              console.log(start_time)
-              console.log(date)
-              console.log(data.job_id,gtcs_job_id,data.system_sn)
+
 
               if(date > start_time){//紀錄比開啟網頁的時間還新
 
                 if(data.job_id == gtcs_job_id && tt.has(data.system_sn) == false ){
                     console.log('---123----');
                     document.getElementById('modbus_switch').value = 0;
-                    // alert(456);
+            
                     tt.set(data.system_sn,data.system_sn)
                     //確認紀錄是否為當前設定對應的job
                     //yes:更新顯示 > 觸發下一個task(要更新task_id、加總task time) > call new job
@@ -1063,104 +1061,116 @@ tt.set('start_time',new Date())
                         document.getElementById('low_angle').value = data.step_lowangle;
                     }
 
-                    if(task_id <= task_count){
-                        let current_circle = document.querySelector("div[data-id='"+task_id+"']");
-                        current_circle.childNodes[1].classList.remove('running')
-                        // current_circle.classList.remove('running')
-                        current_circle.classList.remove('ng')
 
-                        if(data.fasten_status == 4 || data.fasten_status == 5 || data.fasten_status == 6 ){
-                            //OK、OK-JOB、OK-SEQ
-                            save_result(data);
-                            retry_time = 0;//retry測試歸零
-                            document.getElementById('screw_info').innerHTML = retry_time + ' / '+ stop_on_ng;
-                            current_circle.classList.add('finished')
-                            current_circle.childNodes[1].classList.remove('circle-border')
-                            // current_circle.childNodes[0].classList.remove('inner-text');
-                            task_id = task_id + 1;
+                
 
-                            
-                            if(task_id <= task_count){
-                                document.getElementById('task_id').value = task_id;
-                                updateParameters(task_id)
-                                call_job();
-                                // document.getElementById('modbus_switch').value = 1;
-                                let next_circle = document.querySelector("div[data-id='"+task_id+"']");
-                                // next_circle.classList.add('running')
-                                next_circle.childNodes[1].classList.add('running')
-                                next_circle.style.backgroundColor = '#44d0ff';
-                                // next_circle.childNodes[0].classList.add('inner-text');
-                                document.getElementById('task_serail').value = task_id+' / '+task_count;
+                    localStorage.setItem('seq_id', <?php echo $data['seq_id']; ?>); //1
+                    localStorage.setItem('seq_count', <?php echo $data['total_seq']; ?>); //2
 
-                                document.getElementById('tightening_status').innerHTML = 'OK';
-                                document.getElementById('tightening_status').style.backgroundColor = 'green';
-                                document.getElementById('tightening_status_div').style.backgroundColor = 'green';
+                    let  seq_id_new = '<?php echo $data['seq_id']; ?>'
+                    let  seq_count = <?php echo $data['total_seq']; ?>;
 
-                                light_signal = 'ok';
-                                console.log('aaa')
-                                afterward();
-                                console.log('bbb')
-                            }else{
+                    //if(seq_id <= seq_count){
+                        if(task_id <= task_count){
 
-                                if(data.fasten_status == 4 ){
-                                    document.getElementById('tightening_status').innerHTML = 'OK';
-                                    document.getElementById('step'+(task_id-1)).style.backgroundColor = 'green';
-                                    document.getElementById('step'+(task_id-1)).style.borderColor = 'green';
-                                    document.getElementById('tightening_status').style.backgroundColor = 'green';
-                                    document.getElementById('tightening_status_div').style.backgroundColor = 'reen';
-                                    current_circle.classList.add('finished');
-                                }
+                            let current_circle = document.querySelector("div[data-id='"+task_id+"']");
+                            current_circle.childNodes[1].classList.remove('running')
+                            // current_circle.classList.remove('running')
+                            current_circle.classList.remove('ng')
 
-                                if(data.fasten_status == 5 ){
-                                    document.getElementById('tightening_status').innerHTML = 'OK-SEQ';
-                                    document.getElementById('step'+(task_id-1)).style.backgroundColor = '#FFCC00';
-                                    document.getElementById('step'+(task_id-1)).style.borderColor = '#FFCC00';
-                                    document.getElementById('tightening_status').style.backgroundColor = '#FFCC00';
-                                    document.getElementById('tightening_status_div').style.backgroundColor = '#FFCC00';
-                                    current_circle.classList.add('finished_seq');
-                                }
+                            if(data.fasten_status == 4 || data.fasten_status == 5 || data.fasten_status == 6 ){
+                                //OK、OK-JOB、OK-SEQ
+                                save_result(data);
+                                retry_time = 0;//retry測試歸零
+                                document.getElementById('screw_info').innerHTML = retry_time + ' / '+ stop_on_ng;
+                                current_circle.classList.add('finished')
+                                current_circle.childNodes[1].classList.remove('circle-border')
+                                // current_circle.childNodes[0].classList.remove('inner-text');
+                                task_id = task_id + 1;
 
-                                 if(data.fasten_status == 6 ){
-                                    document.getElementById('tightening_status').innerHTML = 'OK-JOB';
-                                    document.getElementById('step'+(task_id-1)).style.backgroundColor = '#FFCC00';
-                                    document.getElementById('step'+(task_id-1)).style.borderColor = '#FFCC00';
-                                    document.getElementById('tightening_status').style.backgroundColor = '#FFCC00';
-                                    document.getElementById('tightening_status_div').style.backgroundColor = '#FFCC00';
-                                    current_circle.classList.add('finished_job');
+                                if(task_id <= task_count){
 
-                                }
-                                //document.getElementById('step'+(task_id-1)).style.color = 'white';
-                                //document.getElementById('step'+(task_id-1)).style.backgroundColor = 'green';
-                                //document.getElementById('step'+(task_id-1)).style.borderColor = 'green';
-                                //document.getElementById('tightening_status').innerHTML = 'OK-ALL';
-                                //document.getElementById('tightening_status').style.backgroundColor = 'yellow';
-                                //document.getElementById('tightening_status_div').style.backgroundColor = 'yellow';
-                                // document.getElementById('step'+task_id);
-                                // isSendingRequest = false;
-                                // setTimeout(() => { force_switch_tool(0); }, 1000);
-                                
-                                // switch_tool(0);
-                                // switch_tool(0);
-                                document.getElementById('modbus_switch').value = 0;
-                                // setTimeout(() => { websocket.send('disable'); }, 1000);
-                                
-                                // isSendingRequest = true;
-                                let current_seq_id = +document.getElementById('seq_id').value;
-                                let max_seq_id = +document.getElementById('max_seq_id').value;
-                                if(current_seq_id < max_seq_id){
-                                    // change to next seq
-                                    // change_job(current_seq_id + 1);
-                                    setTimeout(() => { change_job(current_seq_id + 1,'next'); }, 500);
+                                        document.getElementById('task_id').value = task_id;
+                                        updateParameters(task_id)
+                                        call_job();
+                                        // document.getElementById('modbus_switch').value = 1;
+                                        let next_circle = document.querySelector("div[data-id='"+task_id+"']");
+                                        // next_circle.classList.add('running')
+                                        next_circle.childNodes[1].classList.add('running')
+                                        next_circle.style.backgroundColor = '#44d0ff';
+                                        // next_circle.childNodes[0].classList.add('inner-text');
+                                        document.getElementById('task_serail').value = task_id+' / '+task_count;
+
+                                        document.getElementById('tightening_status').innerHTML = 'OK';
+                                        document.getElementById('tightening_status').style.backgroundColor = 'green';
+                                        document.getElementById('tightening_status_div').style.backgroundColor = 'green';
+
+                                        light_signal = 'ok';
+       
+                                        afterward();
                                 }else{
-                                    setTimeout(() => { force_switch_tool(0); }, 1000);
-                                    document.getElementById('modbus_switch').value = 0;
+                                    
+                                    
+                                        if(data.fasten_status == 4 ){
+                                            document.getElementById('tightening_status').innerHTML = 'OK';
+                                            document.getElementById('step'+(task_id-1)).style.backgroundColor = 'green';
+                                            document.getElementById('step'+(task_id-1)).style.borderColor = 'green';
+                                            document.getElementById('tightening_status').style.backgroundColor = 'green';
+                                            document.getElementById('tightening_status_div').style.backgroundColor = 'reen';
+                                            current_circle.classList.add('finished');
+
+                                            setCookie('final_status', '4', 7);
+                                            
+                                        }
+
+                                        if(data.fasten_status == 5 ){
+                                            document.getElementById('tightening_status').innerHTML = 'OK-SEQ';
+                                            document.getElementById('step'+(task_id-1)).style.backgroundColor = '#FFCC00';
+                                            document.getElementById('step'+(task_id-1)).style.borderColor = '#FFCC00';
+                                            document.getElementById('tightening_status').style.backgroundColor = '#FFCC00';
+                                            document.getElementById('tightening_status_div').style.backgroundColor = '#FFCC00';
+                                            current_circle.classList.add('finished_seq');
+
+                                            setCookie('final_status', '5', 7);
+                      
+                                        }
+
+                                        if(data.fasten_status == 6 ){
+                                            document.getElementById('tightening_status').innerHTML = 'OK-JOB';
+                                            document.getElementById('step'+(task_id-1)).style.backgroundColor = '#FFCC00';
+                                            document.getElementById('step'+(task_id-1)).style.borderColor = '#FFCC00';
+                                            document.getElementById('tightening_status').style.backgroundColor = '#FFCC00';
+                                            document.getElementById('tightening_status_div').style.backgroundColor = '#FFCC00';
+                                            current_circle.classList.add('finished_job');
+
+                                            setCookie('final_status', '6', 7);
+                                        }
+
+                                      
+                                        document.getElementById('modbus_switch').value = 0;
+                                        // setTimeout(() => { websocket.send('disable'); }, 1000);
+                                        
+                                        // isSendingRequest = true;
+                                        let current_seq_id = +document.getElementById('seq_id').value;
+                                        let max_seq_id = +document.getElementById('max_seq_id').value;
+                                        if(current_seq_id < max_seq_id){
+                                            // change to next seq
+                                            // change_job(current_seq_id + 1);
+                                            setTimeout(() => { change_job(current_seq_id + 1,'next'); }, 500);
+                                        }else{
+                                            setTimeout(() => { force_switch_tool(0); }, 1000);
+                                            document.getElementById('modbus_switch').value = 0;
+                                        }
+
+                                        light_signal = 'okall';
+                                        afterward();
                                 }
 
-                                light_signal = 'okall';
-                                afterward();
+                                
                             }
                         }else if(data.fasten_status == 7 || data.fasten_status == 8){
-                            //NG、NG-STOP
+
+                             //NG、NG-STOP
                             save_result(data);
                             current_circle.childNodes[1].classList.add('running')
                             current_circle.classList.add('ng');
@@ -1184,8 +1194,17 @@ tt.set('start_time',new Date())
                                 switch_tool(0);
                                 // function_auth_check('stop_on_ng')
                             }
+
                         }
-                    }
+
+                    /*}else{
+                        //seq else 
+
+
+                    }*/
+
+
+                    
                 }
 
               }
@@ -1293,10 +1312,10 @@ function check_tool_status(){
         },
         complete: function(XHR, TS) {
             XHR = null;
-            // console.log("执行一次"); 
+            
         },
         error: function(xhr, status, error) {
-            // console.log("fail");
+      
         }
     });
 }
@@ -1332,10 +1351,10 @@ async function switch_tool(status) {
         },
         complete: function(XHR, TS) {
             XHR = null;
-            // console.log("执行一次"); 
+           
         },
         error: function(xhr, status, error) {
-            // console.log("fail");
+
         }
     });
 }
@@ -1565,19 +1584,21 @@ async function force_switch_tool(status) {
     }
 
     function save_result(data) {
-        // console.log(data);
+
         data.cc_job_id = document.getElementById('job_id').value;
         data.cc_seq_id = document.getElementById('seq_id').value;
+
         data.cc_task_id = document.getElementById('task_id').value;
         data.cc_equipment = '<?php echo $data['job_data']['controller_id'];?>';
         data.cc_barcodesn = document.getElementById('barcode').placeholder;
         data.cc_station = '';
         data.cc_operator = '<?php echo $_SESSION['user']; ?>';
-        data.ok_job = '<?php echo $data['job_data']['ok_job']; ?>';
-        data.ok_sequence  = '<?php echo $data['seq_list'][0]['ok_sequence']; ?>';
+
         data.task_count_final = '<?php echo $data['task_count'];?>';
         data.cc_program_id = '<?php echo $data['task_list'][0]['template_program_id'];?>';
+        data.total_seq_count ='<?php echo $data['total_seq'];?>';
 
+    //
         
         $.ajax({
             url: '?url=Operations/Save_Result', // 指向服務器端檢查更新的 PHP 腳本
@@ -1863,3 +1884,31 @@ async function force_switch_tool(status) {
 
 
 <?php require APPROOT . 'views/inc/footer.tpl'; ?>
+
+<script>
+function setCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
+
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+
+
+function eraseCookie(name) {
+    document.cookie = name+'=; Max-Age=-99999999;';
+}
+<script>
