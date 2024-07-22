@@ -252,8 +252,24 @@ class Historicals extends Controller
                     #圓餅圖
                     $job_time = array();
                     $job_time_temp = $this->Historicals_newModel->for_history('job_time'); 
-                    foreach($job_time_temp as $k_time =>$v_time){
-                        $job_time[] = array('value' => $v_time['duplicate_count'], 'name' => "JOB-".$v_time['job_id']); 
+                    foreach ($job_time_temp as $v_time) {
+                        $job_name = $v_time['job_name'];
+                    
+                        if (isset($job_name_counts[$job_name])) {
+                            $job_name_counts[$job_name]['duplicate_count'] += $v_time['duplicate_count'];
+                            $job_name_counts[$job_name]['fasten_time'] += $v_time['fasten_time'];
+                            $job_name_counts[$job_name]['total_fasten_time'] += $v_time['total_fasten_time'];
+                            $job_name_counts[$job_name]['average_fasten_time'] += $v_time['average_fasten_time'];
+                        } else {
+                            $job_name_counts[$job_name] = $v_time;
+                        }
+                    }
+                    foreach ($job_name_counts as &$item) {
+                        $item['average_fasten_time'] = $item['total_fasten_time'] / $item['duplicate_count'];
+                    }
+                    
+                    foreach($job_name_counts as $k_time1 =>$v_time1){
+                        $job_time[] = array('value' => $v_time1['duplicate_count'], 'name' => "JOB-".$v_time1['job_name']); 
                     } 
                     $data['job_time_json'] = json_encode($job_time);
                 }
