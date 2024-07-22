@@ -181,7 +181,7 @@ class Historical{
             2 => 'RUNNING',
             3 => 'REVERSE',
             4 => 'OK',
-            5 => 'OK-SEQ',
+            5 => '',
             6 => 'OK-JOB',
             7 => 'NG',
             8 => 'NS',
