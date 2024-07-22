@@ -643,8 +643,8 @@ function updateCircleSize(value)
         let size = document.getElementById('size').value;
         let barcode_start = document.getElementById('barcode_start').checked; // $('input[name=Downshift_Enable]:checked').val();
         let job_repeat = document.getElementById('job_repeat').checked; // $('input[name=Downshift_Enable]:checked').val();
-        //let tower_light = document.getElementById('Tower-Light').checked; // $('input[name=Downshift_Enable]:checked').val();
-        let tower_light  = 0;
+        let tower_light = document.getElementById('Tower-Light').checked; // $('input[name=Downshift_Enable]:checked').val();
+    
         var formData = new FormData();
         // 添加表单数据
         var form = $('new_job_form');
