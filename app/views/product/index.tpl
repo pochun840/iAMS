@@ -775,8 +775,8 @@ function updateCircleSize(value)
         document.getElementById('reverse_count').value = '';
         document.getElementById("threshold_torque").value = 0.0;
         document.getElementById('barcode_start').checked = 1;
-        document.getElementById('job_repeat').checked = 0;
-        document.getElementById('Tower-Light').checked = 1;
+        document.getElementById('job_repeat').checked = 1;
+        document.getElementById('Tower-Light').checked = 0;
 
         // document.getElementById('size').value = response['point_size'];//另外處理
         document.getElementsByClassName('perspective-range')[0].value = 50;
