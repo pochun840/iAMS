@@ -33,7 +33,23 @@
         $temp_task_list_one_based[$index + 1] = $value;
     }*/
 
+    //判斷 $data['seq_list'] 有幾筆 
+    
+    if($data['total_seq'] == 1){
+        $new_index_seq = 0;
+        $data['ok_sequence'] =  $data['seq_list'][0]['ok_sequence'];
+    }else{
 
+        #陣列重整  key值 用  $vv['seq_id'] 取代      
+        $temp = array();
+        foreach($data['seq_list'] as $kk =>$vv){
+            $temp[$vv['seq_id']]= $vv;
+        }
+        $data['ok_sequence'] = $temp[$data['seq_id']]['ok_sequence'];
+
+    }
+
+    
 ?>
 <div class="container-ms">
 
@@ -62,9 +78,7 @@
             <input id="modbus_switch" value="1" >
             <input id="tool_status" value="-1" > 
         </div>
-
-
-
+       
         <div id="task_coordinate" style="display:none;">
             <?php foreach ($data['task_list'] as $key => $task){
                 echo '<input id="task_'.$task['task_id'].'_enable_arm" value="'.$task['enable_arm'].'">';
@@ -982,8 +996,7 @@ function initail() {
 let retry_time = 0;
 const tt = new Map();
 tt.set('start_time',new Date())
-// var date = new Date();
-// console.log(tt)
+
 
   function handleWebSocketMessage(event) {
       const message = event.data;
@@ -1061,16 +1074,16 @@ tt.set('start_time',new Date())
                         document.getElementById('low_angle').value = data.step_lowangle;
                     }
 
-
-                
-
                     localStorage.setItem('seq_id', <?php echo $data['seq_id']; ?>); //1
                     localStorage.setItem('seq_count', <?php echo $data['total_seq']; ?>); //2
 
-                    let  seq_id_new = '<?php echo $data['seq_id']; ?>'
-                    let  seq_count = <?php echo $data['total_seq']; ?>;
+                    //localStorage.setItem('current_seq_id', current_seq_id); 
+                    //localStorage.setItem('max_seq_id', max_seq_id); 
 
-                    //if(seq_id <= seq_count){
+                    let  seq_id_new = '<?php echo $data['seq_id']; ?>'
+                    let  seq_count = <?php echo $data['total_seq']; ?>;            
+
+                    //if(seq_id <= seq_count ){
                         if(task_id <= task_count){
 
                             let current_circle = document.querySelector("div[data-id='"+task_id+"']");
@@ -1085,7 +1098,8 @@ tt.set('start_time',new Date())
                                 document.getElementById('screw_info').innerHTML = retry_time + ' / '+ stop_on_ng;
                                 current_circle.classList.add('finished')
                                 current_circle.childNodes[1].classList.remove('circle-border')
-                                // current_circle.childNodes[0].classList.remove('inner-text');
+                             
+
                                 task_id = task_id + 1;
 
                                 if(task_id <= task_count){
@@ -1110,6 +1124,16 @@ tt.set('start_time',new Date())
                                         afterward();
                                 }else{
                                     
+                                        //
+                                        /*if(seq_id < seq_count ){
+                                            document.getElementById('tightening_status').innerHTML = 'OK';
+                                            document.getElementById('step'+(task_id-1)).style.backgroundColor = 'green';
+                                            document.getElementById('step'+(task_id-1)).style.borderColor = 'green';
+                                            document.getElementById('tightening_status').style.backgroundColor = 'green';
+                                            document.getElementById('tightening_status_div').style.backgroundColor = 'reen';
+                                            current_circle.classList.add('finished');
+
+                                        }*/
                                     
                                         if(data.fasten_status == 4 ){
                                             document.getElementById('tightening_status').innerHTML = 'OK';
@@ -1118,8 +1142,6 @@ tt.set('start_time',new Date())
                                             document.getElementById('tightening_status').style.backgroundColor = 'green';
                                             document.getElementById('tightening_status_div').style.backgroundColor = 'reen';
                                             current_circle.classList.add('finished');
-
-                                            setCookie('final_status', '4', 7);
                                             
                                         }
 
@@ -1130,8 +1152,6 @@ tt.set('start_time',new Date())
                                             document.getElementById('tightening_status').style.backgroundColor = '#FFCC00';
                                             document.getElementById('tightening_status_div').style.backgroundColor = '#FFCC00';
                                             current_circle.classList.add('finished_seq');
-
-                                            setCookie('final_status', '5', 7);
                       
                                         }
 
@@ -1142,8 +1162,6 @@ tt.set('start_time',new Date())
                                             document.getElementById('tightening_status').style.backgroundColor = '#FFCC00';
                                             document.getElementById('tightening_status_div').style.backgroundColor = '#FFCC00';
                                             current_circle.classList.add('finished_job');
-
-                                            setCookie('final_status', '6', 7);
                                         }
 
                                       
@@ -1184,8 +1202,6 @@ tt.set('start_time',new Date())
                             document.getElementById('error1').innerHTML = 'Error : ' + fasten_status[data.fasten_status].status;
                             document.getElementById('error2').innerHTML = 'Error : ' + error_message[data.error_message].status;
 
-                            console.log(data.error_message)
-
                             light_signal = 'ng';
                             afterward();
 
@@ -1194,6 +1210,7 @@ tt.set('start_time',new Date())
                                 switch_tool(0);
                                 // function_auth_check('stop_on_ng')
                             }
+                            //save_result(data);
 
                         }
 
@@ -1597,8 +1614,12 @@ async function force_switch_tool(status) {
         data.task_count_final = '<?php echo $data['task_count'];?>';
         data.cc_program_id = '<?php echo $data['task_list'][0]['template_program_id'];?>';
         data.total_seq_count ='<?php echo $data['total_seq'];?>';
+        data.ok_job ='<?php echo $data['job_data']['ok_job'];?>';
+        data.ok_sequence ='<?php echo $data['ok_sequence'];?>';
 
-    //
+
+       
+    
         
         $.ajax({
             url: '?url=Operations/Save_Result', // 指向服務器端檢查更新的 PHP 腳本

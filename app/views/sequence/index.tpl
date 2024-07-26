@@ -453,7 +453,7 @@ function displayImage()
         //帶入預設值
         document.getElementById("seq_id").value = seq_id;
         document.getElementById("seq_name").value = '';
-        document.getElementById("barcode_enable").checked = 0;
+        //document.getElementById("barcode_enable").checked = 0;
         document.getElementById("stop_on_NG").value = 0;
         // document.getElementById('seq_enable').checked = 1;
         document.getElementById('ok_seq').checked = 1;
@@ -476,7 +476,7 @@ function displayImage()
         let seq_name = document.getElementById("seq_name").value;
         let barcode_enable = document.getElementById("barcode_enable").checked;
         let stop_on_NG = document.getElementById("stop_on_NG").value;
-        // let seq_enable = document.getElementById('seq_enable').checked; //$('input[id=ok_job]:checked').val();
+        //let seq_enable = document.getElementById('seq_enable').checked; //$('input[id=ok_job]:checked').val();
         let ok_seq = document.getElementById('ok_seq').checked; // $('input[name=Downshift_Enable]:checked').val();
         let timeout = document.getElementById("timeout").value;
         let ok_seq_stop = 1;

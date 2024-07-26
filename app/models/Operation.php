@@ -96,10 +96,33 @@ class Operation{
             $data['fasten_status'] = 7;
         }
 
+        //test 把寫入的資料
         echo "<pre>";
         print_r($data);
-        echo "</pre>"; 
-    
+        echo "</pre>";
+
+
+        $filename = 'data'.$data['cc_seq_id'].'.txt';
+        $file = fopen($filename, 'w');
+        if ($file === false) {
+            die("無法開啟檔案");
+        }
+
+        $tt = array();
+
+            // 寫入每一行資料到檔案中
+            foreach ($data as $line) {
+                fwrite($file, $line . "\n");
+            }
+
+        // 關閉檔案
+        fclose($file);
+
+        echo "資料已成功寫入到".$filename ."中。";
+                
+        //$data['cc_seq_id']
+        
+
 
         $sql = "INSERT INTO `fasten_data` ('cc_barcodesn','cc_station','cc_job_id','cc_seq_id','cc_task_id','cc_program_id','cc_equipment','cc_operator','system_sn','data_time','device_type','device_id','device_sn','tool_type','tool_sn','tool_status','job_id','job_name','sequence_id','sequence_name','step_id','fasten_torque','torque_unit','fasten_time','fasten_angle','count_direction','last_screw_count','max_screw_count','fasten_status','error_message','step_targettype','step_tooldirection','step_rpm','step_targettorque','step_hightorque','step_lowtorque','step_targetangle','step_highangle','step_lowangle','step_delayttime','threshold_torque','step_threshold_angle','downshift_torque','downshift_speed','step_prr_rpm','step_prr_angle','barcode','total_angle')
         VALUES(:cc_barcodesn,:cc_station,:cc_job_id,:cc_seq_id,:cc_task_id,:cc_program_id,:cc_equipment,:cc_operator,:system_sn,:data_time,:device_type,:device_id,:device_sn,:tool_type,:tool_sn,:tool_status,:job_id,:job_name,:sequence_id,:sequence_name,:step_id,:fasten_torque,:torque_unit,:fasten_time,:fasten_angle,:count_direction,:last_screw_count,:max_screw_count,:fasten_status,:error_message,:step_targettype,:step_tooldirection,:step_rpm,:step_targettorque,:step_hightorque,:step_lowtorque,:step_targetangle,:step_highangle,:step_lowangle,:step_delayttime,:threshold_torque,:step_threshold_angle,:downshift_torque,:downshift_speed,:step_prr_rpm,:step_prr_angle,:barcode,:total_angle)

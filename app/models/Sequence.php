@@ -82,16 +82,18 @@ class Sequence{
                         ok_sequence = :ok_sequence,
                         ok_sequence_stop = :ok_sequence_stop,
                         sequence_mintime = :sequence_mintime,
-                        sequence_maxtime = :sequence_maxtime 
+                        sequence_maxtime = :sequence_maxtime,
+                        barcode_start = :barcode_start
                     WHERE job_id = :job_id AND seq_id = :seq_id";
             $statement = $this->db->prepare($sql);
-            // $statement->bindValue(':sequence_enable', $data['seq_enable']);
+           // $statement->bindValue(':sequence_enable', $data['seq_enable']);
             $statement->bindValue(':seq_name', $data['seq_name']);
             $statement->bindValue(':tightening_repeat', 1); //中控預設1
             $statement->bindValue(':ng_stop', $data['stop_on_NG']);
             $statement->bindValue(':ok_sequence', $data['ok_seq']);
             $statement->bindValue(':ok_sequence_stop', $data['ok_seq_stop']);
             $statement->bindValue(':sequence_maxtime', $data['timeout']);
+            $statement->bindValue(':barcode_start', $data['barcode_enable']);
             $statement->bindValue(':sequence_mintime', 0);
             $statement->bindValue(':seq_id', $data['seq_id']);
             $statement->bindValue(':job_id', $data['job_id']);
