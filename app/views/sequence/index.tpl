@@ -481,11 +481,6 @@ function displayImage()
         let timeout = document.getElementById("timeout").value;
         let ok_seq_stop = 1;
 
-        console.log(barcode_enable);
-        console.log(seq_id);
-        alert(barcode_enable);
-
-
         var formData = new FormData();
         // 添加表单数据
         var form = $('new_job_form');
@@ -695,7 +690,7 @@ function displayImage()
             url: url,
             success: function(response) {
                 // 成功回調函數，處理伺服器的回應
-                // console.log(response); // 在控制台輸出伺服器的回應
+                console.log(response); // 在控制台輸出伺服器的回應
                 history.go(0);
             },
             error: function(error) {

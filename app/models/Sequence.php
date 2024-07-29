@@ -101,6 +101,7 @@ class Sequence{
 
         }else{ //不存在，用insert
 
+            //echo "eeeeerty";die();
             $sql = "INSERT INTO `sequence` ('sequence_enable','job_id','seq_id','seq_name','tightening_repeat','ng_stop','ok_sequence','ok_sequence_stop','sequence_mintime','sequence_maxtime','img' ,'barcode_start' )
                     VALUES (:sequence_enable,:job_id,:seq_id,:seq_name,:tightening_repeat,:ng_stop,:ok_sequence,:ok_sequence_stop,:sequence_mintime,:sequence_maxtime,:img,:barcode_start)";
             $statement = $this->db->prepare($sql);
