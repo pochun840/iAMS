@@ -244,8 +244,8 @@
                                     <input class="form-check-input t2" type="radio" name="Target-Type" id="sync_yes" value="1"  style="zoom:1.2; vertical-align: middle" onclick="sync_product()">
                                     <label class="form-check-label t2" for="Target-Angle"><?php echo "YES";?></label>
 
-                                    <!--<input class="form-check-input t2" type="radio" name="Target-Type" id="sync_no" value="0"   style="zoom:1.2; vertical-align: middle" onclick="document.getElementById('ProgramNew').style.display='none'" >
-                                    <label class="form-check-label t2" for="Target-Angle"><?php echo "NO";?></label>-->
+                                    <input class="form-check-input t2" type="radio" name="Target-Type" id="sync_no" value="0"   style="zoom:1.2; vertical-align: middle" onclick="document.getElementById('ProgramNew').style.display='none'" >
+                                    <label class="form-check-label t2" for="Target-Angle"><?php echo "NO";?></label>
 
                                 </div>
 
@@ -413,8 +413,8 @@
                                 <input class="form-check-input t2" type="radio" name="Target-Type" id="sync_yes" value="1"  style="zoom:1.2; vertical-align: middle" onclick="sync_product()">
                                 <label class="form-check-label t2" for="Target-Angle"><?php echo "YES";?></label>
 
-                                <!--<input class="form-check-input t2" type="radio" name="Target-Type" id="sync_no" value="0"   style="zoom:1.2; vertical-align: middle" onclick="document.getElementById('ProgramNew').style.display='none'" >
-                                <label class="form-check-label t2" for="Target-Angle"><?php echo "NO";?></label>-->
+                                <input class="form-check-input t2" type="radio" name="Target-Type" id="sync_no" value="0"   style="zoom:1.2; vertical-align: middle" onclick="document.getElementById('ProgramNew').style.display='none'" >
+                                <label class="form-check-label t2" for="Target-Angle"><?php echo "NO";?></label>
 
                             </div>
 
