@@ -97,7 +97,7 @@ class Operation{
         }
 
         //test 把寫入的資料
-        echo "<pre>";
+        /*echo "<pre>";
         print_r($data);
         echo "</pre>";
 
@@ -113,14 +113,13 @@ class Operation{
             // 寫入每一行資料到檔案中
             foreach ($data as $line) {
                 fwrite($file, $line . "\n");
-            }
+            }*/
 
         // 關閉檔案
-        fclose($file);
+        //fclose($file);
 
-        echo "資料已成功寫入到".$filename ."中。";
-                
-        //$data['cc_seq_id']
+        //echo "資料已成功寫入到".$filename ."中。";
+
         
 
 

@@ -550,4 +550,102 @@ class Template{
         $results2 = $statement2->execute();
     }
 
+
+    public function search_data_info($program_id) {
+
+        $sql = "SELECT * FROM task WHERE template_program_id = ?";
+        $statement = $this->db->prepare($sql);
+        $statement->execute([$program_id]);
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function search_data($program_id,$table){
+
+        $sql = "SELECT * FROM " . $table . " WHERE template_program_id = ?";
+        $statement = $this->db->prepare($sql);
+        $statement->execute([$program_id]);
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $results;
+    }
+
+
+    public function cover_data($new_array,$table_name){
+        $updatedCount = 0;
+    
+        foreach ($new_array as $item) {
+            $sql = "UPDATE $table_name SET
+                        step_name = :step_name,
+                        step_targettype = :step_targettype,
+                        step_targetangle = :step_targetangle,
+                        step_targettorque = :step_targettorque,
+                        step_tooldirection = :step_tooldirection,
+                        step_rpm = :step_rpm,
+                        step_offsetdirection = :step_offsetdirection,
+                        step_torque_jointoffset = :step_torque_jointoffset,
+                        step_hightorque = :step_hightorque,
+                        step_lowtorque = :step_lowtorque,
+                        step_threshold_mode = :step_threshold_mode,
+                        step_threshold_torque = :step_threshold_torque,
+                        step_threshold_angle = :step_threshold_angle,
+                        step_monitoringangle = :step_monitoringangle,
+                        step_highangle = :step_highangle,
+                        step_lowangle = :step_lowangle,
+                        step_downshift_enable = :step_downshift_enable,
+                        step_downshift_torque = :step_downshift_torque,
+                        step_downshift_speed = :step_downshift_speed,
+                        torque_unit = :torque_unit,
+                        step_prr = :step_prr,
+                        step_prr_rpm = :step_prr_rpm,
+                        step_prr_angle = :step_prr_angle,
+                        step_downshift_mode = :step_downshift_mode,
+                        step_downshift_angle = :step_downshift_angle
+                    WHERE job_id = :job_id AND seq_id = :seq_id AND task_id = :task_id";
+            
+            $statement = $this->db->prepare($sql);
+            
+            // 执行更新操作
+            if ($statement->execute([
+                'job_id' => $item['job_id'],
+                'seq_id' => $item['seq_id'],
+                'task_id' => $item['task_id'],
+                'step_name' => $item['step_name'],
+                'step_targettype' => $item['step_targettype'],
+                'step_targetangle' => $item['step_targetangle'],
+                'step_targettorque' => $item['step_targettorque'],
+                'step_tooldirection' => $item['step_tooldirection'],
+                'step_rpm' => $item['step_rpm'],
+                'step_offsetdirection' => $item['step_offsetdirection'],
+                'step_torque_jointoffset' => $item['step_torque_jointoffset'],
+                'step_hightorque' => $item['step_hightorque'],
+                'step_lowtorque' => $item['step_lowtorque'],
+                'step_threshold_mode' => $item['step_threshold_mode'],
+                'step_threshold_torque' => $item['step_threshold_torque'],
+                'step_threshold_angle' => $item['step_threshold_angle'],
+                'step_monitoringangle' => $item['step_monitoringangle'],
+                'step_highangle' => $item['step_highangle'],
+                'step_lowangle' => $item['step_lowangle'],
+                'step_downshift_enable' => $item['step_downshift_enable'],
+                'step_downshift_torque' => $item['step_downshift_torque'],
+                'step_downshift_speed' => $item['step_downshift_speed'],
+                'torque_unit' => $item['torque_unit'],
+                'step_prr' => $item['step_prr'],
+                'step_prr_rpm' => $item['step_prr_rpm'],
+                'step_prr_angle' => $item['step_prr_angle'],
+                'step_downshift_mode' => $item['step_downshift_mode'],
+                'step_downshift_angle' => $item['step_downshift_angle']
+            ])) {
+                $updatedCount++;
+            }
+        }
+    
+        return $updatedCount;
+    }
+    
+
+
+
+
+
+
+
 }

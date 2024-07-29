@@ -238,6 +238,19 @@
                                     <b><?php echo $text['Torque_text'].' '.$text['Parameter_text']; ?></b>
                                 </div>
                             </div>
+                             <div>
+                               <div for="new_task_form" class="col-3 t1" style="font-size: 18px"><b><?php echo "SYNC";?> :</b></div>
+                                <div>
+                                    <input class="form-check-input t2" type="radio" name="Target-Type" id="sync_yes" value="1"  style="zoom:1.2; vertical-align: middle" onclick="sync_product()">
+                                    <label class="form-check-label t2" for="Target-Angle"><?php echo "YES";?></label>
+
+                                    <!--<input class="form-check-input t2" type="radio" name="Target-Type" id="sync_no" value="0"   style="zoom:1.2; vertical-align: middle" onclick="document.getElementById('ProgramNew').style.display='none'" >
+                                    <label class="form-check-label t2" for="Target-Angle"><?php echo "NO";?></label>-->
+
+                                </div>
+
+                            </div>
+
                             <div class="scrollbar-modal" id="style-torque">
                                 <div class="modal-force-overflow">
                                     <div style="padding-left: 5%; background-color: #D9D9D9">
@@ -394,6 +407,19 @@
                                     <b><?php echo $text['Angle_text'].' '.$text['Parameter_text']; ?></b>
                                 </div>
                             </div>
+                            <div class="row t1">
+                            <div for="new_task_form" class="col-3 t1" style="font-size: 18px"><b><?php echo "SYNC";?> :</b></div>
+                            <div>
+                                <input class="form-check-input t2" type="radio" name="Target-Type" id="sync_yes" value="1"  style="zoom:1.2; vertical-align: middle" onclick="sync_product()">
+                                <label class="form-check-label t2" for="Target-Angle"><?php echo "YES";?></label>
+
+                                <!--<input class="form-check-input t2" type="radio" name="Target-Type" id="sync_no" value="0"   style="zoom:1.2; vertical-align: middle" onclick="document.getElementById('ProgramNew').style.display='none'" >
+                                <label class="form-check-label t2" for="Target-Angle"><?php echo "NO";?></label>-->
+
+                            </div>
+
+                            </div>
+
                             <div class="scrollbar-modal" id="style-angle">
                                 <div class="modal-force-overflow">
                                     <div style="padding-left: 5%; background-color: #D9D9D9">
@@ -1076,6 +1102,60 @@ function ClickNotification() {
 
 addMessage();
 
+
+
+//
+function sync_product(){
+    let rowSelected = document.getElementsByClassName('selected');
+    let template_program_id  = rowSelected[0].childNodes[1].innerHTML;
+    let table_url   = extractPartFromURL(); //判斷 advancedstep or normalstep
+
+
+    console.log(table_url);
+    console.log(template_program_id);
+
+    if(table_url){      
+        $.ajax({
+        type: "POST",
+        data: {
+            'template_program_id': template_program_id,
+            'table_url': table_url
+        },
+
+        url: '?url=Templates/sync_program_step',
+        success: function(response) {
+            //console.log(response); 
+            alert('success');
+            history.go(0);
+        },
+        error: function(error) {
+            console.error('Error:', error); 
+        }
+        }).fail(function() {
+            // history.go(0);
+        });
+    }
+
+    
+
+}
+
+
+//取得url 參數
+function extractPartFromURL() {
+    let queryString = window.location.search;
+    let urlParams = new URLSearchParams(queryString);
+    
+    let urlValue = urlParams.get('url');
+    
+    if (urlValue) {
+        let parts = urlValue.split('/'); 
+        let partToExtract = parts[1]; 
+        return partToExtract.split('_')[0]; 
+    }
+    
+    return null; 
+}
 </script>
 
 </div>

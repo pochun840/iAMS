@@ -727,5 +727,72 @@ class Templates extends Controller
 
         echo json_encode(array('error' => '','result' => $seq_data));
     }
+
+    //sync program
+    public function sync_program_step(){
+        if( !empty($_POST['template_program_id']) && isset($_POST['template_program_id'])  ){
+            $program_id = $_POST['template_program_id'];
+        }else{ 
+            $input_check = false; 
+        }
+        //table_url
+        if( !empty($_POST['table_url']) && isset($_POST['table_url'])  ){
+            $table_url = $_POST['table_url'];
+            if($table_url == "normalstep"){
+                $table_name ="ccs_normalstep";
+                $table  = "gtcs_normalstep_template";
+            }
+
+            if($table_url == "advancedstep"){
+                $table_name ="ccs_advancedstep";
+                $table  = "gtcs_advancedstep_template";
+            }
+        }else{ 
+            $input_check = false; 
+        }
+
+        
+        //用 program_id 從 gtcs_normalstep_template or gtcs_advancedstep_template 取出資料
+        $temp = $this->TemplateModel->search_data($program_id,$table);
+        $temp_data = $this->TemplateModel->search_data_info($program_id);  
+        if(!empty($temp_data)){
+            foreach ($temp_data as $item) {
+                $new_array[] = array(
+                    'job_id' => $item['job_id'],
+                    'seq_id' => $item['seq_id'],
+                    'task_id' => $item['task_id'],
+                    'step_name' => $temp[0]['step_name'],
+                    'step_targettype' => $temp[0]['step_targettype'],
+                    'step_targetangle' => $temp[0]['step_targetangle'],
+                    'step_targettorque' => $temp[0]['step_targettorque'],
+                    'step_tooldirection' => $temp[0]['step_tooldirection'],
+                    'step_rpm' => $temp[0]['step_rpm'],
+                    'step_offsetdirection' => $temp[0]['step_offsetdirection'],
+                    'step_torque_jointoffset' =>$temp[0]['step_torque_jointoffset'],
+                    'step_hightorque' => $temp[0]['step_hightorque'],
+                    'step_lowtorque' => $temp[0]['step_lowtorque'],
+                    'step_threshold_mode' => $temp[0]['step_threshold_mode'],
+                    'step_threshold_torque' => $temp[0]['step_threshold_torque'],
+                    'step_threshold_angle' => $temp[0]['step_threshold_angle'],
+                    'step_monitoringangle' => $temp[0]['step_monitoringangle'],
+                    'step_highangle' => $temp[0]['step_highangle'],
+                    'step_lowangle' => $temp[0]['step_lowangle'],
+                    'step_downshift_enable' => $temp[0]['step_downshift_enable'],
+                    'step_downshift_torque' => $temp[0]['step_downshift_torque'],
+                    'step_downshift_speed' => $temp[0]['step_downshift_speed'],
+                    'torque_unit' => $temp[0]['torque_unit'],
+                    'step_prr' => $temp[0]['step_prr'],
+                    'step_prr_rpm' => $temp[0]['step_prr_rpm'],
+                    'step_prr_angle' => $temp[0]['step_prr_angle'],
+                    'step_downshift_mode' => $temp[0]['step_downshift_mode'],
+                    'step_downshift_angle' => $temp[0]['step_downshift_angle'],
+                );
+            }
+            if(!empty($new_array)){
+                $res = $this->TemplateModel->cover_data($new_array,$table_name);
+            }
+        }
+        
+    }
     
 }
