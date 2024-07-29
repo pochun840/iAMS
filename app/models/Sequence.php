@@ -101,9 +101,10 @@ class Sequence{
 
         }else{ //不存在，用insert
 
-            $sql = "INSERT INTO `sequence` ('sequence_enable','job_id','seq_id','seq_name','tightening_repeat','ng_stop','ok_sequence','ok_sequence_stop','sequence_mintime','sequence_maxtime','img' )
-                    VALUES (:sequence_enable,:job_id,:seq_id,:seq_name,:tightening_repeat,:ng_stop,:ok_sequence,:ok_sequence_stop,:sequence_mintime,:sequence_maxtime,:img )";
+            $sql = "INSERT INTO `sequence` ('sequence_enable','job_id','seq_id','seq_name','tightening_repeat','ng_stop','ok_sequence','ok_sequence_stop','sequence_mintime','sequence_maxtime','img' ,'barcode_start' )
+                    VALUES (:sequence_enable,:job_id,:seq_id,:seq_name,:tightening_repeat,:ng_stop,:ok_sequence,:ok_sequence_stop,:sequence_mintime,:sequence_maxtime,:img,:barcode_start)";
             $statement = $this->db->prepare($sql);
+
             $statement->bindValue(':sequence_enable', 1);
             $statement->bindValue(':seq_name', $data['seq_name']);
             $statement->bindValue(':tightening_repeat', 1); //中控預設1
@@ -115,6 +116,7 @@ class Sequence{
             $statement->bindValue(':img', '');
             $statement->bindValue(':seq_id', $data['seq_id']);
             $statement->bindValue(':job_id', $data['job_id']);
+            $statement->bindValue(':barcode_start', $data['barcode_enable']);
             $results = $statement->execute();
 
         }

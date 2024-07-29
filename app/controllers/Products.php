@@ -236,7 +236,63 @@ class Products extends Controller
         }
 
         if ($input_check) {
-            $result = $this->ProductModel->CopyJob($from_job_id,$to_job_id,$to_job_name);
+            
+            $result  = $this->ProductModel->CopyJob($from_job_id,$to_job_id,$to_job_name);  //單純copy job 功能
+            $select_seq = $this->ProductModel->check_seq_by_job_id($from_job_id,$to_job_id); //用$from_job_id,$to_job_id 找出對應的seq資料
+            if(!empty($select_seq)){
+
+                $new_temp_seq = array();
+                foreach($select_seq as $key =>$val){
+                    
+                    if(empty($val['barcode_start'])){
+                        $val['barcode_start'] = 0;
+                    }
+
+                    $new_temp_seq[$key]['sequence_enable'] = $val['sequence_enable'];
+                    $new_temp_seq[$key]['job_id'] = $to_job_id;
+                    $new_temp_seq[$key]['seq_id'] = $val['seq_id'];
+                    $new_temp_seq[$key]['seq_name'] = $val['seq_name'];
+                    $new_temp_seq[$key]['img'] = $val['img'];
+                    $new_temp_seq[$key]['tightening_repeat'] = $val['tightening_repeat'];
+                    $new_temp_seq[$key]['ng_stop'] = $val['ng_stop'];
+                    $new_temp_seq[$key]['ok_sequence'] = $val['ok_sequence'];
+                    $new_temp_seq[$key]['ok_sequence_stop'] = $val['ok_sequence_stop'];
+                    $new_temp_seq[$key]['sequence_mintime'] = $val['sequence_mintime'];
+                    $new_temp_seq[$key]['sequence_maxtime'] = $val['sequence_maxtime'];
+                    $new_temp_seq[$key]['barcode_start'] = $val['barcode_start'];
+              
+                }
+                $insertedrecords = $this->ProductModel->Copy_seq_by_job_id($new_temp_seq);  //copy seq  
+                //var_dump($insertedrecords);
+
+            }
+
+            $select_task = $this->ProductModel->check_task_by_job_id($from_job_id,$to_job_id); //用$from_job_id,$to_job_id 找出對應的task資料
+            if(!empty($select_task)){
+                $new_temp_task = array();
+                foreach($select_task as $kk =>$vv){
+                    $new_temp_task[$kk]['job_id'] = $to_job_id;
+                    $new_temp_task[$kk]['seq_id'] = $vv['seq_id'];
+                    $new_temp_task[$kk]['task_id'] = $vv['task_id'];
+                    $new_temp_task[$kk]['controller'] = $vv['controller'];
+                    $new_temp_task[$kk]['enable_equipment'] = $vv['enable_equipment'];
+                    $new_temp_task[$kk]['enable_arm'] = $vv['enable_arm'];
+                    $new_temp_task[$kk]['position_x'] = $vv['position_x'];
+                    $new_temp_task[$kk]['position_y'] = $vv['position_y'];
+                    $new_temp_task[$kk]['tolerance'] = $vv['tolerance'];
+                    $new_temp_task[$kk]['tolerance2'] = $vv['tolerance2'];
+                    $new_temp_task[$kk]['pts'] = $vv['pts'];
+                    $new_temp_task[$kk]['template_program_id'] = $vv['template_program_id'];
+                    $new_temp_task[$kk]['circle_div'] = $vv['circle_div'];
+                    $new_temp_task[$kk]['delay'] = $vv['delay'];
+
+                }
+                $insertedrecords_task = $this->ProductModel->Copy_task_by_job_id($new_temp_task);  //copy task  
+
+
+            }
+
+            
         }else{
             echo json_encode(array('error' => $error_message));
             exit();
