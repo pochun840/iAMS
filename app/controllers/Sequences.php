@@ -113,7 +113,13 @@ class Sequences extends Controller
                 $error_message .= "timeout,";
             }
 
-            if(  !empty($data_array['barcode_enable']) && isset($data_array['barcode_enable'])  ){
+            if( !empty($data_array['barcode_enable']) && isset($data_array['barcode_enable'])  ){
+                if($data_array['barcode_enable'] == 'true'){
+                    $data_array['barcode_enable'] = 1;
+                }else{
+                    $data_array['barcode_enable'] = 0;
+                }
+
             }else{ 
                 $input_check = false;
                 $error_message .= "barcode_enable,";

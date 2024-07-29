@@ -481,6 +481,11 @@ function displayImage()
         let timeout = document.getElementById("timeout").value;
         let ok_seq_stop = 1;
 
+        console.log(barcode_enable);
+        console.log(seq_id);
+        alert(barcode_enable);
+
+
         var formData = new FormData();
         // 添加表单数据
         var form = $('new_job_form');
@@ -497,6 +502,7 @@ function displayImage()
         var fileInput = $('#custom-file')[0].files[0];
         formData.append('image', fileInput);
 
+        
         //cropper
         if($t[0].cropper === undefined){//未上傳圖片
             formData.append('croppedImage', false);
@@ -629,7 +635,7 @@ function displayImage()
                 document.getElementById("job_id").value = response['job_id'];
                 document.getElementById("seq_id").value = response['seq_id'];
                 document.getElementById("seq_name").value = response['seq_name'];
-                document.getElementById('barcode_enable').checked = parseInt(response['barcode_enable']);
+                document.getElementById('barcode_enable').checked = parseInt(response['barcode_start']);
                 document.getElementById("stop_on_NG").value = response['ng_stop'];
                 // document.getElementById("seq_enable").checked = parseInt(response['sequence_enable']);
                 document.getElementById('ok_seq').checked = parseInt(response['ok_sequence']);
