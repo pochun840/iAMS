@@ -202,7 +202,7 @@ class Equipments extends Controller
             $post['buzzer'] = $buzzer;
 
             
-            $url = $_SERVER['REQUEST_SCHEME'].'://'. $_SERVER['SERVER_NAME'].'/imas_test/api/set_io_signal.php';
+            $url = $_SERVER['REQUEST_SCHEME'].'://'. $_SERVER['SERVER_NAME'].'/CC/api/set_io_signal.php';
          
 
             $curl = curl_init();
@@ -229,8 +229,6 @@ class Equipments extends Controller
             $ee = curl_exec($curl);
             //curl_exec($curl);
             curl_close($curl);
-
-            var_dump($ee);die();
 
             echo json_encode(array('result' => true));
             exit();

@@ -610,14 +610,14 @@ class Operations extends Controller
             $hole_id = -1;
         }
 
-        $check = $this->pingDomain('192.168.1.75',502);
+        /*$check = $this->pingDomain('192.168.1.75',502);
         if($check > 0){
 
         }else{
             // 可以避免io沒開的時候 會卡很久，但某些機器判斷會有問題 暫時先移除
             echo json_encode(array('result' => 'no con'));
             exit();
-        }
+        }*/
 
         //要加先判斷連線是否通，不然會等太久
 

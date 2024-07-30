@@ -39,6 +39,21 @@ class Calibrations extends Controller
            
 
         }
+        if(empty($info)){
+            $info = '';
+        }
+        if(empty($meter)){
+            $meter = '';
+        }
+        if(empty($tmp)){
+            $tmp = '';
+        }
+
+        if(!empty($meter['res_total'])){
+            $count = count($meter['res_total']);
+        }else{
+            $count = 0;
+        }
         
     
         $data = array(
@@ -51,7 +66,7 @@ class Calibrations extends Controller
             'echart'=> $tmp,
             'job_arr' => $job_arr,
             'meter' =>$meter,
-            'count' =>count($meter['res_total']),
+            'count' =>$count,
             
         );
 
