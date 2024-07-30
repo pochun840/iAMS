@@ -1152,10 +1152,10 @@ tt.set('start_time',new Date())
                                             document.getElementById('tightening_status_div').style.backgroundColor = 'reen';
                                             current_circle.classList.add('finished');
 
-                                            document.getElementById('VirtualMessage').style.display = 'block';
+                                            /*document.getElementById('VirtualMessage').style.display = 'block';
                                             setTimeout(function() {
                                                 document.getElementById('VirtualMessage').style.display = 'none';
-                                            }, 5000);
+                                            }, 5000);*/
                                         }
 
                                         if(data.fasten_status == 5 ){
@@ -1167,10 +1167,10 @@ tt.set('start_time',new Date())
                                             current_circle.classList.add('finished_seq');
                                             //initializeMessageAutoClose();
 
-                                            document.getElementById('VirtualMessage').style.display = 'block';
+                                            /*document.getElementById('VirtualMessage').style.display = 'block';
                                             setTimeout(function() {
                                                 document.getElementById('VirtualMessage').style.display = 'none';
-                                            }, 5000);
+                                            }, 5000);*/
                                         }
 
                                         if(data.fasten_status == 6 ){
@@ -1182,10 +1182,10 @@ tt.set('start_time',new Date())
                                             current_circle.classList.add('finished_job');
                                             //initializeMessageAutoClose();
 
-                                            document.getElementById('VirtualMessage').style.display = 'block';
+                                            /*document.getElementById('VirtualMessage').style.display = 'block';
                                             setTimeout(function() {
                                                 document.getElementById('VirtualMessage').style.display = 'none';
-                                            }, 5000);
+                                            }, 5000);*/
                                         }
 
                                       

@@ -37,7 +37,7 @@ class Historical{
         $sql = "SELECT * FROM `fasten_data` WHERE    on_flag ='0' ";
         #barcodesn 
         if (!empty($info_arr['barcodesn'])) {
-            $sql .= " AND cc_barcodesn LIKE :barcodesn";
+            $sql .= " AND cc_barcodesn  LIKE :barcodesn  " ;
             $params['barcodesn'] = '%' .$info_arr['barcodesn']. '%';
         }
 
@@ -119,10 +119,12 @@ class Historical{
         
         }
 
+
         $sql .= " ORDER BY data_time DESC LIMIT :offset, :limit";
         
         $params[':offset'] = $offset;
         $params[':limit'] = $limit;
+       
   
         $statement = $this->db->prepare($sql);
         $statement->execute($params);
