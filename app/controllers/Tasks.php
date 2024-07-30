@@ -38,15 +38,23 @@ class Tasks extends Controller
                 $tasks[$key]['last_step_name'] = $value['program'][array_key_last($value['program'])]['step_name'];
                 $tasks[$key]['last_step_count'] = count($value['program']);
             }else{
+
                 $tasks[$key]['last_job_type'] = 'normal';
-                $tasks[$key]['last_targettype'] = $value['program']['step_targettype'];
-                $tasks[$key]['last_step_targetangle'] = $value['program']['step_targetangle'];
-                $tasks[$key]['last_step_highangle'] = $value['program']['step_highangle'];
-                $tasks[$key]['last_step_lowangle'] = $value['program']['step_lowangle'];
-                $tasks[$key]['last_step_targettorque'] = $value['program']['step_targettorque'];
-                $tasks[$key]['last_step_hightorque'] = $value['program']['step_hightorque'];
-                $tasks[$key]['last_step_lowtorque'] = $value['program']['step_lowtorque'];
-                $tasks[$key]['last_step_name'] = $value['program']['step_name'];
+                $tasks[$key]['last_targettype'] = !empty($value['program']['step_targettype']) ? $value['program']['step_targettype'] : '';
+                $tasks[$key]['last_step_targetangle'] = !empty($value['program']['step_targetangle']) ? $value['program']['step_targetangle'] : '';
+                $tasks[$key]['last_step_highangle'] = !empty($value['program']['step_highangle']) ? $value['program']['step_highangle'] : '';
+                $tasks[$key]['last_step_lowangle'] = !empty($value['program']['step_lowangle']) ? $value['program']['step_lowangle'] : '';
+                $tasks[$key]['last_step_targettorque'] = !empty($value['program']['step_targettorque']) ? $value['program']['step_targettorque'] : '';
+                $tasks[$key]['last_step_hightorque'] = !empty($value['program']['step_hightorque']) ? $value['program']['step_hightorque'] : '';
+                $tasks[$key]['last_step_lowtorque'] = !empty($value['program']['step_lowtorque']) ? $value['program']['step_lowtorque'] : '';
+                $tasks[$key]['last_step_name'] = !empty($value['program']['step_name']) ? $value['program']['step_name'] : '';
+                //$tasks[$key]['last_step_targetangle'] = $value['program']['step_targetangle'];
+                //$tasks[$key]['last_step_highangle'] = $value['program']['step_highangle'];
+                //$tasks[$key]['last_step_lowangle'] = $value['program']['step_lowangle'];
+                //$tasks[$key]['last_step_targettorque'] = $value['program']['step_targettorque'];
+                //$tasks[$key]['last_step_hightorque'] = $value['program']['step_hightorque'];
+                //$tasks[$key]['last_step_lowtorque'] = $value['program']['step_lowtorque'];
+                //$tasks[$key]['last_step_name'] = $value['program']['step_name'];
                 $tasks[$key]['last_step_count'] = 1;
             }     
         }

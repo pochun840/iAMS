@@ -903,15 +903,19 @@ function updateCircleSize(value)
                 // 成功回調函數，處理伺服器的回應
                 console.log(response); // 在控制台輸出伺服器的回應
                 history.go(0);
+                document.getElementById('copyjob').style.display = 'none';
             },
             error: function(error) {
                 // 失敗回調函數，處理錯誤情況
-                // console.error('Error:', error); // 在控制台輸出錯誤訊息
+                console.error('Error:', error); // 在控制台輸出錯誤訊息
             }
         }).fail(function() {
             // history.go(0);//失敗就重新整理
         });
 
+        //
+        history.go(0);
+        document.getElementById('copyjob').style.display = 'none';
     }
 
     function delete_job() {
