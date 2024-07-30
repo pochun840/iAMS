@@ -18,10 +18,12 @@ $json = file_get_contents('php://input');
 
 if($json){
     // file_put_contents("./test.txt", $json, FILE_APPEND);
+    //var_dump($josn);die();
     $data = json_decode($json,true);
 }
 
 $light_signal = $data['light_signal'];
+
 $IO = $data['IO'];
 $TowerLightSetting = $data['TowerLightSetting'];
 

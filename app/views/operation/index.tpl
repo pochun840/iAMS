@@ -20,6 +20,7 @@
 .t6{float: left; height: 25px; width: 25px; margin-right: 5px; margin-top: 5px}  /* Sensor icon */
 
 </style>
+
 <?php 
     /*$new_seq_id_temp  = intval($data['seq_id']);
     $new_seq_id = $new_seq_id_temp - 1;
@@ -47,9 +48,11 @@
         }
         $data['ok_sequence'] = $temp[$data['seq_id']]['ok_sequence'];
 
-    }
+    } 
+    /*echo "<pre>";
+    print_r($data['task_message_list']);
+    echo "</pre>";*/
 
-    
 ?>
 <div class="container-ms">
 
@@ -78,7 +81,8 @@
             <input id="modbus_switch" value="1" >
             <input id="tool_status" value="-1" > 
         </div>
-       
+      
+
         <div id="task_coordinate" style="display:none;">
             <?php foreach ($data['task_list'] as $key => $task){
                 echo '<input id="task_'.$task['task_id'].'_enable_arm" value="'.$task['enable_arm'].'">';
@@ -193,7 +197,7 @@
     </div>
 
     <!-- Virtual Message -->
-    <div id="VirtualMessage" class="virtual-message" style="display: none;vertical-align: middle;">
+    <div id="VirtualMessage" class="virtual-message" style="display: none; vertical-align: middle;">
         <div class="topnav">
             <label type="text" style="font-size: 20px; padding-left: 3%; margin: 7px 0"><b>Virtual Message</b></label>
             <span class="close w3-display-topright" onclick="ClickVirtualMessage()">&times;</span>
@@ -202,16 +206,21 @@
             <div class="force-overflow_Message_text">
                 <div id="Message_text" style="padding-left: 6%">
                     <form action="">
-                        <textarea id="w3review" name="w3review" rows="4" cols="40">Kilews A professional electric screwdriver manufacturer.</textarea>
+                        <textarea id="w3review" name="w3review" rows="4" cols="40">
+                            <?php echo $data['task_message_list'][$data['task_id']]['text'];?>
+                        </textarea>
                     </form>
                 </div>
                 <div style="padding-left: 6%;">
-                    <img src="./img/message.svg" style="height: 250px; width: 300px" alt="Nature">
+                    <?php $img = empty($data['task_message_list'][$data['task_id']]['img']) ? './img/message.svg' : $data['task_message_list'][$data['task_id']]['img']; ?>
+                    <img src="<?php echo htmlspecialchars($img); ?>" style="height: 250px; width: 300px" alt="Nature">
                 </div>
             </div>
         </div>
-        <label style="bottom:0px; float:right; color:red; margin-right: 5px; padding: 5px">Close in 5 sec</label>
+        <label style="bottom:0px; float:right; color:red; margin-right: 5px; padding: 5px"></label>
     </div>
+
+
 
     <!-- Identity Verify -->
     <div id="IdentityVerify" class="identity-verify" style="display: none;vertical-align: middle;">
@@ -1142,7 +1151,11 @@ tt.set('start_time',new Date())
                                             document.getElementById('tightening_status').style.backgroundColor = 'green';
                                             document.getElementById('tightening_status_div').style.backgroundColor = 'reen';
                                             current_circle.classList.add('finished');
-                                            
+
+                                            document.getElementById('VirtualMessage').style.display = 'block';
+                                            setTimeout(function() {
+                                                document.getElementById('VirtualMessage').style.display = 'none';
+                                            }, 5000);
                                         }
 
                                         if(data.fasten_status == 5 ){
@@ -1152,7 +1165,12 @@ tt.set('start_time',new Date())
                                             document.getElementById('tightening_status').style.backgroundColor = '#FFCC00';
                                             document.getElementById('tightening_status_div').style.backgroundColor = '#FFCC00';
                                             current_circle.classList.add('finished_seq');
-                      
+                                            //initializeMessageAutoClose();
+
+                                            document.getElementById('VirtualMessage').style.display = 'block';
+                                            setTimeout(function() {
+                                                document.getElementById('VirtualMessage').style.display = 'none';
+                                            }, 5000);
                                         }
 
                                         if(data.fasten_status == 6 ){
@@ -1162,6 +1180,12 @@ tt.set('start_time',new Date())
                                             document.getElementById('tightening_status').style.backgroundColor = '#FFCC00';
                                             document.getElementById('tightening_status_div').style.backgroundColor = '#FFCC00';
                                             current_circle.classList.add('finished_job');
+                                            //initializeMessageAutoClose();
+
+                                            document.getElementById('VirtualMessage').style.display = 'block';
+                                            setTimeout(function() {
+                                                document.getElementById('VirtualMessage').style.display = 'none';
+                                            }, 5000);
                                         }
 
                                       
@@ -1618,9 +1642,6 @@ async function force_switch_tool(status) {
         data.ok_sequence ='<?php echo $data['ok_sequence'];?>';
 
 
-       
-    
-        
         $.ajax({
             url: '?url=Operations/Save_Result', // 指向服務器端檢查更新的 PHP 腳本
             // async: false,
@@ -1932,4 +1953,29 @@ function getCookie(name) {
 function eraseCookie(name) {
     document.cookie = name+'=; Max-Age=-99999999;';
 }
+
+function eww() {
+    document.getElementById('VirtualMessage').style.display = 'none';
+}
+
+function initializeMessageAutoClose() {
+        var messageElement = document.getElementById('VirtualMessage');
+        
+        if (messageElement) {
+            setTimeout(function() {
+                ClickVirtualMessage();
+            }, 5000);
+            messageElement.style.display = 'block';
+        }
+    }
+
+function setCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "") + expires + "; path=/";
+}    
 <script>

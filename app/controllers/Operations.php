@@ -40,7 +40,16 @@ class Operations extends Controller
         $seq_list = $this->OperationModel->getSequencesEnable($current_job_id['value']);
         $task_program = $this->TaskModel->GetTaskProgram($current_job_id['value'],$current_seq_id['value'],$current_task_id['value']);//調整
         $task_list = $this->TaskModel->getTasks($current_job_id['value'],$current_seq_id['value']);
+        //task_message
+        $task_message_list = $this->OperationModel->Get_task_message($current_job_id,$current_seq_id);
+        if(!empty($task_message_list)){
+            $temp =array();
+            foreach($task_message_list  as $jj => $vv){
+                $temp[$vv['task_id']]= $task_message_list[$jj];
+            }
 
+        }
+        
         //get total seq
         $total_seq = $this->SequenceModel->getSequences_enable($current_job_id['value']);
         $total_seq_count = count($total_seq);
@@ -116,11 +125,7 @@ class Operations extends Controller
                 $button_auth[$key] = 1;
             }
         }
-        // var_dump($role_id);
-        // var_dump($button_auth);
-        // var_dump($task_list);
-        // var_dump($task_list[0]['program']);
-        // var_dump($_SERVER);
+      
 
         // $barcode = @$_SESSION['barcode'];
         $barcode = @$_COOKIE['barcode'];
@@ -147,7 +152,12 @@ class Operations extends Controller
             'controller_ip' => $controller_ip,
             'max_seq_id' => $total_seq[array_key_last($total_seq)]['seq_id'],
             'seq_count' => $total_seq_count,
+            
         ];
+        
+        if (!empty($temp)) {
+            $data['task_message_list'] = $temp;
+        }
         
         $this->view('operation/index', $data);
 

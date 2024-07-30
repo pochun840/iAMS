@@ -19,7 +19,7 @@
     
     <div class="excel-sheet" id='excelsheet'>
         <header class="border-bottom">
-            <h2><img src="http://localhost/imas_test/public/img/logo.jpg" alt="Logo"></h2>
+            <h2><img src="../public/img/logo.jpg" alt="Logo"></h2>
             <p  style="font-weight: bold; font-size: 34px; padding-bottom: 5px">Fastening Statistics Report</p>
         </header>
 

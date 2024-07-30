@@ -163,6 +163,7 @@ class Equipments extends Controller
     {   
         $TowerLightSetting = $this->EquipmentModel->GetTowerLightSetting();
         $IO = $this->EquipmentModel->GetIOPinSetting();
+        //var_dump($IO);
 
         if(isset($_GET['light_signal']) ){
             $light_signal = $_GET['light_signal'];
@@ -201,7 +202,8 @@ class Equipments extends Controller
             $post['buzzer'] = $buzzer;
 
             
-            $url = $_SERVER['REQUEST_SCHEME'].'://'. $_SERVER['SERVER_NAME'].'/CC/api/set_io_signal.php';
+            $url = $_SERVER['REQUEST_SCHEME'].'://'. $_SERVER['SERVER_NAME'].'/imas_test/api/set_io_signal.php';
+         
 
             $curl = curl_init();
             // $post['test'] = 'examples daata'; // our data todo in received
@@ -215,18 +217,20 @@ class Equipments extends Controller
 
             // curl_setopt($curl, CURLOPT_TIMEOUT, 1); //if your connect is longer than 1s it lose data in POST better is finish script in recevie
             curl_setopt($curl, CURLOPT_HEADER, 0);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, false);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($curl, CURLOPT_FORBID_REUSE, true);
             curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 1);
             curl_setopt($curl, CURLOPT_DNS_CACHE_TIMEOUT, 100);
             curl_setopt($curl, CURLOPT_NOSIGNAL, 1);
-            curl_setopt($curl, CURLOPT_TIMEOUT_MS, 50);
+            curl_setopt($curl, CURLOPT_TIMEOUT_MS, 50000);
 
             curl_setopt($curl, CURLOPT_FRESH_CONNECT, true);
 
-            curl_exec($curl);
-
+            $ee = curl_exec($curl);
+            //curl_exec($curl);
             curl_close($curl);
+
+            var_dump($ee);die();
 
             echo json_encode(array('result' => true));
             exit();
