@@ -125,6 +125,16 @@ class Operations extends Controller
                 $button_auth[$key] = 1;
             }
         }
+
+
+        if(!empty($seq_list)){
+            $temp_seq = array();
+            $key = 1;
+            foreach( $seq_list as $kv =>$va){
+                $temp_seq[$key] = $va; 
+                $key++;
+            }
+        }
       
 
         // $barcode = @$_SESSION['barcode'];
@@ -152,6 +162,7 @@ class Operations extends Controller
             'controller_ip' => $controller_ip,
             'max_seq_id' => $total_seq[array_key_last($total_seq)]['seq_id'],
             'seq_count' => $total_seq_count,
+            'new_seq_list' => $temp_seq
             
         ];
         
@@ -455,11 +466,48 @@ class Operations extends Controller
 
     public function Save_Result()
     {
-        //儲存鎖附結果到fasten_data
-        $this->OperationModel->SaveFastenData($_GET['data']);
-        //把鎖附的曲線圖資料拉到本機
-        $this->SaveFastenDataLog($_GET['data']['system_sn']);
+      
+        $data = $_GET['data'];
+    
+        if (!is_array($data)) {
+            echo json_encode(['error' => 'Invalid data format']);
+            return;
+        }
+    
+        // 尝试将数据保存到 fasten_data 表中
+        try {
+            $system_no = $this->OperationModel->SaveFastenData($data);
+            //setcookie('system_no', $system_no, time() + 3600, '/');
+
+            echo json_encode(['system_no' => $system_no]);
+            $this->SaveFastenDataLog($data['system_sn']);
+        } catch (Exception $e) {
+          
+            echo json_encode(['error' => $e->getMessage()]);
+        }
     }
+
+    public function update_status(){
+        if(!empty($_GET['sysem_no'])){
+            $system_no = $_GET['sysem_no'];
+        }else{
+            $input_check = false;
+        }
+
+        
+        if(!empty($_GET['new_status'])){
+            $new_status = $_GET['new_status'];
+        }else{
+            $input_check = false;
+        }
+        
+        var_dump($_GET);die();
+        if($input_check){
+            $system_no = $this->OperationModel->update_type($system_no,$new_status);
+        }
+    }
+
+
 
     public function SaveFastenDataLog($system_sn)
     {

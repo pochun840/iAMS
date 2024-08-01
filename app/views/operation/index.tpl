@@ -22,18 +22,7 @@
 </style>
 
 <?php 
-    /*$new_seq_id_temp  = intval($data['seq_id']);
-    $new_seq_id = $new_seq_id_temp - 1;
-
-    $temp_task_list = $data['task_list'];
-    $temp_task_list_zero_based = array_values($temp_task_list);
-
-    //將key調整為從 1 開始
-    $temp_task_list_one_based = array();
-    foreach ($temp_task_list_zero_based as $index => $value) {
-        $temp_task_list_one_based[$index + 1] = $value;
-    }*/
-
+    
     //判斷 $data['seq_list'] 有幾筆 
     
     if($data['total_seq'] == 1){
@@ -49,10 +38,7 @@
         $data['ok_sequence'] = $temp[$data['seq_id']]['ok_sequence'];
 
     } 
-    /*echo "<pre>";
-    print_r($data['task_message_list']);
-    echo "</pre>";*/
-
+    
 ?>
 <div class="container-ms">
 
@@ -763,6 +749,13 @@ let isFulfilled = false; //前置條件是否滿足
 let light_signal = false;
 let right_position = false;
 
+let job_singal;
+let seq_sinal;
+let total_seq;
+let ct_seq_id;
+let system_no;
+
+
 $(document).ready(function () {
     initail();
     //img帶入
@@ -802,6 +795,11 @@ function initail() {
     call_job();
     document.getElementById('Change_Job_Id').value = document.getElementById('job_id').value;
     document.getElementById('socket_hole_number').style.backgroundColor = 'transparent';
+
+    job_singal = '<?php echo $data['job_data']['ok_job']; ?>'; //是否有ok-job的訊號
+    seq_singal  = '<?php echo $data['new_seq_list'][$data['seq_id']]['ok_sequence']; ?>'; //是否有ok-seq的訊號
+    total_seq  = '<?php echo $data['total_seq'];?>'; //seq的數量
+    ct_seq_id  = '<?php echo $data['seq_id'];?>';//當前的seq_id 編號
 }
    
 </script>
@@ -913,8 +911,8 @@ function initail() {
           { index: 2, status: "Tool running", color: "" },
           { index: 3, status: "Reverse", color: "" },
           { index: 4, status: "OK", color: "green" },
-          { index: 5, status: "OK-SEQ", color: "green" },
-          { index: 6, status: "OK-JOB", color: "green" },
+          { index: 5, status: "OK-SEQ", color: "" },
+          { index: 4, status: "OK", color: "" },
           { index: 7, status: "NG", color: "red" },
           { index: 8, status: "NG Stop", color: "red" },
           { index: 9, status: "Setting", color: "" },
@@ -1086,13 +1084,15 @@ tt.set('start_time',new Date())
                     localStorage.setItem('seq_id', <?php echo $data['seq_id']; ?>); //1
                     localStorage.setItem('seq_count', <?php echo $data['total_seq']; ?>); //2
 
-                    //localStorage.setItem('current_seq_id', current_seq_id); 
-                    //localStorage.setItem('max_seq_id', max_seq_id); 
+                    var seq_id_nn = <?php echo json_encode($data['seq_id']); ?>;
+                    var total_seq_nn = <?php echo json_encode($data['total_seq']); ?>;
+
+
+          
 
                     let  seq_id_new = '<?php echo $data['seq_id']; ?>'
                     let  seq_count = <?php echo $data['total_seq']; ?>;            
 
-                    //if(seq_id <= seq_count ){
                         if(task_id <= task_count){
 
                             let current_circle = document.querySelector("div[data-id='"+task_id+"']");
@@ -1111,6 +1111,14 @@ tt.set('start_time',new Date())
 
                                 task_id = task_id + 1;
 
+                                localStorage.setItem('task_id',task_id);
+                                localStorage.setItem('task_count',task_count);
+                                localStorage.setItem('job_singal',job_singal);
+                                localStorage.setItem('seq_singal',seq_singal);
+                                localStorage.setItem('system_no',data.system_sn);
+
+
+                                    
                                 if(task_id <= task_count){
 
                                         document.getElementById('task_id').value = task_id;
@@ -1128,67 +1136,86 @@ tt.set('start_time',new Date())
                                         document.getElementById('tightening_status').style.backgroundColor = 'green';
                                         document.getElementById('tightening_status_div').style.backgroundColor = 'green';
 
-                                        light_signal = 'ok';
-       
-                                        afterward();
+                                        light_signal = 'OK';
+                                  
+                                      
+                                        let system_no = data.system_sn;
+                                        //alert(system_no);
+                                        //update_status(system_no,4);
+                                        alert(system_no);
+
+                                        //afterward();
                                 }else{
                                     
-                                        //
-                                        /*if(seq_id < seq_count ){
-                                            document.getElementById('tightening_status').innerHTML = 'OK';
-                                            document.getElementById('step'+(task_id-1)).style.backgroundColor = 'green';
-                                            document.getElementById('step'+(task_id-1)).style.borderColor = 'green';
-                                            document.getElementById('tightening_status').style.backgroundColor = 'green';
-                                            document.getElementById('tightening_status_div').style.backgroundColor = 'reen';
-                                            current_circle.classList.add('finished');
+                                        
 
-                                        }*/
-                                    
-                                        if(data.fasten_status == 4 ){
-                                            document.getElementById('tightening_status').innerHTML = 'OK';
-                                            document.getElementById('step'+(task_id-1)).style.backgroundColor = 'green';
-                                            document.getElementById('step'+(task_id-1)).style.borderColor = 'green';
-                                            document.getElementById('tightening_status').style.backgroundColor = 'green';
-                                            document.getElementById('tightening_status_div').style.backgroundColor = 'reen';
-                                            current_circle.classList.add('finished');
 
-                                            /*document.getElementById('VirtualMessage').style.display = 'block';
-                                            setTimeout(function() {
-                                                document.getElementById('VirtualMessage').style.display = 'none';
-                                            }, 5000);*/
-                                        }
 
-                                        if(data.fasten_status == 5 ){
+                                        //若OK Job 開啟，OK sequence 開啟，每一個sequence 傳出OK-SEQ信號，最後一個sequence 是傳出OK-Job信號
+                                        if( job_singal == 1 && seq_singal == 1 && seq_id_nn < total_seq_nn && task_id > task_count){
                                             document.getElementById('tightening_status').innerHTML = 'OK-SEQ';
                                             document.getElementById('step'+(task_id-1)).style.backgroundColor = '#FFCC00';
                                             document.getElementById('step'+(task_id-1)).style.borderColor = '#FFCC00';
                                             document.getElementById('tightening_status').style.backgroundColor = '#FFCC00';
                                             document.getElementById('tightening_status_div').style.backgroundColor = '#FFCC00';
-                                            current_circle.classList.add('finished_seq');
-                                            //initializeMessageAutoClose();
+                                            current_circle.classList.add('finished_job');  
+                                            
 
-                                            /*document.getElementById('VirtualMessage').style.display = 'block';
-                                            setTimeout(function() {
-                                                document.getElementById('VirtualMessage').style.display = 'none';
-                                            }, 5000);*/
                                         }
 
-                                        if(data.fasten_status == 6 ){
+                                        if( job_singal == 1 && seq_singal == 1 && seq_id_nn == total_seq_nn && task_id > task_count){
                                             document.getElementById('tightening_status').innerHTML = 'OK-JOB';
                                             document.getElementById('step'+(task_id-1)).style.backgroundColor = '#FFCC00';
                                             document.getElementById('step'+(task_id-1)).style.borderColor = '#FFCC00';
                                             document.getElementById('tightening_status').style.backgroundColor = '#FFCC00';
                                             document.getElementById('tightening_status_div').style.backgroundColor = '#FFCC00';
-                                            current_circle.classList.add('finished_job');
-                                            //initializeMessageAutoClose();
+                                            current_circle.classList.add('finished_job');  
 
-                                            /*document.getElementById('VirtualMessage').style.display = 'block';
-                                            setTimeout(function() {
-                                                document.getElementById('VirtualMessage').style.display = 'none';
-                                            }, 5000);*/
+                                           
                                         }
 
-                                      
+                                        //若OK Job 關閉，OK sequence 關閉 顯示 OK
+                                        if(job_singal == 0 && seq_singal == 0 ){
+                                            document.getElementById('tightening_status').innerHTML = 'OK';
+                                            document.getElementById('step'+(task_id-1)).style.backgroundColor = 'green';
+                                            document.getElementById('step'+(task_id-1)).style.borderColor = 'green';
+                                            document.getElementById('tightening_status').style.backgroundColor = 'green';
+                                            document.getElementById('tightening_status_div').style.backgroundColor = 'green';
+                                            current_circle.classList.add('finished'); 
+                                        }
+
+
+                                        //若OK Job 關閉，OK sequence 開啟，每一個sequence 傳出OK-SEQ信號 
+                                        if(job_singal == 0 && seq_singal == 1 && seq_id_nn < total_seq_nn && task_id > task_count){
+                                            document.getElementById('tightening_status').innerHTML = 'OK-SEQ';
+                                            document.getElementById('step'+(task_id-1)).style.backgroundColor = '#FFCC00';
+                                            document.getElementById('step'+(task_id-1)).style.borderColor = '#FFCC00';
+                                            document.getElementById('tightening_status').style.backgroundColor = '#FFCC00';
+                                            document.getElementById('tightening_status_div').style.backgroundColor = '#FFCC00';
+                                            current_circle.classList.add('finished_job')
+
+                                        } 
+
+                                        //若OK Job 開啟，Oksequence，關閉，最後一個seq 傳出OK-JOB信號
+                                        /*if(job_singal == 1 && seq_singal == 0 && seq_id_nn < total_seq_nn && task_id > task_count){
+                                            document.getElementById('tightening_status').innerHTML = 'OK';
+                                            document.getElementById('step'+(task_id-1)).style.backgroundColor = 'green';
+                                            document.getElementById('step'+(task_id-1)).style.borderColor = 'green';
+                                            document.getElementById('tightening_status').style.backgroundColor = 'green';
+                                            document.getElementById('tightening_status_div').style.backgroundColor = 'green';
+                                            current_circle.classList.add('finished'); 
+                                        }
+
+                                        if(job_singal == 1 && seq_singal == 0 && seq_id_nn == total_seq_nn && task_id > task_count){
+                                            document.getElementById('tightening_status').innerHTML = 'OK';
+                                            document.getElementById('step'+(task_id-1)).style.backgroundColor = 'green';
+                                            document.getElementById('step'+(task_id-1)).style.borderColor = 'green';
+                                            document.getElementById('tightening_status').style.backgroundColor = 'green';
+                                            document.getElementById('tightening_status_div').style.backgroundColor = 'green';
+                                            current_circle.classList.add('finished'); 
+                                        }*/
+
+
                                         document.getElementById('modbus_switch').value = 0;
                                         // setTimeout(() => { websocket.send('disable'); }, 1000);
                                         
@@ -1234,18 +1261,10 @@ tt.set('start_time',new Date())
                                 switch_tool(0);
                                 // function_auth_check('stop_on_ng')
                             }
-                            //save_result(data);
+                           
 
                         }
 
-                    /*}else{
-                        //seq else 
-
-
-                    }*/
-
-
-                    
                 }
 
               }
@@ -1635,19 +1654,49 @@ async function force_switch_tool(status) {
         data.cc_station = '';
         data.cc_operator = '<?php echo $_SESSION['user']; ?>';
 
+
+
         data.task_count_final = '<?php echo $data['task_count'];?>';
         data.cc_program_id = '<?php echo $data['task_list'][0]['template_program_id'];?>';
         data.total_seq_count ='<?php echo $data['total_seq'];?>';
         data.ok_job ='<?php echo $data['job_data']['ok_job'];?>';
         data.ok_sequence ='<?php echo $data['ok_sequence'];?>';
+        data.job_singal  = job_singal;  //OK-JOB 訊號
+        data.seq_singal  = seq_singal;   //OK-SEQ 訊號 
+        data.total_seq =  total_seq; //需要執行SEQ的數量
+        data.ct_seq_id = ct_seq_id;// 當前的seq_id 
+
+        data.new_task_id    = localStorage.getItem('task_id');
+        data.new_task_count = localStorage.getItem('task_count');
+        data.new_seq_id     = localStorage.getItem('seq_id');
+        data.new_seq_count    = localStorage.getItem('seq_count');
+    
+
 
 
         $.ajax({
-            url: '?url=Operations/Save_Result', // 指向服務器端檢查更新的 PHP 腳本
+            url: '?url=Operations/Save_Result',
             // async: false,
             method: 'GET',
             data: { 'data': data },
-            dataType: "json"
+            dataType: "json",
+            success: function(response) {
+            // Store the response in a global variable
+            if (response.system_no) {
+                globalSystemNo = response.system_no;
+                console.log('System No from AJAX response:', globalSystemNo);
+                // Optionally, store the value in localStorage
+                localStorage.setItem('system_no', globalSystemNo);
+            } else if (response.error) {
+                console.error('Error from server:', response.error);
+            }
+        },
+            error: function(xhr, status, error) {
+                // Handle error
+                console.error('AJAX error:', status, error);
+                // Optionally, handle error UI feedback
+            }
+
         });
     }
 
@@ -1977,5 +2026,32 @@ function setCookie(name, value, days) {
         expires = "; expires=" + date.toUTCString();
     }
     document.cookie = name + "=" + (value || "") + expires + "; path=/";
-}    
+} 
+
+function update_status(system_no, new_status) {
+
+    aler('eeeeeeeeeee');
+    $.ajax({
+        url: '?url=Operations/update_status', // 确保这个 URL 与后端匹配
+        method: "POST",
+        data: { 
+            system_no: system_no,  
+            new_status: new_status 
+        },
+        success: function(response) {
+            // 处理成功的情况
+            console.log('AJAX success:', response);
+            // 例如，刷新页面或更新 UI
+            // history.go(0);  // 刷新页面
+        },
+        error: function(xhr, status, error) {
+            // 处理错误的情况
+            console.error('AJAX error:', status, error);
+        }
+    });
+}
+function readFromLocalStorage(key) {
+    return localStorage.getItem(key);
+}
+
 <script>
