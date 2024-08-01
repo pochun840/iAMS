@@ -238,19 +238,9 @@
                                     <b><?php echo $text['Torque_text'].' '.$text['Parameter_text']; ?></b>
                                 </div>
                             </div>
-                             <div>
-                               <div for="new_task_form" class="col-3 t1" style="font-size: 18px"><b><?php echo "SYNC";?> :</b></div>
-                                <div>
-                                    <input class="form-check-input t2" type="radio" name="Target-Type" id="sync_yes" value="1"  style="zoom:1.2; vertical-align: middle" onclick="sync_product()">
-                                    <label class="form-check-label t2" for="Target-Angle"><?php echo "YES";?></label>
+                            <button id="button_sync" class="button button3" onclick="confirmAction()">SYNC</button>
 
-                                    <input class="form-check-input t2" type="radio" name="Target-Type" id="sync_no" value="0"   style="zoom:1.2; vertical-align: middle" onclick="document.getElementById('ProgramNew').style.display='none'" >
-                                    <label class="form-check-label t2" for="Target-Angle"><?php echo "NO";?></label>
-
-                                </div>
-
-                            </div>
-
+                                                      
                             <div class="scrollbar-modal" id="style-torque">
                                 <div class="modal-force-overflow">
                                     <div style="padding-left: 5%; background-color: #D9D9D9">
@@ -407,18 +397,7 @@
                                     <b><?php echo $text['Angle_text'].' '.$text['Parameter_text']; ?></b>
                                 </div>
                             </div>
-                            <div class="row t1">
-                            <div for="new_task_form" class="col-3 t1" style="font-size: 18px"><b><?php echo "SYNC";?> :</b></div>
-                            <div>
-                                <input class="form-check-input t2" type="radio" name="Target-Type" id="sync_yes" value="1"  style="zoom:1.2; vertical-align: middle" onclick="sync_product()">
-                                <label class="form-check-label t2" for="Target-Angle"><?php echo "YES";?></label>
-
-                                <input class="form-check-input t2" type="radio" name="Target-Type" id="sync_no" value="0"   style="zoom:1.2; vertical-align: middle" onclick="document.getElementById('ProgramNew').style.display='none'" >
-                                <label class="form-check-label t2" for="Target-Angle"><?php echo "NO";?></label>
-
-                            </div>
-
-                            </div>
+                            <button id="button_sync" class="button button3" onclick="confirmAction()">SYNC</button>
 
                             <div class="scrollbar-modal" id="style-angle">
                                 <div class="modal-force-overflow">
@@ -1156,6 +1135,20 @@ function extractPartFromURL() {
     
     return null; 
 }
+
+function confirmAction() {
+    const userConfirmed = confirm("Are you sure you want to sync?");
+    if (userConfirmed) {
+        // User clicked "OK"
+        sync_product();
+        // 這裡可以添加你想要執行的同步操作
+    } else {
+        // User clicked "Cancel"
+        console.log("Sync canceled.");
+        // 這裡可以添加你想要執行的取消操作
+    }
+}
+
 </script>
 
 </div>

@@ -30,7 +30,7 @@
 
     <div class="excel-sheet">
         <header class="border-bottom">
-            <h2><img src="http://localhost/imas/public/img/logo.jpg" alt="Logo"></h2>
+            <h2><img src="../public/img/logo.jpg" alt="Logo"></h2>
             <p style="font-weight: bold; font-size: 34px; padding-bottom: 5px">Certificate of Calibration</p>
             <p>Kilews Industrial Co., Ltd.</p>
             <p>No. 30, Lane 83, Hwa Cheng Rd., Hsin Chuang Dist., New Taipei City, Taiwan, R.O.C</p>
