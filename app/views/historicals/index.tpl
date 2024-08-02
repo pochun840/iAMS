@@ -268,7 +268,7 @@ if(!empty($_COOKIE['chat_mode_change'])){
 
                     <div class="topnav-menu">
                         <div class="search-container">
-                            <input type="text" placeholder="<?php echo $text['Search_text']; ?>.." name="sname" id="search_name" size="40" style="height: 35px">&nbsp;
+                            <input type="text" placeholder="<?php echo $text['Search_text']; ?>.." name="sname" id="search_name">&nbsp;
                             <button id="Search" type="button" class="Search-button" onclick="search_info()"><?php echo $text['Search_text']; ?></button>
                         </div>
 

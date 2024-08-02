@@ -3,487 +3,465 @@
 $text = array();
 
 //login page
-$text['login_text'] = '登录';
-$text['logout_text'] = '退出';
-$text['account_text'] = '帐户';
-$text['password_text'] = '密码';
-$text['select_language_text'] = '选择语言';
+$text['login_text'] = '登入';
+$text['logout_text'] = '登出';
+$text['account_text'] = '帳戶';
+$text['password_text'] = '密碼';
+$text['select_language_text'] = '選擇語言';
+
 
 //main page
-$text['main_home_text'] = '主页';
-$text['main_product_text'] = '产品';
-$text['main_equipment_text'] = '设备';
+$text['main_home_text'] = '首頁';
+$text['main_product_text'] = '產品';
+$text['main_equipment_text'] = '設備';
 $text['main_plugins_text'] = '插件';
-$text['main_charts_text'] = '图表';
+$text['main_charts_text'] = '圖表';
 $text['main_operation_text'] = '操作';
-$text['main_monitor_text'] = '监控';
-$text['main_setting_text'] = '设置';
-$text['main_calibration_text'] = '校准';
-$text['main_user_text'] = '用户';
-$text['main_historical_text'] = '历史';
+$text['main_monitor_text'] = '監控';
+$text['main_setting_text'] = '設定';
+$text['main_calibration_text'] = '校準';
+$text['main_user_text'] = '用戶';
+$text['main_historical_text'] = '歷史';
 $text['main_template_text'] = '模板';
-$text['main_DB_SYNC_text'] = '数据同步';
+$text['main_DB_SYNC_text'] = '數據同步';
+
 
 //product page
-$text['Barcode_text'] = '条码';
-$text['Setting_text'] = '设置';
-$text['Add_Job_text'] = '添加工作';
-$text['Copy_text'] = '复制';
-$text['Edit_text'] = '编辑';
+$text['Barcode_text'] = '條碼';
+$text['Setting_text'] = '設定';
+$text['Add_Job_text'] = '新增工作';
+$text['Copy_text'] = '複製';
+$text['Edit_text'] = '編輯';
 $text['Job_ID_text'] = '工作 ID';
-$text['Job_Name_text'] = '工作名称';
-$text['Picture_text'] = '图片';
+$text['Job_Name_text'] = '工作名稱';
+$text['Picture_text'] = '圖片';
 $text['More_Info_text'] = '更多信息';
 $text['Action_text'] = '操作';
 $text['Seq_text'] = '工序';
-$text['Task_text'] = '任务';
+$text['Task_text'] = '任務';
 $text['Arm_text'] = '手臂';
-$text['Detail_text'] = '详细信息';
-$text['Add_Seq_text'] = '添加工序';
-$text['Delete_text'] = '删除';
+$text['Detail_text'] = '詳細信息';
+$text['Add_Seq_text'] = '新增工序';
+$text['Delete_text'] = '刪除';
 $text['Match_From_text'] = '匹配自';
 $text['Match_To_text'] = '匹配至';
-$text['Select_Job_ID_text'] = '选择工作编号';
-$text['Select_Seq_ID_text'] = '选择工序编号';
+$text['Select_Job_ID_text'] = '選擇工作編號';
+$text['Select_Seq_ID_text'] = '選擇工序編號';
+
 
 //product page - add job
-$text['Controller_Type_text'] = '控制器类型';
-$text['Barcode_Start_text'] = '条码开始';
-$text['Job_Repeat_text'] = '工作重复';
-$text['OK_Job_text'] = '工作完成信号';
-$text['Tower_Light_text'] = '三色灯';
-$text['Reverse_Button_text'] = '拆螺丝按钮';
-$text['Reverse_RPM_text'] = '拆螺丝转速';
-$text['Reverse_Force_text'] = '拆螺丝扭力';
-$text['Reverse_Count_text'] = '拆螺丝计数';
-$text['Rev_Threshold_Tor_text'] = '拆螺丝门槛点扭力';
+$text['Controller_Type_text'] = '控制器類型';
+$text['Barcode_Start_text'] = '條碼開始';
+$text['Job_Repeat_text'] = '工作重複';
+$text['OK_Job_text'] = '工作完成信號';
+$text['Tower_Light_text'] = '三色燈';
+$text['Reverse_Button_text'] = '拆螺絲按鈕';
+$text['Reverse_RPM_text'] = '拆螺絲轉速';
+$text['Reverse_Force_text'] = '拆螺絲扭力';
+$text['Reverse_Count_text'] = '拆螺絲計數';
+$text['Rev_Threshold_Tor_text'] = '拆螺絲門檻點扭力';
 $text['Size_text'] = '尺寸';
-$text['ON_text'] = '开';
-$text['OFF_text'] = '关';
-$text['CW_text'] = '顺时针';
-$text['CCW_text'] = '逆时针';
+$text['ON_text'] = '開';
+$text['OFF_text'] = '關';
+$text['CW_text'] = '順時針';
+$text['CCW_text'] = '逆時針';
 $text['MAX_text'] = '最大';
 $text['NO_text'] = '否';
 $text['YES_text'] = '是';
 $text['New_Job_text'] = '新工作';
-$text['Edit_Job_text'] = '编辑工作';
+$text['Edit_Job_text'] = '編輯工作';
 $text['Save_text'] = '保存';
 $text['Cancel_text'] = '取消';
 
+
+
 //product page - copy job
-$text['Copy_job_text'] = '复制工作';
-$text['Copy_from_text'] = '复制自';
-$text['Copy_to_text'] = '复制到';
-$text['Delete_confirm_text'] = '你确定吗？';
+$text['Copy_job_text'] = '複製工作';
+$text['Copy_from_text'] = '複製自';
+$text['Copy_to_text'] = '複製到';
+$text['Delete_confirm_text'] = '你確定嗎？';
 
 //sequence page
 $text['Squence_text'] = '工序';
-$text['Seq_count_text'] = '工序数';
-$text['Add_Seq_text'] = '添加工序';
-$text['Edit_Seq_text'] = '编辑工序';
+$text['Seq_count_text'] = '工序數';
+$text['Add_Seq_text'] = '新增工序';
+$text['Edit_Seq_text'] = '編輯工序';
 $text['Back_text'] = '返回';
-$text['Seq_ID_text'] = '工序编号';
-$text['Seq_Name_text'] = '工序名称';
-$text['Enalbe_text'] = '启用';
-$text['Add_Task_text'] = '添加任务';
+$text['Seq_ID_text'] = '工序編號';
+$text['Seq_Name_text'] = '工序名稱';
+$text['Enalbe_text'] = '啟用';
+$text['Add_Task_text'] = '新增任務';
+
+
 //sequence page - add seq
 $text['New_Seq_text'] = '新工序';
-$text['Barcode_Enable_text'] = '条码启用';
-$text['Add_Picture_text'] = '添加图片';
-$text['NG_Stop_text'] = 'NG 时停止';
+$text['Barcode_Enable_text'] = '條碼啟用';
+$text['Add_Picture_text'] = '新增圖片';
+$text['NG_Stop_text'] = 'NG 時停止';
 $text['Sequence_OK_text'] = '工序 OK';
-$text['Timeout_text'] = '超时';
+$text['Timeout_text'] = '超時';
+
+
 //sequence page - copy seq
-$text['Copy_seq_text'] = '复制工序';
+$text['Copy_seq_text'] = '複製工序';
+
 
 //task page
-$text['Task_text'] = '任务';
-$text['Task_Count_text'] = '任务计数';
+$text['Task_text'] = '任務';
+$text['Task_Count_text'] = '任務計數';
 $text['Hi_text'] = '上限';
 $text['Lo_text'] = '下限';
-$text['Step_text'] = '步骤';
+$text['Step_text'] = '步驟';
+
+
 //task page - new modal
-$text['Task_id_text'] = '任务编号';
+$text['Task_id_text'] = '任務編號';
 $text['Controller_text'] = '控制器';
-$text['Sensor_text'] = '传感器';
+$text['Sensor_text'] = '傳感器';
+
 // $text['Arm_text'] = '臂';
-$text['Virtual_message_text'] = '虚拟消息';
-$text['Socket_Tray_text'] = '套筒选择器';
-$text['Screw_feeder_position_text'] = '螺丝进料器位置';
-$text['Program_controller_text'] = '程序（控制器）';
-$text['Task_screw_position_text'] = '任务螺丝位置';
-$text['Confirm_text'] = '确认';
-$text['Encoder_text'] = '编码器';
-$text['Tolerance_setting_text'] = '公差设置';
+
+$text['Virtual_message_text'] = '虛擬消息';
+$text['Socket_Tray_text'] = '套筒選擇器';
+$text['Screw_feeder_position_text'] = '螺絲進料器位置';
+$text['Program_controller_text'] = '控制器';
+$text['Task_screw_position_text'] = '任務螺絲位置';
+$text['Confirm_text'] = '確認';
+$text['Encoder_text'] = '編碼器';
+$text['Tolerance_setting_text'] = '容許值設定';
 $text['Text_text'] = '文本';
-$text['Encoder_text'] = '编码器';
-$text['New_Task_text'] = '添加任务';
-$text['Edit_Task_text'] = '编辑任务';
+$text['New_Task_text'] = '新增任務';
+$text['Edit_Task_text'] = '編輯任務';
+
 
 //operation page
-$text['barcode_text'] = '条码';
-$text['Call_Job_text'] = '调用工作';
-$text['TR_text'] = '颗数';
-$text['Job_Time_text'] = '工作时间';
-$text['Error_text'] = '错误';
-$text['Screw_info_text'] = '螺丝信息';
+$text['barcode_text'] = '條碼';
+$text['Call_Job_text'] = '調用工作';
+$text['TR_text'] = '顆數';
+$text['Job_Time_text'] = '鎖附時間';
+$text['Error_text'] = '錯誤';
+$text['Screw_info_text'] = '螺絲信息';
 $text['Tool_text'] = '工具';
-$text['Picking_Module_text'] = '拾取模块';
+$text['Picking_Module_text'] = '拾取模組';
 $text['Recycle_box_text'] = '回收箱';
-$text['Button_text'] = '按钮';
-$text['Count_text'] = '计数';
+$text['Button_text'] = '按鈕';
+$text['Count_text'] = '計數';
 $text['Job_List_text'] = '工作列表';
 $text['Seq_List_text'] = '工序列表';
-$text['OK_text'] = '确定';
-$text['Screw_Feeder_text'] = '螺丝进料器';
-$text['Identity_verify_text'] = '身份验证';
-$text['Enter_identity_text'] = '输入身份验证';
-$text['Verify_text'] = '验证';
-$text['Total_Seq_text'] = '总工序';
+$text['OK_text'] = '確定';
+$text['Screw_Feeder_text'] = '螺絲進料器';
+$text['Identity_verify_text'] = '身份驗證';
+$text['Enter_identity_text'] = '輸入身份驗證';
+$text['Verify_text'] = '驗證';
+$text['Total_Seq_text'] = '總工序';
+
 
 //history page
-$text['Historical_Record_text'] = '历史记录';
-$text['Fastening_Record_text'] = '锁附记录';
-$text['Work_Flow_Log_text'] = '工作流程日志';
-$text['User_Access_Logging_text'] = '用户访问日志';
-$text['BarcodeSN_text'] = '条码';
-$text['Operator_text'] = '操作员';
-$text['Select_Job_text'] = '选择工作';
+$text['Historical_Record_text'] = '歷史記錄';
+$text['Fastening_Record_text'] = '鎖附記錄';
+$text['Work_Flow_Log_text'] = '工作流程日誌';
+$text['User_Access_Logging_text'] = '用戶訪問日誌';
+$text['BarcodeSN_text'] = '條碼';
+$text['Operator_text'] = '操作員';
+$text['Select_Job_text'] = '選擇工作';
 $text['From_text'] = '自';
 $text['To_text'] = '到';
-$text['Result_Status_text'] = '结果状态';
-$text['program_text'] = '程序';
-$text['Search_text'] = '搜索';
-$text['Export_text'] = '导出';
-$text['Export_Report_text'] = '导出报告';
-$text['Combine_Data_text'] = '合并数据';
+$text['Result_Status_text'] = '結果狀態';
+$text['program_text'] = '控制器';
+$text['Search_text'] = '搜尋';
+$text['Export_text'] = '匯出';
+$text['Export_Report_text'] = '匯出報告';
+$text['Combine_Data_text'] = '合併數據';
 $text['Clear_text'] = '清除';
-$text['Nopage_text'] = '无页面';
+$text['Nopage_text'] = '無頁面';
 $text['Index_text'] = '索引';
-$text['Time_text'] = '时间';
-$text['Station_text'] = '站点';
-$text['Torque_range_text'] = '扭力范围';
-$text['Angle_range_text'] = '角度范围';
-$text['Final_Torque_text'] = '最终扭力';
-$text['Final_Angle_text'] = '最终角度';
-$text['Status_text'] = '状态';
+$text['Time_text'] = '時間';
+$text['Station_text'] = '站點';
+$text['Torque_range_text'] = '扭力範圍';
+$text['Angle_range_text'] = '角度範圍';
+$text['Final_Torque_text'] = '最終扭力';
+$text['Final_Angle_text'] = '最終角度';
+$text['Status_text'] = '狀態';
 $text['Pset_text'] = 'Pset';
-$text['Click_here_text'] = '单击此处';
-$text['Export_text'] = '导出';
+$text['Click_here_text'] = '點擊此處';
+$text['Export_text'] = '匯出';
+
+
 //history page - nextinfo
 $text['Info_text'] = '信息';
 $text['Job_info_text'] = '工作信息';
-$text['Error_code_text'] = '错误代码';
-$text['Actual_Torque_text'] = '实际扭力';
+$text['Error_code_text'] = '錯誤代碼';
+$text['Actual_Torque_text'] = '實際扭力';
 $text['Direction_text'] = '方向';
-$text['Member_text'] = '成员';
-$text['Note_text'] = '注释';
-$text['Display_lilo_text'] = '显示高/低辅助线。';
-$text['Chart_Setting_text'] = '图表设置';
-$text['Torque_Unit_text'] = '扭力单位';
-$text['Diagram_Display_text'] = '图表显示';
+$text['Member_text'] = '成員';
+$text['Note_text'] = '註釋';
+$text['Display_lilo_text'] = '顯示高/低輔助線。';
+$text['Chart_Setting_text'] = '圖表設定';
+$text['Torque_Unit_text'] = '扭力單位';
+$text['Diagram_Display_text'] = '圖表顯示';
 $text['Torque_text'] = '扭力';
 $text['Angle_text'] = '角度';
-$text['RPM_text'] = '转速';
+$text['RPM_text'] = '轉速';
 $text['Power_text'] = '功率';
 $text['MS_text'] = '毫秒';
-$text['Download_text'] = '下载';
+$text['Download_text'] = '下載';
+
 //history page - combine
-$text['Combine_data_text'] = '合并数据';
+$text['Combine_data_text'] = '合併數據';
+
 
 //template page 
-$text['Program_Template_text'] = '程序模板';
-$text['Choose_Controller_text'] = '选择控制器';
-$text['Screw_Tool_text'] = '螺丝工具';
+$text['Program_Template_text'] = '控制器模板';
+$text['Choose_Controller_text'] = '選擇控制器';
+$text['Screw_Tool_text'] = '螺絲工具';
 $text['Normal_text'] = '智能';
-$text['Advanced_text'] = '进阶';
-$text['Choose_Mode_text'] = '选择模式';
+$text['Advanced_text'] = '進階';
+$text['Choose_Mode_text'] = '選擇模式';
 $text['Choose_Mode_combo_text'] = $text['Choose_Mode_text'].' ('.$text['Normal_text'].' / '.$text['Advanced_text'].')';
 $text['Next_text'] = '下一步';
-$text['Select_text'] = '选择';
+$text['Select_text'] = '選擇';
+
 
 //template page - normal
 $text['Program_Normal_text'] = '程序 - 智能';
-$text['Add_Program_text'] = '添加程序';
-$text['Program_ID_text'] = '程序编号';
-$text['Program_Name_text'] = '程序名称';
-$text['Target_Q_text'] = '目标扭力';
-$text['Target_A_text'] = '目标角度';
+$text['Add_Program_text'] = '新增程式';
+$text['Program_ID_text'] = '程式編號';
+$text['Program_Name_text'] = '程式名稱';
+$text['Target_Q_text'] = '目標扭力';
+$text['Target_A_text'] = '目標角度';
 $text['HiLo_text'] = '上限 / 下限';
-$text['Add_text'] = '添加';
+$text['Add_text'] = '新增';
+
 
 //template page - normal - torque parameter
-$text['Parameter_text'] = '参数';
-$text['Target_Type_text'] = '目标类型';
+$text['Parameter_text'] = '參數';
+$text['Target_Type_text'] = '目標類型';
 $text['New_Program_text'] = '新程序';
 $text['Max_Torque_text'] = '最大扭力';
-$text['Target_Torque_text'] = '目标扭力';
-$text['Joint_Offset_text'] = '扭力补偿值';
+$text['Target_Torque_text'] = '目標扭力';
+$text['Joint_Offset_text'] = '扭力補償值';
 $text['Hi_Torque_text'] = '扭力上限';
 $text['Lo_Torque_text'] = '扭力下限';
-$text['RunDownSpeed_text'] = '转速';
-$text['max_rpm_text'] = '最大转速';
-$text['Threshold_Type_text'] = '门槛选项';
-$text['Threshold_Torque_text'] = '门槛扭力';
-$text['Threshold_Angle_text'] = '门槛角度';
-$text['Downshift_Enable_text'] = '降速启动';
-$text['Downshift_Torque_text'] = '降速点扭力';
-$text['Downshift_Speed_text'] = '降速点转速';
-$text['Monitoring_Angle_text'] = '监控角度';
+$text['RunDownSpeed_text'] = '轉速';
+$text['max_rpm_text'] = '最大轉速';
+$text['Threshold_Type_text'] = '門檻選項';
+$text['Threshold_Torque_text'] = '門檻扭力';
+$text['Threshold_Angle_text'] = '門檻角度';
+$text['Downshift_Enable_text'] = '降速啟動';
+$text['Downshift_Torque_text'] = '降速點扭力';
+$text['Downshift_Speed_text'] = '降速點轉速';
+$text['Monitoring_Angle_text'] = '監控角度';
 $text['Hi_Angle_text'] = '角度上限';
 $text['Lo_Angle_text'] = '角度下限';
-$text['PreRun_text'] = '寻牙设定';
-$text['PreRun_RPM_text'] = '寻牙转速';
-$text['PreRun_Angle_text'] = '寻牙角度';
-$text['Target_Angle_text'] = '目标角度';
+$text['PreRun_text'] = '尋牙設定';
+$text['PreRun_RPM_text'] = '尋牙轉速';
+$text['PreRun_Angle_text'] = '尋牙角度';
+$text['Target_Angle_text'] = '目標角度';
 $text['Program_text'] = '程序';
 
+
 //template page - advanced
-$text['Program_Advanced_text'] = '程序 - 进阶';
-$text['Add_Step_text'] = '添加步骤';
-$text['Test_text'] = '测试';
+$text['Program_Advanced_text'] = '程序 - 進階';
+$text['Add_Step_text'] = '新增步驟';
+$text['Test_text'] = '測試';
 
 //template page - advanced - step
-$text['Advanced_Step_text'] = '进阶步骤';
-$text['Step_ID_text'] = '步骤编号';
-$text['Step_Name_text'] = '步骤名称';
+$text['Advanced_Step_text'] = '進階步驟';
+$text['Step_ID_text'] = '步驟編號';
+$text['Step_Name_text'] = '步驟名稱';
 $text['Hi_Q_text'] = '扭力上限';
 $text['Lo_Q_text'] = '扭力下限';
 $text['Hi_A_text'] = '角度上限';
-$text['Lo_A_text'] = '角度上限';
-$text['New_Step_text'] = '新步骤';
-$text['Monitor_Mode_text'] = '监控模式';
-$text['Monitor_Angle_text'] = '监控角度';
-$text['Over_Angle_Stop_text'] = '超过角度停止';
+$text['Lo_A_text'] = '角度下限';
+$text['New_Step_text'] = '新步驟';
+$text['Monitor_Mode_text'] = '監控模式';
+$text['Monitor_Angle_text'] = '監控角度';
+$text['Over_Angle_Stop_text'] = '超過角度停止';
 $text['Window_text'] = '等比例';
 $text['Hi_Low_text'] = '上下限';
-$text['Delay_Time_text'] = '延迟时间';
+$text['Delay_Time_text'] = '延遲時間';
 $text['Torque_Window_text'] = '扭力上/下限';
 $text['Angle_Window_text'] = '角度上/下限';
-$text['Record_Angle_Val_text'] = '纪录角度值';
-$text['skip_text'] = '不计';
+$text['Record_Angle_Val_text'] = '紀錄角度值';
+$text['skip_text'] = '忽略';
+
 
 //equipment page
-$text['Equipment_text'] = '设备';
-$text['Add_Device_text'] = '添加设备';
-$text['Tower_Light_sensors_text'] = '塔灯传感器';
-$text['Connection_setting_text'] = '连接设置';
-$text['Connection_control_text'] = '连接控制';
-$text['Test_adjust_text'] = '测试调整';
-$text['Online_text'] = '在线';
-$text['Offline_text'] = '离线';
-$text['Communication_log_text'] = '通信日志';
-$text['Connect_Test_text'] = '连接测试';
-$text['Connect_try_text'] = '连接尝试';
-$text['response_text'] = '响应';
-$text['connect success_text'] = '连接成功';
+$text['Equipment_text'] = '設備';
+$text['Add_Device_text'] = '新增設備';
+$text['Tower_Light_sensors_text'] = '三色燈';
+$text['Connection_setting_text'] = '連接設定';
+$text['Connection_control_text'] = '連接控制';
+$text['Test_adjust_text'] = '測試調整';
+$text['Online_text'] = '在線';
+$text['Offline_text'] = '離線';
+$text['Communication_log_text'] = '通信日誌';
+$text['Connect_Test_text'] = '連接測試';
+$text['Connect_try_text'] = '連接嘗試';
+$text['response_text'] = '響應';
+$text['connect success_text'] = '連接成功';
 $text['ID_text'] = 'ID';
-$text['Name_text'] = '名称';
-$text['Unit_text'] = '单位';
-$text['Language_text'] = '语言';
-$text['Batch_Mode_text'] = '批处理模式';
-$text['Blackout_Recovery_text'] = '断电恢复';
-$text['Diskfull_Warning_text'] = '磁盘已满警告';
-$text['Disk_Storage_Space_text'] = '磁盘存储空间';
-$text['Export_data_text'] = '导出数据';
-$text['Import_data_text'] = '导入数据';
-$text['Firmware_update_text'] = '固件更新';
-$text['Export_text'] = '导出';
-$text['Copy_data_text'] = '复制数据';
-$text['Import_text'] = '导入';
+$text['Name_text'] = '名稱';
+$text['Unit_text'] = '單位';
+$text['Language_text'] = '語言';
+$text['Batch_Mode_text'] = '批處理模式';
+$text['Blackout_Recovery_text'] = '斷電恢復';
+$text['Diskfull_Warning_text'] = '磁碟已滿警告';
+$text['Disk_Storage_Space_text'] = '磁碟存儲空間';
+$text['Export_data_text'] = '匯出數據';
+$text['Import_data_text'] = '匯入數據';
+$text['Firmware_update_text'] = '韌體更新';
+$text['Export_text'] = '匯出';
+$text['Copy_data_text'] = '複製數據';
+$text['Import_text'] = '匯入';
 $text['Update_text'] = '更新';
-$text['Contrller_Setting_text'] = '控制器设置';
+$text['Contrller_Setting_text'] = '控制器設定';
 $text['Tool_Information_text'] = '工具信息';
-$text['Tool_Type_text'] = '工具类型';
+$text['Tool_Type_text'] = '工具類型';
 $text['Tool_SN_text'] = '工具 SN';
-$text['SW_Version_text'] = '软件版本';
-$text['Total_Counts_text'] = '总计数';
+$text['SW_Version_text'] = '軟件版本';
+$text['Total_Counts_text'] = '總計數';
 $text['Max_Torque_text'] = '最大扭矩';
 $text['Max_Speed_text'] = '最大速度';
-$text['Calibration_Value_text'] = '校准值';
-$text['Maintain_Counts_text'] = '维护计数';
+$text['Calibration_Value_text'] = '校準值';
+$text['Maintain_Counts_text'] = '維護計數';
 $text['Controller_Information_text'] = '控制器信息';
 $text['Controller_SN_text'] = '控制器 S/N';
 $text['Controller_Ver_text'] = '控制器版本';
 $text['MCB_Version_text'] = 'MCB 版本';
-$text['Image_Version_text'] = '图像版本';
-$text['Refresh_text'] = '刷新';
-$text['Information_text'] = '信息';
-$text['Torque_Filter_text'] = '扭矩过滤器';
+$text['Image_Version_text'] = '圖像版本';
+$text['Refresh_text'] = '更新';
+$text['Information_text'] = '訊息';
+$text['Torque_Filter_text'] = '扭矩過濾器';
 
 //equipment page - arm
-$text['ARM_Setting_text'] = '手臂设置';
-$text['Arm_Encoders_setting_text'] = '手臂编码器设置';
-$text['Zero_point_cali_text'] = '零点校准';
-$text['Zero_reset_text'] = '零点重置';
-$text['Test_adjust_text'] = '测试调整';
-$text['Service_Start_text'] = '服务启动';
-$text['Service_Stop_text'] = '服务停止';
-$text['Service_Check_text'] = '服务检查';
-$text['Screws_text'] = '螺丝';
-$text['Adjustment_text'] = '调整';
-$text['Encoder_text'] = '编码器';
-$text['Tolerance_setting_text'] = '公差设置';
-$text['Picking_area_text'] = '拾取区域';
+$text['ARM_Setting_text'] = '手臂設定';
+$text['Arm_Encoders_setting_text'] = '手臂編碼器設定';
+$text['Zero_point_cali_text'] = '零點校準';
+$text['Zero_reset_text'] = '零點重置';
+$text['Test_adjust_text'] = '測試調整';
+$text['Service_Start_text'] = '服務啟動';
+$text['Service_Stop_text'] = '服務停止';
+$text['Service_Check_text'] = '服務檢查';
+$text['Screws_text'] = '螺絲';
+$text['Adjustment_text'] = '調整';
+$text['Encoder_text'] = '編碼器';
+$text['Tolerance_setting_text'] = '公差設定';
+$text['Picking_area_text'] = '拾取區域';
 
 //equipment page - tower light
-$text['Tower_Light_Setting_text'] = '三色灯设置';
-$text['Light_Setting_text'] = '灯光设置';
-$text['Test_adjust_text'] = '测试调整';
-$text['Red_text'] = '红色';
-$text['Green_text'] = '绿色';
-$text['Yellow_text'] = '黄色';
-$text['Buzzer_text'] = '蜂鸣器';
-$text['TEST_text'] = '测试';
-$text['Type_text'] = '类型';
-$text['Color_Configuration_text'] = '颜色配置';
-$text['Length_of_time_text'] = '时间长度';
+$text['Tower_Light_Setting_text'] = '三色燈設定';
+$text['Light_Setting_text'] = '燈光設定';
+$text['Test_adjust_text'] = '測試調整';
+$text['Red_text'] = '紅色';
+$text['Green_text'] = '綠色';
+$text['Yellow_text'] = '黃色';
+$text['Buzzer_text'] = '蜂鳴器';
+$text['TEST_text'] = '測試';
+$text['Type_text'] = '類型';
+$text['Color_Configuration_text'] = '顏色設定';
+$text['Length_of_time_text'] = '時間長度';
 $text['ms_text'] = '毫秒';
 
 //equipment page - socket tray setting
-$text['Socket_tray_Setting_text'] = '套筒选择器设置';
-$text['Output_text'] = '输出';
-$text['Input_text'] = '输入';
-$text['SET_text'] = '设置';
+$text['Socket_tray_Setting_text'] = '套筒選擇器設定';
+$text['Output_text'] = '輸出';
+$text['Input_text'] = '輸入';
+$text['SET_text'] = '設定';
+
 
 //plugins
-$text['Add_Plugins_text'] = '添加插件';
-$text['Upload_new_software_text'] = '上传新软件';
-$text['Upload_plugins_text'] = '上传插件';
-$text['Upload_progress_text'] = '上传进度';
+$text['Add_Plugins_text'] = '新增外掛程式';
+$text['Upload_new_software_text'] = '上傳新軟體';
+$text['Upload_plugins_text'] = '上傳模組';
+$text['Upload_progress_text'] = '上傳進度';
+
 
 //setting
-$text['Operation_Setting_text'] = '操作设置';
-$text['System_Setting_text'] = '系统设置';
-$text['Manager_Verify_text'] = '管理员验证';
-$text['Skip_Button_Access_text'] = '跳过按钮访问';
-$text['Back_Button_Access_text'] = '返回按钮访问';
-$text['Task_Reset_Button_Access_text'] = '任务重置按钮访问';
-$text['Job_Selection_Access_text'] = '作业选择访问';
-$text['Seq_Selection_Access_text'] = '序列选择访问';
-$text['Stop_On_NG_text'] = 'NG 时停止';
-$text['Current_iAMS_version_text'] = '当前 iAMS 版本';
-$text['Export_specific_JOB_data_text'] = '导出特定工作数据';
-$text['Export_iAMS_data_text'] = '导出 iAMS 数据';
-$text['Import_specific_JOB_data_text'] = '导入特定工作数据';
-$text['Import_data_text'] = '导入数据';
+$text['Operation_Setting_text'] = '操作設定';
+$text['System_Setting_text'] = '系統設定';
+$text['Manager_Verify_text'] = '管理員驗證';
+$text['Skip_Button_Access_text'] = '跳過按鈕訪問';
+$text['Back_Button_Access_text'] = '返回按鈕訪問';
+$text['Task_Reset_Button_Access_text'] = '任務重置按鈕訪問';
+$text['Job_Selection_Access_text'] = '作業選擇訪問';
+$text['Seq_Selection_Access_text'] = '序列選擇訪問';
+$text['Stop_On_NG_text'] = 'NG 時停止';
+$text['Current_iAMS_version_text'] = '當前 iAMS 版本';
+$text['Export_specific_JOB_data_text'] = '匯出特定工作數據';
+$text['Export_iAMS_data_text'] = '匯出 iAMS 數據';
+$text['Import_specific_JOB_data_text'] = '匯入特定工作數據';
+$text['Import_data_text'] = '匯入數據';
 $text['iAMS_Update_text'] = 'iAMS 更新';
-$text['Blackout_Recovery_text'] = '断电恢复';
+$text['Blackout_Recovery_text'] = '斷電恢復';
+
 
 //user
-$text['Member_List_text'] = '会员列表';
-$text['Role_Setting_text'] = '角色设置';
-$text['Station_Setting_text'] = '站点设置';
-$text['Add_member_text'] = '添加会员';
-$text['Edit_member_text'] = '编辑会员';
-$text['Filter_text'] = '筛选';
-$text['User_Name_text'] = '用户名';
-$text['Role_text'] = '角色';
-$text['Created_Date_text'] = '创建日期';
-$text['Employee_Number_text'] = '员工编号';
+$text['Member_List_text'] = '會員列表';
+$text['Role_Setting_text'] = '管理身分設定';
+$text['Station_Setting_text'] = '網站設置';
+$text['Add_member_text'] = '新增使用者';
+$text['Edit_member_text'] = '編輯使用者';
+$text['Filter_text'] = '篩選';
+$text['User_Name_text'] = '使用者名稱';
+$text['Role_text'] = '管理身分';
+$text['Created_Date_text'] = '新增日期';
+$text['Employee_Number_text'] = '員工編號';
 $text['Card_text'] = '卡';
-$text['Authority_text'] = '权限';
-$text['Role_permissions_setting_text'] = '角色权限设置';
-$text['Role_Name_text'] = '角色名称';
-$text['Permissions_text'] = '权限';
-$text['Access_text'] = '访问';
-$text['Read_text'] = '读取';
-$text['Write_text'] = '写入';
+$text['Authority_text'] = '權限';
+$text['Role_permissions_setting_text'] = '管理身分權限設定';
+$text['Role_Name_text'] = '管理身分名稱';
+$text['Permissions_text'] = '權限';
+$text['Access_text'] = '訪問';
+$text['Read_text'] = '讀取';
+$text['Write_text'] = '寫入';
 $text['Bulk_Change_text'] = '批量更改';
-$text['Serial_Number_text'] = '序列号';
-$text['Choose_text'] = '选择';
+$text['Serial_Number_text'] = '序列號';
+$text['Choose_text'] = '選擇';
 
 
 //----------------------------------------------------------------------------------------------------------------
 //扭力單位
-$text['unit_status_0'] = '公斤公尺';
-$text['unit_status_1'] = '牛頓公尺';
+$text['unit_status_0'] = '公斤米';
+$text['unit_status_1'] = '牛頓米';
 $text['unit_status_2'] = '公斤公分';
 $text['unit_status_3'] = '英磅英吋';
-
 //--------------------------------------------------------------------------------------------------------------
+
 
 
 $error_message = array();
 
 //------job manage
-$error_message['job_id'] = 'JOB ID超出範圍 1 - 99';
-$error_message['job_name'] = 'JOB名稱輸入有誤';
+$error_message['job_id'] = '工作ID超出範圍 1 - 99';
+$error_message['job_name'] = '工作名稱輸入有誤';
 $error_message['unfasten_RPM'] = '超出範圍';
 $error_message['unfasten_force'] = '超出範圍';
 
-$error_message['copy_to_id'] = 'JOB ID輸入有誤 1 - 99';
-$error_message['copy_to_name'] = 'JOB名稱輸入有誤';
+$error_message['copy_to_id'] = '工作ID輸入有誤 1 - 99';
+$error_message['copy_to_name'] = '工作名稱輸入有誤';
 
 if(isset($data['tool_info'])){
-	$error_message['unfasten_RPM'] = '超出範圍 '.$data['tool_info']['tool_minrpm'].' - '.$data['tool_info']['tool_maxrpm'];
-	$error_message['unfasten_force'] = '超出範圍 1 - 110';
+    $error_message['unfasten_RPM'] = '超出範圍 '.$data['tool_info']['tool_minrpm'].' - '.$data['tool_info']['tool_maxrpm'];
+    $error_message['unfasten_force'] = '超出範圍 1 - 110';
 }
 
 if(isset($data['job_type'])){
-	if($data['job_type'] == 'normal'){
-		$error_message['job_id'] = 'JOB ID超出範圍 1 - 99';
-		$error_message['copy_to_id'] = 'JOB ID超出範圍 1 - 99';
-	}
-	if($data['job_type'] == 'advanced'){
-		$error_message['job_id'] = 'JOB ID超出範圍 101 - 170';
-		$error_message['copy_to_id'] = 'JOB ID超出範圍 101 - 170';
-	}
-}
-
-//------sequence manage
-$text['already_top'] = '已經在最上方';
-$text['already_bottom'] = '已經在最下方';
-$text['delete_seq_confirm_text'] = '是否要刪除 工序 id: ';
-$error_message['sequence_name'] = '工序名稱輸入有誤';
-$error_message['tightening_repeat'] = '超出範圍 1 - 99';
-$error_message['timeout'] = '超出範圍 0.1 - 60.0';
-$error_message['to_seq_name'] = '工序名稱輸入有誤';
-
-//normal step
-$text['delete_step_confirm_text'] = '是否要刪除 步驟 id: ';
-$error_message['Hi_Torque'] = '超出範圍 需大於 Target Torque 且 小於 Tool Max Torque ';
-$error_message['Low_Torque'] = '超出範圍 需小於 Target Torque';
-$error_message['Threshold_Torque'] = '超出範圍 需小於Target Torque';
-$error_message['Target_Torque'] = '超出範圍 需大於 Tool Min Torque 且 小於 Tool Max Torque';
-$error_message['Joint_OffSet'] = '<br>超出範圍 需小於Target Torque';
-$error_message['Run_Down_Speed'] = '超出範圍 60 - 1100';
-$error_message['Downshift_Torque'] = '超出範圍 需大於Threshold Torque 需小於Target Torque';
-$error_message['Downshift_Speed'] = '超出範圍 60 - Run Down Speed';
-$error_message['High_Angle'] = '超出範圍 1 - 30600';
-$error_message['Low_Angle'] = '超出範圍 0 - 30599';
-$error_message['Pre_Run_RPM'] = '超出範圍 60 - tool_maxrpm';
-$error_message['Pre_Run_Angle'] = '超出範圍 1 - 30600';
-$error_message['Target_Angle'] = '超出範圍 1 - 30600';
-if(isset($data['tool_info'])){
-	$error_message['Hi_Torque'] = '需大於 Target_Torque 且小於'.$data['tool_info']['tool_maxtorque'];
-	$error_message['Low_Torque'] = '需小於 Target Torque 或 High Torque';
-	$error_message['Target_Torque'] = '超出範圍 '.$data['tool_info']['tool_mintorque'].' - '.$data['tool_info']['tool_maxtorque'];
-	$error_message['Run_Down_Speed'] = '超出範圍 '.$data['tool_info']['tool_minrpm'].' - '.$data['tool_info']['tool_maxrpm'];
-	$error_message['Pre_Run_RPM'] = '超出範圍 '.$data['tool_info']['tool_minrpm'].' - '.$data['tool_info']['tool_maxrpm'];
-}
-
-
-//advanced step
-$error_message['step_name'] = 'step name輸入有誤';
-$error_message['RPM'] = '超出範圍 60 - 1100';
-$error_message['Torque_Window_Add'] = '超出範圍 0.5 - 5';
-$error_message['Torque_Window_Subtraction'] = '';
-$error_message['Angle_Window_Add'] = '超出範圍 1 - 30600';
-$error_message['Angle_Window_Subtraction'] = '超出範圍 0 - 30599';
-$error_message['Delay_Time'] = '超出範圍 0.0 - 10.0';
-
-
-if(isset($data['tool_info'])){
-	$error_message['Pre_Run_RPM'] = '超出範圍 '.$data['tool_info']['tool_minrpm'].' - '.$data['tool_info']['tool_maxrpm'];
-	$error_message['Torque_Window_Add'] = '超出範圍 '.$data['tool_info']['tool_mintorque'].' - '.$data['tool_info']['tool_maxtorque'];;
+    if($data['job_type'] == 'normal'){
+        $error_message['job_id'] = '工作ID超出範圍 1 - 99';
+        $error_message['copy_to_id'] = '工作ID超出範圍 1 - 99';
+    }
+    if($data['job_type'] == 'advanced'){
+        $error_message['job_id'] = '工作ID超出範圍 101 - 170';
+        $error_message['copy_to_id'] = '工作ID超出範圍 101 - 170';
+    }
 }
 
 
 //operation error message
 $error_message['NO_ERROR'] = '';
-$error_message['ERR_CONT_TEMP'] = '控制器溫度異常';
-$error_message['ERR_MOT_TEMP'] = '馬達溫度異常';
+$error_message['ERR_CONT_TEMP'] = 'ERR-CONT-TEMP';
+$error_message['ERR_MOT_TEMP'] = 'ERR_MOT_TEMP';
 $error_message['ERR_MOT_CURR'] = '馬達電流過高';
 $error_message['ERR_MOT_PEAK_CURR'] = '馬達峰值電流過高';
 $error_message['ERR_HIGH_TORQUE'] = '扭力超出上限';
@@ -501,8 +479,8 @@ $error_message['ERR_FLASH'] = '控制器Flash驗證碼錯誤';
 $error_message['ERR_FRAM'] = '控制器Fram驗證碼錯誤';
 $error_message['ERR_HIGH_ANGLE'] = '角度超出上限';
 $error_message['ERR_PROTECT_CIRCUIT'] = '硬體保護異常';
-$error_message['ERR_SWITCH_CONFIG'] = '啟動開關設置錯誤';
-$error_message['ERR_STEP_NOT_REC'] = '步驟數設置不一致';
+$error_message['ERR_SWITCH_CONFIG'] = '啟動開關設定錯誤';
+$error_message['ERR_STEP_NOT_REC'] = '步驟數設定不一致';
 $error_message['ERR_TMD_FRAM'] = '起子基板FRAM異常';
 $error_message['ERR_LOW_TORQUE'] = '扭力低於下限';
 $error_message['ERR_LOW_ANGLE'] = '角度低於下限';
@@ -510,33 +488,3 @@ $error_message['ERR_PROC_NOT_FINISH'] = '操作未完成';
 $error_message['SEQ_COMPLETED'] = '工序完成按確認';
 $error_message['JOB_COMPLETED'] = '工作完成按確認';
 $error_message['WORKPIECE_RECOVERY'] = '工件復歸按確認';
-//上海展先全部用簡中
-// $error_message['NO_ERROR'] = '';
-// $error_message['ERR_CONT_TEMP'] = 'ERR-CONT-TEMP';
-// $error_message['ERR_MOT_TEMP'] = 'ERR_MOT_TEMP';
-// $error_message['ERR_MOT_CURR'] = '马达电流过高';
-// $error_message['ERR_MOT_PEAK_CURR'] = '马达峰值电流过高';
-// $error_message['ERR_HIGH_TORQUE'] = '扭力超出上限';
-// $error_message['ERR_DEADLOCK'] = '马达运转异常';
-// $error_message['ERR_PROC_MINTIME'] = '锁附时间低于下限';
-// $error_message['ERR_PROC_MAXTIME'] = '超时锁附';
-// $error_message['ERR_ENCODER'] = '编码器无脉波';
-// $error_message['ERR_HALL'] = '霍尔传感器无脉波';
-// $error_message['ERR_BUSVOLT_HIGH'] = '母线电压过高';
-// $error_message['ERR_BUSVOLT_LOW'] = '母线电压过低';
-// $error_message['ERR_PROC_NA'] = '设定工序异常';
-// $error_message['ERR_STEP_NA'] = '设定步骤异常';
-// $error_message['ERR_DMS_COMM'] = '起子控制器通讯异常';
-// $error_message['ERR_FLASH'] = '控制器Flash验证码错误';
-// $error_message['ERR_FRAM'] = '控制器Fram验证码错误';
-// $error_message['ERR_HIGH_ANGLE'] = '角度超出上限';
-// $error_message['ERR_PROTECT_CIRCUIT'] = '硬体保护异常';
-// $error_message['ERR_SWITCH_CONFIG'] = '启动开关设置错误';
-// $error_message['ERR_STEP_NOT_REC'] = '步骤数设置不一致';
-// $error_message['ERR_TMD_FRAM'] = '起子基板FRAM异常';
-// $error_message['ERR_LOW_TORQUE'] = '扭力低于下限';
-// $error_message['ERR_LOW_ANGLE'] = '角度低于下限';
-// $error_message['ERR_PROC_NOT_FINISH'] = '操作未完成';
-// $error_message['SEQ_COMPLETED'] = '工序完成按确认';
-// $error_message['JOB_COMPLETED'] = '工作完成按确认';
-// $error_message['WORKPIECE_RECOVERY'] = '工件复归按确认';
