@@ -25,6 +25,12 @@ if( isset($data['light_signal']) ){
     $light_signal = $data['light_signal'];
 }
 
+if( isset($_GET['light_signal']) ){
+    $light_signal = $_GET['light_signal'];
+    $data['hole_id'] = 4;
+    // file_put_contents("./test.txt", '123', FILE_APPEND);
+}
+
 if( isset($data['IO']) ){
     $IO = $data['IO'];
 }
@@ -245,6 +251,7 @@ try {
 
     if ($light_signal == 'sockect_hole') {
         // $data['hole_id'];
+	echo 123;
 
         if($data['hole_id'] == 1){
             $pins[0] = true;
@@ -260,12 +267,12 @@ try {
         }
 
         if($data['hole_id'] == 4){
-            $pins[4] = true;
+            $pins[2] = true;
         }
 
         //先判斷目前狀態，如果相同就不重複送指令
         $current_status = $modbus->readCoils(0, 0, 16);
-        if( $pins[0] == $current_status[0] && $pins[1] == $current_status[1] && $pins[4] == $current_status[4] ){
+        if( $pins[0] == $current_status[0] && $pins[1] == $current_status[1] && $pins[2] == $current_status[2] ){
             return 0;
             exit();
         }
@@ -277,17 +284,16 @@ try {
         //clear 
         $modbus->writeMultipleCoils(0, 0, $data_false_single); //先寫死 之後再調
         $modbus->writeMultipleCoils(0, 1, $data_false_single); //
-        $modbus->writeMultipleCoils(0, 4, $data_false_single); //
+        $modbus->writeMultipleCoils(0, 2, $data_false_single); //
         
         $trueValues = array_filter($pins);
         // 使用 array_keys 找出值為 true 的元素的索引
         $trueIndices = array_keys($trueValues);
 
-        // var_dump($trueIndices);
+        //var_dump($trueIndices);
         foreach ($trueIndices as $key => $value) {
             $modbus->writeMultipleCoils(0, $value, $data_true_single); //buzzer start
         }
-
 
     }
 

@@ -231,11 +231,11 @@ if(!empty($_COOKIE['chat_mode_change'])){
                     <div style="padding-left: 2%">
                         <div class="input-group">
                             <span class="input-group-text" style="margin-right: 5px; border: none; background: none"><?php echo $text['BarcodeSN_text']; ?>:</span>
-                            <input type="text"  id="barcodesn" name="barcodesn" maxlength="">
+                            <input type="text" class="form-control input-ms" id="barcodesn" name="barcodesn" maxlength="">
                             <span class="input-group-text" style="margin-right: 5px; border: none; background: none"><?php echo $text['Operator_text']; ?>:</span>
-                            <input type="text"  id="barcodesn" name="barcodesn" maxlength="">
+                            <input type="text" class="form-control input-ms" id="barcodesn" name="barcodesn" maxlength="">
                             <span class="input-group-text" style="margin-right: 5px; border: none; background: none"><?php echo $text['Select_Job_text']; ?>:</span>
-                            <input type="text"  id="JobSelect" placeholder="Click here.." onfocus="openModal('JobSelect')" onclick="this.blur()">
+                            <input type="text" class="form-control input-ms"  id="JobSelect" placeholder="Click here.." onfocus="openModal('JobSelect')" onclick="this.blur()">
                             <span class="input-group-text" style="margin-right: 5px; border: none; background: none"><?php echo $text['Result_Status_text']; ?>:</span>
                             <select id="status">
                                     <?php foreach($data['res_status_arr'] as $key_res =>$val_res){?>
