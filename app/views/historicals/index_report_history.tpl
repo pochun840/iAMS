@@ -253,17 +253,26 @@
                 {
                     name: 'OK',
                     type: 'line',
-                    data: line_ok
+                    data: line_ok,
+                    itemStyle: {
+                        color: 'green' 
+                    }   
                 },
                 {
                     name: 'NG',
                     type: 'line',
-                    data: line_ng
+                    data: line_ng,
+                    itemStyle: {
+                        color: '#F44336' 
+                    }   
                 },
                 {
                     name: 'OKALL',
                     type: 'line',
-                    data: line_okall
+                    data: line_okall,
+                     itemStyle: {
+                        color: '#FFCC00' 
+                    }   
                 }
             ]
         };
