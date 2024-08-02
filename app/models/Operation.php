@@ -73,31 +73,22 @@ class Operation{
             return 0;
         }
 
-        //
-
-   
-        
-
-
         //若OK Job 開啟，OK sequence 開啟，每一個sequence 傳出OK-SEQ信號，最後一個sequence 是傳出OK-Job信號
 
         if ($data['job_singal'] == 1 && $data['seq_singal'] == 1) {
-            // 条件 1
+      
             if ($data['new_seq_id'] < $data['new_seq_count'] && $data['cc_task_id'] < $data['new_task_count']) {
                 $data['fasten_status'] = 4;
             }
         
-            // 条件 2
             if ($data['new_seq_id'] < $data['new_seq_count'] && $data['new_task_id'] == $data['new_task_count']) {
                 $data['fasten_status'] = 5;
             }
         
-            // 条件 3
             if ($data['new_seq_id'] == $data['new_seq_count'] && $data['cc_task_id'] < $data['new_task_count']) {
                 $data['fasten_status'] = 4;
             }
         
-            // 条件 4
             if ($data['new_seq_id'] == $data['new_seq_count'] && $data['cc_task_id'] == $data['new_task_count']) {
                 $data['fasten_status'] = 6;
             }
@@ -109,70 +100,44 @@ class Operation{
         }
 
         //若OK Job 關閉，OK sequence 開啟，每一個sequence 傳出OK-SEQ信號 
-        if($data['job_singal'] == 0 && $data['seq_singal'] == 1 && $data['new_seq_id'] < $data['new_seq_count'] && $data['cc_task_id'] < $data['new_task_count']){
-            $data['fasten_status'] = 4;
+        if($data['job_singal'] == 0 && $data['seq_singal'] == 1 ){
+
+            if ($data['new_seq_id'] < $data['new_seq_count'] && $data['cc_task_id'] < $data['new_task_count']) {
+                $data['fasten_status'] = 4;
+            }
+            if($data['new_seq_id'] < $data['new_seq_count'] && $data['new_task_id'] == $data['new_task_count']) {
+                $data['fasten_status'] = 5;
+            }
+
+            if ($data['new_seq_id'] == $data['new_seq_count'] && $data['cc_task_id'] < $data['new_task_count']) {
+                $data['fasten_status'] = 4;
+            }
+
+            if ($data['new_seq_id'] == $data['new_seq_count'] && $data['cc_task_id'] == $data['new_task_count']) {
+                $data['fasten_status'] = 5;
+            }
+
         }
+      
 
-        if($data['job_singal'] == 0 && $data['seq_singal'] == 1 && $data['new_seq_id'] < $data['new_seq_count']  && $data['new_task_id'] == $data['new_task_count']){
-            $data['fasten_status'] = 5;
+        //若OK Job 開啟，Oksequence，關閉，最後一個seq 傳出OK-JOB信號
+        if($data['job_singal'] == 1 && $data['seq_singal'] == 0 ){
+
+            if ($data['new_seq_id'] < $data['new_seq_count'] && $data['cc_task_id'] < $data['new_task_count']) {
+                $data['fasten_status'] = 4;
+            }
+
+            if($data['new_seq_id'] < $data['new_seq_count'] && $data['new_task_id'] == $data['new_task_count']) {
+                $data['fasten_status'] = 4;
+            }
+            if ($data['new_seq_id'] == $data['new_seq_count'] && $data['cc_task_id'] < $data['new_task_count']) {
+                $data['fasten_status'] = 4;
+            }
+            if ($data['new_seq_id'] == $data['new_seq_count'] && $data['cc_task_id'] == $data['new_task_count']) {
+                $data['fasten_status'] = 6;
+            }
+
         }
-
-        if($data['job_singal'] == 0 && $data['seq_singal'] == 1 && $data['new_seq_id'] < $data['new_seq_count']  && $data['new_task_id'] == $data['new_task_count']){
-            $data['fasten_status'] = 5;
-        }
-
-
-        
-
-       
-
-
-        echo "<pre>";
-        print_r($data);
-        echo "</pre>";
-
-        
-        //die();
-
-        /*if($data['job_singal'] == 1 && $data['seq_singal'] == 1 && $data['new_seq_id'] < $data['new_seq_count'] && $data['new_task_id'] >  $data['new_task_count']){
-            $data['fasten_status'] = 5;
-            
-        }*/
-
-        /*if($data['job_singal'] == 1 && $data['seq_singal'] == 1 && $data['new_seq_id'] < $data['new_seq_count'] && $data['new_task_id'] == $data['new_task_count']){
-            $data['fasten_status'] = 5;
-            
-        }
-
-        if($data['job_singal'] == 1 && $data['seq_singal'] == 1 && $data['new_seq_id'] < $data['new_seq_count'] && $data['new_task_id'] > $data['new_task_count']){
-            $data['fasten_status'] = 6;
-            
-        }*/
-
-     
-       
-        $temp_new = array();
-        $temp_new  = $data;
-
-        // 定义文件路径
-        $filePath = 'yourfile' . $temp_new['sequence_name'] .$temp_new['cc_task_id']. '.txt';
-        
-        // 检查$data类型并转换为适当格式
-        if (is_array($temp_new) || is_object($temp_new)) {
-            // 将数组或对象转换为可读格式
-            $dataString = print_r($temp_new, true);  // 将数据以可读格式转换为字符串
-            // $dataString = var_export($data, true);  // 使用 var_export 以 PHP 代码格式转换为字符串
-        } else {
-            // 如果$data不是数组或对象，直接使用它
-            $dataString = $temp_new;
-        }
-        
-        // 写入文件
-        if (file_put_contents($filePath, $dataString) === false) {
-
-            throw new Exception("Failed to write data to file.");
-        }
-
 
         $sql = "INSERT INTO `fasten_data` ('cc_barcodesn','cc_station','cc_job_id','cc_seq_id','cc_task_id','cc_program_id','cc_equipment','cc_operator','system_sn','data_time','device_type','device_id','device_sn','tool_type','tool_sn','tool_status','job_id','job_name','sequence_id','sequence_name','step_id','fasten_torque','torque_unit','fasten_time','fasten_angle','count_direction','last_screw_count','max_screw_count','fasten_status','error_message','step_targettype','step_tooldirection','step_rpm','step_targettorque','step_hightorque','step_lowtorque','step_targetangle','step_highangle','step_lowangle','step_delayttime','threshold_torque','step_threshold_angle','downshift_torque','downshift_speed','step_prr_rpm','step_prr_angle','barcode','total_angle')
         VALUES(:cc_barcodesn,:cc_station,:cc_job_id,:cc_seq_id,:cc_task_id,:cc_program_id,:cc_equipment,:cc_operator,:system_sn,:data_time,:device_type,:device_id,:device_sn,:tool_type,:tool_sn,:tool_status,:job_id,:job_name,:sequence_id,:sequence_name,:step_id,:fasten_torque,:torque_unit,:fasten_time,:fasten_angle,:count_direction,:last_screw_count,:max_screw_count,:fasten_status,:error_message,:step_targettype,:step_tooldirection,:step_rpm,:step_targettorque,:step_hightorque,:step_lowtorque,:step_targetangle,:step_highangle,:step_lowangle,:step_delayttime,:threshold_torque,:step_threshold_angle,:downshift_torque,:downshift_speed,:step_prr_rpm,:step_prr_angle,:barcode,:total_angle)

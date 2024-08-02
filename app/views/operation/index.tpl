@@ -1140,11 +1140,8 @@ tt.set('start_time',new Date())
                                   
                                       
                                         let system_no = data.system_sn;
-                                        //alert(system_no);
-                                        //update_status(system_no,4);
-                                        alert(system_no);
-
-                                        //afterward();
+                                       
+                                        afterward();
                                 }else{
                                     
                                         
@@ -1192,28 +1189,39 @@ tt.set('start_time',new Date())
                                             document.getElementById('step'+(task_id-1)).style.borderColor = '#FFCC00';
                                             document.getElementById('tightening_status').style.backgroundColor = '#FFCC00';
                                             document.getElementById('tightening_status_div').style.backgroundColor = '#FFCC00';
-                                            current_circle.classList.add('finished_job')
+                                            current_circle.classList.add('finished_job');
 
-                                        } 
+                                        }
+                                        if(job_singal == 0 && seq_singal == 1 && seq_id_nn == total_seq_nn && task_id > task_count){
+                                            document.getElementById('tightening_status').innerHTML = 'OK-SEQ';
+                                            document.getElementById('step'+(task_id-1)).style.backgroundColor = '#FFCC00';
+                                            document.getElementById('step'+(task_id-1)).style.borderColor = '#FFCC00';
+                                            document.getElementById('tightening_status').style.backgroundColor = '#FFCC00';
+                                            document.getElementById('tightening_status_div').style.backgroundColor = '#FFCC00';
+                                            current_circle.classList.add('finished_job');
 
-                                        //若OK Job 開啟，Oksequence，關閉，最後一個seq 傳出OK-JOB信號
-                                        /*if(job_singal == 1 && seq_singal == 0 && seq_id_nn < total_seq_nn && task_id > task_count){
-                                            document.getElementById('tightening_status').innerHTML = 'OK';
-                                            document.getElementById('step'+(task_id-1)).style.backgroundColor = 'green';
-                                            document.getElementById('step'+(task_id-1)).style.borderColor = 'green';
-                                            document.getElementById('tightening_status').style.backgroundColor = 'green';
-                                            document.getElementById('tightening_status_div').style.backgroundColor = 'green';
-                                            current_circle.classList.add('finished'); 
                                         }
 
-                                        if(job_singal == 1 && seq_singal == 0 && seq_id_nn == total_seq_nn && task_id > task_count){
+                                        //若OK Job 開啟，Oksequence，關閉，最後一個seq 傳出OK-JOB信號
+                                        if(job_singal == 1 && seq_singal == 0 &&  seq_id_nn < total_seq_nn && task_id > task_count){
                                             document.getElementById('tightening_status').innerHTML = 'OK';
                                             document.getElementById('step'+(task_id-1)).style.backgroundColor = 'green';
                                             document.getElementById('step'+(task_id-1)).style.borderColor = 'green';
                                             document.getElementById('tightening_status').style.backgroundColor = 'green';
                                             document.getElementById('tightening_status_div').style.backgroundColor = 'green';
-                                            current_circle.classList.add('finished'); 
-                                        }*/
+                                            current_circle.classList.add('finished');  
+                                        }
+
+                                        if(job_singal == 1 && seq_singal == 0 &&  seq_id_nn == total_seq_nn && task_id > task_count){
+                                            document.getElementById('tightening_status').innerHTML = 'OK-JOB';
+                                            document.getElementById('step'+(task_id-1)).style.backgroundColor = '#FFCC00';
+                                            document.getElementById('step'+(task_id-1)).style.borderColor = '#FFCC00';
+                                            document.getElementById('tightening_status').style.backgroundColor = '#FFCC00';
+                                            document.getElementById('tightening_status_div').style.backgroundColor = '#FFCC00';
+                                            current_circle.classList.add('finished_job');  
+                                        }
+                                        
+
 
 
                                         document.getElementById('modbus_switch').value = 0;
