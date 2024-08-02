@@ -1,7 +1,7 @@
 Array
 (
-    [system_sn] => 2456
-    [data_time] => 20240801 12:28:47
+    [system_sn] => 2508
+    [data_time] => 20240802 01:03:13
     [device_type] => 7
     [device_id] => 1
     [device_sn] => FW01-014
@@ -13,9 +13,9 @@ Array
     [sequence_id] => 1
     [sequence_name] => ad-cc
     [step_id] => 1
-    [fasten_torque] => 0.024
+    [fasten_torque] => 0.019
     [torque_unit] => 1
-    [fasten_time] => 2.991
+    [fasten_time] => 2.977
     [fasten_angle] => 1800
     [count_direction] => 0
     [last_screw_count] => 1
@@ -52,9 +52,9 @@ Array
     [task_count_final] => 2
     [cc_program_id] => 3
     [total_seq_count] => 2
-    [ok_job] => 0
+    [ok_job] => 1
     [ok_sequence] => 1
-    [job_singal] => 0
+    [job_singal] => 1
     [seq_singal] => 1
     [total_seq] => 2
     [ct_seq_id] => 1

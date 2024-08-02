@@ -1,7 +1,7 @@
 Array
 (
-    [system_sn] => 2457
-    [data_time] => 20240801 12:29:10
+    [system_sn] => 2505
+    [data_time] => 20240802 00:56:27
     [device_type] => 7
     [device_id] => 1
     [device_sn] => FW01-014
@@ -13,9 +13,9 @@ Array
     [sequence_id] => 1
     [sequence_name] => ad-cc
     [step_id] => 1
-    [fasten_torque] => 0.023
+    [fasten_torque] => 0.021
     [torque_unit] => 1
-    [fasten_time] => 2.479
+    [fasten_time] => 2.488
     [fasten_angle] => 1500
     [count_direction] => 0
     [last_screw_count] => 1
