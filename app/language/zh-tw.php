@@ -35,12 +35,12 @@ $text['Edit_text'] = '編輯';
 $text['Job_ID_text'] = '工作 ID';
 $text['Job_Name_text'] = '工作名稱';
 $text['Picture_text'] = '圖片';
-$text['More_Info_text'] = '更多信息';
+$text['More_Info_text'] = '更多訊息';
 $text['Action_text'] = '操作';
 $text['Seq_text'] = '工序';
 $text['Task_text'] = '任務';
 $text['Arm_text'] = '手臂';
-$text['Detail_text'] = '詳細信息';
+$text['Detail_text'] = '詳細訊息';
 $text['Add_Seq_text'] = '新增工序';
 $text['Delete_text'] = '刪除';
 $text['Match_From_text'] = '匹配自';
@@ -140,7 +140,7 @@ $text['Call_Job_text'] = '調用工作';
 $text['TR_text'] = '顆數';
 $text['Job_Time_text'] = '鎖附時間';
 $text['Error_text'] = '錯誤';
-$text['Screw_info_text'] = '螺絲信息';
+$text['Screw_info_text'] = '螺絲訊息';
 $text['Tool_text'] = '工具';
 $text['Picking_Module_text'] = '拾取模組';
 $text['Recycle_box_text'] = '回收箱';
@@ -188,8 +188,8 @@ $text['Export_text'] = '匯出';
 
 
 //history page - nextinfo
-$text['Info_text'] = '信息';
-$text['Job_info_text'] = '工作信息';
+$text['Info_text'] = '訊息';
+$text['Job_info_text'] = '工作訊息';
 $text['Error_code_text'] = '錯誤代碼';
 $text['Actual_Torque_text'] = '實際扭力';
 $text['Direction_text'] = '方向';
@@ -316,7 +316,7 @@ $text['Copy_data_text'] = '複製數據';
 $text['Import_text'] = '匯入';
 $text['Update_text'] = '更新';
 $text['Contrller_Setting_text'] = '控制器設定';
-$text['Tool_Information_text'] = '工具信息';
+$text['Tool_Information_text'] = '工具訊息';
 $text['Tool_Type_text'] = '工具類型';
 $text['Tool_SN_text'] = '工具 SN';
 $text['SW_Version_text'] = '軟件版本';
@@ -325,7 +325,7 @@ $text['Max_Torque_text'] = '最大扭矩';
 $text['Max_Speed_text'] = '最大速度';
 $text['Calibration_Value_text'] = '校準值';
 $text['Maintain_Counts_text'] = '維護計數';
-$text['Controller_Information_text'] = '控制器信息';
+$text['Controller_Information_text'] = '控制器訊息';
 $text['Controller_SN_text'] = '控制器 S/N';
 $text['Controller_Ver_text'] = '控制器版本';
 $text['MCB_Version_text'] = 'MCB 版本';
@@ -333,6 +333,7 @@ $text['Image_Version_text'] = '圖像版本';
 $text['Refresh_text'] = '更新';
 $text['Information_text'] = '訊息';
 $text['Torque_Filter_text'] = '扭矩過濾器';
+
 
 //equipment page - arm
 $text['ARM_Setting_text'] = '手臂設定';
