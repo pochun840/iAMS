@@ -238,6 +238,7 @@ $text['PreRun_Angle_text'] = '寻牙角度';
 $text['Target_Angle_text'] = '目标角度';
 $text['Program_text'] = '程序';
 
+
 //template page - advanced
 $text['Program_Advanced_text'] = '程序 - 进阶';
 $text['Add_Step_text'] = '添加步骤';
