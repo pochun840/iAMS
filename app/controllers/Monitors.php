@@ -21,7 +21,6 @@ class Monitors extends Controller
             'isMobile' => $isMobile,
             'nav' => $nav,
         ];
-        
         $this->view('monitor/index', $data);
 
     }
