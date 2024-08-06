@@ -540,42 +540,42 @@
                                             <div class="station" tabindex="1">
                                                 <label style="background: #BDBABA; color: #fff; text-align: left;">
                                                     <div style="display: flex; justify-content: center;">
-                                                        <img id="Add-Station" src="./img/add-station.png">
+                                                       <img id="Add-Station" src="./img/add-station.png" onclick="document.getElementById('Add_Station').style.display='block'">
                                                     </div>
                                                 </label>
                                             </div>
                                             <div class="station" tabindex="1">
                                                 <label style="background: #BDBABA; color: #fff; text-align: left;">
                                                     <div style="display: flex; justify-content: center;">
-                                                        <img id="Add-Station" src="./img/add-station.png">
+                                                        <img id="Add-Station" src="./img/add-station.png" onclick="document.getElementById('Add_Station').style.display='block'">
                                                     </div>
                                                 </label>
                                             </div>
                                             <div class="station" tabindex="1">
                                                 <label style="background: #BDBABA; color: #fff; text-align: left;">
                                                     <div style="display: flex; justify-content: center;">
-                                                        <img id="Add-Station" src="./img/add-station.png">
+                                                        <img id="Add-Station" src="./img/add-station.png" onclick="document.getElementById('Add_Station').style.display='block'">
                                                     </div>
                                                 </label>
                                             </div>
                                             <div class="station" tabindex="1">
                                                 <label style="background: #BDBABA; color: #fff; text-align: left;">
                                                     <div style="display: flex; justify-content: center;">
-                                                        <img id="Add-Station" src="./img/add-station.png">
+                                                        <img id="Add-Station" src="./img/add-station.png" onclick="document.getElementById('Add_Station').style.display='block'">
                                                     </div>
                                                 </label>
                                             </div>
                                             <div class="station" tabindex="1">
                                                 <label style="background: #BDBABA; color: #fff; text-align: left;">
                                                     <div style="display: flex; justify-content: center;">
-                                                        <img id="Add-Station" src="./img/add-station.png">
+                                                        <img id="Add-Station" src="./img/add-station.png" onclick="document.getElementById('Add_Station').style.display='block'">
                                                     </div>
                                                 </label>
                                             </div>
                                             <div class="station" tabindex="1">
                                                 <label style="background: #BDBABA; color: #fff; text-align: left;">
                                                     <div style="display: flex; justify-content: center;">
-                                                        <img id="Add-Station" src="./img/add-station.png">
+                                                        <img id="Add-Station" src="./img/add-station.png" onclick="document.getElementById('Add_Station').style.display='block'">
                                                     </div>
                                                 </label>
                                             </div>
