@@ -56,7 +56,7 @@ class Controller
             }else if(preg_match("/en/i", $lang)){
                 $_SESSION['language'] = 'en-us';
             }else{//預設
-                $_SESSION['language'] = 'en-us';
+                $_SESSION['language'] = 'zh-tw';
             }
         }
 

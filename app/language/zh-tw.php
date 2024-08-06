@@ -480,7 +480,7 @@ $text['page'] ='頁面';
 $text['access'] ='有權限';
 $text['read'] ='可讀';
 $text['write'] = '可寫';
-
+$text['role'] = '角色';
 
 
 
