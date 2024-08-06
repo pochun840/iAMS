@@ -432,6 +432,30 @@ if(isset($data['job_type'])){
 	}
 }
 
+
+$text['products'] = '产品';
+$text['equipments'] = '设备';
+$text['plugins'] = '插件';
+$text['charts'] = '图表';
+$text['operations'] = '操作';
+$text['monitors'] = 'monitor';
+$text['settings'] = '设置';
+$text['calibrations'] = '校准';
+$text['users'] = '用户';
+$text['historicals'] = '历史';
+$text['templates'] = '模板';
+$text['sequences'] = '工序';
+$text['tasks'] = '任务';
+$text['logins'] = '登录';
+$text['Tower Light sensors'] = '三色灯';
+
+
+$text['page'] = '页面';
+$text['access'] = '有权限';
+$text['read'] = '可读';
+$text['write'] = '可写';
+$text['role'] = '角色';
+
 //operation error message
 $error_message['NO_ERROR'] = '';
 $error_message['ERR_CONT_TEMP'] = 'ERR-CONT-TEMP';

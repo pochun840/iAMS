@@ -46,6 +46,9 @@ $text['Match_To_text'] = 'Match To';
 $text['Select_Job_ID_text'] = 'Select Job ID';
 $text['Select_Seq_ID_text'] = 'Select Seq ID';
 
+
+
+
 //product page - add job
 $text['Controller_Type_text'] = 'Controller Type';
 $text['Barcode_Start_text'] = 'Barcode Start';
@@ -502,7 +505,7 @@ $error_message['ERR_FRAM'] = 'ERR-FRAM';
 $error_message['ERR_HIGH_ANGLE'] = 'ERR-HIGH-ANGLE';
 $error_message['ERR_PROTECT_CIRCUIT'] = 'ERR-PROTECT-CIRCUIT';
 $error_message['ERR_SWITCH_CONFIG'] = 'ERR-SWITCH-CONFIG';
-$error_message['ERR_STEP_NOT_REC'] = 'ERR-STEP-NOT-REC';
+$error_message['ERR_STEP_NOT_REC'] = 'ERR-STEP-NOT-REC';-
 $error_message['ERR_TMD_FRAM'] = 'ERR-TMD-FRAM';
 $error_message['ERR_LOW_TORQUE'] = 'ERR-LOW-TORQUE';
 $error_message['ERR_LOW_ANGLE'] = 'ERR-LOW-ANGLE';
@@ -510,6 +513,32 @@ $error_message['ERR_PROC_NOT_FINISH'] = 'ERR-PROC-NOT-FINISH';
 $error_message['SEQ_COMPLETED'] = 'SEQ-COMPLETED';
 $error_message['JOB_COMPLETED'] = 'JOB-COMPLETED';
 $error_message['WORKPIECE_RECOVERY'] = 'WORKPIECE-RECOVERY';
+
+
+//Permissions
+$text['products'] = 'products';
+$text['equipments'] = 'equipment';
+$text['plugins'] = 'plugins';
+$text['charts'] = 'charts';
+$text['operations'] = 'operation';
+$text['monitors'] = 'monitor';
+$text['settings'] = 'setting';
+$text['calibrations'] = 'calibration';
+$text['users'] = 'user';
+$text['historicals'] = 'historicals';
+$text['templates'] = 'template';
+$text['sequences'] = 'sequences';
+$text['tasks'] = 'tasks';
+$text['logins'] = 'logins';
+$text['Tower Light sensors'] ='Tower Light sensors';
+
+$text['page'] ='Page';
+$text['access'] ='Access';
+$text['read'] ='Read';
+$text['write'] = 'Write';
+$text['role'] = 'Role';
+
+
 //上海展先全部用簡中
 // $error_message['NO_ERROR'] = '';
 // $error_message['ERR_CONT_TEMP'] = 'ERR-CONT-TEMP';

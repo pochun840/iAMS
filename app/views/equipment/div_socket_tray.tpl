@@ -281,7 +281,7 @@
                 }else{
                     // document.getElementById('service_status_device').innerText = ' Offline'
                     // document.getElementById('service_status_device').style = "color:red";
-                    log.innerText = momo + ' response: connect fail ';
+                    log.innerText = momo + ' response: connect fail_1 ';
                 }
 
                 log.innerText = momo + ' response: connect success ';
@@ -293,7 +293,7 @@
                 let log = document.createElement('div');
                 let momo = moment().format('YYYY/MM/DD HH:mm:ss A');
                 log.className = 'col t3';
-                log.innerText = momo + ' response: connect fail ';
+                log.innerText = momo + ' response: connect fail_2 ';
                 log_div.insertBefore(log,log_div.childNodes[0]);
 
                 // history.go(0);//失敗就重新整理
