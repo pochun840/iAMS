@@ -29,7 +29,7 @@
             <label style="font-size: 16px; color: #fff" for="language"><?php echo $text['select_language_text']; ?> :</label>&nbsp;
             <select class="custom-select" id="language" onchange="language_change()">
                 <option value="zh-cn">简中</option>
-                <option value="zh-tw">繁中</option>
+                <option value="zh-tw" selected>繁中</option>
                 <option value="en-us">English</option>
                 <option value="vi-vn">Tiếng Việt</option>
             </select>
