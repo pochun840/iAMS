@@ -612,13 +612,13 @@ function updateCircleSize(value)
         }
     } //end of function
 
-    function openFile(event){//顯示預覽圖
+    function openFile(event){
+
+        //顯示預覽圖
         var input = event.target; //取得上傳檔案
         var reader = new FileReader(); //建立FileReader物件
 
         reader.readAsDataURL(input.files[0]); //以.readAsDataURL將上傳檔案轉換為base64字串
-        //if(input.files[0].size/1024 > 500){
-
         if(file.size / 1024 / 1024 > 5) {
             alert('Image size cannot exceed 500kb')
             document.getElementById('upload_img').value = '';
@@ -628,7 +628,9 @@ function updateCircleSize(value)
             $('#output').attr('src', dataURL).show(); //將img的src設定為dataURL並顯示
             };            
         }
+
     }
+       
 
     function save_job() {
 

@@ -142,7 +142,7 @@
                 <!--Role Edit Setting  -->
                 <div class="role-edit" id="RoleEditSetting" style="display: none;">
                     <div class="w3-panel alert-light" style="line-height: 30px">
-                        <label type="text" style="font-size: 24px; margin: 10px; color: #000"><b> <?php echo $text['role'];?> <b style="font-size: 25px"> &gt;</b> Super admin setting</b></label>
+                        <label type="text" style="font-size: 24px; margin: 10px; color: #000"><b>Role<b style="font-size: 25px"> &gt;</b> Super admin setting</b></label>
                         <label type="text" style="font-size: 22px; margin: 10px; padding-left: 5%">
                             Role Name :
                             <input id="RoleName" class="t3" type="submit" name="RoleName" value="super admin" disabled="disabled" style="color: #000">
@@ -186,7 +186,7 @@
 
                 <div id="RolePermissionSetting" class="role-setting" style="display: none">
                     <div class="w3-panel alert-light" style="line-height: 30px">
-                        <label type="text" style="font-size: 24px; margin: 10px; color: #000"><b><?php echo $text['role'];?> <b style="font-size: 25px"> &gt;</b> <?php echo $text['Role_permissions_setting_text']; ?></b></label>
+                        <label type="text" style="font-size: 24px; margin: 10px; color: #000"><b>Role<b style="font-size: 25px"> &gt;</b> <?php echo $text['Role_permissions_setting_text']; ?></b></label>
 
                         <button id="back-setting" type="button" onclick="cancelSetting()">
                             <img id="img-back" src="./img/back.svg" alt=""> <?php echo $text['Back_text']; ?>
@@ -211,11 +211,11 @@
                                 <table class="w3-table w3-large table-station">
                                     <thead id="header-table" class="w3-large">
                                         <tr>
-                                            <th width="25%"><?php echo $text['page'];?></th>
+                                            <th width="25%">Permissions</th>
                                             <!-- <th>Owner</th> -->
-                                            <th><?php echo $text['access'];?></th>
-                                            <th><?php echo $text['read'];?></th>
-                                            <th><?php echo $text['write'];?></th>
+                                            <th>Access</th>
+                                            <th>Read</th>
+                                            <th>Write</th>
                                             <!-- <th>Load</th> -->
                                             <!-- <th>Save</th> -->
                                             <!-- <th>Notification</th> -->
@@ -240,9 +240,8 @@
                                         </tr> -->
                                         
                                         <?php foreach ($data['permission_list'] as $key => $value): ?>
-                                             <?php if ($value['Route'] == '三色燈') continue; ?>
                                             <tr>
-                                                <td><?php echo $text[$value['Route']]; ?></td>
+                                                <td><?php echo $value['Route']; ?></td>
                                                 <td>
                                                     <div class="checkboxFive">
                                                         <input id="<?php echo $value['ID']; ?>" type="checkbox" value="<?php echo $value['ID']; ?>" name="permissions">
