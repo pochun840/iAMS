@@ -206,6 +206,22 @@ class Sequence{
 
     public function DeleteSeqById($job_id,$seq_id)
     {
+
+          //找到該job的sequence 是否有存取圖片
+          $stmt = $this->db->prepare('SELECT img FROM sequence WHERE job_id = :job_id AND seq_id =:seq_id');
+          $stmt->bindValue(':job_id', $job_id);
+          $stmt->bindValue(':seq_id', $seq_id);
+          $stmt->execute();
+          $seq = $stmt->fetch(PDO::FETCH_ASSOC);
+  
+          if ($seq && !empty($seq['img'])) {
+              $imgPath_seq = $seq['img'];
+              if (file_exists($imgPath_seq)) {
+                  unlink($imgPath_seq);
+              }
+          }
+
+
         //刪除sequence
         $stmt = $this->db->prepare('DELETE FROM sequence WHERE job_id = :job_id AND seq_id = :seq_id');
         $stmt->bindValue(':job_id', $job_id);
@@ -241,5 +257,53 @@ class Sequence{
         
         return $results;
     }
+
+
+    public function checkTaskBySeqId($from_job_id, $from_seq_id, $to_seq_id)
+    {
+        // 先用 $from_job_id 和 $to_seq_id 在 task 表中查询是否有数据
+        $query = "SELECT COUNT(*) AS count FROM task WHERE job_id = ? AND seq_id = ?";
+        $statement_select = $this->db->prepare($query);
+        $statement_select->execute([$from_job_id, $to_seq_id]);
+        $row = $statement_select->fetch(PDO::FETCH_ASSOC);
+    
+        // 如果有数据，则删除这些记录
+        if ($row['count'] > 0) {
+            $sql_delete = "DELETE FROM task WHERE job_id = ? AND seq_id = ?";
+            $statement_delete = $this->db->prepare($sql_delete);
+            $statement_delete->execute([$from_job_id, $to_seq_id]);
+        }
+    
+        // 查询 $from_job_id 和 $from_seq_id 在 task 表中对应的数据
+        $sql = "SELECT * FROM task WHERE job_id = :job_id AND seq_id = :seq_id";
+        $statement = $this->db->prepare($sql);
+        $statement->bindValue(':job_id', $from_job_id);
+        $statement->bindValue(':seq_id', $from_seq_id);
+        $statement->execute();
+        $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
+    
+        // 如果查询到数据，更新 seq_id 并插入新记录
+        if (!empty($rows)) {
+            foreach ($rows as $row) {
+                // 移除旧的 seq_id 并设置新的 seq_id
+                unset($row['seq_id']);
+                $row['seq_id'] = $to_seq_id;
+    
+                // 插入新记录
+                $sql_insert = "INSERT INTO task (" . implode(", ", array_keys($row)) . ") VALUES (" . implode(", ", array_fill(0, count($row), '?')) . ")";
+                $statement_insert = $this->db->prepare($sql_insert);
+                $statement_insert->execute(array_values($row));
+
+                return true;
+            }
+        }else{
+
+            return false;
+        }
+    
+        // 返回更新后的记录数
+        //return $row['count'];
+    }
+    
 
 }

@@ -42,6 +42,14 @@
         
     }
     
+    $job_signal = !empty($data['job_data']['ok_job']) ? $data['job_data']['ok_job'] : ''; 
+    $seq_signal = !empty($data['new_seq_list'][$data['seq_id']]['ok_sequence']) ? $data['new_seq_list'][$data['seq_id']]['ok_sequence'] : ''; 
+    $total_seq  = !empty($data['total_seq']) ? $data['total_seq'] : ''; 
+    $ct_seq_id  = !empty($data['seq_id']) ? $data['seq_id'] : ''; 
+
+    $seq_id = !empty($data['seq_id']) ? $data['seq_id'] : ''; // 如果 seq_id 为空，设置为空字符串
+    $total_seq = isset($data['total_seq']) ? $data['total_seq'] : 0; // 如果 total_seq 未定义，设置为 0
+
     
 ?>
 <div class="container-ms">
@@ -768,19 +776,30 @@ $(document).ready(function () {
 
 function initail() {
     // body...
+
+    var job_name       = <?php echo json_encode($data['job_name']); ?>;
+    var seq_name       = <?php echo json_encode($data['seq_name']);?>;
+    var target_torque  = <?php echo json_encode($data['target_torque']);?>;
+    var high_torque    = <?php echo json_encode($data['high_torque']);?>;
+    var low_torque     = <?php echo json_encode($data['low_torque']);?>;
+    var target_angle   = <?php echo json_encode($data['target_angle']);?>;
+    var high_angle     = <?php echo json_encode($data['high_angle']);?>;
+    var low_angle      = <?php echo json_encode($data['low_angle']);?>;
+
     document.getElementById('barcode').value = '';
-    document.getElementById('job_name').value = '<?php echo $data['job_data']['job_name']; ?>';
-    document.getElementById('seq_name').value = '<?php echo $data['seq_data']['seq_name']; ?>';
+    document.getElementById('job_name').value = job_name;
+
+    document.getElementById('seq_name').value = seq_name;
     // document.getElementById('task_time') = '';
     document.getElementById('tightening_status').innerHTML = '';
     document.getElementById('tightening_repeat').value = ' 0 / 1';
     document.getElementById('tightening_time').value = '0';
-    document.getElementById('target_torque').innerHTML = '<?php echo $data['task_list'][0]['last_step_targettorque']; ?>';
-    document.getElementById('high_torque').value = '<?php echo  $data['task_list'][0]['last_step_hightorque']; ?>';
-    document.getElementById('low_torque').value = '<?php echo  $data['task_list'][0]['last_step_lowtorque']; ?>';
-    document.getElementById('target_angle').innerHTML = '<?php echo  $data['task_list'][0]['last_step_targetangle']; ?>';
-    document.getElementById('high_angle').value = '<?php echo  $data['task_list'][0]['last_step_highangle']; ?>';
-    document.getElementById('low_angle').value = '<?php echo  $data['task_list'][0]['last_step_lowangle']; ?>';
+    document.getElementById('target_torque').innerHTML = target_torque;
+    document.getElementById('high_torque').value = high_torque;
+    document.getElementById('low_torque').value = low_torque;
+    document.getElementById('target_angle').innerHTML = target_angle;
+    document.getElementById('high_angle').value = high_angle;
+    document.getElementById('low_angle').value = low_angle;
     // document.getElementById('screw_info_div').value = '';
     document.getElementById('screw_info').innerHTML = ' - / ' + document.getElementById('stop_on_ng').value;
     // document.getElementById('arm_div').value = '';
@@ -800,10 +819,11 @@ function initail() {
     document.getElementById('Change_Job_Id').value = document.getElementById('job_id').value;
     document.getElementById('socket_hole_number').style.backgroundColor = 'transparent';
 
-    job_singal = '<?php echo $data['job_data']['ok_job']; ?>'; //是否有ok-job的訊號
-    seq_singal  = '<?php echo $data['new_seq_list'][$data['seq_id']]['ok_sequence']; ?>'; //是否有ok-seq的訊號
-    total_seq  = '<?php echo $data['total_seq'];?>'; //seq的數量
-    ct_seq_id  = '<?php echo $data['seq_id'];?>';//當前的seq_id 編號
+    job_signal = '<?php echo $job_signal; ?>'; // 是否有ok-job的訊號
+    seq_signal = '<?php echo $seq_signal; ?>'; // 是否有ok-seq的訊號
+    total_seq = '<?php echo $total_seq; ?>';   // seq的數量
+    ct_seq_id = '<?php echo $ct_seq_id; ?>'; // 當前的seq_id 編號
+
 }
    
 </script>
@@ -1094,7 +1114,7 @@ tt.set('start_time',new Date())
 
           
 
-                    let  seq_id_new = '<?php echo $data['seq_id']; ?>'
+                    let  seq_id_new = '<?php echo $data['seq_id']; ?>';
                     let  seq_count = <?php echo $data['total_seq']; ?>;            
 
                         if(task_id <= task_count){

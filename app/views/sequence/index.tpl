@@ -691,7 +691,7 @@ function displayImage()
             success: function(response) {
                 // 成功回調函數，處理伺服器的回應
                 console.log(response); // 在控制台輸出伺服器的回應
-                history.go(0);
+                //history.go(0);
             },
             error: function(error) {
                 // 失敗回調函數，處理錯誤情況

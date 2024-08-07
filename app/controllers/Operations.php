@@ -36,10 +36,23 @@ class Operations extends Controller
 
 
         $job_data = $this->ProductModel->getJobById($current_job_id['value']);
+        if (isset($job_data['job_name']) && is_array( $job_data['job_name'])) {
+            $job_name = $data['job_name'];
+        } else {
+            $job_name = ''; 
+        }
+
         $seq_data = $this->SequenceModel->GetSeqById($current_job_id['value'],$current_seq_id['value']);
+        if (isset($seq_data['seq_name']) && is_array($seq_data['seq_name'])) {
+            $seq_name =  $seq_data['seq_name'];
+        } else {
+            $seq_name = ''; 
+        }
+
         $seq_list = $this->OperationModel->getSequencesEnable($current_job_id['value']);
         $task_program = $this->TaskModel->GetTaskProgram($current_job_id['value'],$current_seq_id['value'],$current_task_id['value']);//調整
         $task_list = $this->TaskModel->getTasks($current_job_id['value'],$current_seq_id['value']);
+
         //task_message
         $task_message_list = $this->OperationModel->Get_task_message($current_job_id,$current_seq_id);
         if(!empty($task_message_list)){
@@ -146,6 +159,28 @@ class Operations extends Controller
         }else{
             $temp_seq = '';
         }
+
+
+
+        if(!empty($task_list)){
+            $target_torque =  $task_list[0]['last_step_targettorque'];
+            $high_torque   =  $task_list[0]['last_step_hightorque'];
+            $low_torque    =  $task_list[0]['last_step_lowtorque'];
+            $target_angle  =  $task_list[0]['last_step_targetangle'];
+            $high_angle    =  $task_list[0]['last_step_highangle'];
+            $low_angle     =  $task_list[0]['last_step_lowangle'];
+
+        }else{
+            $target_torque = '';
+            $high_torque   = '';
+            $low_torque    = '';
+            $target_angle  = '';
+            $high_angle    = '';
+            $low_angle    = '';
+            
+        }
+        
+
       
 
         // $barcode = @$_SESSION['barcode'];
@@ -173,7 +208,15 @@ class Operations extends Controller
             'controller_ip' => $controller_ip,
             'max_seq_id' => $max_seq_id,
             'seq_count' => $total_seq_count,
-            'new_seq_list' => $temp_seq
+            'new_seq_list' => $temp_seq,
+            'job_name' => $job_name,
+            'seq_name' => $seq_name,
+            'target_torque' =>$target_torque,
+            'high_torque' =>$high_torque,
+            'low_torque' => $low_torque,
+            'target_angle' => $target_angle,
+            'high_angle' => $high_angle,
+            'low_angle'  => $low_angle
             
         ];
         
@@ -512,7 +555,7 @@ class Operations extends Controller
             $input_check = false;
         }
         
-        var_dump($_GET);die();
+        //var_dump($_GET);die();
         if($input_check){
             $system_no = $this->OperationModel->update_type($system_no,$new_status);
         }

@@ -134,9 +134,39 @@ class Product{
 
     public function DeleteJobById($job_id)
     {
+
+        //先找到該job 是否有存取圖片
+        $stmt = $this->db->prepare('SELECT img FROM job WHERE job_id = :job_id');
+        $stmt->bindValue(':job_id', $job_id);
+        $stmt->execute();
+        $job = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($job && !empty($job['img'])) {
+            $imgPath = $job['img'];
+            if (file_exists($imgPath)) {
+                unlink($imgPath);
+            }
+        }
+        
         $stmt = $this->db->prepare('DELETE FROM job WHERE job_id = :job_id');
         $stmt->bindValue(':job_id', $job_id);
         $results = $stmt->execute();
+
+
+        //找到該job的sequence 是否有存取圖片
+        $stmt = $this->db->prepare('SELECT img FROM sequence WHERE job_id = :job_id');
+        $stmt->bindValue(':job_id', $job_id);
+        $stmt->execute();
+        $seq = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($seq && !empty($seq['img'])) {
+            $imgPath_seq = $seq['img'];
+            if (file_exists($imgPath_seq)) {
+                unlink($imgPath_seq);
+            }
+        }
+
+        
 
         //刪除sequence
         $stmt = $this->db->prepare('DELETE FROM sequence WHERE job_id = :job_id');
@@ -158,6 +188,9 @@ class Product{
         $statement = $this->db->prepare('DELETE FROM ccs_advancedstep WHERE job_id = :job_id ');
         $statement->bindValue(':job_id', $job_id);
         $results = $statement->execute();
+
+
+        
 
         
         return $results;

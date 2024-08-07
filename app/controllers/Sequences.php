@@ -268,11 +268,19 @@ class Sequences extends Controller
 
         if ($input_check) {
             $result = $this->SequenceModel->CopySeq($from_job_id,$from_seq_id,$to_seq_id,$to_seq_name);
-            echo json_encode(array('error' => ''));
-            exit();
+
+            //透過job_id 及 $from_seq_id  找出對應的task 
+            $temp_task = $this->SequenceModel->check_task_by_seq_id($from_job_id, $from_seq_id,$to_seq_id);
+            if(!empty($temp_task)){
+                echo  $temp_task;
+                die();
+
+            }
+            //echo json_encode(array('error' => ''));
+            //exit();
         }else{
-            echo json_encode(array('error' => $error_message));
-            exit();
+            //echo json_encode(array('error' => $error_message));
+            //exit();
         }
 
     }
