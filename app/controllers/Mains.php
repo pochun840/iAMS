@@ -11,6 +11,8 @@ class Mains extends Controller
         $this->DashboardModel = $this->model('Main');
         $this->NavsController = $this->controller_new('Navs');
         $this->NavModel = $this->model('Nav');
+        $this->NavModel = $this->model('Nav');
+        $this->OperationModel = $this->model('Operation');
     }
 
     // 取得所有Jobs
@@ -65,6 +67,14 @@ class Mains extends Controller
         $data = array();
         setcookie('user', '', time() - 3600, '/');
         setcookie('auth_token', '', time() - 3600, '/');
+
+        $job_id  = '';
+        $seq_id  = '';
+        $task_id = '';
+        $current_job_id = $this->OperationModel->SetConfigValue('current_job_id',$job_id);
+        $current_job_id = $this->OperationModel->SetConfigValue('current_seq_id',$seq_id);
+        $current_job_id = $this->OperationModel->SetConfigValue('current_task_id',$task_id);
+
         $this->view('login/index', $data);
         // header("Location:".$_SERVER['REQUEST_URI']."  ");
         exit();

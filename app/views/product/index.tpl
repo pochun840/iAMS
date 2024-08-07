@@ -243,7 +243,7 @@
                                     <div class="col t2">
                       					<select id="reverse_button" style="width: 183px">
                        					    <option value="1"><?php echo $text['CCW_text']; ?></option>
-                     					    <option value="0"><?php echo $text['CW_text']; ?></option>
+                     					    <option value="0" selected><?php echo $text['CW_text']; ?></option>
                          				</select>
                                     </div>
                                 </div>
@@ -267,7 +267,7 @@
                                     <div class="col-4 t2">
                                         <!-- <input id="reverse_count" type="text" class="form-control input-ms" maxlength="" > -->
                                         <select id="reverse_count" style="width: 183px">
-                                            <option value="1" selected><?php echo $text['ON_text']; ?></option>
+                                            <option value="1"><?php echo $text['ON_text']; ?></option>
                                             <option value="0"><?php echo $text['OFF_text']; ?></option>
                                         </select>
                                     </div>
@@ -772,13 +772,13 @@ function updateCircleSize(value)
         document.getElementById("job_id").value = '';
         document.getElementById("job_name").value = '';
         document.getElementById('ok_job').checked = 1;
-        document.getElementById("reverse_button").value = 0;
+        document.getElementById("reverse_button").value = 1;
         document.getElementById("reverse_rpm").value = 100;
-        document.getElementById("reverse_Force").value = 20;
+        document.getElementById("reverse_Force").value = 70;
         document.getElementById('reverse_count').value = '';
         document.getElementById("threshold_torque").value = 0.0;
         document.getElementById('barcode_start').checked = 1;
-        document.getElementById('job_repeat').checked = 1;
+        document.getElementById('job_repeat').checked = 0;
         document.getElementById('Tower-Light').checked = 0;
 
         // document.getElementById('size').value = response['point_size'];//另外處理

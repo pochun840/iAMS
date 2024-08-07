@@ -51,8 +51,17 @@ class Operations extends Controller
         }
         
         //get total seq
+
         $total_seq = $this->SequenceModel->getSequences_enable($current_job_id['value']);
-        $total_seq_count = count($total_seq);
+
+        if(!empty($total_seq)){
+            $total_seq_count = count($total_seq);
+            $max_seq_id = $total_seq[array_key_last($total_seq)]['seq_id'];
+        }else{
+            $total_seq_count = '';
+            $max_seq_id = '';
+        }
+        //$total_seq_count = count($total_seq);
 
         $job_list = $this->ProductModel->getJobs();
         //預處理task_list
@@ -134,6 +143,8 @@ class Operations extends Controller
                 $temp_seq[$key] = $va; 
                 $key++;
             }
+        }else{
+            $temp_seq = '';
         }
       
 
@@ -160,7 +171,7 @@ class Operations extends Controller
             'button_auth' => $button_auth,
             'barcode' => $barcode,
             'controller_ip' => $controller_ip,
-            'max_seq_id' => $total_seq[array_key_last($total_seq)]['seq_id'],
+            'max_seq_id' => $max_seq_id,
             'seq_count' => $total_seq_count,
             'new_seq_list' => $temp_seq
             

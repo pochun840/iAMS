@@ -24,20 +24,20 @@
 <?php 
     
     //判斷 $data['seq_list'] 有幾筆 
-    
-    if($data['total_seq'] == 1){
-        $new_index_seq = 0;
-        $data['ok_sequence'] =  $data['seq_list'][0]['ok_sequence'];
-    }else{
+    if(!empty($data['total_seq'])){
+        if($data['total_seq'] == 1){
+            $new_index_seq = 0;
+            $data['ok_sequence'] =  $data['seq_list'][0]['ok_sequence'];
+        }else{
 
-        #陣列重整  key值 用  $vv['seq_id'] 取代      
-        $temp = array();
-        foreach($data['seq_list'] as $kk =>$vv){
-            $temp[$vv['seq_id']]= $vv;
-        }
-        $data['ok_sequence'] = $temp[$data['seq_id']]['ok_sequence'];
-
-    } 
+            #陣列重整  key值 用  $vv['seq_id'] 取代      
+            $temp = array();
+            foreach($data['seq_list'] as $kk =>$vv){
+                $temp[$vv['seq_id']]= $vv;
+            }
+            $data['ok_sequence'] = $temp[$data['seq_id']]['ok_sequence'];
+        } 
+    }
     
 ?>
 <div class="container-ms">
