@@ -15,8 +15,6 @@ class Logins extends Controller
 
     // 取得所有Jobs
     public function index($url){
-
-        
         session_start();
         $_SESSION['sessionid'] = session_id();
         $error_message = '';

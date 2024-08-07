@@ -250,6 +250,7 @@ try {
     }
 
     if ($light_signal == 'sockect_hole') {
+        // $data['hole_id'];
 
 
         if($data['hole_id'] == 1){
