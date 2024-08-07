@@ -37,7 +37,11 @@
             }
             $data['ok_sequence'] = $temp[$data['seq_id']]['ok_sequence'];
         } 
+    }else{
+
+        
     }
+    
     
 ?>
 <div class="container-ms">
@@ -390,7 +394,7 @@
                 <div class="column column-target" style="margin-right: 20px">
                     <div id="tightening_status_div" class="row target_style" style="background-color: #7ECA86;">
                         <div class="w3-display-container" style="font-size: 5vmin">
-                            <div id="tightening_status" class="w3-display-middle">OK</div>
+                            <div id="tightening_status" class="w3-display-middle"></div>
                         </div>
                     </div>
                     <div class="row target_style">
