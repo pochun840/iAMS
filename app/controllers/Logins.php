@@ -41,12 +41,12 @@ class Logins extends Controller
             $password = $_POST['password'];
 
 
-            $job_id  = '';
-            $seq_id  = '';
-            $task_id = '';
+            $job_id  = 0;
+            //$seq_id  = '';
+            //$task_id = '';
             $current_job_id = $this->OperationModel->SetConfigValue('current_job_id',$job_id);
-            $current_job_id = $this->OperationModel->SetConfigValue('current_seq_id',$seq_id);
-            $current_job_id = $this->OperationModel->SetConfigValue('current_task_id',$task_id);
+            //$current_job_id = $this->OperationModel->SetConfigValue('current_seq_id',$seq_id);
+            //$current_job_id = $this->OperationModel->SetConfigValue('current_task_id',$task_id);
 
             
             if($this->verifyCredentials($username,$password)){
