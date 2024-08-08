@@ -11,6 +11,7 @@ class Logins extends Controller
         $this->LoginModel = $this->model('Login');
         $this->NavModel = $this->model('Nav');
         $this->MainsController = $this->controller_new('Mains');
+        $this->OperationModel = $this->model('Operation');
     }
 
     // 取得所有Jobs
@@ -38,6 +39,15 @@ class Logins extends Controller
 
             $username = $_POST['username'];
             $password = $_POST['password'];
+
+
+            $job_id  = '';
+            $seq_id  = '';
+            $task_id = '';
+            $current_job_id = $this->OperationModel->SetConfigValue('current_job_id',$job_id);
+            $current_job_id = $this->OperationModel->SetConfigValue('current_seq_id',$seq_id);
+            $current_job_id = $this->OperationModel->SetConfigValue('current_task_id',$task_id);
+
             
             if($this->verifyCredentials($username,$password)){
                 // $part1 = hash('sha256', $password);
