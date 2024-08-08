@@ -36,45 +36,14 @@ class Operations extends Controller
 
 
         $job_data = $this->ProductModel->getJobById($current_job_id['value']);
-        if (isset($job_data['job_name']) && is_array( $job_data['job_name'])) {
-            $job_name = $data['job_name'];
-        } else {
-            $job_name = ''; 
-        }
-
         $seq_data = $this->SequenceModel->GetSeqById($current_job_id['value'],$current_seq_id['value']);
-        if (isset($seq_data['seq_name']) && is_array($seq_data['seq_name'])) {
-            $seq_name =  $seq_data['seq_name'];
-        } else {
-            $seq_name = ''; 
-        }
-
         $seq_list = $this->OperationModel->getSequencesEnable($current_job_id['value']);
         $task_program = $this->TaskModel->GetTaskProgram($current_job_id['value'],$current_seq_id['value'],$current_task_id['value']);//調整
         $task_list = $this->TaskModel->getTasks($current_job_id['value'],$current_seq_id['value']);
 
-        //task_message
-        $task_message_list = $this->OperationModel->Get_task_message($current_job_id,$current_seq_id);
-        if(!empty($task_message_list)){
-            $temp =array();
-            foreach($task_message_list  as $jj => $vv){
-                $temp[$vv['task_id']]= $task_message_list[$jj];
-            }
-
-        }
-        
         //get total seq
-
         $total_seq = $this->SequenceModel->getSequences_enable($current_job_id['value']);
-
-        if(!empty($total_seq)){
-            $total_seq_count = count($total_seq);
-            $max_seq_id = $total_seq[array_key_last($total_seq)]['seq_id'];
-        }else{
-            $total_seq_count = '';
-            $max_seq_id = '';
-        }
-        //$total_seq_count = count($total_seq);
+        $total_seq_count = count($total_seq);
 
         $job_list = $this->ProductModel->getJobs();
         //預處理task_list
@@ -101,12 +70,7 @@ class Operations extends Controller
                 }
             }else{
                 $task_list[$key]['last_job_type'] = 'normal';
-                $last_targettype = $value['program']['step_targettype'] ?? 'default_value';
-                $task_list[$key]['last_targettype'] = $last_targettype;
-
-                $last_step_targetangle = $value['program']['step_targetangle'] ?? 'default_value';
-                $task_list[$key]['last_step_targetangle'] = $last_step_targetangle;
-
+                $task_list[$key]['last_targettype'] = $value['program']['step_targettype'];
                 $task_list[$key]['last_step_targetangle'] = $value['program']['step_targetangle'];
                 $task_list[$key]['last_step_highangle'] = $value['program']['step_highangle'];
                 $task_list[$key]['last_step_lowangle'] = $value['program']['step_lowangle'];
@@ -147,42 +111,12 @@ class Operations extends Controller
                 $button_auth[$key] = 1;
             }
         }
-
-
-        if(!empty($seq_list)){
-            $temp_seq = array();
-            $key = 1;
-            foreach( $seq_list as $kv =>$va){
-                $temp_seq[$key] = $va; 
-                $key++;
-            }
-        }else{
-            $temp_seq = '';
-        }
-
-
-
-        if(!empty($task_list)){
-            $target_torque =  $task_list[0]['last_step_targettorque'];
-            $high_torque   =  $task_list[0]['last_step_hightorque'];
-            $low_torque    =  $task_list[0]['last_step_lowtorque'];
-            $target_angle  =  $task_list[0]['last_step_targetangle'];
-            $high_angle    =  $task_list[0]['last_step_highangle'];
-            $low_angle     =  $task_list[0]['last_step_lowangle'];
-
-        }else{
-            $target_torque = '';
-            $high_torque   = '';
-            $low_torque    = '';
-            $target_angle  = '';
-            $high_angle    = '';
-            $low_angle    = '';
-            
-        }
         
-
-      
-
+        if(!empty($total_seq)){
+            $max_seq_id = $total_seq[array_key_last($total_seq)]['seq_id'];
+        }else{
+            $max_seq_id = '';
+        }
         // $barcode = @$_SESSION['barcode'];
         $barcode = @$_COOKIE['barcode'];
         // unset($_SESSION['barcode']);
@@ -206,23 +140,8 @@ class Operations extends Controller
             'button_auth' => $button_auth,
             'barcode' => $barcode,
             'controller_ip' => $controller_ip,
-            'max_seq_id' => $max_seq_id,
-            'seq_count' => $total_seq_count,
-            'new_seq_list' => $temp_seq,
-            'job_name' => $job_name,
-            'seq_name' => $seq_name,
-            'target_torque' =>$target_torque,
-            'high_torque' =>$high_torque,
-            'low_torque' => $low_torque,
-            'target_angle' => $target_angle,
-            'high_angle' => $high_angle,
-            'low_angle'  => $low_angle
-            
+            'max_seq_id' => $max_seq_id
         ];
-        
-        if (!empty($temp)) {
-            $data['task_message_list'] = $temp;
-        }
         
         $this->view('operation/index', $data);
 
@@ -314,6 +233,7 @@ class Operations extends Controller
 
             //check seq enable or not
             $enable_seq_list = $this->OperationModel->GetSeqEnable($job_id);
+            // var_dump($enable_seq_list);
             if($enable_seq_list[$seq_id-1]['sequence_enable'] == 1 ){
                 $current_job_id = $this->OperationModel->SetConfigValue('current_job_id',$job_id);
                 $current_job_id = $this->OperationModel->SetConfigValue('current_seq_id',$seq_id);
@@ -330,7 +250,7 @@ class Operations extends Controller
                         }
                     }
                 }
-  
+                // var_dump($seq_id);
 
                 if($direction == 'previous'){
                     for ($i=$seq_id-1; $i >= 0; $i--) { 
@@ -341,7 +261,9 @@ class Operations extends Controller
                     }
                 }
 
-    
+                // var_dump($enable_seq_list);
+                // var_dump($seq_id);
+
                 $current_job_id = $this->OperationModel->SetConfigValue('current_job_id',$job_id);
                 $current_job_id = $this->OperationModel->SetConfigValue('current_seq_id',$seq_id);
                 $current_job_id = $this->OperationModel->SetConfigValue('current_task_id',$task_id);
@@ -350,7 +272,11 @@ class Operations extends Controller
 
             }
 
-    
+            // $current_job_id = $this->OperationModel->SetConfigValue('current_job_id',$job_id);
+            // $current_job_id = $this->OperationModel->SetConfigValue('current_seq_id',$seq_id);
+            // $current_job_id = $this->OperationModel->SetConfigValue('current_task_id',$task_id);
+            // echo json_encode(array('error' => $error_message));
+            // exit();
         }else{
             echo json_encode(array('error' => $error_message));
             exit();
@@ -520,48 +446,11 @@ class Operations extends Controller
 
     public function Save_Result()
     {
-      
-        $data = $_GET['data'];
-    
-        if (!is_array($data)) {
-            echo json_encode(['error' => 'Invalid data format']);
-            return;
-        }
-    
-        // 尝试将数据保存到 fasten_data 表中
-        try {
-            $system_no = $this->OperationModel->SaveFastenData($data);
-            //setcookie('system_no', $system_no, time() + 3600, '/');
-
-            echo json_encode(['system_no' => $system_no]);
-            $this->SaveFastenDataLog($data['system_sn']);
-        } catch (Exception $e) {
-          
-            echo json_encode(['error' => $e->getMessage()]);
-        }
+        //儲存鎖附結果到fasten_data
+        $this->OperationModel->SaveFastenData($_GET['data']);
+        //把鎖附的曲線圖資料拉到本機
+        $this->SaveFastenDataLog($_GET['data']['system_sn']);
     }
-
-    public function update_status(){
-        if(!empty($_GET['sysem_no'])){
-            $system_no = $_GET['sysem_no'];
-        }else{
-            $input_check = false;
-        }
-
-        
-        if(!empty($_GET['new_status'])){
-            $new_status = $_GET['new_status'];
-        }else{
-            $input_check = false;
-        }
-        
-        //var_dump($_GET);die();
-        if($input_check){
-            $system_no = $this->OperationModel->update_type($system_no,$new_status);
-        }
-    }
-
-
 
     public function SaveFastenDataLog($system_sn)
     {
@@ -712,14 +601,14 @@ class Operations extends Controller
             $hole_id = -1;
         }
 
-        /*$check = $this->pingDomain('192.168.1.75',502);
+        $check = $this->pingDomain('192.168.1.75',502);
         if($check > 0){
 
         }else{
             // 可以避免io沒開的時候 會卡很久，但某些機器判斷會有問題 暫時先移除
             echo json_encode(array('result' => 'no con'));
             exit();
-        }*/
+        }
 
         //要加先判斷連線是否通，不然會等太久
 
@@ -734,8 +623,8 @@ class Operations extends Controller
             // FC 2
             $data = $modbus->readInputDiscretes(0, 0, 16);
 
-            $power0 = (int)$data[4]*1;
-            $power1 = (int)$data[5]*2;
+            $power0 = (int)$data[5]*1;
+            $power1 = (int)$data[6]*2;
             $power2 = (int)$data[7]*4;
 
             $sum = $power0 + $power1 + $power2;
