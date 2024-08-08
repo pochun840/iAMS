@@ -289,7 +289,7 @@ class Products extends Controller
                 }
                 
                 $insertedrecords_task = $this->ProductModel->Copy_task_by_job_id($new_temp_task);  //copy task  
-                echo $insertedrecords_task;
+                //echo $insertedrecords_task;
                 //ccs_normalstep 
                 $res = $this->ProductModel->check_pro_id_for_ccs_normalstep($new_temp_task,$from_job_id);
                 if(!empty($res)){

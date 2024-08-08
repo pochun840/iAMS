@@ -1110,12 +1110,7 @@ tt.set('start_time',new Date())
 
                     var seq_id_nn = <?php echo json_encode($data['seq_id']); ?>;
                     var total_seq_nn = <?php echo json_encode($data['total_seq']); ?>;
-
-
-          
-
-                    let  seq_id_new = '<?php echo $data['seq_id']; ?>';
-                    let  seq_count = <?php echo $data['total_seq']; ?>;            
+         
 
                         if(task_id <= task_count){
 

@@ -259,22 +259,22 @@ class Sequence{
     }
 
 
-    public function checkTaskBySeqId($from_job_id, $from_seq_id, $to_seq_id)
+    public function check_task_by_seq_id($from_job_id, $from_seq_id, $to_seq_id)
     {
-        // 先用 $from_job_id 和 $to_seq_id 在 task 表中查询是否有数据
+        // 先用 $from_job_id 和 $to_seq_id 在 task 查詢是否有資料
         $query = "SELECT COUNT(*) AS count FROM task WHERE job_id = ? AND seq_id = ?";
         $statement_select = $this->db->prepare($query);
         $statement_select->execute([$from_job_id, $to_seq_id]);
         $row = $statement_select->fetch(PDO::FETCH_ASSOC);
     
-        // 如果有数据，则删除这些记录
+        //有資料的話就要刪除
         if ($row['count'] > 0) {
             $sql_delete = "DELETE FROM task WHERE job_id = ? AND seq_id = ?";
             $statement_delete = $this->db->prepare($sql_delete);
             $statement_delete->execute([$from_job_id, $to_seq_id]);
         }
     
-        // 查询 $from_job_id 和 $from_seq_id 在 task 表中对应的数据
+        //查詢 $from_job_id 和 $from_seq_id 在 task是否有資料
         $sql = "SELECT * FROM task WHERE job_id = :job_id AND seq_id = :seq_id";
         $statement = $this->db->prepare($sql);
         $statement->bindValue(':job_id', $from_job_id);
@@ -282,28 +282,86 @@ class Sequence{
         $statement->execute();
         $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
     
-        // 如果查询到数据，更新 seq_id 并插入新记录
-        if (!empty($rows)) {
-            foreach ($rows as $row) {
-                // 移除旧的 seq_id 并设置新的 seq_id
-                unset($row['seq_id']);
-                $row['seq_id'] = $to_seq_id;
+        return $rows;
     
-                // 插入新记录
-                $sql_insert = "INSERT INTO task (" . implode(", ", array_keys($row)) . ") VALUES (" . implode(", ", array_fill(0, count($row), '?')) . ")";
-                $statement_insert = $this->db->prepare($sql_insert);
-                $statement_insert->execute(array_values($row));
-
-                return true;
-            }
-        }else{
-
-            return false;
-        }
-    
-        // 返回更新后的记录数
-        //return $row['count'];
     }
+
+
+    public function copy_task_by_seq_id($new_temp_task){
+        $sql = "INSERT INTO `task` (job_id, seq_id, task_id, controller, enable_equipment, enable_arm, position_x, position_y, tolerance, tolerance2, pts, template_program_id, circle_div, delay)
+                VALUES (:job_id, :seq_id, :task_id, :controller, :enable_equipment, :enable_arm, :position_x, :position_y, :tolerance, :tolerance2, :pts, :template_program_id, :circle_div, :delay)";
+
+        $statement = $this->db->prepare($sql);
+        $insertedRecords_task = 0;
+
+        foreach ($new_temp_task as $task) {
+            $params = array(
+                ':job_id' => $task['job_id'],
+                ':seq_id' => $task['seq_id'],
+                ':task_id' => $task['task_id'],
+                ':controller' => $task['controller'],
+                ':enable_equipment' => $task['enable_equipment'],
+                ':enable_arm' => $task['enable_arm'],
+                ':position_x' => $task['position_x'],
+                ':position_y' => $task['position_y'],
+                ':tolerance' => $task['tolerance'],
+                ':tolerance2' => $task['tolerance2'],
+                ':pts' => $task['pts'],
+                ':template_program_id' => $task['template_program_id'],
+                ':circle_div' => $task['circle_div'],
+                ':delay' => $task['delay']
+            );
+
+            if ($statement->execute($params)) {
+                $insertedRecords_task++;
+            } else {
+            
+                $errorInfo = $statement->errorInfo();
+                echo "SQL Error: " . $errorInfo[2];
+            }
+        }
+
+        return $insertedRecords_task;
+    }
+
+    public function check_pro_id_template($table_name,$from_job_id,$from_seq_id){
+
+        $allowed_tables = array('ccs_normalstep', 'ccs_advancedstep');
+
+        if (!in_array($table_name, $allowed_tables)) {
+            throw new InvalidArgumentException('Invalid table name.');
+        }
+
+        $sql = "SELECT * FROM $table_name WHERE job_id = :job_id AND seq_id = :seq_id ";
+        $stmt = $this->db->prepare($sql); 
+        $statement = $this->db->prepare($sql);
+        $statement->bindValue(':job_id', $from_job_id);
+        $statement->bindValue(':seq_id', $from_seq_id);
+        $statement->execute();
+        $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
+    
+        return $rows;
+        
+    }
+    /*public function check_pro_id_for_ccs_normalstep($new_temp_task,$from_job_id){
+
+
+        foreach($new_temp_task as $key =>$task ){
+            $query = "SELECT * FROM ccs_normalstep WHERE job_id = ? AND seq_id = ?  AND ";
+            $statement_select = $this->db->prepare($query);
+
+            $statement_select->execute([$from_job_id,$task['seq_id'] ]);
+            $statement_select->execute();
+            $result = $statement_select->fetchAll(PDO::FETCH_ASSOC);
+
+        }
+        return $result;
+
+
+    }*/
+
+
+    
     
 
 }

@@ -9,6 +9,7 @@ class Sequences extends Controller
     {
         $this->SequenceModel = $this->model('Sequence');
         $this->NavsController = $this->controller_new('Navs');
+        $this->ProductModel = $this->model('Product');
     }
 
     // 取得所有Jobs
@@ -272,15 +273,112 @@ class Sequences extends Controller
             //透過job_id 及 $from_seq_id  找出對應的task 
             $temp_task = $this->SequenceModel->check_task_by_seq_id($from_job_id, $from_seq_id,$to_seq_id);
             if(!empty($temp_task)){
-                echo  $temp_task;
-                die();
+                $new_temp_task = array();
+                foreach($temp_task as $kk =>$vv){
+                    $new_temp_task[$kk]['job_id'] = $vv['job_id'];
+                    $new_temp_task[$kk]['seq_id'] = $to_seq_id;
+                    $new_temp_task[$kk]['task_id'] = $vv['task_id'];
+                    $new_temp_task[$kk]['controller'] = $vv['controller'];
+                    $new_temp_task[$kk]['enable_equipment'] = $vv['enable_equipment'];
+                    $new_temp_task[$kk]['enable_arm'] = $vv['enable_arm'];
+                    $new_temp_task[$kk]['position_x'] = $vv['position_x'];
+                    $new_temp_task[$kk]['position_y'] = $vv['position_y'];
+                    $new_temp_task[$kk]['tolerance'] = $vv['tolerance'];
+                    $new_temp_task[$kk]['tolerance2'] = $vv['tolerance2'];
+                    $new_temp_task[$kk]['pts'] = $vv['pts'];
+                    $new_temp_task[$kk]['template_program_id'] = $vv['template_program_id'];
+                    $new_temp_task[$kk]['circle_div'] = $vv['circle_div'];
+                    $new_temp_task[$kk]['delay'] = $vv['delay'];
+                }
+ 
+                $insertedrecords_task = $this->SequenceModel->copy_task_by_seq_id($new_temp_task); 
+                $table_name = 'ccs_normalstep';
+                
+                $res = $this->SequenceModel->check_pro_id_template($table_name,$from_job_id,$from_seq_id);
+                if(!empty($res)){
+                    $new_temp_normalstep = array();
+                    $table_name ='ccs_normalstep';
+                    foreach($res as $k_cc =>$v_cc){
+                        $new_temp_normalstep[$k_cc]['job_id'] = $vv['job_id'];
+                        $new_temp_normalstep[$k_cc]['seq_id'] = $to_seq_id;
+                        $new_temp_normalstep[$k_cc]['task_id'] = $v_cc['task_id'];
+                        $new_temp_normalstep[$k_cc]['step_name'] = $v_cc['step_name'];
+                        $new_temp_normalstep[$k_cc]['step_targettype'] = $v_cc['step_targettype'];
+                        $new_temp_normalstep[$k_cc]['step_targetangle'] = $v_cc['step_targetangle'];
+                        $new_temp_normalstep[$k_cc]['step_targettorque'] = $v_cc['step_targettorque'];
+                        $new_temp_normalstep[$k_cc]['step_tooldirection'] = $v_cc['step_tooldirection'];
+                        $new_temp_normalstep[$k_cc]['step_rpm'] = $v_cc['step_rpm'];
+                        $new_temp_normalstep[$k_cc]['step_offsetdirection'] = $v_cc['step_offsetdirection'];
+                        $new_temp_normalstep[$k_cc]['step_torque_jointoffset'] = $v_cc['step_torque_jointoffset'];
+                        $new_temp_normalstep[$k_cc]['step_hightorque'] = $v_cc['step_hightorque'];
+                        $new_temp_normalstep[$k_cc]['step_lowtorque'] = $v_cc['step_lowtorque'];
+                        $new_temp_normalstep[$k_cc]['step_threshold_mode'] = $v_cc['step_threshold_mode'];
+                        $new_temp_normalstep[$k_cc]['step_threshold_torque'] = $v_cc['step_threshold_torque'];
+                        $new_temp_normalstep[$k_cc]['step_threshold_angle'] = $v_cc['step_threshold_angle'];
+                        $new_temp_normalstep[$k_cc]['step_monitoringangle'] = $v_cc['step_monitoringangle'];
+                        $new_temp_normalstep[$k_cc]['step_highangle'] = $v_cc['step_highangle'];
+                        $new_temp_normalstep[$k_cc]['step_lowangle'] = $v_cc['step_lowangle'];
+                        $new_temp_normalstep[$k_cc]['step_downshift_enable'] = $v_cc['step_downshift_enable'];
+                        $new_temp_normalstep[$k_cc]['step_downshift_torque'] = $v_cc['step_downshift_torque'];
+                        $new_temp_normalstep[$k_cc]['step_downshift_speed'] = $v_cc['step_downshift_speed'];
+                        $new_temp_normalstep[$k_cc]['torque_unit'] = $v_cc['torque_unit'];
+                        $new_temp_normalstep[$k_cc]['step_prr'] = $v_cc['step_prr'];
+                        $new_temp_normalstep[$k_cc]['step_prr_rpm'] = $v_cc['step_prr_rpm'];
+                        $new_temp_normalstep[$k_cc]['step_prr_angle'] = $v_cc['step_prr_angle'];
+                        $new_temp_normalstep[$k_cc]['step_downshift_mode'] = $v_cc['step_downshift_mode'];
+                        $new_temp_normalstep[$k_cc]['step_downshift_angle'] = $v_cc['step_downshift_angle'];
+                        $new_temp_normalstep[$k_cc]['gtcs_job_id'] = $v_cc['gtcs_job_id'];   
+                    }
 
+                    $count = $this->ProductModel->cover_data($new_temp_normalstep,$table_name);
+
+                }else{
+                    $table_name = 'ccs_advancedstep';
+                    $res1 = $this->SequenceModel->check_pro_id_template($table_name,$from_job_id,$from_seq_id);
+                    if(!empty($res1)){
+                        foreach($res1 as $k_cc =>$v_cc){
+
+                            $new_temp_advancedstep[$k_cc]['job_id'] = $v_cc['job_id'];
+                            $new_temp_advancedstep[$k_cc]['seq_id'] = $to_seq_id;
+                            $new_temp_advancedstep[$k_cc]['task_id'] = $v_cc['task_id'];
+                            $new_temp_advancedstep[$k_cc]['step_name'] = $v_cc['step_name'];
+                            $new_temp_advancedstep[$k_cc]['step_targettype'] = $v_cc['step_targettype'];
+                            $new_temp_advancedstep[$k_cc]['step_targetangle'] = $v_cc['step_targetangle'];
+                            $new_temp_advancedstep[$k_cc]['step_targettorque'] = $v_cc['step_targettorque'];
+                            $new_temp_advancedstep[$k_cc]['step_tooldirection'] = $v_cc['step_tooldirection'];
+                            $new_temp_advancedstep[$k_cc]['step_rpm'] = $v_cc['step_rpm'];
+                            $new_temp_advancedstep[$k_cc]['step_offsetdirection'] = $v_cc['step_offsetdirection'];
+                            $new_temp_advancedstep[$k_cc]['step_torque_jointoffset'] = $v_cc['step_torque_jointoffset'];
+                            $new_temp_advancedstep[$k_cc]['step_hightorque'] = $v_cc['step_hightorque'];
+                            $new_temp_advancedstep[$k_cc]['step_lowtorque'] = $v_cc['step_lowtorque'];
+                            $new_temp_advancedstep[$k_cc]['step_threshold_mode'] = $v_cc['step_threshold_mode'];
+                            $new_temp_advancedstep[$k_cc]['step_threshold_torque'] = $v_cc['step_threshold_torque'];
+                            $new_temp_advancedstep[$k_cc]['step_threshold_angle'] = $v_cc['step_threshold_angle'];
+                            $new_temp_advancedstep[$k_cc]['step_monitoringangle'] = $v_cc['step_monitoringangle'];
+                            $new_temp_advancedstep[$k_cc]['step_highangle'] = $v_cc['step_highangle'];
+                            $new_temp_advancedstep[$k_cc]['step_lowangle'] = $v_cc['step_lowangle'];
+                            $new_temp_advancedstep[$k_cc]['step_downshift_enable'] = $v_cc['step_downshift_enable'];
+                            $new_temp_advancedstep[$k_cc]['step_downshift_torque'] = $v_cc['step_downshift_torque'];
+                            $new_temp_advancedstep[$k_cc]['step_downshift_speed'] = $v_cc['step_downshift_speed'];
+                            $new_temp_advancedstep[$k_cc]['torque_unit'] = $v_cc['torque_unit'];
+                            $new_temp_advancedstep[$k_cc]['step_prr'] = $v_cc['step_prr'];
+                            $new_temp_advancedstep[$k_cc]['step_prr_rpm'] = $v_cc['step_prr_rpm'];
+                            $new_temp_advancedstep[$k_cc]['step_prr_angle'] = $v_cc['step_prr_angle'];
+                            $new_temp_advancedstep[$k_cc]['step_downshift_mode'] = $v_cc['step_downshift_mode'];
+                            $new_temp_advancedstep[$k_cc]['step_downshift_angle'] = $v_cc['step_downshift_angle'];
+                            $new_temp_advancedstep[$k_cc]['gtcs_job_id'] = $v_cc['gtcs_job_id'];
+
+                        }
+                        $count = $this->ProductModel->cover_data($new_temp_advancedstep,$table_name);
+                    }
+
+                }
             }
-            //echo json_encode(array('error' => ''));
-            //exit();
+            echo json_encode(array('error' => ''));
+            exit();
         }else{
-            //echo json_encode(array('error' => $error_message));
-            //exit();
+            echo json_encode(array('error' => $error_message));
+            exit();
         }
 
     }
