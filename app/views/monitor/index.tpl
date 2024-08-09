@@ -95,13 +95,16 @@
         <div class="center-content">
             <div class="wrapper">
                 <div class="navbutton active" onclick="handleButtonClick(this, 'monitor')">
-                    <span data-content="Monitor" onclick="showContent('monitor')"></span>Monitor
+                    <span data-content="<?php echo $text['main_monitor_text'];?>" onclick="showContent('monitor')"></span>
+                    <?php echo $text['main_monitor_text'];?>
                 </div>
                 <div class="navbutton" onclick="handleButtonClick(this, 'station_setting')">
-                    <span data-content="Station Setting" onclick="showContent('station_setting')"></span>Station Setting
+                    <span data-content="<?php echo $text['station_setting_text'];?>" onclick="showContent('station_setting')"></span>
+                    <?php echo $text['station_setting_text'];?>
                 </div>
                 <div class="navbutton" onclick="handleButtonClick(this, 'station_rule')">
-                    <span data-content="Station Rule" onclick="showContent('station_rule')"></span>Station Rule
+                    <span data-content="<?php echo $text['station_rule_text'];?>" onclick="showContent('station_rule')"></span>Station Rule
+                    <?php echo $text['station_rule_text'];?>
                 </div>
             </div>
 
@@ -123,7 +126,7 @@
                                                     <div>1.N.m</div>
                                                     <div>Esther</div>
                                                 </label>
-                                                <div class="overlay">Station Fastening</div>
+                                                <div class="overlay"><?php echo $text['station_fastening_text'];?></div>
                                             </div>
                                             <div class="station" tabindex="1">
                                                 <label style="background: #14A800; color: #fff; text-align: left; padding-left: 3%;">
@@ -134,7 +137,7 @@
                                                     <div>1.5.N.m</div>
                                                     <div>Peter</div>
                                                 </label>
-                                                <div class="overlay">Station Fastening</div>
+                                                <div class="overlay"><?php echo $text['station_fastening_text'];?></div>
                                             </div>
                                             <div class="station" tabindex="1">
                                                 <label style="background: #E9A759;color: #fff; text-align: left; padding-left: 3%;">
@@ -145,7 +148,7 @@
                                                     <div>1.N.m</div>
                                                     <div>Mary</div>
                                                 </label>
-                                                <div class="overlay">Station Standby</div>
+                                                <div class="overlay"><?php echo $text['station_standby_text'];?></div>
                                             </div>
                                             <div class="station" tabindex="1">
                                                 <label style="background: #BDBABA;color: #fff; text-align: left; padding-left: 3%;">
@@ -156,7 +159,7 @@
                                                     <div>1.5.N.m</div>
                                                     <div>Peter</div>
                                                 </label>
-                                                <div class="overlay">Station Offline</div>
+                                                <div class="overlay"><?php echo $text['station_offline_text'];?></div>
                                             </div>
                                             <div class="station" tabindex="1">
                                                 <label style="background: #A1E959;color: #fff; text-align: left; padding-left: 3%;">
@@ -167,7 +170,7 @@
                                                     <div>1.5.N.m</div>
                                                     <div>Luke</div>
                                                 </label>
-                                                <div class="overlay">Station Connect</div>
+                                                <div class="overlay"><?php echo $text['station_connect_text'];?><?php echo $text['station_offline_text'];?></div>
                                             </div>
                                             <div class="station" tabindex="1">
                                                 <label style="background: #BDBABA; color: #fff; text-align: left; padding-left: 3%;">
@@ -334,7 +337,7 @@
                         </div>
                     </div>
 
-                    <div style="float: right"><button id="open-station" class="SettingButton" type="button">Open Station</button></div>
+                    <div style="float: right"><button id="open-station" class="SettingButton" type="button"><?php echo $text['open_station_text'];?></button></div>
 
                     <div id="Monitor_table_setting" style="margin-top: 5px">
                         <div class="scrollbar-monitor" id="style-monitor">
@@ -342,13 +345,13 @@
                                 <table class="table table-bordered table-hover" id="table-monitor" >
                                     <thead id="header-table">
                                         <tr style="text-align: center">
-                                            <th width="10%">Station Name</th>
-                                            <th width="10%">Torque</th>
-                                            <th width="10%">Angle</th>
-                                            <th width="10%">Status</th>
-                                            <th width="10%">Operator</th>
-                                            <th width="10%">Job Name</th>
-                                            <th width="10%">Job barcode</th>
+                                            <th width="10%"><?php echo $text['station_name_text'];?></th>
+                                            <th width="10%"><?php echo $text['Torque_text'];?></th>
+                                            <th width="10%"><?php echo $text['Angle_text'];?></th>
+                                            <th width="10%"><?php echo $text['Status_text'];?></th>
+                                            <th width="10%"><?php echo $text['Operator_text'];?></th>
+                                            <th width="10%"><?php echo $text['Job_Name_text'];?></th>
+                                            <th width="10%"><?php echo $text['job_barcode_text'];?></th>
                                             <th width="10%">Assembly</th>
                                             <th width="10%">Sub</th>
                                             <th width="10%">Controller</th>
@@ -593,9 +596,9 @@
                                     <thead id="header-table">
                                         <tr style="text-align: center">
                                             <th width="5%">ID</th>
-                                            <th width="15%">Station Name</th>
+                                            <th width="15%"><?php echo $text['station_name_text'];?></th>
                                             <th width="15%">IP</th>
-                                            <th width="10%">Operator</th>
+                                            <th width="10%"><?php echo $text['Operator_text'];?></th>
                                             <th width="8%">Job Name</th>
                                             <th width="15%">Job barcode</th>
                                             <th width="20%">Assembly</th>
@@ -639,7 +642,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-4 t1">Station Name :</div>
+                                    <div class="col-4 t1"> :</div>
                                     <div class="col-5 t2">
                                         <input type="text" class="t3 form-control input-ms" id="station-name" maxlength="">
                                     </div>

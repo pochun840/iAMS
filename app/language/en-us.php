@@ -539,6 +539,19 @@ $text['write'] = 'Write';
 $text['role'] = 'Role';
 
 
+//Monitors
+$text['station_name_text'] = 'Station Name';
+$text['job_barcode_text'] = 'Job barcode';
+$text['open_station_text'] = 'Open Station';
+$text['station_setting_text'] = 'Station Setting';
+$text['station_rule_text'] = 'station_rule';
+$text['station_fastening_text'] = 'Station Fastening';
+$text['station_standby_text'] = 'Station Standby';
+$text['station_offline_text'] = '';
+
+
+
+
 //上海展先全部用簡中
 // $error_message['NO_ERROR'] = '';
 // $error_message['ERR_CONT_TEMP'] = 'ERR-CONT-TEMP';

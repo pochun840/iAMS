@@ -215,7 +215,7 @@ $text['Add_text'] = '添加';
 //template page - normal - torque parameter
 $text['Parameter_text'] = '参数';
 $text['Target_Type_text'] = '目标类型';
-$text['New_Program_text'] = '新程序';
+$text['New_Program_text'] = '添加組別';
 $text['Max_Torque_text'] = '最大扭力';
 $text['Target_Torque_text'] = '目标扭力';
 $text['Joint_Offset_text'] = '扭力补偿值';
@@ -455,6 +455,21 @@ $text['access'] = '有权限';
 $text['read'] = '可读';
 $text['write'] = '可写';
 $text['role'] = '角色';
+
+
+//Monitors
+$text['station_name_text'] = '工站名稱';
+$text['job_barcode_text'] = '工作條碼';
+$text['open_station_text'] = '打開工站';
+$text['station_setting_text'] = '工站設定';
+$text['station_rule_text'] = '工站規則';
+$text['station_fastening_text'] = '鎖附中';
+$text['station_standby_text'] = '閒置中';
+$text['station_offline_text'] = '離線';
+
+
+
+
 
 //operation error message
 $error_message['NO_ERROR'] = '';

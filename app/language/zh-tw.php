@@ -19,7 +19,7 @@ $text['main_charts_text'] = '圖表';
 $text['main_operation_text'] = '操作';
 $text['main_monitor_text'] = '監控';
 $text['main_setting_text'] = '設定';
-$text['main_calibration_text'] = '校準';
+$text['main_calibration_text'] = '校正';
 $text['main_user_text'] = '用戶';
 $text['main_historical_text'] = '歷史';
 $text['main_template_text'] = '模板';
@@ -39,21 +39,21 @@ $text['More_Info_text'] = '更多訊息';
 $text['Action_text'] = '操作';
 $text['Seq_text'] = '工序';
 $text['Task_text'] = '任務';
-$text['Arm_text'] = '手臂';
+$text['Arm_text'] = '定位力臂';
 $text['Detail_text'] = '詳細訊息';
 $text['Add_Seq_text'] = '新增工序';
 $text['Delete_text'] = '刪除';
-$text['Match_From_text'] = '匹配自';
-$text['Match_To_text'] = '匹配至';
+$text['Match_From_text'] = '從';
+$text['Match_To_text'] = '到';
 $text['Select_Job_ID_text'] = '選擇工作編號';
 $text['Select_Seq_ID_text'] = '選擇工序編號';
 
 
 //product page - add job
 $text['Controller_Type_text'] = '控制器類型';
-$text['Barcode_Start_text'] = '條碼開始';
+$text['Barcode_Start_text'] = '條碼啟動';
 $text['Job_Repeat_text'] = '工作重複';
-$text['OK_Job_text'] = '工作完成信號';
+$text['OK_Job_text'] = '工作完工信號';
 $text['Tower_Light_text'] = '三色燈';
 $text['Reverse_Button_text'] = '拆螺絲按鈕';
 $text['Reverse_RPM_text'] = '拆螺絲轉速';
@@ -166,7 +166,7 @@ $text['Operator_text'] = '操作員';
 $text['Select_Job_text'] = '選擇工作';
 $text['From_text'] = '自';
 $text['To_text'] = '到';
-$text['Result_Status_text'] = '結果狀態';
+$text['Result_Status_text'] = '鎖附結果';
 $text['program_text'] = '控制器';
 $text['Search_text'] = '搜尋';
 $text['Export_text'] = '匯出';
@@ -236,7 +236,7 @@ $text['Add_text'] = '新增';
 //template page - normal - torque parameter
 $text['Parameter_text'] = '參數';
 $text['Target_Type_text'] = '目標類型';
-$text['New_Program_text'] = '新程序';
+$text['New_Program_text'] = '新增組別';
 $text['Max_Torque_text'] = '最大扭力';
 $text['Target_Torque_text'] = '目標扭力';
 $text['Joint_Offset_text'] = '扭力補償值';
@@ -320,11 +320,11 @@ $text['Tool_Information_text'] = '工具訊息';
 $text['Tool_Type_text'] = '工具類型';
 $text['Tool_SN_text'] = '工具 SN';
 $text['SW_Version_text'] = '軟件版本';
-$text['Total_Counts_text'] = '總計數';
+$text['Total_Counts_text'] = '總顆數';
 $text['Max_Torque_text'] = '最大扭矩';
 $text['Max_Speed_text'] = '最大速度';
-$text['Calibration_Value_text'] = '校準值';
-$text['Maintain_Counts_text'] = '維護計數';
+$text['Calibration_Value_text'] = '校正值';
+$text['Maintain_Counts_text'] = '維護顆數';
 $text['Controller_Information_text'] = '控制器訊息';
 $text['Controller_SN_text'] = '控制器 S/N';
 $text['Controller_Ver_text'] = '控制器版本';
@@ -336,9 +336,9 @@ $text['Torque_Filter_text'] = '扭矩過濾器';
 
 
 //equipment page - arm
-$text['ARM_Setting_text'] = '手臂設定';
+$text['ARM_Setting_text'] = '定位力臂設定';
 $text['Arm_Encoders_setting_text'] = '手臂編碼器設定';
-$text['Zero_point_cali_text'] = '零點校準';
+$text['Zero_point_cali_text'] = '零點校正';
 $text['Zero_reset_text'] = '零點重置';
 $text['Test_adjust_text'] = '測試調整';
 $text['Service_Start_text'] = '服務啟動';
@@ -347,8 +347,8 @@ $text['Service_Check_text'] = '服務檢查';
 $text['Screws_text'] = '螺絲';
 $text['Adjustment_text'] = '調整';
 $text['Encoder_text'] = '編碼器';
-$text['Tolerance_setting_text'] = '公差設定';
-$text['Picking_area_text'] = '拾取區域';
+$text['Tolerance_setting_text'] = '容許值設定';
+$text['Picking_area_text'] = '取料區域';
 
 //equipment page - tower light
 $text['Tower_Light_Setting_text'] = '三色燈設定';
@@ -372,9 +372,9 @@ $text['SET_text'] = '設定';
 
 
 //plugins
-$text['Add_Plugins_text'] = '新增外掛程式';
+$text['Add_Plugins_text'] = '新增功能包';
 $text['Upload_new_software_text'] = '上傳新軟體';
-$text['Upload_plugins_text'] = '上傳模組';
+$text['Upload_plugins_text'] = '上傳功能包';
 $text['Upload_progress_text'] = '上傳進度';
 
 
@@ -467,7 +467,7 @@ $text['charts'] = '圖表';
 $text['operations'] = '操作';
 $text['monitors'] = '監控';
 $text['settings']  = '設定';
-$text['calibrations'] = '校準';
+$text['calibrations'] = '校正';
 $text['users'] = '用戶';
 $text['historicals'] = '歷史';
 $text['templates'] = '模板';
@@ -482,6 +482,17 @@ $text['read'] ='可讀';
 $text['write'] = '可寫';
 $text['role'] = '角色';
 
+
+//Monitors
+$text['station_name_text'] = '工站名稱';
+$text['job_barcode_text'] = '工作條碼';
+$text['open_station_text'] = '打開工站';
+$text['station_setting_text'] = '工站設定';
+$text['station_rule_text'] = '工站規則';
+$text['station_fastening_text'] = '鎖附中';
+$text['station_standby_text'] = '閒置中';
+$text['station_offline_text'] = '離線';
+$text['station_connect_text'] = '已連接';
 
 
 //operation error message
