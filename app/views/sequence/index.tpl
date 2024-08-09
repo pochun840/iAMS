@@ -330,8 +330,8 @@
                 </div>
 
                 <div class="modal-footer justify-content-center">
-                    <button id="button1" class="button button3" onclick="copy_seq()">Save</button>
-                    <button id="button2" class="button button3" onclick="document.getElementById('CopySeq').style.display='none'" class="cancelbtn">Cancel</button>
+                    <button id="button1" class="button button3" onclick="copy_seq()"><?php echo $text['Save_text'];?></button>
+                    <button id="button2" class="button button3" onclick="document.getElementById('CopySeq').style.display='none'" class="cancelbtn"><?php echo $text['Cancel_text'];?></button>
                 </div>
             </div>
         </div>

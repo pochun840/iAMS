@@ -794,5 +794,44 @@ class Templates extends Controller
         }
         
     }
+
+    public function check_task_by_pro_id(){
+        $input_check = true;
+        if( !empty($_POST['program_id']) && isset($_POST['program_id'])  ){
+            $program_id = $_POST['program_id'];
+        }else{ 
+            $input_check = false; 
+        }
+        if($input_check){
+            $res = $this->TemplateModel->get_job_by_pro_id($program_id);
+
+            if(!empty($res)){
+            
+                #儲存唯一的job_id
+                $uniquejobs = array();
+                #紀錄job_id 是否已經存在
+                $seenjobids = array();
+
+                foreach ($res as $row) {
+                    #如果 job_id 不在 $seenjobids裡，則需要加到 $uniquejobs
+                    if (!in_array($row['job_id'], $seenjobids)) {
+                        $seenjobids[] = $row['job_id']; 
+                        $uniquejobs[] = $row; 
+                        
+                    }
+                }
+
+                header('Content-Type: application/json');
+                echo json_encode($uniquejobs);
+
+            }else{
+                echo json_encode([]);
+            }
+
+        }else{
+            echo json_encode(['error' => 'Invalid input']);    
+        }
+
+    }
     
 }

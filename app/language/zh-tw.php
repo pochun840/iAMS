@@ -22,7 +22,7 @@ $text['main_setting_text'] = '設定';
 $text['main_calibration_text'] = '校正';
 $text['main_user_text'] = '用戶';
 $text['main_historical_text'] = '歷史';
-$text['main_template_text'] = '模板';
+$text['main_template_text'] = '参數組別';
 $text['main_DB_SYNC_text'] = '數據同步';
 
 
@@ -211,7 +211,7 @@ $text['Combine_data_text'] = '合併數據';
 
 
 //template page 
-$text['Program_Template_text'] = '控制器模板';
+$text['Program_Template_text'] = '參數組別';
 $text['Choose_Controller_text'] = '選擇控制器';
 $text['Screw_Tool_text'] = '螺絲工具';
 $text['Normal_text'] = '智能';
@@ -223,7 +223,7 @@ $text['Select_text'] = '選擇';
 
 
 //template page - normal
-$text['Program_Normal_text'] = '程序 - 智能';
+$text['Program_Normal_text'] = '組別 - 智能';
 $text['Add_Program_text'] = '新增程式';
 $text['Program_ID_text'] = '程式編號';
 $text['Program_Name_text'] = '程式名稱';
@@ -257,11 +257,11 @@ $text['PreRun_text'] = '尋牙設定';
 $text['PreRun_RPM_text'] = '尋牙轉速';
 $text['PreRun_Angle_text'] = '尋牙角度';
 $text['Target_Angle_text'] = '目標角度';
-$text['Program_text'] = '程序';
+$text['Program_text'] = '組別';
 
 
 //template page - advanced
-$text['Program_Advanced_text'] = '程序 - 進階';
+$text['Program_Advanced_text'] = '組別 - 進階';
 $text['Add_Step_text'] = '新增步驟';
 $text['Test_text'] = '測試';
 
@@ -470,7 +470,7 @@ $text['settings']  = '設定';
 $text['calibrations'] = '校正';
 $text['users'] = '用戶';
 $text['historicals'] = '歷史';
-$text['templates'] = '模板';
+$text['templates'] = '参數組別';
 $text['sequences'] = '工序';
 $text['tasks'] = '任務';
 $text['logins'] = '登入';

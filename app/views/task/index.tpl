@@ -519,8 +519,8 @@
                 </div>
 
                 <div class="modal-footer justify-content-center">
-                    <button id="button1" class="button button3" onclick="new_task_save()">Save</button>
-                    <button id="close_modal_2" class="button button3" onclick="close_modal()" class="cancelbtn">Cancel</button>
+                    <button id="button1" class="button button3" onclick="new_task_save()"><?php echo $text['Save_text'];?></button>
+                    <button id="close_modal_2" class="button button3" onclick="close_modal()" class="cancelbtn"><?php echo $text['Cancel_text'];?></button>
                 </div>
             </div>
         </div>
