@@ -547,7 +547,16 @@ $text['station_setting_text'] = 'Station Setting';
 $text['station_rule_text'] = 'station_rule';
 $text['station_fastening_text'] = 'Station Fastening';
 $text['station_standby_text'] = 'Station Standby';
-$text['station_offline_text'] = '';
+$text['station_offline_text'] = 'Station Offline';
+$text['station_connect_text'] = 'Station Connect';
+$text['add_rows_text'] = 'Add Rows';
+$text['delete_station_text'] = 'Delete Station';
+$text['add_station_text'] = 'Add Station';
+$text['station_id_text'] = 'Station ID';
+$text['station_name_text'] = 'Station Name';
+$text['station_ip_text'] = 'Station IP';
+$text['job_select_text'] = 'Job Select';
+//Station IP 
 
 
 

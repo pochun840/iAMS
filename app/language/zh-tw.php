@@ -70,7 +70,7 @@ $text['NO_text'] = '否';
 $text['YES_text'] = '是';
 $text['New_Job_text'] = '新工作';
 $text['Edit_Job_text'] = '編輯工作';
-$text['Save_text'] = '保存';
+$text['Save_text'] = '儲存';
 $text['Cancel_text'] = '取消';
 
 
@@ -136,7 +136,7 @@ $text['Edit_Task_text'] = '編輯任務';
 
 //operation page
 $text['barcode_text'] = '條碼';
-$text['Call_Job_text'] = '調用工作';
+$text['Call_Job_text'] = '切換工作';
 $text['TR_text'] = '顆數';
 $text['Job_Time_text'] = '鎖附時間';
 $text['Error_text'] = '錯誤';
@@ -493,7 +493,13 @@ $text['station_fastening_text'] = '鎖附中';
 $text['station_standby_text'] = '閒置中';
 $text['station_offline_text'] = '離線';
 $text['station_connect_text'] = '已連接';
-
+$text['add_rows_text'] = '增加產線';
+$text['delete_station_text'] = '刪除產線';
+$text['add_station_text'] = '新增工站';
+$text['station_id_text'] = '工站 ID';
+$text['station_name_text'] = '工站名稱';
+$text['station_ip_text'] = '工站 IP';
+$text['job_select_text'] = '工作選擇';
 
 //operation error message
 $error_message['NO_ERROR'] = '';

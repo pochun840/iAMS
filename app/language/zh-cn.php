@@ -122,7 +122,7 @@ $text['Edit_Task_text'] = '编辑任务';
 
 //operation page
 $text['barcode_text'] = '条码';
-$text['Call_Job_text'] = '调用工作';
+$text['Call_Job_text'] = '切换工作';
 $text['TR_text'] = '颗数';
 $text['Job_Time_text'] = '工作时间';
 $text['Error_text'] = '错误';
@@ -458,16 +458,22 @@ $text['role'] = '角色';
 
 
 //Monitors
-$text['station_name_text'] = '工站名稱';
-$text['job_barcode_text'] = '工作條碼';
-$text['open_station_text'] = '打開工站';
-$text['station_setting_text'] = '工站設定';
-$text['station_rule_text'] = '工站規則';
-$text['station_fastening_text'] = '鎖附中';
-$text['station_standby_text'] = '閒置中';
-$text['station_offline_text'] = '離線';
-
-
+$text['station_name_text'] = '工站名称';
+$text['job_barcode_text'] = '工作条码';
+$text['open_station_text'] = '打开工站';
+$text['station_setting_text'] = '工站设置';
+$text['station_rule_text'] = '工站规则';
+$text['station_fastening_text'] = '锁附中';
+$text['station_standby_text'] = '闲置中';
+$text['station_offline_text'] = '离线';
+$text['station_connect_text'] = '已连接';
+$text['add_rows_text'] = '增加产线';
+$text['delete_station_text'] = '删除产线';
+$text['add_station_text'] = '新增工站';
+$text['station_id_text'] = '工站 ID';
+$text['station_name_text'] = '工站名称';
+$text['station_ip_text'] = '工站 IP';
+$text['job_select_text'] = '工作选择';
 
 
 

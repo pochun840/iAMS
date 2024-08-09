@@ -349,7 +349,7 @@
                         <div id="screw_info_div" class="row sensor_style">
                             <h5 style="font-size: 2.3vmin; line-height: 30px; text-align: left"><?php echo $text['Screw_info_text']; ?></h5>
                             <label style="color: green; font-size: 2.5vmin;">
-                                <b><span id="screw_info" style="margin-bottom: 10px">9/12</span></b>
+                                <b><span id="screw_info" style="margin-bottom: 10px"></span></b>
                                 <span onclick="function_auth_check('stop_on_ng')"><img src="./img/screw-reset.png" style="margin-left: 10%; height: 25px; width: 25px; margin-bottom: 10px"></span>
                             </label>
                         </div>
