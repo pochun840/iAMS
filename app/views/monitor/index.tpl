@@ -170,7 +170,7 @@
                                                     <div>1.5.N.m</div>
                                                     <div>Luke</div>
                                                 </label>
-                                                <div class="overlay"><?php echo $text['station_connect_text'];?><?php echo $text['station_offline_text'];?></div>
+                                                <div class="overlay"><?php echo $text['station_connect_text'];?></div>
                                             </div>
                                             <div class="station" tabindex="1">
                                                 <label style="background: #BDBABA; color: #fff; text-align: left; padding-left: 3%;">
@@ -491,8 +491,8 @@
                 <div id="StationSettingDisplay" style="margin-top: 40px">
                     <div class="topnav-menu">
                         <div class="topnav-right">
-                            <button id="Add_Rows" type="button" class="SettingButton" onclick="addGallery()">Add Rows</button>
-                            <button id="Delete_Station" type="button" class="SettingButton">Delete Station</button>
+                            <button id="Add_Rows" type="button" class="SettingButton" onclick="addGallery()"><?php echo $text['add_rows_text'];?></button>
+                            <button id="Delete_Station" type="button" class="SettingButton"><?php echo $text['delete_station_text'];?></button>
                         </div>
                     </div>
 
@@ -599,8 +599,8 @@
                                             <th width="15%"><?php echo $text['station_name_text'];?></th>
                                             <th width="15%">IP</th>
                                             <th width="10%"><?php echo $text['Operator_text'];?></th>
-                                            <th width="8%">Job Name</th>
-                                            <th width="15%">Job barcode</th>
+                                            <th width="8%"><?php echo $text['Job_Name_text'];?></th>
+                                            <th width="15%"><?php echo $text['job_barcode_text'];?></th>
                                             <th width="20%">Assembly</th>
                                             <th width="8%">Sub</th>
                                             <th width="5%" style="font-size: 24px" onclick="document.getElementById('Add_Field').style.display='block'">&#43;</th>
@@ -632,29 +632,29 @@
                             <header class="w3-container modal-header">
                                 <span onclick="document.getElementById('Add_Station').style.display='none'"
                                     class="w3-button w3-red w3-display-topright" style="padding: 7px; width: 60px; font-size: 23px">&times;</span>
-                                <h3>Add Station</h3>
+                                <h3><?php echo $text['add_station_text'];?></h3>
                             </header>
                             <div class="modal-body" style="padding-left: 10%">
                                 <div class="row">
-                                    <div class="col-4 t1">Station ID :</div>
+                                    <div class="col-4 t1"><?php echo $text['station_id_text'];?> :</div>
                                     <div class="col-3 t2">
                                         <label class="form-check-label" style="padding-left: 12%">1</label>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-4 t1"> :</div>
+                                    <div class="col-4 t1"><?php echo $text['station_name_text'];?> :</div>
                                     <div class="col-5 t2">
                                         <input type="text" class="t3 form-control input-ms" id="station-name" maxlength="">
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-4 t1">Station IP :</div>
+                                    <div class="col-4 t1"><?php echo $text['station_name_text'];?> :</div>
                                     <div class="col-5 t2">
                                         <input type="text" class="t3 form-control input-ms" id="station-ip" maxlength="">
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="Operator" class="col-4 t1">Operator :</div>
+                                    <div for="Operator" class="col-4 t1"><?php echo $text['Operator_text'];?> :</div>
                                     <div class="option-custom col-2 t2">
                                         <div class="select-input select-input-multiple form-control input-ms">
                                             <div class="selected-list" id="selectedNamesOperator"></div>
@@ -669,7 +669,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="Job" class="col-4 t1">Job Select :</div>
+                                    <div for="Job" class="col-4 t1"><?php echo $text['job_select_text'];?> :</div>
                                     <div class="option-custom col-2 t2">
                                         <div class="select-input select-input-multiple form-control input-ms">
                                             <div class="selected-list" id="selectedNamesJob"></div>
@@ -685,7 +685,7 @@
                                 </div>
                             </div>
                             <div class="w3-center" style="background-color: #F2F1F1">
-                                <button id="btn-save" class="saveButton">Save</button>
+                                <button id="btn-save" class="saveButton"><?php echo $text['Save_text'];?></button>
                             </div>
                         </div>
                     </div>
