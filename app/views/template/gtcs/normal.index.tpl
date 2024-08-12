@@ -578,7 +578,7 @@
                             </div>
                         </div>
 
-                        <div for="from_pro_id" class="col" style="font-size: 20px; margin: 5px 0px 5px"><b><?php echo $text['Copy_to_text'];?></b></div>
+                        <div for="from_pro_id" class="col" style="font-size: 20px; margin: 5px 0px 5px"><b><?php echo $text['Copy_to_text']?></b></div>
                         <div style="padding-left: 20px;">
                             <div class="row">
                                 <div for="to_pro_id" class="col-5 t1"><?php echo $text['Program_ID_text']; ?> :</div>

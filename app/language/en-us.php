@@ -538,6 +538,9 @@ $text['read'] ='Read';
 $text['write'] = 'Write';
 $text['role'] = 'Role';
 
+//
+$text['no_jobs_found'] = 'No jobs found or error occurred';
+
 
 //Monitors
 $text['station_name_text'] = 'Station Name';

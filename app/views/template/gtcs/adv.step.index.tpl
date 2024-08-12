@@ -1111,29 +1111,5 @@ function extractPartFromurl() {
     return null;
 }
 
-function sync_product(jobId, programId, url) {
-    //alert(url);
-    if (url) { 
-        $.ajax({
-            type: "POST",
-            data: {
-                'program_id': programId,        
-                'table_url': url                
-            },
-            url: '?url=Templates/sync_program_step',
-            success: function(response) {
-                console.log(response);
-                alert('Success');
-                history.go(0); 
-            },
-            error: function(error) {
-                console.error('Error:', error); 
-            }
-        }).fail(function() {
-        });
-    } else {
-        console.warn('URL parameter is missing');
-    }
-}
 
 </script>
