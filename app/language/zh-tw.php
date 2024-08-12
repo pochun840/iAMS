@@ -224,9 +224,9 @@ $text['Select_text'] = '選擇';
 
 //template page - normal
 $text['Program_Normal_text'] = '組別 - 智能';
-$text['Add_Program_text'] = '新增程式';
-$text['Program_ID_text'] = '程式編號';
-$text['Program_Name_text'] = '程式名稱';
+$text['Add_Program_text'] = '新增組別';
+$text['Program_ID_text'] = '組別編號';
+$text['Program_Name_text'] = '組別名稱';
 $text['Target_Q_text'] = '目標扭力';
 $text['Target_A_text'] = '目標角度';
 $text['HiLo_text'] = '上限 / 下限';

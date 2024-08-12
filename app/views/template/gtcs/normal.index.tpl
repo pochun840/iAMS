@@ -242,8 +242,6 @@
                                     <b><?php echo $text['Torque_text'].' '.$text['Parameter_text']; ?></b>
                                 </div>
                             </div>
-                            <button id="button_sync" class="button button3" onclick="confirmAction()">SYNC</button>
-
                                                       
                             <div class="scrollbar-modal" id="style-torque">
                                 <div class="modal-force-overflow">
@@ -401,7 +399,7 @@
                                     <b><?php echo $text['Angle_text'].' '.$text['Parameter_text']; ?></b>
                                 </div>
                             </div>
-                            <button id="button_sync" class="button button3" onclick="confirmAction()">SYNC</button>
+                          
 
                             <div class="scrollbar-modal" id="style-angle">
                                 <div class="modal-force-overflow">
