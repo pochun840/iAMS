@@ -633,7 +633,7 @@ class Template{
                 'step_prr_angle' => $item['step_prr_angle'],
                 'step_downshift_mode' => $item['step_downshift_mode'],
                 'step_downshift_angle' => $item['step_downshift_angle']
-            ])) {
+            ])) {   
                 $updatedCount++;
             }
         }
@@ -642,6 +642,17 @@ class Template{
     }
     
 
+    public function get_job_by_pro_id($program_id){
+        $sql = "SELECT job.job_id , job.job_name 
+                FROM task 
+                LEFT JOIN job ON task.job_id = job.job_id 
+                WHERE task.template_program_id = ?";
+        $statement = $this->db->prepare($sql);
+        $statement->execute([$program_id]);
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+    
+        return $results;
+    }
 
 
 

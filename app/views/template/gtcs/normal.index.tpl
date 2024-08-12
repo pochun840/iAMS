@@ -14,7 +14,6 @@
 .t1{font-size: 17px; margin: 3px 0px; display: flex; align-items: center;}
 .t2{font-size: 17px; margin: 3px 0px;}
 </style>
-
 <div class="container-ms">
 
     <header>
@@ -127,6 +126,11 @@
                     <button id="delete-program" type="button" onclick="delete_program()">
                         <img id="img-delete" src="./img/program-delete.svg" alt=""><?php echo $text['Delete_text']; ?>
                     </button>
+
+                    <button id="add-program" type="button" onclick="sync_program()">
+                        <img id="img-program" src="./img/add-program.svg" alt=""><?php echo "update"; ?>
+                    </button>
+
                 </div>
             </div>
 
@@ -602,6 +606,44 @@
         </div>
     </div>
 
+
+    <!----Program sync Modal op ----->
+    <div id="syncProgram" class="modal">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content w3-animate-zoom" style="width: 430px">
+                <header class="w3-container modal-header">
+                    <span onclick="cancel_action()"
+                    class="w3-button w3-red w3-xxlarge w3-display-topright" style="padding: 7px; width: 60px">&times;</span>
+                    <h3></h3>
+                </header>
+
+                <div class="modal-body">
+                    <form id="copy_Pro_form">
+                        <div class="col" style="font-size: 20px; margin: 5px 0px 5px"><b>d</b></div>
+                        <div style="padding-left: 20px;">
+        		            <div class="row">
+        				        <div for="from_pro_id" class="col-5 t1">
+                                
+                                </div>
+        				        <div class="col-5 t2">
+        				            <input type="text" class="form-control" id="from_pro_id" disabled>
+        				        </div>
+        				    </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <input type="checkbox" id="confirmCheckbox"> 
+                    <label for="confirmCheckbox" style="color: white;">I agree</label>
+                    <button id="button1" class="button button3" onclick="syncProgram_job()"><?php echo "SYNC"; ?></button>
+                    <button id="button2" class="button button3" onclick="cancel_action()" class="cancelbtn"><?php echo $text['Cancel_text']; ?></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!----Program sync Modal ed ----->
+
 <script>
 
 // Get the modal
@@ -720,6 +762,96 @@ function get_program_id() {
     return program_id;
 }
 
+//sync-program  檢查 只做單選 
+let global_job_id = null;
+let global_program_id = null;
+
+function sync_program() {
+    let rowSelected = document.getElementsByClassName('selected');
+    let url = '?url=Templates/check_task_by_pro_id';
+
+    // 确保至少有一个选中的项
+    if (rowSelected.length > 0) {
+        // 取第一个选中的行的 program_id
+        let program_id = rowSelected[0].childNodes[1].innerHTML;
+        global_program_id =  program_id;
+        $.ajax({
+            type: "POST",
+            data: {
+                'program_id': program_id
+            },
+            dataType: "json",
+            url: url,
+            success: function(response) {
+                console.log(response); 
+                
+                
+                let syncProgramElement = document.getElementById('syncProgram');
+                let modalBody = syncProgramElement.querySelector('.modal-body');
+                modalBody.innerHTML = '';
+
+                let contentDiv = document.createElement('div');
+                contentDiv.style.fontSize = '20px';
+                contentDiv.style.margin = '5px 0px 5px';
+                contentDiv.innerHTML = '<b>Job Details:</b>';
+
+                modalBody.appendChild(contentDiv);
+
+                if (Array.isArray(response) && response.length > 0) {
+
+                    global_job_id = response[0].job_id;
+
+                    let jobListDiv = document.createElement('div');
+                    jobListDiv.style.paddingLeft = '20px';
+                    
+                    response.forEach(job => {
+                        let jobDiv = document.createElement('div');
+
+                        //Job ID 和 Job Name 的文字為紅色
+                        jobDiv.innerHTML = `
+                            <span style="color: red;">Job ID:</span> ${job.job_id}, 
+                            <span style="color: red;">Job Name:</span> ${job.job_name}
+                        `;
+                        
+                        jobListDiv.appendChild(jobDiv);
+                    });
+
+                    modalBody.appendChild(jobListDiv);
+                } else {
+                    modalBody.innerHTML = '<p>No jobs found or error occurred.</p>';
+                    //history.go(0);
+                }
+
+                syncProgramElement.style.display = 'block';
+            },
+            error: function(error) {
+                 alert('Please select a row.');
+                //history.go(0);
+            }
+        }).fail(function() {
+            history.go(0); 
+        });
+    } else {
+        // 如果没有选中的行，可以选择显示一个提示或错误信息
+        alert('Please select a row.');
+    }
+}
+
+function syncProgram_job(){
+    let checkbox = document.getElementById('confirmCheckbox');
+    let table_url   = extractPartFromURL(); 
+    if(checkbox.checked){
+        if (global_job_id && global_program_id && table_url) {
+           sync_product(global_job_id, global_program_id, table_url);
+        }
+    }else{
+        //如果沒有選中，alert訊息
+        alert('Please agree to the terms before proceeding.');
+    }
+
+}
+
+
 //new program 按下new seq button
 function new_program() {
 
@@ -729,7 +861,7 @@ function new_program() {
         return 0;
     }
 
-    document.getElementById('modal_head').innerHTML = 'New Program'; //'New Program'
+    //document.getElementById('modal_head').innerHTML = 'New Program'; //'New Program'
     // //帶入預設值
     document.getElementById("program-id").value = program_id;
     document.getElementById("program-id-a").value = program_id;
@@ -1084,39 +1216,29 @@ addMessage();
 
 
 //
-function sync_product(){
-    let rowSelected = document.getElementsByClassName('selected');
-    let template_program_id  = rowSelected[0].childNodes[1].innerHTML;
-    let table_url   = extractPartFromURL(); //判斷 advancedstep or normalstep
-
-
-    console.log(table_url);
-    console.log(template_program_id);
-
-    if(table_url){      
+function sync_product(jobId, programId, url) {
+    //alert(url);
+    if (url) { 
         $.ajax({
-        type: "POST",
-        data: {
-            'template_program_id': template_program_id,
-            'table_url': table_url
-        },
-
-        url: '?url=Templates/sync_program_step',
-        success: function(response) {
-            //console.log(response); 
-            alert('success');
-            history.go(0);
-        },
-        error: function(error) {
-            console.error('Error:', error); 
-        }
+            type: "POST",
+            data: {
+                'program_id': programId,        
+                'table_url': url                
+            },
+            url: '?url=Templates/sync_program_step',
+            success: function(response) {
+                console.log(response);
+                alert('Success');
+                history.go(0); 
+            },
+            error: function(error) {
+                console.error('Error:', error); 
+            }
         }).fail(function() {
-            // history.go(0);
         });
+    } else {
+        console.warn('URL parameter is missing');
     }
-
-    
-
 }
 
 
@@ -1140,7 +1262,7 @@ function confirmAction() {
     const userConfirmed = confirm("Are you sure you want to sync?");
     if (userConfirmed) {
         // User clicked "OK"
-        sync_product();
+        //sync_product();
         // 這裡可以添加你想要執行的同步操作
     } else {
         // User clicked "Cancel"
@@ -1149,8 +1271,19 @@ function confirmAction() {
     }
 }
 
+function cancel_action(){
+    document.getElementById('syncProgram').style.display='none';
+    history.go(0); 
+}
+
 </script>
 
 </div>
 
 <?php require APPROOT . 'views/inc/footer.tpl'; ?>
+
+<style>
+.white-text {
+    color: white;
+}
+</style>

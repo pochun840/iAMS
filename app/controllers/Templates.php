@@ -730,8 +730,8 @@ class Templates extends Controller
 
     //sync program
     public function sync_program_step(){
-        if( !empty($_POST['template_program_id']) && isset($_POST['template_program_id'])  ){
-            $program_id = $_POST['template_program_id'];
+        if( !empty($_POST['program_id']) && isset($_POST['program_id'])  ){
+            $program_id = $_POST['program_id'];
         }else{ 
             $input_check = false; 
         }
@@ -750,6 +750,8 @@ class Templates extends Controller
         }else{ 
             $input_check = false; 
         }
+
+      
 
         
         //用 program_id 從 gtcs_normalstep_template or gtcs_advancedstep_template 取出資料
@@ -788,8 +790,10 @@ class Templates extends Controller
                     'step_downshift_angle' => $temp[0]['step_downshift_angle'],
                 );
             }
+
             if(!empty($new_array)){
                 $res = $this->TemplateModel->cover_data($new_array,$table_name);
+               //var_dump($res);die();
             }
         }
         
