@@ -653,10 +653,4 @@ class Template{
     
         return $results;
     }
-
-    
-
-
-
-
 }
