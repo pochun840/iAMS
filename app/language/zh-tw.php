@@ -77,8 +77,8 @@ $text['Cancel_text'] = '取消';
 
 //product page - copy job
 $text['Copy_job_text'] = '複製工作';
-$text['Copy_from_text'] = '複製自';
-$text['Copy_to_text'] = '複製到';
+$text['Copy_from_text'] = '從';
+$text['Copy_to_text'] = '到';
 $text['Delete_confirm_text'] = '你確定嗎？';
 
 //sequence page

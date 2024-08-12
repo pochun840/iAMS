@@ -562,7 +562,7 @@
 
                 <div class="modal-body">
                     <form id="copy_Pro_form">
-                        <div class="col" style="font-size: 20px; margin: 5px 0px 5px"><b>Copy From</b></div>
+                        <div class="col" style="font-size: 20px; margin: 5px 0px 5px"><b><?php echo $text['Copy_from_text'];?></b></div>
                         <div style="padding-left: 20px;">
         		            <div class="row">
         				        <div for="from_pro_id" class="col-5 t1"><?php echo $text['Program_ID_text']; ?> :</div>
@@ -578,7 +578,7 @@
                             </div>
                         </div>
 
-                        <div for="from_pro_id" class="col" style="font-size: 20px; margin: 5px 0px 5px"><b>Copy To</b></div>
+                        <div for="from_pro_id" class="col" style="font-size: 20px; margin: 5px 0px 5px"><b><?php echo $text['Copy_to_text'];?></b></div>
                         <div style="padding-left: 20px;">
                             <div class="row">
                                 <div for="to_pro_id" class="col-5 t1"><?php echo $text['Program_ID_text']; ?> :</div>

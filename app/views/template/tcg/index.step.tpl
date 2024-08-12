@@ -428,7 +428,7 @@
 
                 <div class="modal-body">
                     <form id="copy_step_form" style="padding-left: 3%">
-                        <div class="col" style="font-size: 20px; margin: 5px 0px 5px"><b>Copy From</b></div>
+                        <div class="col" style="font-size: 20px; margin: 5px 0px 5px"><?php echo $text['Copy_from_text'];?></div>
                         <div style="padding-left: 20px;">
         		            <div class="row">
         				        <div for="from_step_id" class="col-5 t1">Step ID :</div>
