@@ -1256,18 +1256,7 @@ function extractPartFromURL() {
     return null; 
 }
 
-function confirmAction() {
-    const userConfirmed = confirm("Are you sure you want to sync?");
-    if (userConfirmed) {
-        // User clicked "OK"
-        //sync_product();
-        // 這裡可以添加你想要執行的同步操作
-    } else {
-        // User clicked "Cancel"
-        console.log("Sync canceled.");
-        // 這裡可以添加你想要執行的取消操作
-    }
-}
+
 
 function cancel_action(){
     document.getElementById('syncProgram').style.display='none';
