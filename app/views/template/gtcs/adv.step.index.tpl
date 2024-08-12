@@ -131,6 +131,11 @@
                     <button id="test" type="button">
                         <img id="img-test" src="./img/check-all.png"> <?php echo $text['Test_text']; ?>
                     </button>
+
+                    <button id="add-step" type="button" onclick="sync_program()">
+                        <img id="img-add" src="./img/add-program.svg" alt="">update                    
+                    </button>
+
                 </div>
             </div>
 
@@ -437,6 +442,44 @@
             </div>
         </div>
     </div>
+
+
+    <!----Program sync Modal op ----->
+    <div id="syncProgram" class="modal">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content w3-animate-zoom" style="width: 430px">
+                <header class="w3-container modal-header">
+                    <span onclick="cancel_action()"
+                    class="w3-button w3-red w3-xxlarge w3-display-topright" style="padding: 7px; width: 60px">&times;</span>
+                    <h3></h3>
+                </header>
+
+                <div class="modal-body">
+                    <form id="copy_Pro_form">
+                        <div class="col" style="font-size: 20px; margin: 5px 0px 5px"><b>d</b></div>
+                        <div style="padding-left: 20px;">
+        		            <div class="row">
+        				        <div for="from_pro_id" class="col-5 t1">
+                                
+                                </div>
+        				        <div class="col-5 t2">
+        				            <input type="text" class="form-control" id="from_pro_id" disabled>
+        				        </div>
+        				    </div>
+                        </div>
+                    </form> w
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <input type="checkbox" id="confirmCheckbox"> 
+                    <label for="confirmCheckbox" style="color: white;">I agree</label>
+                    <button id="button1" class="button button3" onclick="syncProgram_job()"><?php echo "SYNC"; ?></button>
+                    <button id="button2" class="button button3" onclick="cancel_action()" class="cancelbtn"><?php echo $text['Cancel_text']; ?></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!----Program sync Modal ed ----->
+
 <script>
 
 // Get the modal
@@ -940,3 +983,157 @@ addMessage();
 </div>
 
 <?php require APPROOT . 'views/inc/footer.tpl'; ?>
+<script>
+
+function cancel_action(){
+    document.getElementById('syncProgram').style.display='none';
+    history.go(0); 
+}
+
+//sync-program  檢查 只做單選 
+let global_job_id = null;
+let global_program_id = null;
+
+function sync_program() {
+    let rowSelected = document.getElementsByClassName('selected');
+    let url = '?url=Templates/check_task_by_pro_id';
+
+    // 确保至少有一个选中的项
+    if (rowSelected.length > 0) {
+        // 取第一个选中的行的 program_id
+        let program_id = extractPartFromurl();
+        global_program_id =  program_id;
+
+        $.ajax({
+            type: "POST",
+            data: {
+                'program_id': program_id
+            },
+            dataType: "json",
+            url: url,
+            success: function(response) {
+                console.log(response); 
+                
+                
+                let syncProgramElement = document.getElementById('syncProgram');
+                let modalBody = syncProgramElement.querySelector('.modal-body');
+                modalBody.innerHTML = '';
+
+                let contentDiv = document.createElement('div');
+                contentDiv.style.fontSize = '20px';
+                contentDiv.style.margin = '5px 0px 5px';
+                contentDiv.innerHTML = '<b>Job Details:</b>';
+
+                modalBody.appendChild(contentDiv);
+
+                if (Array.isArray(response) && response.length > 0) {
+
+                    global_job_id = response[0].job_id;
+
+                    let jobListDiv = document.createElement('div');
+                    jobListDiv.style.paddingLeft = '20px';
+                    
+                    response.forEach(job => {
+                        let jobDiv = document.createElement('div');
+
+                        //Job ID 和 Job Name 的文字為紅色
+                        jobDiv.innerHTML = `
+                            <span style="color: red;">Job ID:</span> ${job.job_id}, 
+                            <span style="color: red;">Job Name:</span> ${job.job_name}
+                        `;
+                        
+                        jobListDiv.appendChild(jobDiv);
+                    });
+
+                    modalBody.appendChild(jobListDiv);
+                } else {
+                    modalBody.innerHTML = '<p>No jobs found or error occurred.</p>';
+                    //history.go(0);
+                }
+
+                syncProgramElement.style.display = 'block';
+            },
+            error: function(error) {
+                 alert('Please select a row.');
+                //history.go(0);
+            }
+        }).fail(function() {
+            history.go(0); 
+        });
+    } else {
+
+        alert('Please select a row.');
+    }
+}
+
+function syncProgram_job(){
+    let checkbox = document.getElementById('confirmCheckbox');
+    let table_url   = extractPartFromURL(); 
+    if(checkbox.checked){
+        if (global_job_id && global_program_id && table_url) {
+           sync_product(global_job_id, global_program_id, table_url);
+        }
+    }else{
+        //如果沒有選中，alert訊息
+        alert('Please agree to the terms before proceeding.');
+    }
+
+}
+
+
+
+function extractPartFromURL() {
+    let queryString = window.location.search;
+    let urlParams = new URLSearchParams(queryString);
+    
+    let urlValue = urlParams.get('url');
+    
+    if (urlValue) {
+        let parts = urlValue.split('/'); 
+        let partToExtract = parts[1]; 
+        return partToExtract.split('_')[0]; 
+    }
+    
+    return null; 
+}
+
+function extractPartFromurl() {
+    let queryString = window.location.search; 
+    let urlParams = new URLSearchParams(queryString); 
+
+    let urlValue = urlParams.get('url');
+    
+    if (urlValue) {
+        let parts = urlValue.split('/'); 
+        return parts[parts.length - 1]; 
+    }
+    
+    return null;
+}
+
+function sync_product(jobId, programId, url) {
+    //alert(url);
+    if (url) { 
+        $.ajax({
+            type: "POST",
+            data: {
+                'program_id': programId,        
+                'table_url': url                
+            },
+            url: '?url=Templates/sync_program_step',
+            success: function(response) {
+                console.log(response);
+                alert('Success');
+                history.go(0); 
+            },
+            error: function(error) {
+                console.error('Error:', error); 
+            }
+        }).fail(function() {
+        });
+    } else {
+        console.warn('URL parameter is missing');
+    }
+}
+
+</script>

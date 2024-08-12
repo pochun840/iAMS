@@ -1287,3 +1287,6 @@ function cancel_action(){
     color: white;
 }
 </style>
+
+
+<script>

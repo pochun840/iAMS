@@ -353,8 +353,7 @@ class Template{
     }
 
     public function GetProgramById_Advanced($program_id)
-    {
-        $sql= "SELECT * FROM gtcs_advancedstep_template WHERE template_program_id = :template_program_id order by template_step_id";
+    {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   gram_id order by template_step_id";
         $statement = $this->db->prepare($sql);
         $statement->bindValue(':template_program_id', $program_id);
         $results = $statement->execute();
@@ -652,6 +651,11 @@ class Template{
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
     
         return $results;
+    }
+
+    public function get_job_by_pro_id_adv($program_id){
+
+
     }
 
 
