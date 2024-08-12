@@ -205,6 +205,7 @@ $text['Select_text'] = '选择';
 //template page - normal
 $text['Program_Normal_text'] = '程序 - 智能';
 $text['Add_Program_text'] = '添加程序';
+$text['Edit_Program_text'] = '编辑程序';
 $text['Program_ID_text'] = '程序编号';
 $text['Program_Name_text'] = '程序名称';
 $text['Target_Q_text'] = '目标扭力';

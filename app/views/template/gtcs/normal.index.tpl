@@ -859,7 +859,7 @@ function new_program() {
         return 0;
     }
 
-    //document.getElementById('modal_head').innerHTML = 'New Program'; //'New Program'
+    //document.getElementById('modal_head').innerHTML = ''; //'New Program'
     // //帶入預設值
     document.getElementById("program-id").value = program_id;
     document.getElementById("program-id-a").value = program_id;
@@ -1109,7 +1109,7 @@ function edit_program(program_id) {
             document.getElementById("pre-run-rpm-a").value = response['step_prr_rpm'];
             document.getElementById("pre-run-angle-a").value = response['step_prr_angle'];
 
-            document.getElementById('modal_head').innerHTML = 'Edit Program'; //'New Job'
+            document.getElementById('modal_head').innerHTML = '<?php echo $text['Edit_Program_text'];?>'; //'New Job'
             document.getElementById('ProgramNew').style.display = 'block'
         },
         error: function(error) {
