@@ -359,10 +359,10 @@ $text['Operation_Setting_text'] = '操作设置';
 $text['System_Setting_text'] = '系统设置';
 $text['Manager_Verify_text'] = '管理员验证';
 $text['Skip_Button_Access_text'] = '跳过按钮访问';
-$text['Back_Button_Access_text'] = '返回按钮访问';
-$text['Task_Reset_Button_Access_text'] = '任务重置按钮访问';
-$text['Job_Selection_Access_text'] = '作业选择访问';
-$text['Seq_Selection_Access_text'] = '序列选择访问';
+$text['Back_Button_Access_text'] = '返回工序';
+$text['Task_Reset_Button_Access_text'] = '任务重启';
+$text['Job_Selection_Access_text'] = '切换工作';
+$text['Seq_Selection_Access_text'] = '切换工序';
 $text['Stop_On_NG_text'] = 'NG 时停止';
 $text['Current_iAMS_version_text'] = '当前 iAMS 版本';
 $text['Export_specific_JOB_data_text'] = '导出特定工作数据';
@@ -456,7 +456,7 @@ $text['access'] = '有权限';
 $text['read'] = '可读';
 $text['write'] = '可写';
 $text['role'] = '角色';
-
+$text['no_jobs_found'] = '找不到工作或发生错误';
 
 //Monitors
 $text['station_name_text'] = '工站名称';

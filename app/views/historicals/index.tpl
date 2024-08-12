@@ -256,7 +256,7 @@ if(!empty($_COOKIE['chat_mode_change'])){
                                             <option value="<?php echo $key_res_1;?>"><?php echo $val_res_1;?></option>
                                     <?php }?>
                               </select>
-                              <span class="input-group-text" style="margin-right: 5px; border: none; background: none"><?php echo $text['program_text']; ?>:</span>
+                              <span class="input-group-text" style="margin-right: 5px; border: none; background: none"><?php echo $text['Program_text']; ?>:</span>
                                <select id="program" style="width: 190px;">
                                     <option value = '0'>select</option>
                                      <?php foreach($data['res_program'] as $key_res_2 => $val_res_2){?>

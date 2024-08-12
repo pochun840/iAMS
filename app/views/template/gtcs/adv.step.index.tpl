@@ -700,7 +700,7 @@ function new_step() {
         document.getElementById("delay-time").value = '0.0';
         document.getElementById('joint-offset').value = 0; //預設用torque
         document.getElementById("offset-value").value = '0.0';
-        $('input[name=monitor-option][value=0]').prop('checked', true) //預設用Window
+        $('input[name=monitor-option][value=1]').prop('checked', true) //預設用Window
         document.getElementById("MonitorAngle-ON-OFF").checked = false;//預設關閉
         document.getElementById("AngleStop-ON-OFF").checked = false;//預設關閉
         document.getElementById("torque-window").value = '0.6';

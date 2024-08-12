@@ -14,7 +14,7 @@ $text['select_language_text'] = '選擇語言';
 $text['main_home_text'] = '首頁';
 $text['main_product_text'] = '產品';
 $text['main_equipment_text'] = '設備';
-$text['main_plugins_text'] = '插件';
+$text['main_plugins_text'] = '功能包';
 $text['main_charts_text'] = '圖表';
 $text['main_operation_text'] = '操作';
 $text['main_monitor_text'] = '監控';
@@ -383,11 +383,11 @@ $text['Upload_progress_text'] = '上傳進度';
 $text['Operation_Setting_text'] = '操作設定';
 $text['System_Setting_text'] = '系統設定';
 $text['Manager_Verify_text'] = '管理員驗證';
-$text['Skip_Button_Access_text'] = '跳過按鈕訪問';
-$text['Back_Button_Access_text'] = '返回按鈕訪問';
-$text['Task_Reset_Button_Access_text'] = '任務重置按鈕訪問';
-$text['Job_Selection_Access_text'] = '作業選擇訪問';
-$text['Seq_Selection_Access_text'] = '序列選擇訪問';
+$text['Skip_Button_Access_text'] = '跳過工序';
+$text['Back_Button_Access_text'] = '返回工序';
+$text['Task_Reset_Button_Access_text'] = '任務重啟';
+$text['Job_Selection_Access_text'] = '切換工作';
+$text['Seq_Selection_Access_text'] = '切換工序';
 $text['Stop_On_NG_text'] = 'NG 時停止';
 $text['Current_iAMS_version_text'] = 'iAMS 版本';
 $text['Export_specific_JOB_data_text'] = '匯出特定工作數據';
@@ -463,7 +463,7 @@ if(isset($data['job_type'])){
 //Permissions
 $text['products'] = '產品';
 $text['equipments'] = '設備';
-$text['plugins'] = '插件';
+$text['plugins'] = '功能包';
 $text['charts'] = '圖表';
 $text['operations'] = '操作';
 $text['monitors'] = '監控';
@@ -482,7 +482,7 @@ $text['access'] ='有權限';
 $text['read'] ='可讀';
 $text['write'] = '可寫';
 $text['role'] = '角色';
-
+$text['no_jobs_found'] = '找不到工作或發生錯誤';
 
 //Monitors
 $text['station_name_text'] = '工站名稱';
