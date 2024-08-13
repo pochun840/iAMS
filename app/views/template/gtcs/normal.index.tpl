@@ -632,8 +632,8 @@
                 </div>
                 <div class="modal-footer justify-content-center">
                     <input type="checkbox" id="confirmCheckbox"> 
-                    <label for="confirmCheckbox" style="color: white;">I agree</label>
-                    <button id="button1" class="button button3" onclick="syncProgram_job()"><?php echo "SYNC"; ?></button>
+                    <label for="confirmCheckbox" style="color: white;font-size: 18px;"><?php echo $text['iagree_text'];?></label>
+                    <button id="button1" class="button button3" onclick="syncProgram_job()"><?php echo $text['SYNC_text'];?></button>
                     <button id="button2" class="button button3" onclick="cancel_action()" class="cancelbtn"><?php echo $text['Cancel_text']; ?></button>
                 </div>
             </div>
@@ -791,7 +791,7 @@ function sync_program() {
                 let contentDiv = document.createElement('div');
                 contentDiv.style.fontSize = '20px';
                 contentDiv.style.margin = '5px 0px 5px';
-                contentDiv.innerHTML = '<b>Job Details:</b>';
+                contentDiv.innerHTML = '<b><?php echo $text['Detail_text'];?>:</b>';
 
                 modalBody.appendChild(contentDiv);
 
@@ -816,8 +816,13 @@ function sync_program() {
 
                     modalBody.appendChild(jobListDiv);
                 } else {
-                    modalBody.innerHTML = '<p>No jobs found or error occurred.</p>';
-                    //history.go(0);
+                    let noJobsMessage = document.createElement('p');
+                    noJobsMessage.textContent = '<?php echo $text['no_jobs_found'];?>';
+                    noJobsMessage.style.textAlign = 'center'; // Center text horizontally
+                    noJobsMessage.style.fontSize = '16px'; // Adjust font size if needed
+                    noJobsMessage.style.color = 'gray'; // Optional: Change text color
+
+                    modalBody.appendChild(noJobsMessage);
                 }
 
                 syncProgramElement.style.display = 'block';
@@ -1277,3 +1282,10 @@ function cancel_action(){
 
 
 <script>
+
+<style>
+    .large-text {
+        color: white;
+        font-size: 18px;
+    }
+</style>

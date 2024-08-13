@@ -541,8 +541,9 @@ $text['write'] = 'Write';
 $text['role'] = 'Role';
 
 //
-$text['no_jobs_found'] = 'No jobs found or error occurred';
-
+$text['no_jobs_found'] = 'No jobs found';
+$text['iagree_text'] = 'I agree';
+$text['SYNC_text'] = 'Sync';
 
 //Monitors
 $text['station_name_text'] = 'Station Name';

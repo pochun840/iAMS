@@ -482,7 +482,10 @@ $text['access'] ='有權限';
 $text['read'] ='可讀';
 $text['write'] = '可寫';
 $text['role'] = '角色';
-$text['no_jobs_found'] = '找不到工作或發生錯誤';
+$text['no_jobs_found'] = '找不到工作';
+$text['iagree_text'] = '我同意';
+$text['SYNC_text'] = '同步';
+
 
 //Monitors
 $text['station_name_text'] = '工站名稱';
