@@ -750,12 +750,12 @@ class Templates extends Controller
             $input_check = false; 
         }
 
-      
-
-        
+  
+    
         //用 program_id 從 gtcs_normalstep_template or gtcs_advancedstep_template 取出資料
         $temp = $this->TemplateModel->search_data($program_id,$table);
-        $temp_data = $this->TemplateModel->search_data_info($program_id);  
+        $temp_data = $this->TemplateModel->search_data_info($program_id); 
+
         if(!empty($temp_data)){
             foreach ($temp_data as $item) {
                 $new_array[] = array(
@@ -792,7 +792,7 @@ class Templates extends Controller
 
             if(!empty($new_array)){
                 $res = $this->TemplateModel->cover_data($new_array,$table_name);
-               //var_dump($res);die();
+                //var_dump($res);die();
             }
         }
         

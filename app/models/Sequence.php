@@ -262,7 +262,7 @@ class Sequence{
     public function check_task_by_seq_id($from_job_id, $from_seq_id, $to_seq_id)
     {
         // 先用 $from_job_id 和 $to_seq_id 在 task 查詢是否有資料
-        $query = "SELECT COUNT(*) AS count FROM task WHERE job_id = ? AND seq_id = ?";
+        $query = "SELECT COUNT(*) AS count FROM task WHERE job_id = ? AND seq_id = ? ";
         $statement_select = $this->db->prepare($query);
         $statement_select->execute([$from_job_id, $to_seq_id]);
         $row = $statement_select->fetch(PDO::FETCH_ASSOC);
@@ -343,11 +343,11 @@ class Sequence{
         return $rows;
         
     }
-    /*public function check_pro_id_for_ccs_normalstep($new_temp_task,$from_job_id){
+    public function check_pro_id_for_ccs_normalstep($new_temp_task,$from_job_id){
 
 
         foreach($new_temp_task as $key =>$task ){
-            $query = "SELECT * FROM ccs_normalstep WHERE job_id = ? AND seq_id = ?  AND ";
+            $query = "SELECT * FROM ccs_normalstep WHERE job_id = ? AND seq_id = ?  ";
             $statement_select = $this->db->prepare($query);
 
             $statement_select->execute([$from_job_id,$task['seq_id'] ]);
@@ -358,7 +358,7 @@ class Sequence{
         return $result;
 
 
-    }*/
+    }
 
 
     

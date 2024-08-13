@@ -109,6 +109,7 @@ $text['Sensor_text'] = '传感器';
 // $text['Arm_text'] = '臂';
 $text['Virtual_message_text'] = '虚拟消息';
 $text['Socket_Tray_text'] = '套筒选择器';
+$text['id_card_text'] = 'ID 卡';
 $text['Screw_feeder_position_text'] = '螺丝进料器位置';
 $text['Program_controller_text'] = '程序（控制器）';
 $text['Task_screw_position_text'] = '任务螺丝位置';
@@ -482,7 +483,16 @@ $text['station_ip_text'] = '工站 IP';
 $text['job_select_text'] = '工作选择';
 
 
-
+//Calibrations
+$text['Choose_ktm_text'] = '选择扭力計'; 
+$text['Reset_text'] = '清除';
+$text['Min_Torque_text'] = '最小扭力';
+$text['Avg_Torque_text'] = '平均扭力';
+$text['Customize_text'] = '自定义';
+$text['Undo_text'] = '清除';
+$text['Calibrations_title_text'] ='扭矩收集与分析系统';
+$text['file_name_text'] = '文件名称';
+$text['Standard_Deviation_text'] = '標準差';
 //operation error message
 $error_message['NO_ERROR'] = '';
 $error_message['ERR_CONT_TEMP'] = 'ERR-CONT-TEMP';

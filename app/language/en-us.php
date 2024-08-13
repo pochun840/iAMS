@@ -112,6 +112,7 @@ $text['Sensor_text'] = 'Sensor';
 $text['Arm_text'] = 'Arm';
 $text['Virtual_message_text'] = 'Virtual message';
 $text['Socket_Tray_text'] = 'Socket Tray';
+$text['id_card_text'] = 'ID CARD';
 $text['Screw_feeder_position_text'] = 'Screw feeder position';
 $text['Program_controller_text'] = 'Program(controller)';
 $text['Task_screw_position_text'] = 'Task screw position';
@@ -398,6 +399,17 @@ $text['Bulk_Change_text'] = 'Bulk Change';
 $text['Serial_Number_text'] = 'Serial Number';
 $text['Choose_text'] = 'Choose';
 
+
+//Calibrations
+$text['Choose_ktm_text'] = 'Torque Meter'; 
+$text['Reset_text'] = 'Reset';
+$text['Min_Torque_text'] = 'Min Torque';
+$text['Avg_Torque_text'] = 'Avg Torque';
+$text['Customize_text'] = 'Customize';
+$text['Undo_text'] = 'Undo';
+$text['Calibrations_title_text'] ='Torque collection and analysis system';
+$text['file_name_text'] = 'file name';
+$text['Standard_Deviation_text'] = 'Standard Deviation';
 
 //----------------------------------------------------------------------------------------------------------------
 //扭力單位

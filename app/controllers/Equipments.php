@@ -251,6 +251,7 @@ class Equipments extends Controller
             $line = mb_convert_encoding($line,"UTF-8","BIG5");
             $comPort = preg_replace('/[^A-Za-z0-9]/', '', $line); // 移除所有非字母、非數字及非冒號(:)的字符
             if (!empty($comPort)) {
+                $comPort = str_replace('Statusfordevice','',$comPort);
                 $comPorts[] = $comPort;
             }
         }

@@ -8,7 +8,7 @@
 
     <header>
         <div class="calibration">
-            <img id="header-img" src="./img/calibration-head.svg">Calibration
+            <img id="header-img" src="./img/calibration-head.svg"><?php echo $text['main_calibration_text'];?>
         </div>
         <div class="notification">
             <i style="width:auto; height:40px" class="fa fa-bell" onclick="ClickNotification()"></i>
@@ -84,14 +84,14 @@
 
     <div id="Torque-Collection">
         <div class="topnav">
-            <label type="text" style="font-size: 24px; margin-bottom: 4px; padding-left: 10px">Torque collection and analysis system</label>
+            <label type="text" style="font-size: 24px; margin-bottom: 4px; padding-left: 10px"><?php echo $text['Calibrations_title_text'];?></label>
         </div>
 
         <div class="main-content">
             <div class="center-content">
                 <div class="container-main">
                     <div class="row t1">
-                        <div class="col-4 t1" style="padding-left: 7%; font-size: 18px">Torque Meter :</div>
+                        <div class="col-4 t1" style="padding-left: 7%; font-size: 18px"><?php echo $text['Choose_ktm_text'];?> :</div>
                         <div class="custom-select">
                             <select id="TorqueMeter">
                                 <?php foreach($data['res_Torquemeter_arr'] as $k_t => $v_t){?>
@@ -102,7 +102,7 @@
                     </div>
 
                     <div class="row t1">
-                        <div class="col-4 t1" style="padding-left: 7%; font-size: 18px">Controller :</div>
+                        <div class="col-4 t1" style="padding-left: 7%; font-size: 18px"><?php echo $text['Choose_Controller_text'];?> :</div>
                         <div class="custom-select">
                             <select id="controller_info">
                                  <?php foreach($data['res_controller_arr'] as $k_c =>$v_c){?>
@@ -112,7 +112,7 @@
                         </div>
                     </div>
 
-                    <button class="nextButton" id="nextButton" onclick="NextToAnalysisSystemKTM()">Next &#10144;</button>
+                    <button class="nextButton" id="nextButton" onclick="NextToAnalysisSystemKTM()"><?php echo $text['Next_text'];?></button>
                 </div>
             </div>
         </div>
@@ -120,15 +120,15 @@
 
     <div id="analysis-system-KTM" style="display: none">
         <div class="topnav">
-            <label type="text" style="font-size: 24px; margin-bottom: 0px; padding-left: 10px">Torque collection and analysis system-KTM</label>
+            <label type="text" style="font-size: 24px; margin-bottom: 0px; padding-left: 10px"><?php echo $text['Calibrations_title_text'];?></label>
             <div class="topnav-right">
                 <button class="btn" id="back-btn" type="button" onclick="backSetting()">
-                    <img id="img-back" src="./img/back.svg" alt="">back
+                    <img id="img-back" src="./img/back.svg" alt=""><?php echo $text['Back_text']; ?>
                 </button>
 
-                <button class="btn" id="export-report" type="button" onclick="openModal('Export_Report')">Export Report</button>
+                <button class="btn" id="export-report" type="button" onclick="openModal('Export_Report')"><?php echo $text['Export_text'];?></button>
                 <!--<button class="btn" id="export-chart" type="button" onclick="openModal('Export_Chart')">Export Chart</button>-->
-                <button class="btn" id="export-excel" type="button"  onclick="window.location.href = '?url=Calibrations/export_excel';">Export Data</button>
+                <button class="btn" id="export-excel" type="button"  onclick="window.location.href = '?url=Calibrations/export_excel';"><?php echo $text['Export_Report_text'];?></button>
             </div>
         </div>
 
@@ -136,23 +136,23 @@
             <!-- Left -->
             <div class="column column-left">
                 <div class="row t1" style=" padding-left: 45%">
-                    <button id="call-job" type="button" class="btn-calljob" style="font-size: 18px; color: #000;"  onclick="calljoball()" >Call Job</button>
+                    <button id="call-job" type="button" class="btn-calljob" style="font-size: 18px; color: #000;"  onclick="calljoball()" ><?php echo $text['Call_Job_text'];?></button>
                 </div>
                 <div class="border-bottom">
                     <div class="row t1">
-                        <div class="col-5 t1" style=" padding-left: 2%; color: #000">Job ID:</div>
+                        <div class="col-5 t1" style=" padding-left: 2%; color: #000"><?php echo $text['Job_ID_text'];?>:</div>
                         <div class="col-4 t1">
                             <input id="job-id" type="text" class="t2 form-control" value="">
                         </div>
                     </div>
                     <div class="row t1">
-                        <div class="col-5 t1" style="padding-left: 2%; color: #000">Job Name:</div>
+                        <div class="col-5 t1" style="padding-left: 2%; color: #000"><?php echo $text['Job_Name_text'];?>:</div>
                         <div class="col-4 t1">
                             <input id="job-name" type="text" class="t2 form-control" value="">
                         </div>
                     </div>
                     <div class="row t1">
-                        <div class="col-5 t1" style="padding-left: 2%; color: #000">Tool SN:</div>
+                        <div class="col-5 t1" style="padding-left: 2%; color: #000"><?php echo $text['Tool_SN_text'];?>:</div>
                         <div class="col-4 t1">
                             <input id="tool-sn" type="text" class="t2 form-control" value="">
                         </div>
@@ -199,7 +199,7 @@
                 </div>
 
                 <div class="row t1">
-                    <div class="col-7 t1"><b>Target Torque</b></div>
+                    <div class="col-7 t1"><b><?php echo $text['Target_Torque_text'];?></b></div>
                     <div class="col-4 t1">
                         <input id="standard-torque" type="text" class="t2 form-control" value="0.6">
                     </div>
@@ -214,7 +214,7 @@
 
                 <div class="row t1">
                    <br><br>
-                   <button id="Connect" type="button" class="btn-calljob" style="font-size: 18px; color: #000;" onclick="Connect()">Connect</button>
+                   <button id="Connect" type="button" class="btn-calljob" style="font-size: 18px; color: #000;" onclick="Connect()"><?php echo $text['Test_text'];?></button>
                 </div>
             </div>
 
@@ -226,17 +226,17 @@
                         <span class="input-group-text">TQ:</span>
                         <input type="text" class="form-control" style="margin-right: 5px">
 
-                        <span class="input-group-text">RPM:</span>
+                        <span class="input-group-text"><?php echo $text['RPM_text'];?>:</span>
                         <input type="text" class="form-control" style="margin-right: 5px">
 
                         <span class="input-group-text">Offset:</span>
                         <input type="text" class="form-control" style="margin-right: 5px">
 
-                        <button id="Save-btn" type="button" class="btn-save-reset-undo" style="margin-right: 5%">Save</button>
-                        <button id="Reset" type="button" class="btn-save-reset-undo" onclick="reset()">Reset</button>
-                        <button id="Undo" type="button" class="btn-save-reset-undo" onclick="undo()" >Undo</button>
+                        <button id="Save-btn" type="button" class="btn-save-reset-undo" style="margin-right: 5%"><?php echo $text['Save_text'];?></button>
+                        <button id="Reset" type="button" class="btn-save-reset-undo" onclick="reset()"><?php echo $text['Reset_text'];?></button>
+                        <button id="Undo" type="button" class="btn-save-reset-undo" onclick="undo()" ><?php echo $text['Undo_text'];?></button>
 
-                        <span class="input-group-text">Received Time:</span>
+                        <span class="input-group-text"><?php echo $text['Time_text'];?>:</span>
                         <input type="text" class="form-control">
                     </div>
                 </div>
@@ -247,19 +247,19 @@
                             <table class="table table-bordered table-hover" id="table">
                                 <thead id="header-table" style="text-align: center; vertical-align: middle">
                                        <tr>
-                                        <th>Recv<br>No</th>
-                                        <th>Recv. Time</th>
-                                        <th>Operator</th>
-                                        <th>Tool S/N</th>
-                                        <th>Torque</th>
-                                        <th>Unit</th>
+                                        <th><?php echo $text['Index_text'];?></th>
+                                        <th><?php echo $text['Time_text'];?></th>
+                                        <th><?php echo $text['Operator_text'];?></th>
+                                        <th><?php echo $text['Tool_SN_text'];?></th>
+                                        <th><?php echo $text['Torque_text'];?></th>
+                                        <th><?php echo $text['Unit_text'];?></th>
 
-                                        <th>Max<br>Torque</th>
-                                        <th>Min<br>Torque</th>
-                                        <th>Avg<br>Torque</th>
+                                        <th><?php echo $text['Max_Torque_text'];?></th>
+                                        <th><?php echo $text['Min_Torque_text'];?></th>
+                                        <th><?php echo $text['Avg_Torque_text'];?></th>
                                         <th>+ %</th>
                                         <th>- %</th>
-                                        <th>Customize</th>
+                                        <th><?php echo $text['Customize_text'];?></th>
                                    
                                     </tr>
                                 </thead>
@@ -295,7 +295,7 @@
                                         </div>
                                     </div>
                                     <div class="row t1">
-                                        <div class="col-5 t1" style=" padding-left: 5%; color: #000">Target Torque:</div>
+                                        <div class="col-5 t1" style=" padding-left: 5%; color: #000"><?php echo $text['Target_Torque_text'];?>:</div>
                                         <div class="col-5 t1">
                                             <input id="target-torque" type="text" class="t2 form-control" value="0.6">
                                         </div>
@@ -307,31 +307,31 @@
                                         </div>
                                     </div>
                                     <div class="row t1">
-                                        <div class="col-5 t1" style=" padding-left: 5%; color: #000">Hi Limit Torque:</div>
+                                        <div class="col-5 t1" style=" padding-left: 5%; color: #000"><?php echo $text['Hi_Q_text'];?>:</div>
                                         <div class="col-5 t1">
                                             <input id="high-limit-torque" type="text" class="t2 form-control" value="<?php echo $data['meter']['hi_limit_torque'];?>">
                                         </div>
                                     </div>
                                     <div class="row t1">
-                                        <div class="col-5 t1" style=" padding-left: 5%; color: #000">Lo Limit Torque:</div>
+                                        <div class="col-5 t1" style=" padding-left: 5%; color: #000"><?php echo $text['Lo_Q_text'];?>:</div>
                                         <div class="col-5 t1">
                                             <input id="low-limit-torque" type="text" class="t2 form-control" value="<?php echo $data['meter']['low_limit_torque'];?>">
                                         </div>
                                     </div>
                                     <div class="row t1">
-                                        <div class="col-5 t1" style=" padding-left: 5%; color: #000">Max Torque:</div>
+                                        <div class="col-5 t1" style=" padding-left: 5%; color: #000"><?php echo $text['Max_Torque_text'];?>:</div>
                                         <div class="col-5 t1">
                                             <input id="max-torque" type="text" class="t2 form-control" value="<?php echo $data['meter']['max_torque'];?>">
                                         </div>
                                     </div>
                                     <div class="row t1">
-                                        <div class="col-5 t1" style=" padding-left: 5%; color: #000">Min Torque:</div>
+                                        <div class="col-5 t1" style=" padding-left: 5%; color: #000"><?php echo $text['Min_Torque_text'];?>:</div>
                                         <div class="col-5 t1">
                                             <input id="min-torque" type="text" class="t2 form-control" value="<?php echo $data['meter']['min_torque'];?>">
                                         </div>
                                     </div>
                                     <div class="row t1">
-                                        <div class="col-5 t1" style=" padding-left: 5%; color: #000">Ave Torque:</div>
+                                        <div class="col-5 t1" style=" padding-left: 5%; color: #000"><?php echo $text['Avg_Torque_text'];?></div>
                                         <div class="col-5 t1">
                                             <input id="ave-torque" type="text" class="t2 form-control" value="<?php echo $data['meter']['avg_torque'];?>">
                                         </div>
@@ -408,15 +408,15 @@
     <div id="Export_Report" class="modal" style="top: 10%;">
         <div class="modal-dialog modal-lg">
             <div class="modal-content w3-animate-zoom">
-                <h4>Export Report</h4>
+                <h4><?php echo $text['Export_Report_text'];?></h4>
                 <div class="row t1">
-                    <div class="col-3 t1" for="fileName3">file name:</div>
+                    <div class="col-3 t1" for="fileName3"><?php echo $text['file_name_text'];?>:</div>
                     <div class="col-6 t1">
                         <input id="fileName3" type="text" class="t1 form-control" value="">
                     </div>
                 </div>
                 <div class="row t1">
-                    <div class="col-3 t1" for="Save-as3">Save as type:</div>
+                    <div class="col-3 t1" for="Save-as3"><?php echo $text['Type_text'];?>:</div>
                     <div class="col t1">
                         <select id="Save-as3" style="width: 184px; height: 30px">
                             <option value="html">html</option>
@@ -428,7 +428,7 @@
                 </div>
                 <div class="modal-footer justify-content-center">
                     <button id="Exportreport" class="style-button" onclick="html_download()">Export</button>
-                    <button class="style-button" onclick="closeModal('Export_Report')">Cancel</button>
+                    <button class="style-button" onclick="closeModal('Export_Report')"><?php echo $text['Cancel_text'];?></button>
                 </div>
             </div>
         </div>
@@ -591,34 +591,38 @@ function toggleMenu()
         //highlight_row('barcode-table');
     });
 
-function highlight_row(tableId)
-{
+function highlight_row(tableId) {
     var table = document.getElementById(tableId);
     var cells = table.getElementsByTagName('td');
 
     for (var i = 0; i < cells.length; i++) {
-        // Take each cell
+        // 遍历每个单元格
         var cell = cells[i];
-        // do something on onclick event for cell
+        
+        cell.onclick = function () {
+            // 获取点击单元格所在的行
+            var row = this.parentNode;
 
-        cell.onclick = function ()
-        {
-            // Get the row id where the cell exists
-            var rowId = this.parentNode.rowIndex;
+            var rows = table.getElementsByTagName('tr');
 
-            var rowsNotSelected = table.getElementsByTagName('tr');
-            for (var row = 0; row < rowsNotSelected.length; row++) {
-                rowsNotSelected[row].style.backgroundColor = "";
-                rowsNotSelected[row].classList.remove('selected');
+            // 从所有行中移除 'selected' 类
+            for (var rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+                rows[rowIndex].classList.remove('selected');
+                // 可选：如果需要，也可以清除背景颜色
+                rows[rowIndex].style.backgroundColor = "";
             }
-            var rowSelected = table.getElementsByTagName('tr')[rowId];
-            // rowSelected.style.backgroundColor = "red";
-            rowSelected.className += "selected";
 
-            //hide div
+            // 为点击的行添加 'selected' 类
+            row.classList.add('selected');
+            // 可选：如果需要，也可以设置背景颜色
+            // row.style.backgroundColor = "red";
+
+            // 如果需要隐藏某个 div（需要指定要隐藏的 div 和隐藏的方式）
+            // document.getElementById('yourDivId').style.display = 'none';
         }
     }
-} //end of function
+}
+
 
 // Notification ....................
 let messageCount = 0;

@@ -160,7 +160,7 @@
                         <!-- ARM  -->
                         <div class="row epuipment-row">
                             <div class="col-1">
-                                <img class="images" src="./img/ep_picture.png" alt="">
+                                <img class="images" src="./img/ARM.png" alt="">
                             </div>
                             <div class="col-3" style="line-height: 32px; padding-left: 5%">
                                 <div style="font-size: 20px"><b><?php echo $text['Arm_text']; ?></b></div>
@@ -227,7 +227,7 @@
                         <!-- Tower light sensors  -->
                         <div class="row epuipment-row">
                             <div class="col-1">
-                                <img class="images" src="./img/ep_picture.png" alt="">
+                                <img class="images" src="./img/light.png" alt="">
                             </div>
                             <div class="col-3" style="line-height: 32px; padding-left: 5%">
                                 <div style="font-size: 20px"><b><?php echo $text['Tower_Light_sensors_text']; ?></b></div>
@@ -364,7 +364,7 @@
                         <!-- Socket tray  -->
                         <div class="row epuipment-row">
                             <div class="col-1">
-                                <img class="images" src="./img/ep_picture.png" alt="">
+                                <img class="images" src="./img/socket tray.png" alt="">
                             </div>
                             <div class="col-3" style="line-height: 32px; padding-left: 5%">
                                 <div style="font-size: 20px"><b><?php echo $text['Socket_Tray_text']; ?></b></div>
@@ -394,6 +394,43 @@
                                 <a><i id="Edit" class="fa fa-edit" onclick="ShowSockettraySettingMode()"></i></a>
                             </div>
                         </div>
+
+
+                        <!-- id card  -->
+                        <div class="row epuipment-row">
+                            <div class="col-1">
+                                <img class="images" src="./img/id_card.png" alt="">
+                            </div>
+                            <div class="col-3" style="line-height: 32px; padding-left: 5%">
+                                <div style="font-size: 20px"><b><?php echo $text['id_card_text']; ?></b></div>
+                                <div>V.1.1.0</div>
+                                <!-- <div>Nov 11.23 10:55</div> -->
+                            </div>
+
+                            <!-- Message  -->
+                            <div class="col-4" style="font-size:18px">
+                                <form action="" id="Recycle-box_Status">
+                                    <div class="mt-1" style="text-align: center;line-height: 55px">
+                                        ---
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="col">
+                                <div class="simple-toggle">
+                                    <label class="tgl" style="font-size:28px; float: right;">
+                                        <input type="checkbox"  checked />
+                                        <span data-on="&#10003;" data-off="&#10005;"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <a><i id="Remove" class="fa fa-minus-square-o"></i></a>
+                                <a><i id="Edit" class="fa fa-edit" onclick=""></i></a>
+                            </div>
+                        </div>
+
+
                     </div>
 
                     </div>

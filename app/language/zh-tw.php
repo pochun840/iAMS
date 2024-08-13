@@ -123,6 +123,7 @@ $text['Sensor_text'] = '傳感器';
 
 $text['Virtual_message_text'] = '虛擬消息';
 $text['Socket_Tray_text'] = '套筒選擇器';
+$text['id_card_text'] = 'ID 卡';
 $text['Screw_feeder_position_text'] = '螺絲進料器位置';
 $text['Program_controller_text'] = '控制器';
 $text['Task_screw_position_text'] = '任務螺絲位置';
@@ -322,7 +323,7 @@ $text['Tool_Type_text'] = '工具類型';
 $text['Tool_SN_text'] = '工具 SN';
 $text['SW_Version_text'] = '軟件版本';
 $text['Total_Counts_text'] = '總顆數';
-$text['Max_Torque_text'] = '最大扭矩';
+//$text['Max_Torque_text'] = '最大扭矩';
 $text['Max_Speed_text'] = '最大速度';
 $text['Calibration_Value_text'] = '校正值';
 $text['Maintain_Counts_text'] = '維護顆數';
@@ -420,6 +421,17 @@ $text['Write_text'] = '寫入';
 $text['Bulk_Change_text'] = '批量更改';
 $text['Serial_Number_text'] = '序列號';
 $text['Choose_text'] = '選擇';
+
+//Calibrations
+$text['Choose_ktm_text'] = '選擇扭力計';
+$text['Reset_text'] = '清除';
+$text['Min_Torque_text'] = '最小扭力';
+$text['Avg_Torque_text'] = '平均扭力';
+$text['Customize_text'] = '自定義';
+$text['Undo_text'] = '清除';
+$text['Calibrations_title_text'] ='扭力收集與分析系統';
+$text['file_name_text'] = '檔案名稱';
+$text['Standard_Deviation_text'] = '標準差';
 
 
 //----------------------------------------------------------------------------------------------------------------

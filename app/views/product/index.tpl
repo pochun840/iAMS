@@ -984,7 +984,7 @@ function updateCircleSize(value)
     }
 
     function GetSeqList(seq_id) {
-        // alert(123456)
+
         // let url = '?url=Products/get_seq_list_by_job_id';
         var Seq_Select = document.getElementById("Seq-ID");
         // 清空<select>元素的现有选项
@@ -999,11 +999,7 @@ function updateCircleSize(value)
             dataType: "json",
             url: url,
             success: function(response) {
-                // 成功回調函數，處理伺服器的回應
-                // console.log(response); // 在控制台輸出伺服器的回應
-                // history.go(0);
-
-                // var optionsData = JSON.parse(response);
+            if (Array.isArray(response)) {
                 var optionsData = response;
 
                 // 添加新选项
@@ -1016,12 +1012,14 @@ function updateCircleSize(value)
 
                 if (seq_id != undefined) {
                     document.getElementById('Seq-ID').value = seq_id;
-                }else{
+                } else {
                     document.getElementById('Seq-ID').value = 1;
                 }
-
-
-            },
+            } else {
+                console.error('Response is not an array:', response);
+                alertify.error("Server response is not in the expected format.");
+            }
+        },
             error: function(error) {
                 // 失敗回調函數，處理錯誤情況
                 // console.error('Error:', error); // 在控制台輸出錯誤訊息

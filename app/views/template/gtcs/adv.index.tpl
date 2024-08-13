@@ -110,7 +110,7 @@
                     <input type="text" class="form-control input-ms" id="controller-type" value="GTCS" maxlength="" disabled="disabled">
                 </div>
 
-                <div for="tool-type" class="col-1 t1">Screw Tool :</div>
+                <div for="tool-type" class="col-1 t1"><?php echo $text['Screw_Tool_text'];?> :</div>
                 <div class="col-2 t2" style="margin-right: 2%">
                     <input type="text" class="form-control input-ms" id="tool-type" value="3-01007-7L-H" maxlength="" disabled="disabled">
                 </div>
@@ -459,7 +459,7 @@ function highlight_row() {
                     // console.error('Error:', error); // 在控制台輸出錯誤訊息
                 }
             }).fail(function() {
-                // history.go(0);//失敗就重新整理
+                history.go(0);//失敗就重新整理
             });
         } else {
 

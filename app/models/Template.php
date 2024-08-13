@@ -235,22 +235,22 @@ class Template{
         $results = $stmt->execute();
 
 
-        //清空 task的 template_program_id
-        $sql = "SELECT * FROM task WHERE template_program_id = :template_program_id";
-        $statement = $this->db->prepare($sql);
-        $statement->bindValue(':template_program_id', $program_id);
-        $statement->execute();
-        $rows = $statement->fetch(PDO::FETCH_ASSOC);
-        if ($rows) {
-            $update_sql = "UPDATE task  SET template_program_id = NULL WHERE template_program_id = :template_program_id";
-            $update_statement = $this->db->prepare($update_sql);
-            $update_statement->bindValue(':template_program_id', $program_id);
-            $update_statement->execute();
-            
-            echo "Record updated successfully.";
-        } else {
-            echo "No record found.";
-        }        
+         //清空 task的 template_program_id
+         $sql = "SELECT * FROM task WHERE template_program_id = :template_program_id";
+         $statement = $this->db->prepare($sql);
+         $statement->bindValue(':template_program_id', $program_id);
+         $statement->execute();
+         $rows = $statement->fetch(PDO::FETCH_ASSOC);
+         if ($rows) {
+             $update_sql = "UPDATE task  SET template_program_id = NULL WHERE template_program_id = :template_program_id";
+             $update_statement = $this->db->prepare($update_sql);
+             $update_statement->bindValue(':template_program_id', $program_id);
+             $update_statement->execute();
+             
+             echo "Record updated successfully.";
+         } else {
+             echo "No record found.";
+         }        
 
 
       
@@ -588,6 +588,8 @@ class Template{
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
         return $results;
     }
+
+    
 
 
     public function cover_data($new_array,$table_name){

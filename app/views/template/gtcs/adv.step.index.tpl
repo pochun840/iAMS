@@ -133,7 +133,7 @@
                     </button>
 
                     <button id="add-step" type="button" onclick="sync_program()">
-                        <img id="img-add" src="./img/add-program.svg" alt="">update                    
+                        <img id="img-add" src="./img/add-program.svg" alt=""><?php echo $text['Sync_Program_text']; ?>                   
                     </button>
 
                 </div>
@@ -451,7 +451,7 @@
                 <header class="w3-container modal-header">
                     <span onclick="cancel_action()"
                     class="w3-button w3-red w3-xxlarge w3-display-topright" style="padding: 7px; width: 60px">&times;</span>
-                    <h3></h3>
+                    <h3><?php echo $text['Sync_Program_text'];?></h3>
                 </header>
 
                 <div class="modal-body">
@@ -471,8 +471,8 @@
                 </div>
                 <div class="modal-footer justify-content-center">
                     <input type="checkbox" id="confirmCheckbox"> 
-                    <label for="confirmCheckbox" style="color: white;">I agree</label>
-                    <button id="button1" class="button button3" onclick="syncProgram_job()"><?php echo "SYNC"; ?></button>
+                    <label for="confirmCheckbox" style="color: white;font-size: 18px;"><?php echo $text['iagree_text'];?></label>
+                    <button id="button1" class="button button3" onclick="syncProgram_job()"><?php echo $text['SYNC_text'];?></button>
                     <button id="button2" class="button button3" onclick="cancel_action()" class="cancelbtn"><?php echo $text['Cancel_text']; ?></button>
                 </div>
             </div>
@@ -998,8 +998,10 @@ function sync_program() {
     let rowSelected = document.getElementsByClassName('selected');
     let url = '?url=Templates/check_task_by_pro_id';
 
+    
+
     // 确保至少有一个选中的项
-    if (rowSelected.length > 0) {
+    if (rowSelected.length  === 0) {
         // 取第一个选中的行的 program_id
         let program_id = extractPartFromurl();
         global_program_id =  program_id;
@@ -1038,8 +1040,8 @@ function sync_program() {
 
                         //Job ID 和 Job Name 的文字為紅色
                         jobDiv.innerHTML = `
-                            <span style="color: red;">Job ID:</span> ${job.job_id}, 
-                            <span style="color: red;">Job Name:</span> ${job.job_name}
+                            <span style="color: red;font-size: 16px;">Job ID:</span> ${job.job_id}, 
+                            <span style="color: red;font-size: 16px;">Job Name:</span> ${job.job_name}
                         `;
                         
                         jobListDiv.appendChild(jobDiv);
@@ -1047,8 +1049,13 @@ function sync_program() {
 
                     modalBody.appendChild(jobListDiv);
                 } else {
-                    modalBody.innerHTML = '<p>No jobs found or error occurred.</p>';
-                    //history.go(0);
+                    let noJobsMessage = document.createElement('p');
+                    noJobsMessage.textContent = '<?php echo $text['no_jobs_found'];?>';
+                    noJobsMessage.style.textAlign = 'center'; // Center text horizontally
+                    noJobsMessage.style.fontSize = '16px'; // Adjust font size if needed
+                    noJobsMessage.style.color = 'gray'; // Optional: Change text color
+
+                    modalBody.appendChild(noJobsMessage);
                 }
 
                 syncProgramElement.style.display = 'block';
@@ -1062,7 +1069,7 @@ function sync_program() {
         });
     } else {
 
-        alert('Please select a row.');
+        //alert('Please select a row.');
     }
 }
 

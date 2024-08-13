@@ -1193,7 +1193,7 @@ function delete_program() {
                 // console.error('Error:', error); // 在控制台輸出錯誤訊息
             }
         }).fail(function() {
-            // history.go(0);//失敗就重新整理
+            history.go(0);//失敗就重新整理
         });
     } else {
 
