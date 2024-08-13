@@ -915,7 +915,7 @@ function get_gtcs_template(item) {
 
             const labelDiv = document.createElement('div');
             labelDiv.classList.add('col-2');
-            labelDiv.textContent = item.template_program_id;
+            labelDiv.textContent = '';
 
             const label = document.createElement('label');
             label.classList.add('form-check-label');
