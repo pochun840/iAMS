@@ -212,6 +212,7 @@ $text['Target_Q_text'] = '目标扭力';
 $text['Target_A_text'] = '目标角度';
 $text['HiLo_text'] = '上限 / 下限';
 $text['Add_text'] = '添加';
+$text['Sync_Program_text'] = '更新';
 
 //template page - normal - torque parameter
 $text['Parameter_text'] = '参数';

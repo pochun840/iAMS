@@ -214,6 +214,8 @@ $text['Target_Q_text'] = 'Target Q';
 $text['Target_A_text'] = 'Target A';
 $text['HiLo_text'] = 'Hi / Lo';
 $text['Add_text'] = 'Add';
+$text['Sync_Program_text']  = 'Update';
+
 
 //template page - normal - torque parameter
 $text['Parameter_text'] = 'Parameter';
