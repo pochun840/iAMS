@@ -362,91 +362,91 @@
     </div>
 
     <!-- Table Barcode Setting -->
-        <div id="barcode-setting" class="modal">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content w3-animate-zoom" style="width: 80%">
-                    <header class="w3-container modal-header">
-                        <span onclick="document.getElementById('barcode-setting').style.display='none'"
-                            class="w3-button w3-red w3-xxlarge w3-display-topright" style="padding: 7px; width: 60px">&times;</span>
-                        <h3>Barcode Setting</h3>
-                    </header>
+    <div id="barcode-setting" class="modal" style="transform: scale(1.0); transform-origin: top left;">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content w3-animate-zoom" style="width: 80%">
+            <header class="w3-container modal-header">
+                <span onclick="document.getElementById('barcode-setting').style.display='none'"
+                    class="w3-button w3-red w3-xxlarge w3-display-topright" style="padding: 7px; width: 60px">&times;</span>
+                <h3>Barcode Setting</h3>
+            </header>
 
-                    <div class="modal-body">
-                        <form id="barcode_form" onsubmit="return false;">
-          		            <div class="row">
-          				        <div class="col-3 t1"><?php echo $text['Barcode_text']; ?> :</div>
-          				        <div class="col-9 t2">
-           				            <input type="text" class="form-control input-ms" id="barcode-number" maxlength="99" onblur="autofill(this)">
-           				        </div>
-           				    </div>
-                            <div class="row">
-                                <div class="col-3 t1"><?php echo $text['Match_From_text']; ?> :</div>
-                                <div class="col-3 t2">
-                                    <input type="text" class="t3 form-control input-ms" id="match-from">
-                                </div>
-
-                                <div class="col-3 t1"><?php echo $text['Match_To_text']; ?> :</div>
-                                <div class="col-3 t2">
-                                    <input type="text" class="t3 form-control input-ms" id="match-to">
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-3 t1"><?php echo $text['Select_Job_ID_text']; ?> :</div>
-                 				<div class="col t2">
-                 				    <select id="Job-ID" onchange="GetSeqList()" style="width: 133px; height: 30px;border: 1px solid #B8B8B8; border-radius: 3px;padding-left: .375rem;">
-                                        <?php foreach ($data['jobs'] as $key => $value) {
-                                            echo '<option value="'.$value['job_id'].'">'.$value['job_id'].'</option>';
-                                        } ?>
-                         			</select>
-                   				</div>
-               				</div>
-                            <div class="row">
-                                <div class="col-3 t1"><?php echo $text['Select_Seq_ID_text']; ?> :</div>
-                 				<div class="col t2">
-                 				    <select id="Seq-ID" style="width: 133px; height: 30px;border: 1px solid #B8B8B8; border-radius: 3px;padding-left: .375rem;">
-                       				    
-                         			</select>
-                   				</div>
-                                <button class="button button3" style="margin-right: 15px" onclick="save_barcode()"><?php echo $text['Save_text']; ?></button>
-               				</div>
-                        </form>
-                        <hr>
-                        <div class="scrollbar-barcode-table" id="style-barcode-table">
-                            <div class="force-overflow-barcode-table">
-                                <table class="table table-bordered table-hover" id="barcode-table">
-                                    <thead id="header-table" style="text-align: center; vertical-align: middle">
-                                        <tr>
-                                            <th><?php echo $text['Job_ID_text']; ?></th>
-                                            <th><?php echo $text['Job_Name_text']; ?></th>
-                                            <th><?php echo $text['Seq_ID_text']; ?></th>
-                                            <th><?php echo $text['Seq_Name_text']; ?></th>
-                                            <th><?php echo $text['Barcode_text']; ?></th>
-                                            <th><?php echo $text['Action_text']; ?></th>
-                                            <th style="display:none;">Match From</th>
-                                            <th style="display:none;">Match To</th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody id="tbody1" style="background-color: #F2F1F1; font-size: 1.8vmin;text-align: center; vertical-align: middle;">
-                                        <tr>
-                                            <td>1</td>
-                                            <td>nor-ac-12</td>
-                                            <td>-</td>
-                                            <td>2</td>
-                                            <td>12345678</td>
-                                            <td><i class="fa fa-times" style="font-size:22px"></i></td>
-                                            <td style="display:none;">666</td>
-                                            <td style="display:none;">666</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+            <div class="modal-body">
+                <form id="barcode_form" onsubmit="return false;">
+                    <div class="row">
+                        <div class="col-3 t1"><?php echo $text['Barcode_text']; ?> :</div>
+                        <div class="col-9 t2">
+                            <input type="text" class="form-control input-ms" id="barcode-number" maxlength="99" onblur="autofill(this)">
                         </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3 t1"><?php echo $text['Match_From_text']; ?> :</div>
+                        <div class="col-3 t2">
+                            <input type="text" class="t3 form-control input-ms" id="match-from">
+                        </div>
+
+                        <div class="col-3 t1"><?php echo $text['Match_To_text']; ?> :</div>
+                        <div class="col-3 t2">
+                            <input type="text" class="t3 form-control input-ms" id="match-to">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-3 t1"><?php echo $text['Select_Job_ID_text']; ?> :</div>
+                        <div class="col t2">
+                            <select id="Job-ID" onchange="GetSeqList()" style="width: 133px; height: 30px; border: 1px solid #B8B8B8; border-radius: 3px; padding-left: .375rem;">
+                                <?php foreach ($data['jobs'] as $key => $value) {
+                                    echo '<option value="'.$value['job_id'].'">'.$value['job_id'].'</option>';
+                                } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3 t1"><?php echo $text['Select_Seq_ID_text']; ?> :</div>
+                        <div class="col t2">
+                            <select id="Seq-ID" style="width: 133px; height: 30px; border: 1px solid #B8B8B8; border-radius: 3px; padding-left: .375rem;">
+                            </select>
+                        </div>
+                        <button class="button button3" style="margin-right: 15px" onclick="save_barcode()"><?php echo $text['Save_text']; ?></button>
+                    </div>
+                </form>
+                <hr>
+                <div class="scrollbar-barcode-table" id="style-barcode-table">
+                    <div class="force-overflow-barcode-table">
+                        <table class="table table-bordered table-hover" id="barcode-table">
+                            <thead id="header-table" style="text-align: center; vertical-align: middle">
+                                <tr>
+                                    <th><?php echo $text['Job_ID_text']; ?></th>
+                                    <th><?php echo $text['Job_Name_text']; ?></th>
+                                    <th><?php echo $text['Seq_ID_text']; ?></th>
+                                    <th><?php echo $text['Seq_Name_text']; ?></th>
+                                    <th><?php echo $text['Barcode_text']; ?></th>
+                                    <th><?php echo $text['Action_text']; ?></th>
+                                    <th style="display:none;">Match From</th>
+                                    <th style="display:none;">Match To</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="tbody1" style="background-color: #F2F1F1; font-size: 1.8vmin; text-align: center; vertical-align: middle;">
+                                <tr>
+                                    <td>1</td>
+                                    <td>nor-ac-12</td>
+                                    <td>-</td>
+                                    <td>2</td>
+                                    <td>12345678</td>
+                                    <td><i class="fa fa-times" style="font-size:22px"></i></td>
+                                    <td style="display:none;">666</td>
+                                    <td style="display:none;">666</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    </div>
+
 <script>
 
 document.addEventListener("DOMContentLoaded", function() {

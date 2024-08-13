@@ -128,7 +128,7 @@
                     </button>
 
                     <button id="add-program" type="button" onclick="sync_program()">
-                        <img id="img-program" src="./img/add-program.svg" alt=""><?php echo "update"; ?>
+                        <img id="img-program" src="./img/add-program.svg" alt=""><?php echo $text['Sync_Program_text']; ?>
                     </button>
 
                 </div>
@@ -612,7 +612,7 @@
                 <header class="w3-container modal-header">
                     <span onclick="cancel_action()"
                     class="w3-button w3-red w3-xxlarge w3-display-topright" style="padding: 7px; width: 60px">&times;</span>
-                    <h3></h3>
+                    <h3><?php echo $text['Sync_Program_text'];?></h3>
                 </header>
 
                 <div class="modal-body">
@@ -807,8 +807,8 @@ function sync_program() {
 
                         //Job ID 和 Job Name 的文字為紅色
                         jobDiv.innerHTML = `
-                            <span style="color: red;">Job ID:</span> ${job.job_id}, 
-                            <span style="color: red;">Job Name:</span> ${job.job_name}
+                            <span style="color: red;font-size: 16px;">Job ID:</span> ${job.job_id}, 
+                            <span style="color: red;font-size: 16px;">Job Name:</span> ${job.job_name}
                         `;
                         
                         jobListDiv.appendChild(jobDiv);
