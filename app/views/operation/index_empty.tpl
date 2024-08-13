@@ -10,7 +10,7 @@
 
 <?php echo $data['nav']; ?>
 <style>
-.t1{color: #14A800; background-color: #E8F9F1; border-radius: 10px; padding-right: 5%; padding: 0 5px;}
+.t1{color: #14A800; background-color: #E8F9F1; border-radius: 10px; padding-right: 5%; padding: 0 5px; }
 .t2{color: #555555; background-color: #DDDDDD; border-radius: 10px; padding: 0 5px}
 
 .t3{font-size: 5vmin; margin-top: 3%; padding-left: 5%}                 /* target_torque */
@@ -18,6 +18,8 @@
 .t5{margin-right: 2px;margin-top: 5px}                                 /* Hi Torque & Hi Angle */
 
 .t6{float: left; height: 25px; width: 25px; margin-right: 5px; margin-top: 5px}  /* Sensor icon */
+.t7{font-size: 20px; margin: 3px 0px; display: flex; align-items: center;}
+
 
 </style>
 <div class="container-ms">
@@ -237,21 +239,21 @@
                 <div class="column" style="width: 40%">
                     <div id="task-setting" style=" height: 445px">
                         <div class="row" style="padding: 0 20px">
-                            <label class="col-3" style="margin: 2px 2px"><?php echo $text['Job_Name_text']; ?>:</label>
+                            <label class="col-3 t7" style="margin: 2px 2px"><?php echo $text['Job_Name_text']; ?>:</label>
                             <div class="col-6" style="margin: 2px 2px">
                                 <input id="job_name" type="text" class="form-control" disabled="disabled" style="font-size: 1.8vmin; background-color: #DDDDDD; height: 28px; border: 0">
                             </div>
                             <div class="col" style="margin: 2px 2px">
                                 <button class="btn-calljob" type="button" style="vertical-align: sub;font-size: 1.5vmin;" onclick="function_auth_check('change_job')"><?php echo $text['Call_Job_text']; ?></button>
                             </div>
-                            <label class="col-3" style="margin: 2px 2px"><?php echo $text['Seq_Name_text']; ?>:</label>
+                            <label class="col-3 t7" style="margin: 2px 2px"><?php echo $text['Seq_Name_text']; ?>:</label>
                             <div class="col-6" style="margin: 2px 2px">
                                 <input id="seq_name" type="text" class="form-control"  disabled="disabled" style="font-size: 1.8vmin; background-color: #DDDDDD; height: 28px; border: 0" >
                             </div>
 
                         </div>
                         <div class="row" style="padding: 0 20px">
-                            <label class="col-3" style="margin: 2px 2px"><?php echo $text['barcode_text']; ?>:</label>
+                            <label class="col-3 t7" style="margin: 2px 2px"><?php echo $text['barcode_text']; ?>:</label>
                             <div class="col" style="margin: 2px 2px">
                                 <input id="barcode" type="password" class="form-control" placeholder="" style="font-size: 1.5vmin;height: 28px;">
                             </div>

@@ -233,6 +233,9 @@ class Template{
         $stmt = $this->db->prepare('DELETE FROM gtcs_advancedstep_template WHERE template_program_id = :template_program_id ');
         $stmt->bindValue(':template_program_id', $pro_id);
         $results = $stmt->execute();
+
+
+      
     }
 
     public function EditProgram_Advanced($data)
