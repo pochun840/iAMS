@@ -250,35 +250,29 @@ class Product{
 
     }
 
-    public function check_pro_id_for_ccs_normalstep($new_temp_task,$from_job_id){
+    public function check_pro_id_for_ccs_normalstep($from_job_id){
 
+        $query = "SELECT * FROM ccs_normalstep WHERE job_id = ? ";
+        $statement_select = $this->db->prepare($query);
 
-        foreach($new_temp_task as $key =>$task ){
-            $query = "SELECT * FROM ccs_normalstep WHERE job_id = ? AND seq_id = ? ";
-            $statement_select = $this->db->prepare($query);
-
-            $statement_select->execute([$from_job_id,$task['seq_id'] ]);
-            $statement_select->execute();
-            $result = $statement_select->fetchAll(PDO::FETCH_ASSOC);
-
-        }
+        $statement_select->execute([$from_job_id]);
+        $statement_select->execute();
+        $result = $statement_select->fetchAll(PDO::FETCH_ASSOC);
+ 
         return $result;
 
 
     }
 
-    public function check_pro_id_for_ccs_advancedstep($new_temp_task,$from_job_id){
+    public function check_pro_id_for_ccs_advancedstep($from_job_id){
 
+        $query = "SELECT * FROM ccs_advancedstep WHERE job_id = ? ";
+        $statement_select = $this->db->prepare($query);
 
-        foreach($new_temp_task as $key =>$task ){
-            $query = "SELECT * FROM ccs_advancedstep WHERE job_id = ? AND seq_id = ? ";
-            $statement_select = $this->db->prepare($query);
-
-            $statement_select->execute([$from_job_id,$task['seq_id'] ]);
-            $statement_select->execute();
-            $result = $statement_select->fetchAll(PDO::FETCH_ASSOC);
-
-        }
+        $statement_select->execute([$from_job_id,$task['seq_id'] ]);
+        $statement_select->execute();
+        $result = $statement_select->fetchAll(PDO::FETCH_ASSOC);
+     
         return $result;
 
 
@@ -505,13 +499,13 @@ class Product{
                 step_tooldirection, step_rpm, step_offsetdirection, step_torque_jointoffset, step_hightorque,
                 step_lowtorque, step_threshold_mode, step_threshold_torque, step_threshold_angle, step_monitoringangle,
                 step_highangle, step_lowangle, step_downshift_enable, step_downshift_torque, step_downshift_speed,
-                torque_unit, step_prr, step_prr_rpm, step_prr_angle, step_downshift_mode, step_downshift_angle
+                torque_unit, step_prr, step_prr_rpm, step_prr_angle, step_downshift_mode, step_downshift_angle,gtcs_job_id
             ) VALUES (
                 :job_id, :seq_id, :task_id, :step_name, :step_targettype, :step_targetangle, :step_targettorque,
                 :step_tooldirection, :step_rpm, :step_offsetdirection, :step_torque_jointoffset, :step_hightorque,
                 :step_lowtorque, :step_threshold_mode, :step_threshold_torque, :step_threshold_angle, :step_monitoringangle,
                 :step_highangle, :step_lowangle, :step_downshift_enable, :step_downshift_torque, :step_downshift_speed,
-                :torque_unit, :step_prr, :step_prr_rpm, :step_prr_angle, :step_downshift_mode, :step_downshift_angle
+                :torque_unit, :step_prr, :step_prr_rpm, :step_prr_angle, :step_downshift_mode, :step_downshift_angle,:gtcs_job_id
             )";
             
             $statement = $this->db->prepare($sql);
@@ -550,7 +544,9 @@ class Product{
                 'step_prr_rpm' => $item['step_prr_rpm'],
                 'step_prr_angle' => $item['step_prr_angle'],
                 'step_downshift_mode' => $item['step_downshift_mode'],
-                'step_downshift_angle' => $item['step_downshift_angle']
+                'step_downshift_angle' => $item['step_downshift_angle'],
+                'gtcs_job_id' =>$item['gtcs_job_id']
+
             ])) {
                 $insertedCount++;
             } else {

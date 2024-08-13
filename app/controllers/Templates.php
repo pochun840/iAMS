@@ -137,7 +137,6 @@ class Templates extends Controller
             }
         }
 
-        // var_dump($advancedstep);
 
         $data = [
             'isMobile' => $isMobile,

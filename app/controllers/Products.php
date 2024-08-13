@@ -289,9 +289,10 @@ class Products extends Controller
                 }
                 
                 $insertedrecords_task = $this->ProductModel->Copy_task_by_job_id($new_temp_task);  //copy task  
-                //echo $insertedrecords_task;
-                //ccs_normalstep 
-                $res = $this->ProductModel->check_pro_id_for_ccs_normalstep($new_temp_task,$from_job_id);
+                $res = $this->ProductModel->check_pro_id_for_ccs_normalstep($from_job_id);
+
+              
+                
                 if(!empty($res)){
                     $new_temp_normalstep = array();
                     $table_name ='ccs_normalstep';
@@ -328,6 +329,7 @@ class Products extends Controller
                     }
 
                     $count = $this->ProductModel->cover_data($new_temp_normalstep,$table_name);
+                 
                 }else{
                     //ccs_advancedstep
                     $res1 = $this->ProductModel->check_pro_id_for_ccs_advancedstep($new_temp_task,$from_job_id);
