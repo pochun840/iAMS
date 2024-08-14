@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/historical.css?v=202404111200" type="text/css">
 
 <script src="<?php echo URLROOT; ?>js/flatpickr.js"></script>
-<script src="<?php echo URLROOT; ?>js/historical.js?v=202407181100"></script>
+<script src="<?php echo URLROOT; ?>js/historical.js?v=202405081700"></script>
 
 <script src="<?php echo URLROOT; ?>js/echarts_min.js?v=202405080900"></script>
 <script src="<?php echo URLROOT; ?>js/html2canvas_min.js?v=202405080900"></script>
@@ -229,46 +229,74 @@ if(!empty($_COOKIE['chat_mode_change'])){
             <div id="fasteningContent" class="content">
                 <div id="FasteningDisplay" style="margin-top: 40px">
                     <div style="padding-left: 2%">
-                        <div class="input-group">
-                            <span class="input-group-text" style="margin-right: 5px; border: none; background: none"><?php echo $text['BarcodeSN_text']; ?>:</span>
-                            <input type="text"  id="barcodesn" name="barcodesn" maxlength="">
-                            <span class="input-group-text" style="margin-right: 5px; border: none; background: none"><?php echo $text['Operator_text']; ?>:</span>
-                            <input type="text"  id="barcodesn" name="barcodesn" maxlength="">
-                            <span class="input-group-text" style="margin-right: 5px; border: none; background: none"><?php echo $text['Select_Job_text']; ?>:</span>
-                            <input type="text"  id="JobSelect" placeholder="Click here.." onfocus="openModal('JobSelect')" onclick="this.blur()">
-                            <span class="input-group-text" style="margin-right: 5px; border: none; background: none"><?php echo $text['Result_Status_text']; ?>:</span>
-                            <select id="status">
+                        <div class="row">
+                            <div for="BarcodeSN" class="col-2 t1"><?php echo $text['BarcodeSN_text']; ?>:</div>
+                            <div class="col-2 t2" style="margin-left: -100px">
+                                <input type="text" class="t3 form-control input-ms" id="barcodesn" name="barcodesn" maxlength="" style="width: 190px;">
+                            </div>
+
+                            <div for="Operator" class="col-2 t1"><?php echo $text['Operator_text']; ?>:</div>
+                            <div class="col-2 t2" style="margin-left: -100px">
+                               <!--<input type="text" class="t3 form-control input-ms" id="Operator" maxlength="" value="" style="width: 190px;">-->
+                               <!--<select>
+                                    <?//php foreach($data['all_roles'] as $key =>$val){ ?>
+                                            <!--<option value='<?//php echo $val['ID'];?>'> <?//php echo $val['Title'];?> </option>
+                                    <?//php } ?>
+                               </select>-->
+                            </div>
+
+                            <div for="SelectJob" class="col-2 t1"><?php echo $text['Select_Job_text']; ?>:</div>
+                            <div class="col-2 t3" style="margin-left: -100px">
+                                <input type="text" class="t3 form-control input-ms" id="JobSelect" placeholder="<?php echo $text['Click_here_text']; ?>.." onfocus="openModal('JobSelect')" onclick="this.blur()">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-2 t1" for="FromDate"><?php echo $text['From_text']; ?>:</div>
+                            <div class="col-2 t1" style="margin-left: -100px">
+                                <input type="datetime-local" class="t3" id="FromDate" name="FromDate" style="width: 190px;border-radius: 5px;border: 1px solid #CCCCCC; ">
+                            </div>
+
+                            <div class="col-2 t1" for="ToDate"><?php echo $text['To_text']; ?>:</div>
+                            <div class="col-2 t1" style="margin-left: -100px">
+                                <input type="datetime-local" class="t3" id="ToDate" name="ToDate" style="width: 190px; border-radius: 5px;border: 1px solid #CCCCCC;">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div for="result-status" class="col-2 t1"><?php echo $text['Result_Status_text']; ?>:</div>
+                            <div class="col-2 t2" style="margin-left: -100px">
+                                <select id="status" style="width: 190px">
                                     <?php foreach($data['res_status_arr'] as $key_res =>$val_res){?>
                                             <option value="<?php echo $key_res;?>"><?php echo $val_res;?></option>
                                     <?php }?>
-                            </select>
-                        </div>
 
-                        <div class="input-group">
-                              <span class="input-group-text" style="margin-right: 5px; border: none; background: none"><?php echo $text['From_text']; ?>:</span>
-                              <input type="datetime-local" class="t3" id="FromDate" name="FromDate" style="width: 190px;border-radius: 5px;border: 1px solid #CCCCCC; ">
-                              <span class="input-group-text" style="margin-right: 5px; border: none; background: none"><?php echo $text['To_text']; ?>:</span>
-                              <input type="datetime-local" class="t3" id="ToDate" name="ToDate" style="width: 190px; border-radius: 5px;border: 1px solid #CCCCCC;">
-                              <span class="input-group-text" style="margin-right: 5px; border: none; background: none"><?php echo $text['Controller_text']; ?>:</span>
-                              <select id="controller" style="width: 190px;">
-                                    <option value = '0'>select</option>
+                                </select>
+                            </div>
+
+                            <div for="Controller" class="col-2 t1"><?php echo $text['Controller_text']; ?>:</div>
+                            <div class="col-2 t3" style="margin-left: -100px">
+                                <select id="Controller" style="width: 190px;">
                                     <?php foreach($data['res_controller_arr'] as $key_res_1 =>$val_res_1){?>
                                             <option value="<?php echo $key_res_1;?>"><?php echo $val_res_1;?></option>
                                     <?php }?>
-                              </select>
-                              <span class="input-group-text" style="margin-right: 5px; border: none; background: none"><?php echo $text['Program_text']; ?>:</span>
-                               <select id="program" style="width: 190px;">
-                                    <option value = '0'>select</option>
-                                     <?php foreach($data['res_program'] as $key_res_2 => $val_res_2){?>
-                                            <option   value="<?php echo $val_res_2['template_program_id'];?>"><?php echo $val_res_2['template_program_id'];?></option>
+                                </select>
+                            </div>
+
+                            <div for="Program" class="col-2 t1"><?php echo $text['program_text']; ?>:</div>
+                            <div class="col-2 t3"  style="margin-left: -100px">
+                                <select id="Program" style="width: 190px;">
+                                     <?php foreach($data['res_program'] as $key_res_2 =>$val_res_2){?>
+                                            <option value="<?php echo $key_res_2;?>"><?php echo $val_res_2;?></option>
                                     <?php }?>
                                 </select>
+                            </div>
                         </div>
                     </div>
 
                     <div class="topnav-menu">
                         <div class="search-container">
-                            <input type="text" placeholder="<?php echo $text['Search_text']; ?>.." name="sname" id="search_name">&nbsp;
+                            <input type="text" placeholder="<?php echo $text['Search_text']; ?>.." name="sname" id="search_name" size="40" style="height: 35px">&nbsp;
                             <button id="Search" type="button" class="Search-button" onclick="search_info()"><?php echo $text['Search_text']; ?></button>
                         </div>
 
@@ -326,8 +354,8 @@ if(!empty($_COOKIE['chat_mode_change'])){
                                             <td><?php echo $v_info['cc_barcodesn'];?></td>
                                             <td><?php echo $v_info['job_name'];?></td>
                                             <td><?php echo $v_info['sequence_name'];?></td>
-                                            <td><?php echo $v_info['cc_task_id'];?></td>
-                                            <td><?php echo $data['res_controller_arr'][$v_info['cc_equipment']];?></td>
+                                            <td><?php echo $v_info['cc_task_name'];?></td>
+                                            <td></td>
                                             <td><?php echo $v_info['step_lowtorque']." ~ ".$v_info['step_hightorque'];?></td>
                                             <td><?php echo $v_info['step_lowangle']." ~ ".$v_info['step_highangle'];?></td>
                                             <td><?php echo $v_info['fasten_torque'].$data['torque_arr'][$v_info['torque_unit']] ;?></td>
@@ -967,6 +995,8 @@ addMessage();
 
     var x_title = '<?php echo $data['chart_info']['x_title'];?>';
     var y_title = '<?php echo $data['chart_info']['y_title'];?>';
+
+
     var option = {
             
             grid: GridConfig.generate('90%', '70%', '3%', '20%'),
@@ -1027,10 +1057,19 @@ addMessage();
     
     //如果 limit_val=1 曲線圖 要顯示上下限 min_val 及 max_val
     if (limit_val == 1) {
+        
+        if(x_title  == "Time(MS)" && y_title =="Angle"){
+            var t1 = 'low angle';
+            var t2 = 'high angle';
+        }else{
+            var t1 = 'low torque';
+            var t2 = 'high torque';
+        }
+
         option.series[0].markLine = {
             data: [
-                {yAxis: min_val, name: '',label: {position: 'middle',formatter: 'low torque'}}, 
-                {yAxis: max_val, name: '',label: {position: 'middle',formatter: 'high torque'}}  
+                {yAxis: min_val, name: '',label: {position: 'middle',formatter: t1}}, 
+                {yAxis: max_val, name: '',label: {position: 'middle',formatter: t2}}  
             ],
             symbol: 'none',
             lineStyle: {
