@@ -596,9 +596,35 @@ class Template{
         $insertedCount = 0;
         
         if($table_name == "ccs_advancedstep"){
-            $stmt = $this->db->prepare('DELETE FROM ccs_advancedstep WHERE job_id = :job_id');
-            $stmt->bindValue(':job_id', $jobid);
-            $results = $stmt->execute();
+
+            $sql = "DELETE FROM ccs_advancedstep  WHERE job_id = :job_id AND seq_id = :seq_id AND task_id = :task_id";
+            try {
+                $statement = $this->db->prepare($sql);
+                
+                if ($statement === false) {
+                    $errorInfo = $this->db->errorInfo();
+                    error_log('数据库准备语句失败: ' . $errorInfo[2]);
+                    return;
+                }
+        
+                foreach ($new_array as $item) {
+                    if (!$statement->execute([
+                        ':job_id' => $item['job_id'],
+                        ':seq_id' => $item['seq_id'],
+                        ':task_id' => $item['task_id']
+                    ])) {
+                        // 打印执行失败的错误信息
+                        $errorInfo = $statement->errorInfo();
+                        error_log('执行删除操作失败: ' . $errorInfo[2]);
+                    }
+                }
+            } catch (PDOException $e) {
+                error_log('数据库删除错误: ' . $e->getMessage());
+            }
+
+
+
+
 
          
             foreach ($new_array as $item) {
