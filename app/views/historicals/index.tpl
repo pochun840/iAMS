@@ -123,16 +123,10 @@ if(!empty($_COOKIE['chat_mode_change'])){
 </style>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.18/c3.min.js"></script>
-
-
+<script src="<?php echo URLROOT; ?>js/d31.min.js?v=202408141500"></script>
+<script src="<?php echo URLROOT; ?>js/c3.min.js?v=202408141500"></script>
+<script src="<?php echo URLROOT; ?>js/html2canvas.min.js?v=202408141500"></script>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/c3.min.css?v=202404251500" type="text/css">
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
-
-
-
 
 <div class="container-ms">
     <header>

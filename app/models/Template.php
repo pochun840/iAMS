@@ -592,7 +592,7 @@ class Template{
     
 
 
-    public function cover_data($new_array,$table_name,$jobid){
+    public function cover_data($new_array,$table_name){
         $insertedCount = 0;
         
         if($table_name == "ccs_advancedstep"){

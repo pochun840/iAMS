@@ -1618,9 +1618,15 @@ async function force_switch_tool(status) {
             });
         }else{//沒有設定socket hole
             flag = true;
+            if (arm_status != 0 && !right_position) { //task有啟用arm 且 arm不在正確位置
+                if(!right_position){
+                    console.log('ng position')
+                     flag = false;
+                }
+            }
         }
 
-        // //把arm判斷放在socket tray之後
+         //把arm判斷放在socket tray之後
         // if (arm_status != 0 && !right_position) { //task有啟用arm 且 arm不在正確位置
         //     // if(!right_position){
         //     console.log('ng position')

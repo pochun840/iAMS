@@ -42,7 +42,7 @@ class Historicals extends Controller
 
         $torque_arr = $this->Historicals_newModel->details('torque');
 
-        $res_program = $this->Historicals_newModel->details('program');
+        //$res_program = $this->Historicals_newModel->details('program');
 
         #取得所有的job_id
         $job_arr = $this->Historicals_newModel->get_job_id();
