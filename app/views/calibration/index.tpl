@@ -170,7 +170,7 @@
                     <div class="row t1" style="padding-left: 3%">
                         <div class="col t1 form-check form-check-inline">
                             <input class="t1 form-check-input" type="checkbox" checked="checked" name="auto-record" id="auto-record" value="1" style="zoom:1.0; vertical-align: middle;">&nbsp;&nbsp;
-                            <label class="t1 form-check-label" for="auto-record">Auto Record</label>
+                            <label class="t1 form-check-label" for="auto-record"><?php echo $text['Auto_Record_text'];?></label>
                         </div>
                     </div>
                     <div class="row t1" style="padding-left: 3%">
@@ -191,7 +191,7 @@
                 <div class="row t1" style="padding-left: 3%">
                     <div class="col t1 form-check form-check-inline">
                         <input class="t1 form-check-input" type="checkbox" name="auto-calculation" id="auto-calculation" value="1" style="zoom:1.0; vertical-align: middle;">&nbsp;&nbsp;
-                        <label class="t1 form-check-label" for="auto-calculation">Auto Calculation</label>
+                        <label class="t1 form-check-label" for="auto-calculation"><?php echo $text['Auto_Calculation_text'];?></label>
                     </div>
                     <div class="col t1">
                         <button  style="float: right" id="calculate" type="button" class="btn-calculate">Calculate</button>
@@ -337,7 +337,7 @@
                                         </div>
                                     </div>
                                     <div class="row t1">
-                                        <div class="col-5 t1" style=" padding-left: 5%; color: #000">Standard Deviation:</div>
+                                        <div class="col-5 t1" style=" padding-left: 5%; color: #000"><?php echo $text['Standard_Deviation_text'];?>:</div>
                                         <div class="col-5 t1">
                                             <input id="standard-deviation" type="text" class="t2 form-control" value="<?php  echo $data['meter']['stddev1'];?>">
                                         </div>
@@ -397,7 +397,7 @@
                     </div>
                 </div>
                 <div class="modal-footer justify-content-center">
-                    <button id="ExportChart" class="style-button" onclick="pic_download()">Export</button>
+                    <button id="ExportChart" class="style-button" onclick="pic_download()"><?php echo $text['Export_text'];?></button>
                     <button class="style-button" onclick="closeModal('Export_Chart')">Cancel</button>
                 </div>
             </div>
@@ -427,7 +427,7 @@
                     </div>
                 </div>
                 <div class="modal-footer justify-content-center">
-                    <button id="Exportreport" class="style-button" onclick="html_download()">Export</button>
+                    <button id="Exportreport" class="style-button" onclick="html_download()"><?php echo $text['Export_text'];?></button>
                     <button class="style-button" onclick="closeModal('Export_Report')"><?php echo $text['Cancel_text'];?></button>
                 </div>
             </div>

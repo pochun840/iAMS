@@ -25,20 +25,24 @@
 <?php 
     
     //判斷 $data['seq_list'] 有幾筆 
-    
-    if($data['total_seq'] == 1){
-        $new_index_seq = 0;
-        $data['ok_sequence'] =  $data['seq_list'][0]['ok_sequence'];
-    }else{
+    if(!empty($data['total_seq'] )){
 
-        #陣列重整  key值 用  $vv['seq_id'] 取代      
-        $temp = array();
-        foreach($data['seq_list'] as $kk =>$vv){
-            $temp[$vv['seq_id']]= $vv;
-        }
-        $data['ok_sequence'] = $temp[$data['seq_id']]['ok_sequence'];
+        if($data['total_seq'] == 1){
+            $new_index_seq = 0;
+            $data['ok_sequence'] =  $data['seq_list'][0]['ok_sequence'];
+        }else{
 
-    } 
+            #陣列重整  key值 用  $vv['seq_id'] 取代      
+            $temp = array();
+            foreach($data['seq_list'] as $kk =>$vv){
+                $temp[$vv['seq_id']]= $vv;
+            }
+            $data['ok_sequence'] = $temp[$data['seq_id']]['ok_sequence'];
+
+        } 
+
+    }
+   
     
 ?>
 <div class="container-ms">
@@ -67,6 +71,7 @@
             <input id="max_seq_id" value="<?php echo $data['max_seq_id']; ?>" disabled>
             <input id="modbus_switch" value="1" >
             <input id="tool_status" value="-1" > 
+            <input id="last_sn" value="<?php echo $data['last_sn']; ?>" > 
         </div>
       
 
@@ -1037,7 +1042,12 @@ tt.set('start_time',new Date())
 
 
 
-              if(date > start_time){//紀錄比開啟網頁的時間還新
+               // start_time = start_time - 100000; //往前推100秒避免秒差
+              let last_sn = document.getElementById('last_sn').value;
+
+              // if(date > start_time){//紀錄比開啟網頁的時間還新
+              if(data.system_sn > last_sn){//紀錄比開啟網頁的時間還新
+
 
                 if(data.job_id == gtcs_job_id && tt.has(data.system_sn) == false ){
                     console.log('---123----');

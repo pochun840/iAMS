@@ -235,6 +235,7 @@ class Sequence{
         $stmt->bindValue(':seq_id', $seq_id);
         $results2 = $stmt->execute();
 
+
         //更新對應的step
 
         //刪除task
@@ -242,6 +243,12 @@ class Sequence{
         $stmt->bindValue(':job_id', $job_id);
         $stmt->bindValue(':seq_id', $seq_id);
         $results = $stmt->execute();
+        //更新task的seq_id
+        $sql2= "UPDATE task SET seq_id = seq_id - 1 WHERE job_id = :job_id AND seq_id > :seq_id";
+        $stmt = $this->db->prepare($sql2);
+        $stmt->bindValue(':job_id', $job_id);
+        $stmt->bindValue(':seq_id', $seq_id);
+        $results2 = $stmt->execute();
 
         //刪除其他關聯
         //delete ccs_normalstep
@@ -254,6 +261,19 @@ class Sequence{
         $statement->bindValue(':job_id', $job_id);
         $statement->bindValue(':seq_id', $seq_id);
         $results = $statement->execute();
+
+         //更新ccs_normalstep
+        $sql2= "UPDATE ccs_normalstep SET seq_id = seq_id - 1 WHERE job_id = :job_id AND seq_id > :seq_id";
+        $stmt = $this->db->prepare($sql2);
+        $stmt->bindValue(':job_id', $job_id);
+        $stmt->bindValue(':seq_id', $seq_id);
+        $results2 = $stmt->execute();
+        //ccs_advancedstep
+        $sql2= "UPDATE ccs_advancedstep SET seq_id = seq_id - 1 WHERE job_id = :job_id AND seq_id > :seq_id";
+        $stmt = $this->db->prepare($sql2);
+        $stmt->bindValue(':job_id', $job_id);
+        $stmt->bindValue(':seq_id', $seq_id);
+        $results2 = $stmt->execute();
         
         return $results;
     }

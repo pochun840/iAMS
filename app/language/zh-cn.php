@@ -493,6 +493,10 @@ $text['Undo_text'] = '清除';
 $text['Calibrations_title_text'] ='扭矩收集与分析系统';
 $text['file_name_text'] = '文件名称';
 $text['Standard_Deviation_text'] = '標準差';
+$text['Auto_Record_text'] = '自动记录';
+$text['Auto_Calculation_text'] = '自动计算';
+
+
 //operation error message
 $error_message['NO_ERROR'] = '';
 $error_message['ERR_CONT_TEMP'] = 'ERR-CONT-TEMP';

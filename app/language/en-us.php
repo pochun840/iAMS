@@ -410,6 +410,8 @@ $text['Undo_text'] = 'Undo';
 $text['Calibrations_title_text'] ='Torque collection and analysis system';
 $text['file_name_text'] = 'file name';
 $text['Standard_Deviation_text'] = 'Standard Deviation';
+$text['Auto_Record_text'] = 'Auto Record';
+$text['Auto_Calculation_text'] = 'Auto_Calculation';
 
 //----------------------------------------------------------------------------------------------------------------
 //扭力單位

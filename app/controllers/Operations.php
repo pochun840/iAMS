@@ -158,6 +158,8 @@ class Operations extends Controller
         // unset($_SESSION['barcode']);
         setcookie('barcode', '', time() - 3600, '/');
 
+        $last_sn = $this->GetControllerLastSn();
+
         $data = [
             'isMobile' => $isMobile,
             'nav' => $nav,
@@ -178,7 +180,8 @@ class Operations extends Controller
             'controller_ip' => $controller_ip,
             'max_seq_id' => @$total_seq[array_key_last($total_seq)]['seq_id'],
             'seq_count' => $total_seq_count,
-            'new_seq_list' => $temp_seq
+            'new_seq_list' => $temp_seq,
+            'last_sn' => $last_sn,
             
         ];
         
@@ -790,6 +793,35 @@ class Operations extends Controller
         }
 
     }
+
+    public function GetControllerLastSn($value='')
+    {
+        //get controller ip
+        $controller_ip = $this->EquipmentModel->GetControllerIP(1);
+
+        require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
+        $modbus = new ModbusMaster($controller_ip, "TCP");
+        try {
+            $modbus->port = 502;
+            $modbus->timeout_sec = 3;
+            // $data = array($tool_status);
+            $dataTypes = array("INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT");
+
+            // FC 2
+            $data = $modbus->readMultipleRegisters(0, 4165, 2);
+
+            $sn = $data[0]*pow(2, 24) + $data[1]*pow(2, 16) + $data[2]*pow(2, 8) + $data[3]*pow(2, 0);
+
+            return $sn;
+            // echo json_encode(array('result' => 'no'));
+            // exit();
+        } catch (Exception $e) {
+            // echo json_encode(array('result' => '$modbus->status;'));
+            // exit();
+            return false;
+        }
+    }
+    
 
 
 }

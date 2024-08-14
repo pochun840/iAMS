@@ -269,7 +269,7 @@ class Product{
         $query = "SELECT * FROM ccs_advancedstep WHERE job_id = ? ";
         $statement_select = $this->db->prepare($query);
 
-        $statement_select->execute([$from_job_id,$task['seq_id'] ]);
+        $statement_select->execute([$from_job_id]);
         $statement_select->execute();
         $result = $statement_select->fetchAll(PDO::FETCH_ASSOC);
      
@@ -492,68 +492,122 @@ class Product{
 
     public function cover_data($new_array, $table_name) {
         $insertedCount = 0;
-        
-        foreach ($new_array as $item) {
-            $sql = "INSERT INTO $table_name (
-                job_id, seq_id, task_id, step_name, step_targettype, step_targetangle, step_targettorque,
-                step_tooldirection, step_rpm, step_offsetdirection, step_torque_jointoffset, step_hightorque,
-                step_lowtorque, step_threshold_mode, step_threshold_torque, step_threshold_angle, step_monitoringangle,
-                step_highangle, step_lowangle, step_downshift_enable, step_downshift_torque, step_downshift_speed,
-                torque_unit, step_prr, step_prr_rpm, step_prr_angle, step_downshift_mode, step_downshift_angle,gtcs_job_id
-            ) VALUES (
-                :job_id, :seq_id, :task_id, :step_name, :step_targettype, :step_targetangle, :step_targettorque,
-                :step_tooldirection, :step_rpm, :step_offsetdirection, :step_torque_jointoffset, :step_hightorque,
-                :step_lowtorque, :step_threshold_mode, :step_threshold_torque, :step_threshold_angle, :step_monitoringangle,
-                :step_highangle, :step_lowangle, :step_downshift_enable, :step_downshift_torque, :step_downshift_speed,
-                :torque_unit, :step_prr, :step_prr_rpm, :step_prr_angle, :step_downshift_mode, :step_downshift_angle,:gtcs_job_id
-            )";
-            
-            $statement = $this->db->prepare($sql);
-    
-            if ($statement === false) {
-                $errorInfo = $this->db->errorInfo();
-                echo "SQL 错误: " . $errorInfo[2];
-                return; // 退出函数
-            }
-    
-            if ($statement->execute([
-                'job_id' => $item['job_id'],
-                'seq_id' => $item['seq_id'],
-                'task_id' => $item['task_id'],
-                'step_name' => $item['step_name'],
-                'step_targettype' => $item['step_targettype'],
-                'step_targetangle' => $item['step_targetangle'],
-                'step_targettorque' => $item['step_targettorque'],
-                'step_tooldirection' => $item['step_tooldirection'],
-                'step_rpm' => $item['step_rpm'],
-                'step_offsetdirection' => $item['step_offsetdirection'],
-                'step_torque_jointoffset' => $item['step_torque_jointoffset'],
-                'step_hightorque' => $item['step_hightorque'],
-                'step_lowtorque' => $item['step_lowtorque'],
-                'step_threshold_mode' => $item['step_threshold_mode'],
-                'step_threshold_torque' => $item['step_threshold_torque'],
-                'step_threshold_angle' => $item['step_threshold_angle'],
-                'step_monitoringangle' => $item['step_monitoringangle'],
-                'step_highangle' => $item['step_highangle'],
-                'step_lowangle' => $item['step_lowangle'],
-                'step_downshift_enable' => $item['step_downshift_enable'],
-                'step_downshift_torque' => $item['step_downshift_torque'],
-                'step_downshift_speed' => $item['step_downshift_speed'],
-                'torque_unit' => $item['torque_unit'],
-                'step_prr' => $item['step_prr'],
-                'step_prr_rpm' => $item['step_prr_rpm'],
-                'step_prr_angle' => $item['step_prr_angle'],
-                'step_downshift_mode' => $item['step_downshift_mode'],
-                'step_downshift_angle' => $item['step_downshift_angle'],
-                'gtcs_job_id' =>$item['gtcs_job_id']
 
-            ])) {
-                $insertedCount++;
-            } else {
-                $errorInfo = $statement->errorInfo();
-                echo "插入失败: " . $errorInfo[2];
+        if( $table_name == 'ccs_normalstep'){
+            foreach ($new_array as $item) {
+                $sql = "INSERT INTO $table_name (
+                    job_id, seq_id, task_id, step_name, step_targettype, step_targetangle, step_targettorque,
+                    step_tooldirection, step_rpm, step_offsetdirection, step_torque_jointoffset, step_hightorque,
+                    step_lowtorque, step_threshold_mode, step_threshold_torque, step_threshold_angle, step_monitoringangle,
+                    step_highangle, step_lowangle, step_downshift_enable, step_downshift_torque, step_downshift_speed,
+                    torque_unit, step_prr, step_prr_rpm, step_prr_angle, step_downshift_mode, step_downshift_angle,gtcs_job_id
+                ) VALUES (
+                    :job_id, :seq_id, :task_id, :step_name, :step_targettype, :step_targetangle, :step_targettorque,
+                    :step_tooldirection, :step_rpm, :step_offsetdirection, :step_torque_jointoffset, :step_hightorque,
+                    :step_lowtorque, :step_threshold_mode, :step_threshold_torque, :step_threshold_angle, :step_monitoringangle,
+                    :step_highangle, :step_lowangle, :step_downshift_enable, :step_downshift_torque, :step_downshift_speed,
+                    :torque_unit, :step_prr, :step_prr_rpm, :step_prr_angle, :step_downshift_mode, :step_downshift_angle,:gtcs_job_id
+                )";
+                
+                $statement = $this->db->prepare($sql);
+        
+                if ($statement === false) {
+                    $errorInfo = $this->db->errorInfo();
+                    echo "SQL 错误: " . $errorInfo[2];
+                    return; // 退出函数
+                }
+        
+                if ($statement->execute([
+                    'job_id' => $item['job_id'],
+                    'seq_id' => $item['seq_id'],
+                    'task_id' => $item['task_id'],
+                    'step_name' => $item['step_name'],
+                    'step_targettype' => $item['step_targettype'],
+                    'step_targetangle' => $item['step_targetangle'],
+                    'step_targettorque' => $item['step_targettorque'],
+                    'step_tooldirection' => $item['step_tooldirection'],
+                    'step_rpm' => $item['step_rpm'],
+                    'step_offsetdirection' => $item['step_offsetdirection'],
+                    'step_torque_jointoffset' => $item['step_torque_jointoffset'],
+                    'step_hightorque' => $item['step_hightorque'],
+                    'step_lowtorque' => $item['step_lowtorque'],
+                    'step_threshold_mode' => $item['step_threshold_mode'],
+                    'step_threshold_torque' => $item['step_threshold_torque'],
+                    'step_threshold_angle' => $item['step_threshold_angle'],
+                    'step_monitoringangle' => $item['step_monitoringangle'],
+                    'step_highangle' => $item['step_highangle'],
+                    'step_lowangle' => $item['step_lowangle'],
+                    'step_downshift_enable' => $item['step_downshift_enable'],
+                    'step_downshift_torque' => $item['step_downshift_torque'],
+                    'step_downshift_speed' => $item['step_downshift_speed'],
+                    'torque_unit' => $item['torque_unit'],
+                    'step_prr' => $item['step_prr'],
+                    'step_prr_rpm' => $item['step_prr_rpm'],
+                    'step_prr_angle' => $item['step_prr_angle'],
+                    'step_downshift_mode' => $item['step_downshift_mode'],
+                    'step_downshift_angle' => $item['step_downshift_angle'],
+                    'gtcs_job_id' =>$item['gtcs_job_id']
+
+                ])) {
+                    $insertedCount++;
+                } else {
+                    $errorInfo = $statement->errorInfo();
+                    echo "插入失败: " . $errorInfo[2];
+                }
             }
         }
+        if( $table_name == 'ccs_advancedstep'){
+            foreach ($new_array as $item) {
+                $sql = "INSERT INTO $table_name ('job_id','seq_id','task_id','step_id','step_name','step_targettype','step_targetangle','step_targettorque','step_delayttime','step_tooldirection','step_rpm','step_offsetdirection','step_torque_jointoffset','step_monitoringmode','step_torwin_target','step_torquewindow','step_angwin_target','step_anglewindow','step_hightorque','step_lowtorque','step_monitoringangle','step_highangle','step_lowangle','torque_unit','step_angle_mode','step_slope','gtcs_job_id' )
+                    VALUES ( :job_id,:seq_id,:task_id,:step_id,:step_name,:step_targettype,:step_targetangle,:step_targettorque,:step_delayttime,:step_tooldirection,:step_rpm,:step_offsetdirection,:step_torque_jointoffset,:step_monitoringmode,:step_torwin_target,:step_torquewindow,:step_angwin_target,:step_anglewindow,:step_hightorque,:step_lowtorque,:step_monitoringangle,:step_highangle,:step_lowangle,:torque_unit,:step_angle_mode,:step_slope,:gtcs_job_id )";
+                
+                $statement = $this->db->prepare($sql);
+        
+                if ($statement === false) {
+                    $errorInfo = $this->db->errorInfo();
+                    echo "SQL 错误: " . $errorInfo[2];
+                    return; // 退出函数
+                }
+        
+                if ($statement->execute([
+                    'job_id' => $item['job_id'],
+                    'seq_id' => $item['seq_id'],
+                    'task_id' => $item['task_id'],
+                    'step_id' => $item['step_id'],
+                    'step_name' => $item['step_name'],
+                    'step_targettype' => $item['step_targettype'],
+                    'step_targetangle' => $item['step_targetangle'],
+                    'step_targettorque' => $item['step_targettorque'],
+                    'step_delayttime' => 0,
+                    'step_tooldirection' => $item['step_tooldirection'],
+                    'step_rpm' => $item['step_rpm'],
+                    'step_offsetdirection' => $item['step_offsetdirection'],
+                    'step_torque_jointoffset' => $item['step_torque_jointoffset'],
+                    'step_monitoringmode' => $item['step_monitoringmode'],
+                    'step_torwin_target' => $item['step_torwin_target'],
+                    'step_torquewindow' => $item['step_torquewindow'],
+                    'step_angwin_target' => $item['step_angwin_target'],
+                    'step_anglewindow' => $item['step_anglewindow'],
+                    'step_hightorque' => $item['step_hightorque'],
+                    'step_lowtorque' => $item['step_lowtorque'],
+                    'step_monitoringangle' => $item['step_monitoringangle'],                    
+                    'step_highangle' => $item['step_highangle'],
+                    'step_lowangle' => $item['step_lowangle'],
+                    'torque_unit' => $item['torque_unit'],
+                    'step_angle_mode' => $item['step_angle_mode'],
+                    'step_slope' => $item['step_slope'],
+                    'gtcs_job_id' => $item['gtcs_job_id'],
+
+                ])) {
+                    $insertedCount++;
+                } else {
+                    $errorInfo = $statement->errorInfo();
+                    echo "插入失败: " . $errorInfo[2];
+                }
+            }
+        }
+        
+        
     
         return $insertedCount;
     }
