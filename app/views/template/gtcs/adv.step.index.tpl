@@ -1099,8 +1099,8 @@ function sync_product(jobId, programId, url) {
             },
             url: '?url=Templates/sync_program_step',
             success: function(response) {
-                console.log(response);
-                //alert('Success');
+                //console.log(response);
+                alert('Success');
                 history.go(0); 
             },
             error: function(error) {
