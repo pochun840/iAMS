@@ -87,6 +87,7 @@ if(!empty($_COOKIE['chat_mode_change'])){
 }else{
     $chat_mode_change = '';
 }
+
 ?>
 
 <style>
@@ -280,8 +281,8 @@ if(!empty($_COOKIE['chat_mode_change'])){
                             <div for="Program" class="col-2 t1"><?php echo $text['program_text']; ?>:</div>
                             <div class="col-2 t3"  style="margin-left: -100px">
                                 <select id="Program" style="width: 190px;">
-                                     <?php foreach($data['res_program'] as $key_res_2 =>$val_res_2){?>
-                                            <option value="<?php echo $key_res_2;?>"><?php echo $val_res_2;?></option>
+                                     <?php foreach($data['res_program'] as $key_res_2 => $val_res_2){?>
+                                            <option value="<?php echo $val_res_2['template_program_id'];?>"><?php echo $val_res_2['template_program_id'];?></option>
                                     <?php }?>
                                 </select>
                             </div>
