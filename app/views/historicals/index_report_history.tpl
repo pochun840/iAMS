@@ -8,9 +8,9 @@
 <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/print-history-excel.css?v=202405131030">
 <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/datatables.min.css">
 
-<script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
 
 
+<script src="<?php echo URLROOT; ?>js/echarts.min.js"></script>
 <script src="<?php echo URLROOT; ?>js/historical.js?v=202405021000"></script>
 
 </head>

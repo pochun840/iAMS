@@ -1,7 +1,7 @@
 <?php require APPROOT . 'views/inc/header.tpl'; ?>
 
 
-<script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+<script src="<?php echo URLROOT; ?>js/echarts.min.js"></script>
 <?php echo $data['nav']; ?>
 
 <div class="container-ms">

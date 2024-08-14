@@ -432,6 +432,8 @@ $text['Undo_text'] = '清除';
 $text['Calibrations_title_text'] ='扭力收集與分析系統';
 $text['file_name_text'] = '檔案名稱';
 $text['Standard_Deviation_text'] = '標準差';
+$text['Auto_Record_text'] = '自動記錄';
+$text['Auto_Calculation_text'] = '自動計算';
 
 
 //----------------------------------------------------------------------------------------------------------------

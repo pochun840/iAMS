@@ -1268,7 +1268,7 @@ tt.set('start_time',new Date())
 
                           
 
-
+                            localStorage.setItem('aa', '1');
 
                             document.getElementById('screw_info').innerHTML = retry_time + ' / '+ stop_on_ng;
                             document.getElementById('modbus_switch').value = 1;
@@ -1287,7 +1287,7 @@ tt.set('start_time',new Date())
                            
                             document.getElementById('tightening_status').style.backgroundColor = 'red';
                             document.getElementById('tightening_status_div').style.backgroundColor = 'red';
-
+                            
 
                         }
 
