@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/print-styles.css">
     <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/datatables.min.css">
-    <script src="<?php echo URLROOT; ?>js/echarts.min.js"></script>
+    <script src="<?php echo URLROOT;?>js/echarts.min.js"></script>
 
     <title><?php echo SITENAME; ?></title>
     <style>

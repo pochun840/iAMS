@@ -434,6 +434,14 @@ $text['file_name_text'] = '檔案名稱';
 $text['Standard_Deviation_text'] = '標準差';
 $text['Auto_Record_text'] = '自動記錄';
 $text['Auto_Calculation_text'] = '自動計算';
+$text['Instant_data_setting_text'] = '即時數據設定';
+$text['Skip_Turn_Rev_text'] = '跳過';
+$text['Calculation_text'] = '計算';
+$text['Count_text'] = '次數';
+$text['Item_text'] = '項目';
+$text['Tolerance_text'] = '誤差範圍';
+$text['Bias_text'] = '偏差';
+
 
 
 //----------------------------------------------------------------------------------------------------------------

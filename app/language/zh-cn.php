@@ -495,6 +495,13 @@ $text['file_name_text'] = '文件名称';
 $text['Standard_Deviation_text'] = '標準差';
 $text['Auto_Record_text'] = '自动记录';
 $text['Auto_Calculation_text'] = '自动计算';
+$text['Instant_data_setting_text'] = '即時數據設定';
+$text['Skip_Turn_Rev_text'] = '跳过';
+$text['Calculation_text'] = '计算';
+$text['Count_text'] = '次數';
+$text['Item_text'] = '项目';
+$text['Tolerance_text'] = '误差范围';
+
 
 
 //operation error message

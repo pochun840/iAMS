@@ -412,7 +412,14 @@ $text['file_name_text'] = 'file name';
 $text['Standard_Deviation_text'] = 'Standard Deviation';
 $text['Auto_Record_text'] = 'Auto Record';
 $text['Auto_Calculation_text'] = 'Auto_Calculation';
-$text['Auto_Calculation_text'] = 'Auto_Calculation';
+$text['Instant_data_setting_text'] = 'Instant data setting';
+$text['Skip_Turn_Rev_text'] = 'Skip Turn Rev';
+$text['Calculation_text'] = 'Calculate';
+$text['Count_text'] = 'Count';
+$text['Item_text'] = 'Item';
+$text['Tolerance_text'] = 'Tolerance';
+$text['Bias_text'] = 'Bias';
+
 
 //----------------------------------------------------------------------------------------------------------------
 //扭力單位

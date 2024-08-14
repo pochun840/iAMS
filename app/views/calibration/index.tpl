@@ -165,7 +165,7 @@
                     </div>
                 </div>
 
-                <div class="w3-center" style="font-size: 18px; color: #000">Instant data setting</div>
+                <div class="w3-center" style="font-size: 18px; color: #000"><?php echo $text['Instant_data_setting_text'];?></div>
                 <div class="border-bottom">
                     <div class="row t1" style="padding-left: 3%">
                         <div class="col t1 form-check form-check-inline">
@@ -176,11 +176,11 @@
                     <div class="row t1" style="padding-left: 3%">
                         <div class="col t1 form-check form-check-inline">
                             <input class="t1 form-check-input" type="checkbox" checked="checked" name="skip-turn-rev" id="skip-turn-rev" value="1" style="zoom:1.0; vertical-align: middle;">&nbsp;&nbsp;
-                            <label class="t1 form-check-label" for="skip-turn-rev">Skip Turn Rev</label>
+                            <label class="t1 form-check-label" for="skip-turn-rev"><?php echo $text['Skip_Turn_Rev_text'];?></label>
                         </div>
                     </div>
                     <div class="row t1" style="padding-left: 1%">
-                       <div class="col-5 t1">Count:</div>
+                       <div class="col-5 t1"><?php echo $text['Count_text'];?>:</div>
                         <div class="col-4 t1">
                             <input id="count" type="text" class="t2 form-control" value="0">
                         </div>
@@ -194,7 +194,7 @@
                         <label class="t1 form-check-label" for="auto-calculation"><?php echo $text['Auto_Calculation_text'];?></label>
                     </div>
                     <div class="col t1">
-                        <button  style="float: right" id="calculate" type="button" class="btn-calculate">Calculate</button>
+                        <button  style="float: right" id="calculate" type="button" class="btn-calculate"><?php echo $text['Calculation_text'];?></button>
                     </div>
                 </div>
 
@@ -206,7 +206,7 @@
                 </div>
 
                 <div class="row t1">
-                    <div class="col-7 t1"><b>Tolerance(+/- %)</b></div>
+                    <div class="col-7 t1"><b><?php echo $text['Tolerance_text'];?>(+/- %)</b></div>
                     <div class="col-4 t1">
                         <input id="tolerance" type="text" class="t2 form-control" value="+ 0.5">
                     </div>
@@ -223,13 +223,13 @@
             <div class="column column-right">
                 <div id="column-right-header">
                     <div class="input-group input-group-sm">
-                        <span class="input-group-text">TQ:</span>
+                        <span class="input-group-text"><?php echo $text['Target_Q_text'];?>:</span>
                         <input type="text" class="form-control" style="margin-right: 5px">
 
                         <span class="input-group-text"><?php echo $text['RPM_text'];?>:</span>
                         <input type="text" class="form-control" style="margin-right: 5px">
 
-                        <span class="input-group-text">Offset:</span>
+                        <span class="input-group-text"><?php echo $text['Joint_Offset_text'];?>:</span>
                         <input type="text" class="form-control" style="margin-right: 5px">
 
                         <button id="Save-btn" type="button" class="btn-save-reset-undo" style="margin-right: 5%"><?php echo $text['Save_text'];?></button>
@@ -282,14 +282,14 @@
                     <div class="column column-meter-model">
                         <div class="meter-model" id='item_data' style="display:none;">
                             <div class="row t1 border-bottom">
-                                <div class="col-5" style=" padding-left: 5%; color: #000"><b>Item</b></div>
+                                <div class="col-5" style=" padding-left: 5%; color: #000"><b><?php echo $text['Item_text'];?></b></div>
                                 <div class="col-5" style=" padding-left: 5%; color: #000"><b>Meter</b></div>
                             </div>
 
                             <div class="scrollbar-meter" id="style-meter">
                                 <div class="force-overflow-meter">
                                     <div class="row t1">
-                                        <div class="col-5 t1" style=" padding-left: 5%; color: #000">Item:</div>
+                                        <div class="col-5 t1" style=" padding-left: 5%; color: #000"><?php echo $text['Item_text'];?>:</div>
                                         <div class="col-5 t1">
                                             <input id="item" type="text" class="t2 form-control" value="KTM-100(N.m)">
                                         </div>
@@ -475,7 +475,7 @@
                         </div>
                     </div>
                 </div>
-                <button id='submit_check' onclick='submit_check()'>submit</button>
+                <button id='submit_check' onclick='submit_check()'><?php echo $text['Search_text'];?></button>
             </div>
         </div>
     </div>

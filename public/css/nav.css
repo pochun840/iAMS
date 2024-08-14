@@ -89,6 +89,7 @@ nav.main-menu.expanded
     font-size: 18px;
     padding-left: 8px;
     font-family: 'Titillium Web', sans-serif;
+    white-space: nowrap;
 }
 
 .main-menu>ul.logout
