@@ -1,7 +1,7 @@
 <!-- Tower Light Edit Setting -->
     <div id="TowerLight_Edit_Setting" style="display: none">
         <div class="topnav">
-            <label type="text" style="font-size: 20px; margin: 4px; padding-left: 5%">Tower Light Setting</label>
+            <label type="text" style="font-size: 20px; margin: 4px; padding-left: 5%"><?php echo $text['Tower_Light_Setting_text'];?></label>
             <button class="btn" id="back-btn" type="button" onclick="cancelSetting()">
                 <img id="img-back" src="./img/back.svg" alt=""><?php echo $text['Back_text']; ?>
             </button>

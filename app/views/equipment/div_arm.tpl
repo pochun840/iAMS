@@ -3,7 +3,7 @@
         <div class="topnav">
             <label type="text" style="font-size: 20px; margin: 4px; padding-left: 5%"><?php echo $text['ARM_Setting_text']; ?></label>
             <button class="btn" id="back-btn" type="button" onclick="cancelSetting()">
-                <img id="img-back" src="./img/back.svg" alt="">back
+                <img id="img-back" src="./img/back.svg" alt=""><?php echo $text['Back_text']; ?>
             </button>
         </div>
         <div class="main-content">
