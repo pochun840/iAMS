@@ -1155,10 +1155,6 @@ tt.set('start_time',new Date())
                                         afterward();
                                 }else{
                                     
-                                        
-
-
-
                                         //若OK Job 開啟，OK sequence 開啟，每一個sequence 傳出OK-SEQ信號，最後一個sequence 是傳出OK-Job信號
                                         if( job_singal == 1 && seq_singal == 1 && seq_id_nn < total_seq_nn && task_id > task_count){
                                             document.getElementById('tightening_status').innerHTML = 'OK-SEQ';
@@ -1255,42 +1251,36 @@ tt.set('start_time',new Date())
                                 }
 
                                 
+                            }else if(data.fasten_status == 7 || data.fasten_status == 8){
+                                //NG、NG-STOP
+                                save_result(data);
+                                current_circle.childNodes[1].classList.add('running')
+                                current_circle.classList.add('ng');
+                                retry_time = retry_time + 1;
+                                document.getElementById('step'+task_id).style.backgroundColor = 'red';
+                                document.getElementById('tightening_status_div').style.backgroundColor = 'red';
+
+
+                                document.getElementById('screw_info').innerHTML = retry_time + ' / '+ stop_on_ng;
+                                document.getElementById('modbus_switch').value = 1;
+
+                                document.getElementById('error1').innerHTML = 'Error : ' + fasten_status[data.fasten_status].status;
+                                document.getElementById('error2').innerHTML = 'Error : ' + error_message[data.error_message].status;
+
+                                light_signal = 'ng';
+                                afterward();
+
+                                if( +retry_time == +stop_on_ng && +stop_on_ng != 0 ){
+                                    // force_switch_tool(0);
+                                    switch_tool(0);
+                                    // function_auth_check('stop_on_ng')
+                                }
+
+
                             }
-                        }else if(data.fasten_status == 7 || data.fasten_status == 8){
-
-                             //NG、NG-STOP
-                            save_result(data);
-                            current_circle.childNodes[1].classList.add('running')
-                            current_circle.classList.add('ng');
-                            retry_time = retry_time + 1;
-                            document.getElementById('step'+task_id).style.backgroundColor = 'red';
-                            document.getElementById('tightening_status_div').style.backgroundColor = 'red';
-
-                          
-
-                            localStorage.setItem('aa', '1');
-
-                            document.getElementById('screw_info').innerHTML = retry_time + ' / '+ stop_on_ng;
-                            document.getElementById('modbus_switch').value = 1;
-
-                            document.getElementById('error1').innerHTML = 'Error : ' + fasten_status[data.fasten_status].status;
-                            document.getElementById('error2').innerHTML = 'Error : ' + error_message[data.error_message].status;
-
-                            light_signal = 'ng';
-                            afterward();
-
-                            if( +retry_time == +stop_on_ng && +stop_on_ng != 0 ){
-                                // force_switch_tool(0);
-                                switch_tool(0);
-                                // function_auth_check('stop_on_ng')
-                            }
-                           
-                            document.getElementById('tightening_status').style.backgroundColor = 'red';
-                            document.getElementById('tightening_status_div').style.backgroundColor = 'red';
-                            
-
+                        }else{
+                            //
                         }
-
                 }
 
               }

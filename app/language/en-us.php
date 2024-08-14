@@ -412,7 +412,7 @@ $text['file_name_text'] = 'file name';
 $text['Standard_Deviation_text'] = 'Standard Deviation';
 $text['Auto_Record_text'] = 'Auto Record';
 $text['Auto_Calculation_text'] = 'Auto_Calculation';
-
+$text['Auto_Calculation_text'] = 'Auto_Calculation';
 
 //----------------------------------------------------------------------------------------------------------------
 //扭力單位
