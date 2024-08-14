@@ -770,9 +770,12 @@ function sync_program() {
 
     // 确保至少有一个选中的项
     if (rowSelected.length > 0) {
+
+        
         // 取第一个选中的行的 program_id
         let program_id = rowSelected[0].childNodes[1].innerHTML;
         global_program_id =  program_id;
+
         $.ajax({
             type: "POST",
             data: {
@@ -832,7 +835,7 @@ function sync_program() {
                 //history.go(0);
             }
         }).fail(function() {
-            history.go(0); 
+            //history.go(0); 
         });
     } else {
         // 如果没有选中的行，可以选择显示一个提示或错误信息

@@ -1061,7 +1061,7 @@ function sync_program() {
                 syncProgramElement.style.display = 'block';
             },
             error: function(error) {
-                 alert('Please select a row.');
+                 alert('Please select a row');
                 //history.go(0);
             }
         }).fail(function() {
@@ -1069,7 +1069,7 @@ function sync_program() {
         });
     } else {
 
-        //alert('Please select a row.');
+        //alert('Please select a row..');
     }
 }
 
@@ -1087,6 +1087,31 @@ function syncProgram_job(){
 
 }
 
+function sync_product(jobId, programId, url) {
+    //alert(url);
+    if (url) { 
+        $.ajax({
+            type: "POST",
+            data: {
+                'jobid' :jobId,
+                'program_id': programId,        
+                'table_url': url                
+            },
+            url: '?url=Templates/sync_program_step',
+            success: function(response) {
+                console.log(response);
+                //alert('Success');
+                history.go(0); 
+            },
+            error: function(error) {
+                console.error('Error:', error); 
+            }
+        }).fail(function() {
+        });
+    } else {
+        console.warn('URL parameter is missing');
+    }
+}
 
 
 function extractPartFromURL() {

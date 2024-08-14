@@ -729,6 +729,13 @@ class Templates extends Controller
 
     //sync program
     public function sync_program_step(){
+
+        if( !empty($_POST['jobid']) && isset($_POST['jobid'])  ){
+            $jobid = $_POST['jobid'];
+        }else{ 
+            $input_check = false; 
+        }
+
         if( !empty($_POST['program_id']) && isset($_POST['program_id'])  ){
             $program_id = $_POST['program_id'];
         }else{ 
@@ -750,50 +757,102 @@ class Templates extends Controller
             $input_check = false; 
         }
 
-  
+        
+     
     
         //用 program_id 從 gtcs_normalstep_template or gtcs_advancedstep_template 取出資料
         $temp = $this->TemplateModel->search_data($program_id,$table);
         $temp_data = $this->TemplateModel->search_data_info($program_id); 
 
-        if(!empty($temp_data)){
-            foreach ($temp_data as $item) {
-                $new_array[] = array(
-                    'job_id' => $item['job_id'],
-                    'seq_id' => $item['seq_id'],
-                    'task_id' => $item['task_id'],
-                    'step_name' => $temp[0]['step_name'],
-                    'step_targettype' => $temp[0]['step_targettype'],
-                    'step_targetangle' => $temp[0]['step_targetangle'],
-                    'step_targettorque' => $temp[0]['step_targettorque'],
-                    'step_tooldirection' => $temp[0]['step_tooldirection'],
-                    'step_rpm' => $temp[0]['step_rpm'],
-                    'step_offsetdirection' => $temp[0]['step_offsetdirection'],
-                    'step_torque_jointoffset' =>$temp[0]['step_torque_jointoffset'],
-                    'step_hightorque' => $temp[0]['step_hightorque'],
-                    'step_lowtorque' => $temp[0]['step_lowtorque'],
-                    'step_threshold_mode' => $temp[0]['step_threshold_mode'],
-                    'step_threshold_torque' => $temp[0]['step_threshold_torque'],
-                    'step_threshold_angle' => $temp[0]['step_threshold_angle'],
-                    'step_monitoringangle' => $temp[0]['step_monitoringangle'],
-                    'step_highangle' => $temp[0]['step_highangle'],
-                    'step_lowangle' => $temp[0]['step_lowangle'],
-                    'step_downshift_enable' => $temp[0]['step_downshift_enable'],
-                    'step_downshift_torque' => $temp[0]['step_downshift_torque'],
-                    'step_downshift_speed' => $temp[0]['step_downshift_speed'],
-                    'torque_unit' => $temp[0]['torque_unit'],
-                    'step_prr' => $temp[0]['step_prr'],
-                    'step_prr_rpm' => $temp[0]['step_prr_rpm'],
-                    'step_prr_angle' => $temp[0]['step_prr_angle'],
-                    'step_downshift_mode' => $temp[0]['step_downshift_mode'],
-                    'step_downshift_angle' => $temp[0]['step_downshift_angle'],
-                );
+        if(!empty($temp)){
+            $new_temp_advancedstep = array();
+
+            $jobid = $temp_data[0]['job_id'];
+            if($table_url == "advancedstep"){
+
+                foreach ($temp_data as $kk => $item) {
+                    $new_temp_advancedstep[$kk] = array(
+                        'job_id' => $item['job_id'],
+                        'seq_id' => $item['seq_id'],
+                        'task_id' => $item['task_id'],
+                        'step_id' => $temp[0]['template_step_id'],
+                        'step_name' => $temp[0]['step_name'],
+                        'step_targettype' => $temp[0]['step_targettype'],
+                        'step_targetangle' => $temp[0]['step_targetangle'],
+                        'step_targettorque' => $temp[0]['step_targettorque'],
+                        'step_delayttime' => $temp[0]['step_delayttime'],
+                        'step_tooldirection' => $temp[0]['step_tooldirection'],
+                        'step_rpm' => $temp[0]['step_rpm'],
+                        'step_offsetdirection' => $temp[0]['step_offsetdirection'],
+                        'step_torque_jointoffset' => $temp[0]['step_torque_jointoffset'],
+                        'step_monitoringmode' => $temp[0]['step_monitoringmode'],
+                        'step_torwin_target' => $temp[0]['step_torwin_target'],
+                        'step_torquewindow' => $temp[0]['step_torquewindow'],
+                        'step_angwin_target' => $temp[0]['step_angwin_target'],
+                        'step_anglewindow' => $temp[0]['step_anglewindow'],
+                        'step_hightorque' => $temp[0]['step_hightorque'],
+                        'step_lowtorque' => $temp[0]['step_lowtorque'],
+                        'step_monitoringangle' => $temp[0]['step_monitoringangle'],
+                        'step_highangle' => $temp[0]['step_highangle'],
+                        'step_lowangle' => $temp[0]['step_lowangle'],
+                        'torque_unit' => $temp[0]['torque_unit'],
+                        'step_angle_mode' => $temp[0]['step_angle_mode'],
+                        'step_slope' => $temp[0]['step_slope']
+                    );
+                }
+              
             }
 
-            if(!empty($new_array)){
-                $res = $this->TemplateModel->cover_data($new_array,$table_name);
-                //var_dump($res);die();
+            if($table_url == "normalstep"){
+                $jobid = $temp_data[0]['job_id'];
+                foreach ($temp_data as $kk => $item) {
+                    $new_temp_normalstep[$kk] = array(
+                        'job_id' => $item['job_id'],
+                        'seq_id' => $item['seq_id'],
+                        'task_id' => $item['task_id'],
+                        'step_name' => $temp[0]['step_name'],
+                        'step_targettype' => $temp[0]['step_targettype'],
+                        'step_targetangle' => $temp[0]['step_targetangle'],
+                        'step_targettorque' => $temp[0]['step_targettorque'],
+                        'step_tooldirection' => $temp[0]['step_tooldirection'],
+                        'step_rpm' => $temp[0]['step_rpm'],
+                        'step_offsetdirection' => $temp[0]['step_offsetdirection'],
+                        'step_torque_jointoffset' =>$temp[0]['step_torque_jointoffset'],
+                        'step_hightorque' => $temp[0]['step_hightorque'],
+                        'step_lowtorque' => $temp[0]['step_lowtorque'],
+                        'step_threshold_mode' => $temp[0]['step_threshold_mode'],
+                        'step_threshold_torque' => $temp[0]['step_threshold_torque'],
+                        'step_threshold_angle' => $temp[0]['step_threshold_angle'],
+                        'step_monitoringangle' => $temp[0]['step_monitoringangle'],
+                        'step_highangle' => $temp[0]['step_highangle'],
+                        'step_lowangle' => $temp[0]['step_lowangle'],
+                        'step_downshift_enable' => $temp[0]['step_downshift_enable'],
+                        'step_downshift_torque' => $temp[0]['step_downshift_torque'],
+                        'step_downshift_speed' => $temp[0]['step_downshift_speed'],
+                        'torque_unit' => $temp[0]['torque_unit'],
+                        'step_prr' => $temp[0]['step_prr'],
+                        'step_prr_rpm' => $temp[0]['step_prr_rpm'],
+                        'step_prr_angle' => $temp[0]['step_prr_angle'],
+                        'step_downshift_mode' => $temp[0]['step_downshift_mode'],
+                        'step_downshift_angle' => $temp[0]['step_downshift_angle']
+                    );
+                }   
             }
+
+
+    
+            if($table_url == "advancedstep" && !empty($new_temp_advancedstep)){
+                $res = $this->TemplateModel->cover_data($new_temp_advancedstep,$table_name,$jobid);
+            }
+
+            if($table_url == "normalstep" && !empty($new_temp_normalstep)){
+                //echo 'eewqw';//die();
+                $res = $this->TemplateModel->cover_data($new_temp_normalstep,$table_name,$jobid);
+
+                //$res = $this->TemplateModel->cover_data($new_temp_advancedstep,$table_name,$jobid);
+            }
+
+           
         }
         
     }
@@ -823,7 +882,6 @@ class Templates extends Controller
                         
                     }
                 }
-
                 header('Content-Type: application/json');
                 echo json_encode($uniquejobs);
 
