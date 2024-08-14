@@ -117,7 +117,7 @@ $text['Step_text'] = '步驟';
 //task page - new modal
 $text['Task_id_text'] = '任務編號';
 $text['Controller_text'] = '控制器';
-$text['Sensor_text'] = '傳感器';
+$text['Sensor_text'] = '感測器';
 
 // $text['Arm_text'] = '臂';
 
@@ -441,7 +441,7 @@ $text['Count_text'] = '次數';
 $text['Item_text'] = '項目';
 $text['Tolerance_text'] = '誤差範圍';
 $text['Bias_text'] = '偏差';
-
+$text['Meter_text'] = '儀表';
 
 
 //----------------------------------------------------------------------------------------------------------------

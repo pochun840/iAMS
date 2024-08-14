@@ -419,7 +419,7 @@ $text['Count_text'] = 'Count';
 $text['Item_text'] = 'Item';
 $text['Tolerance_text'] = 'Tolerance';
 $text['Bias_text'] = 'Bias';
-
+$text['Meter_text'] = 'Meter';
 
 //----------------------------------------------------------------------------------------------------------------
 //扭力單位

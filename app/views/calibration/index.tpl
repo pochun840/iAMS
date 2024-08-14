@@ -283,7 +283,7 @@
                         <div class="meter-model" id='item_data' style="display:none;">
                             <div class="row t1 border-bottom">
                                 <div class="col-5" style=" padding-left: 5%; color: #000"><b><?php echo $text['Item_text'];?></b></div>
-                                <div class="col-5" style=" padding-left: 5%; color: #000"><b>Meter</b></div>
+                                <div class="col-5" style=" padding-left: 5%; color: #000"><b><?php echo $text['Meter_text'];?></b></div>
                             </div>
 
                             <div class="scrollbar-meter" id="style-meter">
@@ -301,7 +301,7 @@
                                         </div>
                                     </div>
                                     <div class="row t1">
-                                        <div class="col-5 t1" style=" padding-left: 5%; color: #000">Bias (+/-%):</div>
+                                        <div class="col-5 t1" style=" padding-left: 5%; color: #000"><?php echo $text['Bias_text'];?> (+/-%):</div>
                                         <div class="col-5 t1">
                                             <input id="bias" type="text" class="t2 form-control" value="10">
                                         </div>

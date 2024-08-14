@@ -50,7 +50,7 @@ $text['Select_Seq_ID_text'] = '选择工序编号';
 $text['Controller_Type_text'] = '控制器类型';
 $text['Barcode_Start_text'] = '条码开始';
 $text['Job_Repeat_text'] = '工作重复';
-$text['OK_Job_text'] = '工作完成信号';
+$text['OK_Job_text'] = '完工信号';
 $text['Tower_Light_text'] = '三色灯';
 $text['Reverse_Button_text'] = '拆螺丝按钮';
 $text['Reverse_RPM_text'] = '拆螺丝转速';
@@ -501,8 +501,8 @@ $text['Calculation_text'] = '计算';
 $text['Count_text'] = '次數';
 $text['Item_text'] = '项目';
 $text['Tolerance_text'] = '误差范围';
-
-
+$text['Bias_text'] = '偏差';
+$text['Meter_text'] = '儀表';
 
 //operation error message
 $error_message['NO_ERROR'] = '';
