@@ -29,7 +29,10 @@ class Operations extends Controller
         $controller_ip = $this->EquipmentModel->GetControllerIP(1);
 
         $current_job_id = $this->OperationModel->GetConfigValue('current_job_id');
-        if($current_job_id['value'] == "0"){
+        $job_data = $this->ProductModel->getJobById($current_job_id['value']);
+
+        
+        if($current_job_id['value'] == "0"  || $job_data == false ){
             $job_list = $this->ProductModel->getJobs();
             $data = array('nav' => $nav,'job_list' => $job_list);
             $this->view('operation/index_empty',$data);
@@ -821,7 +824,7 @@ class Operations extends Controller
             return false;
         }
     }
-    
+
 
 
 }

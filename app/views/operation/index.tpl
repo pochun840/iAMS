@@ -1266,6 +1266,10 @@ tt.set('start_time',new Date())
                             document.getElementById('step'+task_id).style.backgroundColor = 'red';
                             document.getElementById('tightening_status_div').style.backgroundColor = 'red';
 
+                          
+
+
+
                             document.getElementById('screw_info').innerHTML = retry_time + ' / '+ stop_on_ng;
                             document.getElementById('modbus_switch').value = 1;
 
@@ -1281,6 +1285,9 @@ tt.set('start_time',new Date())
                                 // function_auth_check('stop_on_ng')
                             }
                            
+                            document.getElementById('tightening_status').style.backgroundColor = 'red';
+                            document.getElementById('tightening_status_div').style.backgroundColor = 'red';
+
 
                         }
 
