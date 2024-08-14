@@ -1056,6 +1056,12 @@ addMessage();
 
     
     //如果 limit_val=1 曲線圖 要顯示上下限 min_val 及 max_val
+
+    if(x_title  == "Time(MS)" && y_title =="Power"){
+        var limit_val = 0;
+        document.cookie = "limit_val=" + limit_val + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+        //history.go(0);
+    }
     if (limit_val == 1) {
         
         if(x_title  == "Time(MS)" && y_title =="Angle"){
@@ -1611,5 +1617,17 @@ function reportWindowSize() {
 }
 
 window.onresize = reportWindowSize;
+
+
+function check_limit11(x_title,y_title){
+
+
+    // 這裡檢查 x_title 和 y_title 的值
+    if (x_title == "Time(MS)" && y_title == "Power") {
+        limit_val = '0'; // 強制設置 limit_val 為 '0'
+    }
+
+
+}
 
 </script>
