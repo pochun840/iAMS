@@ -78,7 +78,7 @@ $text['Delete_confirm_text'] = '你确定吗？';
 
 //sequence page
 $text['Squence_text'] = '工序';
-$text['Seq_count_text'] = '工序数';
+$text['Seq_count_text'] = '总工序';
 $text['Add_Seq_text'] = '添加工序';
 $text['Edit_Seq_text'] = '编辑工序';
 $text['Back_text'] = '返回';
@@ -96,9 +96,10 @@ $text['Timeout_text'] = '超时';
 //sequence page - copy seq
 $text['Copy_seq_text'] = '复制工序';
 
+
 //task page
 $text['Task_text'] = '任务';
-$text['Task_Count_text'] = '任务计数';
+$text['Task_Count_text'] = '任务总数';
 $text['Hi_text'] = '上限';
 $text['Lo_text'] = '下限';
 $text['Step_text'] = '步骤';
@@ -285,7 +286,7 @@ $text['ID_text'] = 'ID';
 $text['Name_text'] = '名称';
 $text['Unit_text'] = '单位';
 $text['Language_text'] = '语言';
-$text['Batch_Mode_text'] = '批处理模式';
+$text['Batch_Mode_text'] = '计数模式';
 $text['Blackout_Recovery_text'] = '断电恢复';
 $text['Diskfull_Warning_text'] = '磁盘已满警告';
 $text['Disk_Storage_Space_text'] = '磁盘存储空间';
