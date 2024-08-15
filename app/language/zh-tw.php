@@ -94,8 +94,8 @@ $text['Add_Task_text'] = '新增任務';
 
 
 //sequence page - add seq
-$text['New_Seq_text'] = '新工序';
-$text['Barcode_Enable_text'] = '條碼啟用';
+$text['New_Seq_text'] = '新增工序';
+$text['Barcode_Enable_text'] = '條碼啟動';
 $text['Add_Picture_text'] = '新增圖片';
 $text['NG_Stop_text'] = 'NG 時停止';
 $text['Sequence_OK_text'] = '工序 OK';

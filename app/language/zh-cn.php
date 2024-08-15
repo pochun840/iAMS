@@ -352,7 +352,7 @@ $text['SET_text'] = '设置';
 
 //plugins
 $text['Add_Plugins_text'] = '添加插件';
-$text['Upload_new_software_text'] = '上传新软件';
+$text['Upload_new_software_text'] = '上传新插件';
 $text['Upload_plugins_text'] = '上传插件';
 $text['Upload_progress_text'] = '上传进度';
 
@@ -360,7 +360,7 @@ $text['Upload_progress_text'] = '上传进度';
 $text['Operation_Setting_text'] = '操作设置';
 $text['System_Setting_text'] = '系统设置';
 $text['Manager_Verify_text'] = '管理员验证';
-$text['Skip_Button_Access_text'] = '跳过按钮访问';
+$text['Skip_Button_Access_text'] = '跳过工序';
 $text['Back_Button_Access_text'] = '返回工序';
 $text['Task_Reset_Button_Access_text'] = '任务重启';
 $text['Job_Selection_Access_text'] = '切换工作';
