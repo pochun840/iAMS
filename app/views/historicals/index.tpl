@@ -1055,8 +1055,14 @@ addMessage();
     if(x_title  == "Time(MS)" && y_title =="Power"){
         var limit_val = 0;
         document.cookie = "limit_val=" + limit_val + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
-        //history.go(0);
+        
     }
+
+    if(x_title  == "Time(MS)" && y_title =="RPM"){
+        var limit_val = 0;
+        document.cookie = "limit_val=" + limit_val + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+    }
+
     if (limit_val == 1) {
         
         if(x_title  == "Time(MS)" && y_title =="Angle"){
