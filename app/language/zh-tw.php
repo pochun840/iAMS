@@ -333,7 +333,7 @@ $text['Controller_Ver_text'] = '控制器版本';
 $text['MCB_Version_text'] = 'MCB 版本';
 $text['Image_Version_text'] = '圖像版本';
 $text['Refresh_text'] = '更新';
-$text['Information_text'] = '訊息';
+$text['Information_text'] = '資訊';
 $text['Torque_Filter_text'] = '扭矩過濾器';
 
 

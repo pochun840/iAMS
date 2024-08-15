@@ -312,7 +312,7 @@ $text['Controller_Ver_text'] = '控制器版本';
 $text['MCB_Version_text'] = 'MCB 版本';
 $text['Image_Version_text'] = '图像版本';
 $text['Refresh_text'] = '刷新';
-$text['Information_text'] = '信息';
+$text['Information_text'] = '资讯';
 $text['Torque_Filter_text'] = '扭矩过滤器';
 
 //equipment page - arm
