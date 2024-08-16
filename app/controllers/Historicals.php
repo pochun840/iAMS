@@ -278,12 +278,20 @@ class Historicals extends Controller
                 }
             }
 
-            if($val =="statistics"){
-
+            if ($val == "statistics") {
                 $start_date = date('Y-m-d', strtotime('-7 days'));
                 $end_date = date('Y-m-d');
+                $date_format = 'Ymd';
 
-                // 初始化日期陣列
+                $all_dates = array();
+                $current_date = strtotime($start_date);
+                while ($current_date <= strtotime($end_date)) {
+                    $all_dates[] = date($date_format, $current_date);
+                    $current_date = strtotime("+1 day", $current_date);
+                }
+
+            
+                // 初始化日期数组
                 $date_array = [];
                 for ($date = strtotime($start_date); $date <= strtotime($end_date); $date = strtotime('+1 day', $date)) {
                     $formatted_date = date('Ymd', $date);
@@ -294,76 +302,60 @@ class Historicals extends Controller
                     ];
                 }
 
-
-                #OK
-                $statistics_ok_temp = $this->Historicals_newModel->for_history('statistics_ok'); 
-                if(!empty($statistics_ok_temp)){
-                    foreach($statistics_ok_temp  as $kk1 =>$vv1){
-                        unset($statistics_ok_temp[$kk1]);
-                        $statistics_ok_temp[$vv1['date']] = $vv1;
-                        $statistics_ok_temp[$vv1['date']]['ok_count']=$vv1['status_count'];
-                    }
+                    
+                // NG 数据处理
+                $complete_data = array();
+                $res = $this->Historicals_newModel->for_history('statistics_ng'); 
+                foreach ($res as $record) {
+                    $date = $record['date'];
+                    $category = $record['status_category'];
+                    $count = $record['status_count'];
+                    
+                    $complete_data[$date][$category] = $count;
                 }
 
-                #NG
-                $statistics_ng_temp = $this->Historicals_newModel->for_history('statistics_ng'); 
-                if(!empty($statistics_ng_temp)){
-                    foreach($statistics_ng_temp as $kk =>$vv){
-                        unset($statistics_ng_temp[$kk]);
-                        $statistics_ng_temp[$vv['date']] = $vv;
-                        $statistics_ng_temp[$vv['date']]['ng_count'] = $vv['status_count'];
-                    }
-                }
-
-                #OKALL 
-                $statistics_okall_temp = $this->Historicals_newModel->for_history('statistics_okall'); 
-                if(!empty($statistics_okall_temp)){
-                    foreach($statistics_okall_temp as $kk2 =>$vv2){
-                        unset($statistics_okall_temp[$kk2]);
-                        $statistics_okall_temp[$vv2['date']] = $vv2;
-                        $statistics_okall_temp[$vv2['date']]['ok_all_count']=$vv2['status_count'];    
-                    }
-                }     
-             
-                $type_arr  = $statistics_ok_temp + $statistics_ng_temp + $statistics_okall_temp;
-                if (!empty($type_arr)) {
-                    foreach ($type_arr as $kd => &$vd) {
-
-                        $vd['ok_all_count'] = $statistics_okall_temp[$kd]['ok_all_count'] ?? 0;
-                        $vd['ng_count'] = $vd['ng_count'] ?? 0;
-                        $vd['ok_count'] = $vd['ok_count'] ?? 0;
-                        unset($vd['fasten_status']);
-                        unset($vd['status_count']);
-                    }
-                
-                    foreach ($type_arr as &$vd) {
-                        if (!isset($vd['ok_all_count'])) {
-                            $vd['ok_all_count'] = 0;
+                foreach ($complete_data as $date => $categories) {
+                    if (isset($date_array[$date])) {
+                        // 更新 ng_count
+                        if (isset($categories['NG'])) {
+                            $date_array[$date]['ng_count'] = $categories['NG'];
+                        }
+                        
+                        // 更新 ok_count
+                        if (isset($categories['OK'])) {
+                            $date_array[$date]['ok_count'] = $categories['OK'];
+                        }
+                        
+                        // 更新 ok_all_count
+                        if (isset($categories['OK_ALL'])) {
+                            $date_array[$date]['ok_all_count'] = $categories['OK_ALL'];
                         }
                     }
-                }
-                
-                #陣列合併
-                foreach ($date_array as $ke1 => &$ve1) {
-                    foreach ($type_arr as $ke2 => $ve2) {
-                        if ($ke1 == $ke2) {
-                            $ve1 = array_merge($ve1, $ve2);
-                            unset($ve1['date']); 
-                        }
-                    }
-                    $ng_counts[] = isset($ve1['ng_count']) ? $ve1['ng_count'] : 0;
-                    $ok_counts[] = isset($ve1['ok_count']) ? $ve1['ok_count'] : 0;
-                    $ok_all_counts[] = isset($ve1['ok_all_count']) ? $ve1['ok_all_count'] : 0;
-                }
+                }                
+                $ng_count_values = array_values(array_map(function($item) {
+                    return (int)$item['ng_count'];
+                }, $date_array));
 
-                $ng_counts = array_map('intval', $ng_counts);
-                $ok_counts = array_map('intval', $ok_counts);
-                $ok_all_counts = array_map('intval', $ok_all_counts);
+
+                $ng_count_json = json_encode($ng_count_values, JSON_PRETTY_PRINT);
+
+                $ok_count_values = array_values(array_map(function($item) {
+                    return (int)$item['ok_count'];
+                }, $date_array));
+                $ok_count_json = json_encode($ok_count_values, JSON_PRETTY_PRINT);
+
+                $ok_all_count_values = array_values(array_map(function($item) {
+                    return (int)$item['ok_all_count'];
+                }, $date_array));
+                $ok_all_count_json = json_encode($ok_all_count_values , JSON_PRETTY_PRINT);
+
+            
                 $data['statistics']['date'] = json_encode(array_keys($date_array));
-                $data['statistics']['ng'] = json_encode($ng_counts);
-                $data['statistics']['ok'] = json_encode($ok_counts);
-                $data['statistics']['ok_all'] = json_encode($ok_all_counts);
+                $data['statistics']['ng'] = $ng_count_json;
+                $data['statistics']['ok'] = $ok_count_json;
+                $data['statistics']['ok_all'] = $ok_all_count_json;
             }
+            
         }
 
 

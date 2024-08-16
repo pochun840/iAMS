@@ -146,12 +146,11 @@ function search_info(){
     var selectElement = document.getElementById("status");
     var status_val    = selectElement.value;
 
-    var select_controller = document.getElementById("controller");
-    var controller_val    = select_controller.value;
+    /*var select_controller = document.getElementById("controller");
+    var controller_val    = select_controller.value;*/
 
-    var select_program    = document.getElementById("program");
+    var select_program    = document.getElementById("Program");
     var program_val       = select_program.value;
-
 
     //job 
     var checked_jobid = document.querySelectorAll('input[type="checkbox"][name="jobid"]:checked');
@@ -187,8 +186,8 @@ function search_info(){
                 job_id: checkedjobidarr,
                 sequence_id: checkedseqidarr,
                 cc_task_id:checkedtaskidarr,
-                controller_val:controller_val,
-                program_val:program_val,
+                //controller_val:controller_val,
+                //program_val:program_val,
                 checkedjobidarr:checkedjobidarr,
                 checkedseqidarr:checkedseqidarr,
                 checkedtaskidarr:checkedtaskidarr

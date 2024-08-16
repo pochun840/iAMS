@@ -251,7 +251,7 @@ try {
 
     if ($light_signal == 'sockect_hole') {
         // $data['hole_id'];
-
+	echo 123;
 
         if($data['hole_id'] == 1){
             $pins[0] = true;

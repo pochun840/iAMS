@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/historical.css?v=202404111200" type="text/css">
 
 <script src="<?php echo URLROOT; ?>js/flatpickr.js"></script>
-<script src="<?php echo URLROOT; ?>js/historical.js?v=202405081700"></script>
+<script src="<?php echo URLROOT; ?>js/historical.js?v=202408151600"></script>
 
 <script src="<?php echo URLROOT; ?>js/echarts_min.js?v=202405080900"></script>
 <script src="<?php echo URLROOT; ?>js/html2canvas_min.js?v=202405080900"></script>
@@ -278,9 +278,10 @@ if(!empty($_COOKIE['chat_mode_change'])){
                                 </select>
                             </div>
 
-                            <div for="Program" class="col-2 t1"><?php echo $text['program_text']; ?>:</div>
+                            <div for="Program" class="col-2 t1"><?php echo $text['Program_text']; ?>:</div>
                             <div class="col-2 t3"  style="margin-left: -100px">
                                 <select id="Program" style="width: 190px;">
+                                    <option value="-1"><?php echo "select";?></option>
                                      <?php foreach($data['res_program'] as $key_res_2 => $val_res_2){?>
                                             <option value="<?php echo $val_res_2['template_program_id'];?>"><?php echo $val_res_2['template_program_id'];?></option>
                                     <?php }?>
@@ -349,8 +350,8 @@ if(!empty($_COOKIE['chat_mode_change'])){
                                             <td><?php echo $v_info['cc_barcodesn'];?></td>
                                             <td><?php echo $v_info['job_name'];?></td>
                                             <td><?php echo $v_info['sequence_name'];?></td>
-                                            <td><?php echo $v_info['cc_task_name'];?></td>
-                                            <td></td>
+                                            <td><?php echo $v_info['cc_task_id'];?></td>
+                                            <td><?php echo "GTCS";?></td>
                                             <td><?php echo $v_info['step_lowtorque']." ~ ".$v_info['step_hightorque'];?></td>
                                             <td><?php echo $v_info['step_lowangle']." ~ ".$v_info['step_highangle'];?></td>
                                             <td><?php echo $v_info['fasten_torque'].$data['torque_arr'][$v_info['torque_unit']] ;?></td>
@@ -1055,14 +1056,16 @@ addMessage();
     if(x_title  == "Time(MS)" && y_title =="Power"){
         var limit_val = 0;
         document.cookie = "limit_val=" + limit_val + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
-        
+        //history.go(0);
     }
 
+    
     if(x_title  == "Time(MS)" && y_title =="RPM"){
         var limit_val = 0;
         document.cookie = "limit_val=" + limit_val + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+        //history.go(0);
     }
-
+    
     if (limit_val == 1) {
         
         if(x_title  == "Time(MS)" && y_title =="Angle"){

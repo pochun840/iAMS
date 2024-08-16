@@ -142,6 +142,7 @@
 
 
     var fastening_status =<?php echo $data['fastening_status']; ?>;
+       var colors = ['#FFCC00', '#99CC66', '#E60000', '#FFCC00'];
     var fChart = echarts.init(document.getElementById('fastening_status_chart'));
     var option = {
         title: {
@@ -158,7 +159,7 @@
             top: 'bottom',
             data: fastening_status.map(function(item) { return item.name; })
         },*/
-        series: [
+        /*series: [
             {
                 name: 'Status',
                 type: 'pie',
@@ -167,6 +168,23 @@
                 data: fastening_status,
                 animationType: 'scale', 
                 animationEasing: 'elasticOut' 
+            }
+        ]*/
+        series: [
+            {
+                name: 'Status',
+                type: 'pie',
+                radius: '55%',
+                center: ['50%', '60%'],
+                data: fastening_status,
+                itemStyle: {
+                    color: function(params) {
+                        // Assign colors to pie chart slices based on the index
+                        return colors[params.dataIndex % colors.length];
+                    }
+                },
+                animationType: 'scale',
+                animationEasing: 'elasticOut'
             }
         ]
     };

@@ -63,7 +63,7 @@ class Historical{
             }else if($info_arr['status_val'] =="2"){
                // $sql .="AND fasten_status = '4' ";
 
-                $sql .="AND fasten_status in('4','5','6') ";
+                $sql .="AND fasten_status in('5','6') ";
                 // $sql .=" AND fasten_status = '5' or fasten_status = '6' ";
             }else{
                 $sql .=" AND fasten_status  in('7','8') ";
@@ -631,16 +631,33 @@ class Historical{
             break;
 
             case "statistics_ng":
-                $sql = "SELECT substr(data_time, 1, 8) AS date, fasten_status, COUNT(*) AS status_count FROM fasten_data WHERE data_time BETWEEN '".$before_date."' AND '".$after_date."' AND on_flag = '0' AND fasten_status IN ('7','8') GROUP BY substr(data_time, 1, 10), fasten_status";
+                                $sql = "SELECT 
+                    substr(data_time, 1, 8) AS date, 
+                    CASE 
+                        WHEN fasten_status IN ('7', '8') THEN 'NG'
+                        WHEN fasten_status IN ('4') THEN 'OK'
+                        WHEN fasten_status IN ('5', '6') THEN 'OK_ALL'
+                    END AS status_category,
+                    COUNT(*) AS status_count
+                FROM 
+                    fasten_data 
+                WHERE 
+                    data_time BETWEEN '2024080100:00:00' AND '2024081623:59:59' 
+                    AND on_flag = '0' 
+                    AND fasten_status IN ('4', '5', '6', '7', '8') 
+                GROUP BY 
+                    substr(data_time, 1, 10), 
+                    status_category";
+                //echo $sql;die();
             break;
 
-            case "statistics_ok":
+            /*case "statistics_ok":
                 $sql = "SELECT substr(data_time, 1, 8) AS date, fasten_status, COUNT(*) AS status_count FROM fasten_data WHERE data_time BETWEEN '".$before_date."' AND '".$after_date."' AND on_flag = '0' AND fasten_status IN ('4') GROUP BY substr(data_time, 1, 10), fasten_status";
             break;
 
             case "statistics_okall":
                 $sql = "SELECT substr(data_time, 1, 8) AS date, fasten_status, COUNT(*) AS status_count FROM fasten_data WHERE data_time BETWEEN '".$before_date."' AND '".$after_date."' AND on_flag = '0' AND fasten_status IN ('5','6') GROUP BY substr(data_time, 1, 10), fasten_status";
-            break;
+            break;*/
 
             case "job_time":
                 $sql = "SELECT 
