@@ -381,6 +381,7 @@ $text['iAMS_Update_text'] = 'iAMS 更新';
 $text['Blackout_Recovery_text'] = '断电恢复';
 $text['Dec'] = '倒数';
 $text['Inc'] = '正数';
+$text['Sensor_Enable_Step_text']= '传感器启用';
 
 //user
 $text['Member_List_text'] = '会员列表';

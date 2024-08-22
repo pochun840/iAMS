@@ -366,6 +366,7 @@ $text['Operation_Setting_text'] = 'Operation Setting';
 $text['System_Setting_text'] = 'System Setting';
 $text['Import/Export_Setting_text'] = 'Import/Export_Setting';
 $text['Counting_Method_text'] = 'Counting_Method';
+$text['Sensor_Enable_Step_text']= 'Sensor Enable Step';
 $text['Dec'] = 'Dec';
 $text['Inc'] = 'Inc';
 $text['Manager_Verify_text'] = 'Manager Verify';

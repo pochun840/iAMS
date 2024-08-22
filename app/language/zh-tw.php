@@ -404,6 +404,7 @@ $text['iAMS_Update_text'] = 'iAMS 更新';
 $text['Blackout_Recovery_text'] = '斷電恢復';
 $text['Dec'] = '倒數';
 $text['Inc'] = '正數';
+$text['Sensor_Enable_Step_text']= '感測器啟用';
 
 
 //user

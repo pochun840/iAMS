@@ -163,7 +163,7 @@
                     </div>
 
                     <div class="t1">
-                        <div class="col-2 t2" style="font-weight: bold;margin-top: 15px"><?php echo "Sensor Enable Step"; ?>:</div>
+                        <div class="col-2 t2" style="font-weight: bold;margin-top: 15px"><?php echo $text['Sensor_Enable_Step_text']; ?>:</div>
 
                     </div>
                     <div class="row t1">
