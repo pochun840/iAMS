@@ -187,7 +187,7 @@ function search_info(){
                 sequence_id: checkedseqidarr,
                 cc_task_id:checkedtaskidarr,
                 //controller_val:controller_val,
-                //program_val:program_val,
+                program_val:program_val,
                 checkedjobidarr:checkedjobidarr,
                 checkedseqidarr:checkedseqidarr,
                 checkedtaskidarr:checkedtaskidarr

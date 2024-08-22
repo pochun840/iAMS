@@ -87,6 +87,7 @@ class Historicals extends Controller
         $info_arr = array();
         $info_arr = $_POST;
 
+    
         $offset = 0;
         $limit  = 10000;
         #按照POST的資訊 取得資料庫搜尋的結果

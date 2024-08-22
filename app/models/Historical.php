@@ -80,8 +80,8 @@ class Historical{
         }
         
         #program 搜尋
-        if(!empty($info_arr['program_val']) && $info_arr['program_val'] != "0"){
-
+        if(!empty($info_arr['program_val']) && $info_arr['program_val'] != "0" && $info_arr['program_val'] != "-1"){
+           
             $info_arr['program_val'] = (int)$info_arr['program_val'];
             $sql .="AND cc_program_id = :cc_program_id";
             $params['cc_program_id'] = $info_arr['program_val'];
@@ -125,7 +125,6 @@ class Historical{
         $params[':offset'] = $offset;
         $params[':limit'] = $limit;
        
-  
         $statement = $this->db->prepare($sql);
         $statement->execute($params);
 
