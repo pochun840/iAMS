@@ -11,6 +11,7 @@ class Equipments extends Controller
         $this->DashboardModel = $this->model('Main');
         $this->NavsController = $this->controller_new('Navs');
         $this->EquipmentModel = $this->model('Equipment');
+        $this->OperationModel = $this->model('Operation');
     }
 
     // 取得所有Jobs
@@ -35,6 +36,8 @@ class Equipments extends Controller
         $div_tower_light = 'equipment/div_tower_light';
         $div_socket_tray = 'equipment/div_socket_tray';
         $controller_ip = $this->EquipmentModel->GetControllerIP(1);
+        $tower_light_switch = $this->OperationModel->GetConfigValue('tower_light_switch')['value'];
+        $buzzer_switch = $this->OperationModel->GetConfigValue('buzzer_switch')['value'];
 
         $data = [
             'isMobile' => $isMobile,
@@ -50,6 +53,8 @@ class Equipments extends Controller
             'div_socket_tray' => $div_socket_tray,
             'comPorts' => $comPorts,
             'controller_ip' => $controller_ip,
+            'tower_light_switch' => $tower_light_switch,
+            'buzzer_switch' => $buzzer_switch
         ];
         
         $this->view('equipment/index', $data);

@@ -1,3 +1,27 @@
+<?php 
+if(!empty($data['buzzer_switch'])) {
+    if ($data['buzzer_switch'] == "1") {
+        $buzzer_status = 'checkmark checkmark_buzzer';
+        $is_disabled = '';     
+    } else {
+        $buzzer_status = 'checkmark checkmark_buzzer disabled';
+    }
+} else {
+    $buzzer_status = 'checkmark checkmark_buzzer disabled';
+    $is_disabled = 'disabled';
+}
+
+if(!empty($data['tower_light_switch'])) {
+    if ($data['tower_light_switch'] == "1") {
+         $is_disabled = '';       
+    } else {
+        $is_disabled = 'disabled';
+    }
+}else{
+    $is_disabled = 'disabled';
+}
+
+?>
 <!-- Tower Light Edit Setting -->
     <div id="TowerLight_Edit_Setting" style="display: none">
         <div class="topnav">
@@ -180,19 +204,19 @@
                             <div class="col-4 t1 coler-setting">
                                 <label class="light_test">
                                     <input id="OK_Red" type="checkbox" checked="checked">
-                                    <span class="checkmark checkmark_red"></span>
+                                    <span class="<?php echo 'checkmark checkmark_red' .' ' .$is_disabled;?>"></span>
                                 </label>
                                 <label class="light_test">
                                     <input id="OK_Green" type="checkbox">
-                                    <span class="checkmark checkmark_green"></span>
+                                    <span class="<?php echo 'checkmark checkmark_green' .' ' .$is_disabled;?>"></span>
                                 </label>
                                 <label class="light_test">
                                     <input id="OK_Yellow" type="checkbox">
-                                    <span class="checkmark checkmark_yellow"></span>
+                                    <span class="<?php echo 'checkmark checkmark_yellow' .' ' .$is_disabled;?>"></span>
                                 </label>
                                 <label class="light_test">
-                                    <input id="OK_Buzzer" type="checkbox">
-                                    <span class="checkmark checkmark_buzzer"><?php echo $text['Buzzer_text']; ?></span>
+                                    <input id="OK_Buzzer" type="checkbox"> 
+                                    <span class="<?php echo $buzzer_status;?>"><?php echo $text['Buzzer_text']; ?></span>
                                 </label>
                             </div>
                             <div class="col t3">
@@ -203,7 +227,7 @@
                                     </label>
                                 </div>
                                 <div>
-                                    <input id="OK_time" class="lighttime" type="" name="">
+                                    <input id="OK_time" class="lighttime" type="" name="" <?php echo $is_disabled;?> >
                                     <span><?php echo $text['ms_text']; ?></span>
                                 </div>
                             </div>
@@ -216,19 +240,19 @@
                             <div class="col-4 t1 coler-setting">
                                 <label class="light_test">
                                     <input id="NG_Red" type="checkbox" checked="checked">
-                                    <span class="checkmark checkmark_red"></span>
+                                    <span class="<?php echo 'checkmark checkmark_red' .' ' .$is_disabled;?>"></span>
                                 </label>
                                 <label class="light_test">
                                     <input id="NG_Green" type="checkbox">
-                                    <span class="checkmark checkmark_green"></span>
+                                    <span class="<?php echo 'checkmark checkmark_green' .' ' .$is_disabled;?>"></span>
                                 </label>
                                 <label class="light_test">
                                     <input id="NG_Yellow" type="checkbox">
-                                    <span class="checkmark checkmark_yellow"></span>
+                                    <span class="<?php echo 'checkmark checkmark_yellow' .' ' .$is_disabled;?>"></span>
                                 </label>
                                 <label class="light_test">
                                     <input id="NG_Buzzer" type="checkbox">
-                                    <span class="checkmark checkmark_buzzer"><?php echo $text['Buzzer_text']; ?></span>
+                                    <span class="<?php echo $buzzer_status;?>""><?php echo $text['Buzzer_text']; ?></span>
                                 </label>
                             </div>
                             <div class="col t3">
@@ -239,7 +263,7 @@
                                     </label>
                                 </div>
                                 <div>
-                                    <input id="NG_time" class="lighttime" type="" name="">
+                                    <input id="NG_time" class="lighttime" type="" name="" <?php echo $is_disabled;?> >
                                     <span><?php echo $text['ms_text']; ?></span>
                                 </div>
                             </div>
@@ -252,19 +276,19 @@
                             <div class="col-4 t1 coler-setting">
                                 <label class="light_test">
                                     <input id="OK_SEQ_Red" type="checkbox" checked="checked">
-                                    <span class="checkmark checkmark_red"></span>
+                                    <span class="<?php echo 'checkmark checkmark_red' .' ' .$is_disabled;?>"></span>
                                 </label>
                                 <label class="light_test">
                                     <input id="OK_SEQ_Green" type="checkbox">
-                                    <span class="checkmark checkmark_green"></span>
+                                    <span class="<?php echo 'checkmark checkmark_green' .' ' .$is_disabled;?>"></span>
                                 </label>
                                 <label class="light_test">
                                     <input id="OK_SEQ_Yellow" type="checkbox">
-                                    <span class="checkmark checkmark_yellow"></span>
+                                    <span class="<?php echo 'checkmark checkmark_yellow' .' ' .$is_disabled;?>"></span>
                                 </label>
                                 <label class="light_test">
                                     <input id="OK_SEQ_Buzzer" type="checkbox">
-                                    <span class="checkmark checkmark_buzzer"><?php echo $text['Buzzer_text']; ?></span>
+                                    <span class="<?php echo $buzzer_status;?>""><?php echo $text['Buzzer_text']; ?></span>
                                 </label>
                             </div>
                             <div class="col t3">
@@ -275,7 +299,7 @@
                                     </label>
                                 </div>
                                 <div>
-                                    <input id="OK_SEQ_time" class="lighttime" type="" name="">
+                                    <input id="OK_SEQ_time" class="lighttime" type="" name="" <?php echo $is_disabled;?> >
                                     <span><?php echo $text['ms_text']; ?></span>
                                 </div>
                             </div>
@@ -288,19 +312,19 @@
                              <div class="col-4 t1 coler-setting">
                                 <label class="light_test">
                                     <input id="OKALL_Red" type="checkbox" checked="checked">
-                                    <span class="checkmark checkmark_red"></span>
+                                     <span class="<?php echo 'checkmark checkmark_red' .' ' .$is_disabled;?>"></span>
                                 </label>
                                 <label class="light_test">
                                     <input id="OKALL_Green" type="checkbox">
-                                    <span class="checkmark checkmark_green"></span>
+                                    <span class="<?php echo 'checkmark checkmark_green' .' ' .$is_disabled;?>"></span>
                                 </label>
                                 <label class="light_test">
                                     <input id="OKALL_Yellow" type="checkbox">
-                                    <span class="checkmark checkmark_yellow"></span>
+                                    <span class="<?php echo 'checkmark checkmark_yellow' .' ' .$is_disabled;?>"></span>
                                 </label>
                                 <label class="light_test">
                                     <input id="OKALL_Buzzer" type="checkbox">
-                                    <span class="checkmark checkmark_buzzer"><?php echo $text['Buzzer_text']; ?></span>
+                                    <span class="<?php echo $buzzer_status;?>""><?php echo $text['Buzzer_text']; ?></span>
                                 </label>
                             </div>
                            <div class="col t3">
@@ -311,7 +335,7 @@
                                     </label>
                                 </div>
                                 <div>
-                                    <input id="OKALL_time" class="lighttime" type="" name="">
+                                    <input id="OKALL_time" class="lighttime" type="" name="" <?php echo $is_disabled;?> >
                                     <span><?php echo $text['ms_text']; ?></span>
                                 </div>
                             </div>
@@ -324,19 +348,19 @@
                             <div class="col-4 t1 coler-setting">
                                 <label class="light_test">
                                     <input id="ERROR_Red" type="checkbox" checked="checked">
-                                    <span class="checkmark checkmark_red"></span>
+                                     <span class="<?php echo 'checkmark checkmark_red' .' ' .$is_disabled;?>"></span>
                                 </label>
                                 <label class="light_test">
                                     <input id="ERROR_Green" type="checkbox">
-                                    <span class="checkmark checkmark_green"></span>
+                                    <span class="<?php echo 'checkmark checkmark_green' .' ' .$is_disabled;?>"></span>
                                 </label>
                                 <label class="light_test">
                                     <input id="ERROR_Yellow" type="checkbox">
-                                    <span class="checkmark checkmark_yellow"></span>
+                                    <span class="<?php echo 'checkmark checkmark_yellow' .' ' .$is_disabled;?>"></span>
                                 </label>
                                 <label class="light_test">
                                     <input id="ERROR_Buzzer" type="checkbox">
-                                    <span class="checkmark checkmark_buzzer"><?php echo $text['Buzzer_text']; ?></span>
+                                    <span class="<?php echo $buzzer_status;?>""><?php echo $text['Buzzer_text']; ?></span>
                                 </label>
                             </div>
                             <div class="col t3">
@@ -347,7 +371,7 @@
                                     </label>
                                 </div>
                                 <div>
-                                    <input id="ERROR_time" class="lighttime" type="" name="">
+                                    <input id="ERROR_time" class="lighttime" type="" name="" <?php echo $is_disabled;?> >
                                     <span><?php echo $text['ms_text']; ?></span>
                                 </div>
                            </div>
@@ -568,6 +592,14 @@
 </script>
 
 <style>
+
+    .disabled {
+        opacity: 0.5; 
+        pointer-events: none; 
+        cursor: not-allowed; 
+    }
+
+
     /* The light_test */
     .light_test {
       display: block;
