@@ -340,11 +340,14 @@ $text['Red_text'] = 'Red';
 $text['Green_text'] = 'Green';
 $text['Yellow_text'] = 'Yellow';
 $text['Buzzer_text'] = 'Buzzer';
+$text['Buzzer_Setting_text'] = 'Buzzer Setting';
 $text['TEST_text'] = 'TEST';
 $text['Type_text'] = 'Type';
 $text['Color_Configuration_text'] = 'Color Configuration';
 $text['Length_of_time_text'] = 'Length of time';
 $text['ms_text'] = 'ms';
+$text['Automatic Speech_Setting_text'] = 'Automatic Speech Setting'; 
+
 
 //equipment page - socket tray setting
 $text['Socket_tray_Setting_text'] = 'Socket tray Setting';

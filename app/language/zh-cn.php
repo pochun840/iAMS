@@ -339,11 +339,14 @@ $text['Red_text'] = '红色';
 $text['Green_text'] = '绿色';
 $text['Yellow_text'] = '黄色';
 $text['Buzzer_text'] = '蜂鸣器';
+$text['Buzzer_Setting_text'] = '蜂鸣器设置';
 $text['TEST_text'] = '测试';
 $text['Type_text'] = '类型';
 $text['Color_Configuration_text'] = '颜色配置';
 $text['Length_of_time_text'] = '时间长度';
 $text['ms_text'] = '毫秒';
+$text['Automatic Speech_Setting_text'] = '自动语音识别设置'; 
+
 
 //equipment page - socket tray setting
 $text['Socket_tray_Setting_text'] = '套筒选择器设置';

@@ -36,6 +36,9 @@ class Settings extends Controller
         $button_auth['stop_on_ng'] = $this->OperationModel->GetConfigValue('stop_on_ng')['value'];
         $button_auth['switch_seq'] = $this->OperationModel->GetConfigValue('auth_seq_change')['value'];
         $button_auth['role_checked'] = $this->OperationModel->GetConfigValue('manger_verify')['value'];
+        $button_auth['auto_switch'] = $this->OperationModel->GetConfigValue('auto_switch')['value'];
+        $button_auth['tower_light_switch'] = $this->OperationModel->GetConfigValue('tower_light_switch')['value'];
+        $button_auth['buzzer_switch'] = $this->OperationModel->GetConfigValue('buzzer_switch')['value'];
         $button_auth['role_checked'] = explode(",",$button_auth['role_checked']);//轉換成array 方便用in_array判斷
 
         $data = [
@@ -45,6 +48,7 @@ class Settings extends Controller
             'button_auth' => $button_auth,
         ];
         
+   
         $this->view('setting/index', $data);
 
     }
@@ -314,8 +318,12 @@ class Settings extends Controller
         $this->OperationModel->SetConfigValue('auth_seq_change',$_POST['switch_seq']);
         $this->OperationModel->SetConfigValue('manger_verify',$_POST['role_checked']);
         $this->OperationModel->SetConfigValue('stop_on_ng',$_POST['stop_on_ng']);
+        $this->OperationModel->SetConfigValue('auto_switch',$_POST['auto_switch']);
+        $this->OperationModel->SetConfigValue('tower_light_switch',$_POST['tower_light_switch']);
+        $this->OperationModel->SetConfigValue('buzzer_switch',$_POST['buzzer_switch']);
 
         echo json_encode(array('error' => $error_message));
+
         exit();
 
 

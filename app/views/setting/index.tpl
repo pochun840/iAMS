@@ -158,6 +158,34 @@
                             <label><i></i></label>
                         </div>
                     </div>
+
+                    <div class="t1">
+                        <div class="col-2 t2" style="font-weight: bold;margin-top: 15px"><?php echo "Sensor Enable Step"; ?>:</div>
+
+                    </div>
+                    <div class="row t1">
+                        <div class="col-3 t2" style="padding-left: 5%"><?php echo  $text['Automatic Speech_Setting_text']; ?>:</div>
+                        <div class="switch menu col-3 t4">
+                            <input id="auto_switch" type="checkbox" <?php if($data['button_auth']['auto_switch']){ echo 'checked';} ?>>
+                            <label><i></i></label>
+                        </div>
+                    </div>
+                    <div class="row t1">
+                        <div class="col-3 t2" style="padding-left: 5%"><?php echo $text['Tower_Light_Setting_text']; ?>:</div>
+                        <div class="switch menu col-3 t4">
+                            <input id="tower_light_switch" type="checkbox" <?php if($data['button_auth']['tower_light_switch']){ echo 'checked';} ?>>
+                            <label><i></i></label>
+                        </div>
+                    </div>
+                    <div class="row t1">
+                        <div class="col-3 t2" style="padding-left: 5%"><?php echo $text['Buzzer_Setting_text']; ?>:</div>
+                        <div class="switch menu col-3 t4">
+                            <input id="buzzer_switch" type="checkbox" <?php if($data['button_auth']['buzzer_switch']){ echo 'checked';} ?>>
+                            <label><i></i></label>
+                        </div>
+                    </div>
+
+                    
                     <button class="saveButton" onclick="save_manager_verify()"><?php echo $text['Save_text']; ?></button>
                 </div>
             </div>
@@ -298,6 +326,9 @@ function handleButtonClick(button, content)
         let switch_job = document.getElementById('switch_job').checked;
         let switch_seq = document.getElementById('switch_seq').checked;
         let stop_on_ng = document.getElementById('stop_on_ng').checked;
+        let auto_switch = document.getElementById('auto_switch').checked;
+        let tower_light_switch = document.getElementById('tower_light_switch').checked;
+        let buzzer_switch = document.getElementById('buzzer_switch').checked;
 
         let list = document.querySelectorAll("input[name='manager_role']:checked");
         let role_checked = '';
@@ -315,17 +346,20 @@ function handleButtonClick(button, content)
                 'switch_job': +switch_job,
                 'switch_seq': +switch_seq,
                 'stop_on_ng': +stop_on_ng,
+                'auto_switch': +auto_switch,
+                'tower_light_switch': +tower_light_switch,
+                'buzzer_switch': +buzzer_switch,
                 'role_checked': role_checked,
             },
             dataType: "json",
             url: "?url=Settings/Operation_Setting",
-        }).done(function(notice) { //���\�B���^�ǭȤ~�|����
+        }).done(function(notice) { 
             if (notice.error != '') {} else {
                 Swal.fire('Saved!', '', 'success');
                 // window.location = window.location.href;
             }
         }).fail(function() {
-            // history.go(0);//���ѴN���s��z
+            // history.go(0);
         });
 
 

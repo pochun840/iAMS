@@ -360,11 +360,14 @@ $text['Red_text'] = '紅色';
 $text['Green_text'] = '綠色';
 $text['Yellow_text'] = '黃色';
 $text['Buzzer_text'] = '蜂鳴器';
+$text['Buzzer_Setting_text'] = '蜂鳴器設定';
 $text['TEST_text'] = '測試';
 $text['Type_text'] = '類型';
 $text['Color_Configuration_text'] = '顏色設定';
 $text['Length_of_time_text'] = '時間長度';
 $text['ms_text'] = '毫秒';
+$text['Automatic Speech_Setting_text'] = '自動語音辨識設定'; 
+
 
 //equipment page - socket tray setting
 $text['Socket_tray_Setting_text'] = '套筒選擇器設定';
