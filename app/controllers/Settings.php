@@ -39,13 +39,24 @@ class Settings extends Controller
         $button_auth['auto_switch'] = $this->OperationModel->GetConfigValue('auto_switch')['value'];
         $button_auth['tower_light_switch'] = $this->OperationModel->GetConfigValue('tower_light_switch')['value'];
         $button_auth['buzzer_switch'] = $this->OperationModel->GetConfigValue('buzzer_switch')['value'];
+        $button_auth['language_setting'] = $this->OperationModel->GetConfigValue('language_setting')['value'];
+        $button_auth['count_method_setting'] = $this->OperationModel->GetConfigValue('count_method_setting')['value'];
         $button_auth['role_checked'] = explode(",",$button_auth['role_checked']);//轉換成array 方便用in_array判斷
+
+
+        //語言切換 
+        $language = array('zh-cn' => '简中', 'zh-tw' => '繁中', 'en-us' => 'English', 'vi-vn' => 'Tiếng Việt');
+
+        //計數模式
+        $count_method = array('0' => 'Inc', '1' => 'Dec');
 
         $data = [
             'isMobile' => $isMobile,
             'nav' => $nav,
             'all_roles' => $all_roles,
             'button_auth' => $button_auth,
+            'language_setting' => $language,
+            'count_method' => $count_method,
         ];
         
    
@@ -328,6 +339,23 @@ class Settings extends Controller
 
 
     }
+
+
+    public function System_Setting()
+    {
+        $error_message = '';
+
+        $this->OperationModel->SetConfigValue('language_setting',$_POST['language_setting']);
+        $this->OperationModel->SetConfigValue('count_method_setting',$_POST['count_method_setting']);
+        //count_method_setting
+        $_SESSION['language'] = $_POST['language_setting'];
+        echo json_encode(array('error' => $error_message));
+
+        exit();
+
+
+    }
+
 
     
 }

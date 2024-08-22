@@ -386,6 +386,8 @@ $text['Upload_progress_text'] = '上傳進度';
 //setting
 $text['Operation_Setting_text'] = '操作設定';
 $text['System_Setting_text'] = '系統設定';
+$text['Import/Export_Setting_text'] = '匯入/匯出設定';
+$text['Counting_Method_text'] = '計數模式';
 $text['Manager_Verify_text'] = '管理員驗證';
 $text['Skip_Button_Access_text'] = '跳過工序';
 $text['Back_Button_Access_text'] = '返回工序';
@@ -400,6 +402,8 @@ $text['Import_specific_JOB_data_text'] = '匯入特定工作數據';
 $text['Import_data_text'] = '匯入數據';
 $text['iAMS_Update_text'] = 'iAMS 更新';
 $text['Blackout_Recovery_text'] = '斷電恢復';
+$text['Dec'] = '倒數';
+$text['Inc'] = '正數';
 
 
 //user

@@ -1,11 +1,6 @@
 <?php require APPROOT . 'views/inc/header.tpl'; ?>
-
-
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/setting.css" type="text/css">
-
 <?php echo $data['nav']; ?>
-
-
 <div class="container-ms">
 
     <header>
@@ -91,9 +86,18 @@
                 <div class="navbutton active" onclick="handleButtonClick(this, 'operation')">
                     <span data-content="<?php echo $text['Operation_Setting_text']; ?>" onclick="showContent('operation')"></span><?php echo $text['Operation_Setting_text']; ?>
                 </div>
+
                 <div class="navbutton" onclick="handleButtonClick(this, 'system_setting')">
-                    <span data-content="<?php echo $text['System_Setting_text']; ?>" onclick="showContent('system_setting')"></span><?php echo $text['System_Setting_text']; ?>
+                    <span data-content="<?php echo $text['System_Setting_text']; ?>" onclick="showContent('system_setting')"></span><?php echo $text['Import/Export_Setting_text']; ?>
                 </div>
+
+                <div class="navbutton" onclick="handleButtonClick(this, 'import_export_setting')">
+                    <span data-content="<?php echo $text['Import/Export_Setting_text']; ?>" onclick="showContent('import_export_setting')"></span><?php echo $text['Import/Export_Setting_text']; ?>
+                </div>
+
+               
+                
+                
             </div>
 
             <!-- System Operation -->
@@ -104,7 +108,6 @@
 
                         <?php foreach ($data['all_roles'] as $key => $value) {
                             echo '<div class="t2 form-check form-check-inline" style="margin-left: -5px">';
-                            // echo '<input class="form-check-input" type="checkbox" name="manager_role" id="Leader'.$key.'" value="'.$value['ID'].'" style="zoom:1.1; vertical-align: middle;">';
                             if (in_array($value['ID'], $data['button_auth']['role_checked'])) {
                                 echo '<input class="form-check-input" type="checkbox" name="manager_role" id="Leader'.$key.'" value="'.$value['ID'].'" style="zoom:1.1; vertical-align: middle;" checked>';
                             }else{
@@ -189,10 +192,51 @@
                     <button class="saveButton" onclick="save_manager_verify()"><?php echo $text['Save_text']; ?></button>
                 </div>
             </div>
-
-            <!-- Seytem Setting -->
+            
+            <!-- system Setting -->
             <div id="system_settingContent" class="content" style="display: none">
                 <div id="System_Setting" style="margin-top: 40px">
+
+                    <div class="t1">
+                        <div class="col-2 t2" style="font-weight: bold;margin-top: 15px"><?php echo $text['select_language_text']; ?>:</div>
+
+                        <?php foreach ($data['language_setting'] as $key => $value) {
+                            echo '<div class="t2 form-check form-check-inline" style="margin-left: -5px">';
+                
+                            if($key == $data['button_auth']['language_setting']){
+                                echo '<input class="form-check-input" type="radio" name="language_setting" id="Leader'.$key.'" value="'.$key.'" style="zoom:1.1; vertical-align: middle;" checked>';
+                            }else{
+                                echo '<input class="form-check-input" type="radio" name="language_setting" id="Leader'.$key.'" value="'.$key.'" style="zoom:1.1; vertical-align: middle">';
+                            }
+
+                            echo '<label class="form-check-label" for="Leader'.$key.'">'.$value.'</label>';
+                            echo '</div>';
+                        }?>
+                    </div>
+
+                    <div class="t1">
+                        <div class="col-2 t2" style="font-weight: bold;margin-top: 15px"><?php echo $text['Counting_Method_text']; ?>:</div>
+
+                        <?php foreach ($data['count_method'] as $key => $value) {
+                            echo '<div class="t2 form-check form-check-inline" style="margin-left: -5px">';
+                            
+                            if($key == $data['button_auth']['count_method_setting']){
+                                echo '<input class="form-check-input" type="radio" name="count_method_setting" id="Leader'.$key.'" value="'.$key.'" style="zoom:1.1; vertical-align: middle;" checked>';
+                            }else{
+                                echo '<input class="form-check-input" type="radio" name="count_method_setting" id="Leader'.$key.'" value="'.$key.'" style="zoom:1.1; vertical-align: middle">';
+                            }
+                            echo '<label class="form-check-label" for="Leader'.$key.'">'.$text[$value].'</label>';
+                            echo '</div>';
+                        }?>
+                    </div>
+            
+                    <button class="saveButton" onclick="save_manager_verify_system()"><?php echo $text['Save_text']; ?></button>
+                </div>
+            </div>
+
+            <!-- import_export Setting -->
+            <div id="import_export_settingContent" class="content" style="display: none">
+                <div id="import_export_setting" style="margin-top: 40px">
                 <div style="width: 95%">
                     <div class="row t1">
                         <div class="col-3 t1" style="padding-left: 3%;margin-top: 15px"><?php echo $text['Current_iAMS_version_text']; ?>:</div>
@@ -270,6 +314,10 @@
                     <button class="saveButton" id="saveButton"><?php echo $text['Save_text']; ?></button>
                 </div>
             </div>
+
+
+
+         
         </div>
     </div>
 <script>
@@ -365,6 +413,41 @@ function handleButtonClick(button, content)
 
     }
 
+    function save_manager_verify_system(argument) {
+
+        let list_language = document.querySelectorAll("input[name='language_setting']:checked");
+        let language_checked = '';
+        for (var i = 0; i < list_language.length; i++) {
+            language_checked += list_language[i].value + ','
+        }
+        language_checked = language_checked.slice(0, -1);
+
+        let list_count_method = document.querySelectorAll("input[name='count_method_setting']:checked");
+        let count_method_checked = '';
+        for (var i = 0; i < list_count_method.length; i++) {
+            count_method_checked += list_count_method[i].value + ','
+        }
+        countmethod_checked = count_method_checked.slice(0, -1);
+
+         $.ajax({
+            type: "POST",
+            data: {
+                'language_setting': language_checked,
+                'count_method_setting': countmethod_checked
+            },
+            dataType: "json",
+            url: "?url=Settings/System_Setting",
+        }).done(function(notice) { 
+            if (notice.error != '') {} else {
+                Swal.fire('Saved!', '', 'success');
+                // window.location = window.location.href;
+                history.go(0);
+            }
+        }).fail(function() {
+            // history.go(0);
+        });
+
+    }
 
 </script>
 </div>

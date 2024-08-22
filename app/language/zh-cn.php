@@ -363,6 +363,8 @@ $text['Upload_progress_text'] = '上传进度';
 //setting
 $text['Operation_Setting_text'] = '操作设置';
 $text['System_Setting_text'] = '系统设置';
+$text['Import/Export_Setting_text'] = '导入/导出设置';
+$text['Counting_Method_text'] = '计数模式';
 $text['Manager_Verify_text'] = '管理员验证';
 $text['Skip_Button_Access_text'] = '跳过工序';
 $text['Back_Button_Access_text'] = '返回工序';
@@ -377,6 +379,8 @@ $text['Import_specific_JOB_data_text'] = '导入特定工作数据';
 $text['Import_data_text'] = '导入数据';
 $text['iAMS_Update_text'] = 'iAMS 更新';
 $text['Blackout_Recovery_text'] = '断电恢复';
+$text['Dec'] = '倒数';
+$text['Inc'] = '正数';
 
 //user
 $text['Member_List_text'] = '会员列表';

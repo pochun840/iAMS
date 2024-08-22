@@ -364,6 +364,10 @@ $text['Upload_progress_text'] = 'Upload progress';
 //setting
 $text['Operation_Setting_text'] = 'Operation Setting';
 $text['System_Setting_text'] = 'System Setting';
+$text['Import/Export_Setting_text'] = 'Import/Export_Setting';
+$text['Counting_Method_text'] = 'Counting_Method';
+$text['Dec'] = 'Dec';
+$text['Inc'] = 'Inc';
 $text['Manager_Verify_text'] = 'Manager Verify';
 $text['Skip_Button_Access_text'] = 'Sequence Skip';
 $text['Back_Button_Access_text'] = 'Sequence Back';
@@ -378,6 +382,7 @@ $text['Import_specific_JOB_data_text'] = 'Import specific JOB data';
 $text['Import_data_text'] = 'Import data';
 $text['iAMS_Update_text'] = 'iAMS Update';
 $text['Blackout_Recovery_text'] = 'Blackout Recovery';
+
 
 //user
 $text['Member_List_text'] = 'Member List';
