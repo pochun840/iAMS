@@ -58,6 +58,8 @@ class Operations extends Controller
                 $temp[$vv['task_id']]= $task_message_list[$jj];
             }
 
+        }else{
+            $task_message_list = '';
         }
         
         //get total seq
@@ -69,8 +71,6 @@ class Operations extends Controller
             $total_seq_count = 0;
         }
         
-
-
         $job_list = $this->ProductModel->getJobs();
         //預處理task_list
         foreach ($task_list as $key => $value) {
@@ -185,6 +185,7 @@ class Operations extends Controller
             'seq_count' => $total_seq_count,
             'new_seq_list' => $temp_seq,
             'last_sn' => $last_sn,
+            'task_message_list' => $task_message_list
             
         ];
         
@@ -522,7 +523,7 @@ class Operations extends Controller
             $input_check = false;
         }
         
-        var_dump($_GET);die();
+        //var_dump($_GET);die();
         if($input_check){
             $system_no = $this->OperationModel->update_type($system_no,$new_status);
         }

@@ -790,7 +790,7 @@ function initail() {
     document.getElementById('low_torque').value = '<?php echo  $data['task_list'][0]['last_step_lowtorque']; ?>';
     document.getElementById('target_angle').innerHTML = '<?php echo  $data['task_list'][0]['last_step_targetangle']; ?>';
     document.getElementById('high_angle').value = '<?php echo  $data['task_list'][0]['last_step_highangle']; ?>';
-    document.getElementById('low_angle').value = '<?php echo  $data['task_list'][0]['last_step_lowangle']; ?>';
+    document.getElementById('low_angle').value = '<?php echo  $data['task_list'][0]['last_step_lowangle']; ?>'; 
     // document.getElementById('screw_info_div').value = '';
     document.getElementById('screw_info').innerHTML = ' - / ' + document.getElementById('stop_on_ng').value;
     // document.getElementById('arm_div').value = '';
@@ -2061,7 +2061,6 @@ function setCookie(name, value, days) {
 
 function update_status(system_no, new_status) {
 
-    aler('eeeeeeeeeee');
     $.ajax({
         url: '?url=Operations/update_status', // 确保这个 URL 与后端匹配
         method: "POST",
