@@ -51,7 +51,7 @@ class Operations extends Controller
         $task_program = $this->TaskModel->GetTaskProgram($current_job_id['value'],$current_seq_id['value'],$current_task_id['value']);//調整
         $task_list = $this->TaskModel->getTasks($current_job_id['value'],$current_seq_id['value']);
         //task_message
-        $task_message_list = $this->OperationModel->Get_task_message($current_job_id,$current_seq_id);
+        $task_message_list = $this->OperationModel->Get_task_message($current_job_id,$current_seq_id,$current_task_id);
         if(!empty($task_message_list)){
             $temp =array();
             foreach($task_message_list  as $jj => $vv){
@@ -124,6 +124,9 @@ class Operations extends Controller
         $button_auth['switch_job'] = $this->OperationModel->GetConfigValue('auth_job_change')['value'];
         $button_auth['switch_seq'] = $this->OperationModel->GetConfigValue('auth_seq_change')['value'];
         $button_auth['stop_on_ng'] = $this->OperationModel->GetConfigValue('stop_on_ng')['value'];
+        $button_auth['auto_switch'] = $this->OperationModel->GetConfigValue('auto_switch')['value'];
+        $button_auth['tower_light_switch'] = $this->OperationModel->GetConfigValue('tower_light_switch')['value'];
+        $button_auth['buzzer_switch'] = $this->OperationModel->GetConfigValue('buzzer_switch')['value'];
         $button_auth['role_checked'] = $this->OperationModel->GetConfigValue('manger_verify')['value'];
         $button_auth['role_checked'] = explode(",",$button_auth['role_checked']);//轉換成array 方便用in_array判斷
         // var_dump($button_auth);
@@ -192,7 +195,6 @@ class Operations extends Controller
         if (!empty($temp)) {
             $data['task_message_list'] = $temp;
         }
-        
         
         $this->view('operation/index', $data);
 

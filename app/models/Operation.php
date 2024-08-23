@@ -267,13 +267,13 @@ class Operation{
     }
 
 
-
-    public function Get_task_message($current_job_id, $current_seq_id) {
+    public function Get_task_message($current_job_id, $current_seq_id,$current_task_id) {
         
-        $sql = "SELECT * FROM task_message WHERE job_id = :job_id AND seq_id = :seq_id  ";
+        $sql = "SELECT * FROM task_message WHERE job_id = :job_id AND seq_id = :seq_id  AND task_id = :task_id ";
         $statement = $this->db->prepare($sql);
         $statement->bindValue(':job_id', $current_job_id['value'], PDO::PARAM_INT);
         $statement->bindValue(':seq_id', $current_seq_id['value'], PDO::PARAM_INT);
+        $statement->bindValue(':task_id', $current_task_id['value'], PDO::PARAM_INT);
         
         if ($statement->execute()) {
             $results = $statement->fetchAll(PDO::FETCH_ASSOC);
