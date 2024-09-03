@@ -482,7 +482,7 @@ addMessage();
             let user_employee_number = document.getElementById('employee-number').value;
             let user_role = document.getElementById('user-role').value;
 
-            if (user_name == '' || user_account == '' || user_password == '' || user_employee_number == '' || user_role == '-1' ) {
+            if (user_name == '' || user_account == '' || user_password == '' ||  user_role == '-1' ) {
                 return false;
             }else{
                 return true;
@@ -494,7 +494,7 @@ addMessage();
             let user_employee_number = document.getElementById('employee-number').value;
             let user_role = document.getElementById('user-role').value;
 
-            if (user_name == '' || user_account == '' || user_employee_number == '' || user_role == '-1' ) {
+            if (user_name == '' || user_account == '' || user_role == '-1' ) {
                 return false;
             }else{
                 return true;
