@@ -441,7 +441,7 @@ if(!empty($_COOKIE['chat_mode_change'])){
                                 <?php echo $text['Chart_Setting_text']; ?>:  
                                 <select id="chartseting" class="t6 Select-All" style="float: none"  onchange="chat_mode_change(this)">
                                     <?php foreach($data['chat_mode_arr'] as $k_chat => $v_chat){?>
-                                        <option  value="<?php echo $k_chat;?>"  <?php if($chat_mode_change == $k_chat){echo "selected";}else{echo "";}?>  > <?php echo $v_chat;?> </option>
+                                        <option  value="<?php echo $k_chat;?>"  <?php if($chat_mode_change == $k_chat){echo "selected";}else{echo "";}?>  > <?php echo $text[$v_chat];?> </option>
                                     <?php } ?>                             
                                 </select>
                             </td>
@@ -449,7 +449,7 @@ if(!empty($_COOKIE['chat_mode_change'])){
                                 <?php echo $text['Torque_Unit_text']; ?>:  
                                 <select id="Torque-Unit" class="Select-All" style="float: none; width: 100px" onchange="unit_change(this)">
                                     <?php foreach($data['torque_mode_arr'] as $k_torque =>$v_torque){?>
-                                            <option  value="<?php echo $k_torque;?>" <?php if($data['unitvalue'] == $k_torque){echo "selected";}else{echo "";}?> > <?php echo $v_torque; ?> </option>
+                                            <option  value="<?php echo $k_torque;?>" <?php if($data['unitvalue'] == $k_torque){echo "selected";}else{echo "";}?> > <?php echo $text[$v_torque]; ?> </option>
                                     <?php } ?>
                                 </select>
                             </td>

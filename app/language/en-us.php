@@ -437,8 +437,23 @@ $text['unit_status_0'] = 'Kgf-m';
 $text['unit_status_1'] = 'N-m';
 $text['unit_status_2'] = 'Kgf-cm';
 $text['unit_status_3'] = 'In-lbs';
-//------------------------------------------------ -------------------------------------------------- ------------
 
+$text['Kgf.m'] = 'Kgf-m';
+$text['N.m'] = 'N-m';
+$text['Kgf.cm'] = 'Kgf-cm';
+$text['In.lbs'] = 'In-lbs';
+
+//------------------------------------------------ -------------------------------------------------- ------------
+//----------------------------------------------------------------------------------------------------------------
+//圖表單位
+$text['Torque/Time(MS)'] = 'Torque/Time';
+$text['Angle/Time(MS)'] = 'Angle/Time';
+$text['RPM/Time(MS)'] = 'RPM/Time';
+$text['Power/Time(MS)'] = 'Power/Time';
+$text['Torque/Angle'] = 'Torque/Angle';
+$text['Torque&Angle/Time(MS)'] = 'Torque&Angle/Time';
+
+//------------------------------------------------ -------------------------------------------------- ------------
 
 //error message
 $error_message = array();
