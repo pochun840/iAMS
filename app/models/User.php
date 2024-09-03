@@ -146,6 +146,20 @@ class User{
         return $row;
     }
 
+    public function GetUserByName($user_account)
+    {
+        $sql = "SELECT users.*, RoleID,cc_roles.Title FROM `users`
+                LEFT JOIN cc_userroles ur ON users.id = ur.UserID
+                LEFT JOIN cc_roles ON ur.RoleID = cc_roles.ID
+                WHERE users.account = :user_account";
+        $statement = $this->db->prepare($sql);
+        $statement->bindValue(':user_account', $user_account);
+        $statement->execute();
+        $row = $statement->fetch(PDO::FETCH_ASSOC);
+
+        return $row;
+    }
+
     public function check_job_event_conflict($job_id,$event_id)
     {
         $sql = "SELECT count(*) as count FROM input WHERE input_jobid = ? AND input_event = ?";

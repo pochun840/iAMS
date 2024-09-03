@@ -179,19 +179,19 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="user-name" class="col-4 t1"><?php echo $text['Name_text']; ?> :</div>
+                            <div for="user-name" class="col-4 t1"> <p class="red-text"><?php echo $text['Name_text']; ?> :</p></div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="user-name" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="account" class="col-4 t1"><?php echo $text['account_text']; ?> :</div>
+                            <div for="account" class="col-4 t1"><p class="red-text"><?php echo $text['account_text']; ?> :</p></div>
                             <div class="col-4 t2" >
                                 <input type="text" class="form-control input-ms" id="user-account" maxlength="12" required>
                             </div>
                         </div>
                         <div class="row">
-                            <div for="user-password" class="col-4 t1"><?php echo $text['password_text']; ?> :</div>
+                            <div for="user-password" class="col-4 t1"><p class="red-text"><?php echo $text['password_text']; ?> :</p></div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="user-password" maxlength="12" required>
                             </div>
@@ -209,7 +209,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="authority" class="col-4 t1"><?php echo $text['Authority_text']; ?> :</div>
+                            <div for="authority" class="col-4 t1"><p class="red-text"><?php echo $text['Authority_text']; ?> :</p></div>
                             <div class="col t2">
                                 <select id="user-role" style="width: 169px">
                					    <option value="-1" disabled selected><?php echo $text['Choose_text']; ?></option>
@@ -574,3 +574,8 @@ addMessage();
 
 
 <?php require APPROOT . 'views/inc/footer.tpl'; ?>
+<style>
+    .red-text {
+        color: red;
+    }
+</style>

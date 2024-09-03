@@ -13,6 +13,7 @@ class Historicals extends Controller
         $this->NavsController = $this->controller_new('Navs');
         $this->UserModel = $this->model('User');
         $this->Historicals_newModel = $this->model('Historical');
+        $this->NavModel = $this->model('Nav');
     }
 
     public function index($page)
@@ -44,8 +45,9 @@ class Historicals extends Controller
 
         $res_program = $this->Historicals_newModel->details('program');
 
-
-
+        #取得該帳號的權限
+        $account = $_SESSION['user'];
+        $user_permissions =  $this->UserModel->GetUserByName($account);
 
         #取得所有的job_id
         $job_arr = $this->Historicals_newModel->get_job_id();
@@ -65,7 +67,8 @@ class Historicals extends Controller
             'torque_arr' => $torque_arr,
             'status_arr' => $status_arr,
             'job_arr' => $job_arr,
-            'path' => __FUNCTION__
+            'path' => __FUNCTION__,
+            'user_role_title' => $user_permissions['Title']
         ];
 
         $this->view('historicals/index', $data);
@@ -125,7 +128,7 @@ class Historicals extends Controller
                 $info_data .= "<td>".$v['fasten_angle']." deg </td>";
                 $info_data .= "<td style='".$style."'>". $status_arr['status_type'][$v['fasten_status']]."</td>";
                 $info_data .= "<td>".$status_arr['error_msg'][$v['error_message']]."</td>";
-                $info_data .= "<td></td>";
+                $info_data .= "<td>".$v['cc_program_id']."</td>";
                 $info_data .= "<td><a href=\" ?url=Historicals/nextinfo/".$v['system_sn']." \"><img src=\"./img/info-30.png\" style=\"height: 28px; vertical-align: middle;\" ></a></td>";
         
                 $info_data .="</tr>";
