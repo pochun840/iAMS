@@ -385,6 +385,32 @@ class Templates extends Controller
         exit();
     }
 
+
+    public function edit_gtcs_adv_program(){
+
+        $input_check = true;
+        $res = 'fail';
+        $error_message = '';     
+
+        if( !empty($_POST['program_id']) && isset($_POST['program_id'])  ){
+            $data['program_id'] = $_POST['program_id'];
+        }else{ 
+            $input_check = false; 
+            $error_message .= "program_id,";
+        }
+        if( !empty($_POST['program_name']) && isset($_POST['program_name'])  ){
+            $data['program_name'] = $_POST['program_name'];
+        }else{ 
+            $input_check = false; 
+            $error_message .= "program_name,";
+        }
+
+        if($input_check){
+            $this->TemplateModel->EditProgram_Advanced_Name($data);
+        }
+
+    }
+
     public function create_gtcs_adv_program()
     {
         $input_check = true;
@@ -758,23 +784,10 @@ class Templates extends Controller
         }
 
         
-     
-    
         //用 program_id 從 gtcs_normalstep_template or gtcs_advancedstep_template 取出資料
         $temp_data = $this->TemplateModel->search_data($program_id,$table); //4 
         $temp = $this->TemplateModel->search_data_info($program_id); // 2
 
-
-        echo "<pre>";
-        print_r($temp_data);
-        echo "</pre>";
-
-        echo "<pre>";
-        print_r($temp);
-        echo "</pre>";
-
-      
-  
         if(!empty($temp)){
 
             if ($table_url == "advancedstep") {

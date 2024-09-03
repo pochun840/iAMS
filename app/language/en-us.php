@@ -222,6 +222,7 @@ $text['Sync_Program_text']  = 'Update';
 $text['Parameter_text'] = 'Parameter';
 $text['Target_Type_text'] = 'Target Type';
 $text['New_Program_text'] = 'New Program';
+$text['Edit_Program_text'] = 'Edit Program';
 $text['Max_Torque_text'] = 'Max Torque';
 $text['Target_Torque_text'] = 'Target Torque';
 $text['Joint_Offset_text'] = 'Joint Offset';

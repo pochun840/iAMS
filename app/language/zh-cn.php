@@ -220,6 +220,8 @@ $text['Sync_Program_text'] = '更新';
 $text['Parameter_text'] = '参数';
 $text['Target_Type_text'] = '目标类型';
 $text['New_Program_text'] = '添加組別';
+$text['Edit_Program_text'] = '编辑組別';
+//编辑
 $text['Max_Torque_text'] = '最大扭力';
 $text['Target_Torque_text'] = '目标扭力';
 $text['Joint_Offset_text'] = '扭力补偿值';

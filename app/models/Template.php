@@ -256,6 +256,23 @@ class Template{
       
     }
 
+    public function EditProgram_Advanced_Name($data){
+        if( $this->CheckProgramExist($data['program_id'])){
+            $sql = "UPDATE `gtcs_advancedstep_template` 
+            SET template_program_name = :template_program_name
+            WHERE template_program_id = :template_program_id";
+
+            $statement = $this->db->prepare($sql);
+            $statement->bindValue(':template_program_id', $data['program_id']);
+            $statement->bindValue(':template_program_name', $data['program_name']);
+            $results = $statement->execute();
+
+
+        } 
+        
+        return $results;
+    }
+
     public function EditProgram_Advanced($data)
     {
         if( $this->CheckProgramExist($data['program_id']) ){ //已存在，用update

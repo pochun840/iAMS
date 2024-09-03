@@ -120,6 +120,10 @@
                         <img id="img-add" src="./img/add-program.svg" alt=""><?php echo $text['Add_Program_text']; ?>
                     </button>
 
+                    <button id="add-program" type="button" onclick="edit_program()">
+                        <img id="img-add" src="./img/edit.svg" alt=""><?php echo $text['Edit_text']; ?>
+                    </button>
+
                     <button id="copy-program" type="button" onclick="copy_program_div()">
                         <img id="img-copy" src="./img/program-copy.svg" alt=""><?php echo $text['Copy_text']; ?>
                     </button>
@@ -232,6 +236,49 @@
             </div>
         </div>
     </div>
+
+    <!-- edit Program -->
+     <div id="ProgramEdit" class="modal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content w3-animate-zoom" style="width:100%;">
+                <header class="w3-container modal-header">
+                    <span onclick="document.getElementById('ProgramEdit').style.display='none'"
+                    class="w3-button w3-red w3-xxlarge w3-display-topright" style="padding: 7px; width: 60px">&times;</span>
+                    <h3 id="modal_head"><?php echo $text['Edit_Program_text']; ?></h3>
+                </header>
+
+                <div class="modal-body">
+                    <form id="new_program_form">
+                        <div id="Torque_Parameter" style="display: block">
+                            <div class="scrollbar-modal" id="style-y">
+                                <div class="modal-force-overflow">
+                                    <div style="padding-left: 5%; height: 300px">
+                                        <div class="row t1">
+                                            <div class="col-5 t1" for=""><?php echo $text['Program_ID_text']; ?> :</div>
+                                            <div class="col-5 t2">
+                                                <input type="text" id="edit_program-id" class="form-control input-ms" value="1" maxlength="" disabled="disabled">
+                                            </div>
+                                        </div>
+                                        <div class="row t1">
+                                            <div class="col-5 t1" for=""><?php echo $text['Program_Name_text']; ?> :</div>
+                                            <div class="col-5 t2">
+                                                <input type="text" id="edit_program-name" class="form-control input-ms" value="Program-1" maxlength="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button id="button1" class="button button3" onclick="edit_advance_template()"><?php echo $text['Save_text']; ?></button>
+                    <button id="button2" class="button button3" onclick="document.getElementById('ProgramEdit').style.display='none'" class="cancelbtn"><?php echo $text['Cancel_text']; ?></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 
     <!-- Program Copy Modal -->
     <div id="CopyProgram" class="modal">
@@ -376,6 +423,28 @@ function highlight_row() {
 
     }
 
+
+    function edit_program(){
+
+        let rowSelected = document.getElementsByClassName('selected');
+        if (rowSelected.length != 0) {
+
+            let pro_id = rowSelected[0].childNodes[1].innerHTML;
+            let pro_name = rowSelected[0].childNodes[2].innerHTML;
+
+            document.getElementById("edit_program-id").value = pro_id;
+
+            document.getElementById("edit_program-name").value = pro_name;
+
+            document.getElementById('modal_head').innerHTML = '<?php echo $text['Edit_Program_text']; ?>'; //'Edit Program'
+            document.getElementById('ProgramEdit').style.display = 'block';
+        }
+
+        
+
+        document.getElementById('ProgramEdit').style.display = 'block';
+    }
+
     function create_advance_template(argument) {
         let program_id = document.getElementById("program-id").value;
         let program_name = document.getElementById("program-name").value;
@@ -391,6 +460,28 @@ function highlight_row() {
             console.log(data);
             history.go(0)
         });
+    }
+
+
+    
+    function edit_advance_template() {
+
+        let program_id = document.getElementById("edit_program-id").value;
+        let program_name = document.getElementById("edit_program-name").value;
+
+        $.ajax({
+            type: "POST",
+            url: "?url=Templates/edit_gtcs_adv_program",
+            data: {'program_id':program_id, 'program_name':program_name},
+            dataType: "json",
+        }).done(function(data) { //成功且有回傳值才會執行
+            // program_id = data['missing_id'];
+            //console.log(data);
+            history.go(0);
+             document.getElementById('ProgramEdit').style.display = 'none';
+        });
+        document.getElementById('ProgramEdit').style.display = 'none';
+        history.go(0);
     }
 
     function copy_program_div() {
