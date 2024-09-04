@@ -27,8 +27,6 @@ class Users extends Controller
             'permission_list' => $permission_list,
             'all_roles' => $all_roles,
         ];
-
-        // var_dump($all_roles);
         
         $this->view('user/index', $data);
 
