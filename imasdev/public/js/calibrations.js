@@ -185,31 +185,6 @@ function JobCheckbox()
     checked_jobid.forEach(function(checkbox) {
         checkedjobidarr.push(checkbox.value);
     });
-
-    //checkedjobidarr 不等於空值 要取得對應的seq_id
-    if(checkedjobidarr != '' ) {
-        $.ajax({
-            type: "POST",
-            data: {job_id: checkedjobidarr},
-            url: '?url=Calibrations/get_correspond_val',
-            success: function(response) {
-                if (response.trim() === '') {
-                    alert('查無資料');
-                    window.location.href = '?url=Calibrations';
-
-                } else {
-                    var seqListElement = document.getElementById('Seq-list');
-                    seqListElement.style.display = 'block';
-                    document.getElementById("Seq-list").innerHTML = response;
-                }
-            },
-            error: function(error) {
-            }
-        }).fail(function () {
-        });
-
-    }
-
 }
 
 function JobCheckbox_seq(){

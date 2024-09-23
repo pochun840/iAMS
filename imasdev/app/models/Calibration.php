@@ -123,7 +123,7 @@ class Calibration{
     }
 
 
-    public function meter_info(){
+    public function meter_info($job_id){
 
         $temp = array();
 
@@ -136,7 +136,7 @@ class Calibration{
                 (SELECT SUM(torque) FROM calibrations) AS total_torque,
                 *
             FROM
-                calibrations
+                calibrations WHERE job_id ='".$job_id."'
             ORDER BY
                 id ASC;
             ";
@@ -149,9 +149,9 @@ class Calibration{
 
         $temp['hi_limit_torque'] = $a + $b;
         $temp['low_limit_torque'] = $a - $b;
-        $temp['max_torque'] = $result[0]['max_torque'];
-        $temp['min_torque'] = $result[0]['min_torque'];
-        $temp['avg_torque'] = $result[0]['avg_torque'];
+        $temp['max_torque'] = $result[0]['max_torque'] ?? null; 
+        $temp['min_torque'] = $result[0]['min_torque'] ?? null; 
+        $temp['avg_torque'] = $result[0]['avg_torque'] ?? null; 
 
         return  $result;
 

@@ -440,38 +440,18 @@
         <div class="modal-lg" style="padding-left: 5%">
             <div class="lmodal-content" style="top: 140px; width: 670px;">
                 <span class="lclose-btn" onclick="closeModal_job()">&times;</span>
-                <span class="lclose-btn" onclick="closeModal_job()">&times;</span>
-                <span class="lclose-btn" onclick="closeModal_job()">&times;</span>
                 <div class="lmodal-column modalselect">
                     <h4>Job</h4>
                     <div class="scrollbar-jobselect" id="style-jobselect">
                         <div class="force-overflow-jobselect">
                              <?php foreach($data['job_arr'] as $k_job =>$v_job){?>
-                            <div class="row t1"  style="padding-left: 5%">
-                                <div class="col t2 form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="jobid" id="jobid" value="<?php echo $v_job['job_id'];?>" onclick="JobCheckbox()" style="zoom:1.0; vertical-align: middle;">&nbsp;
-                                    <label class="form-check-label" for="jobid"><?php echo $v_job['job_name'];?></label>
+                                <div class="row t1" style="padding-left: 5%">
+                                    <div class="col t2 form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" name="jobid" id="jobid_<?php echo $v_job['job_id'];?>" value="<?php echo $v_job['job_id'];?>" onclick="selectSingle(this)">
+                                        <label class="form-check-label" for="jobid_<?php echo $v_job['job_id'];?>"><?php echo $v_job['job_name'];?></label>
+                                    </div>
                                 </div>
-                            </div>
                             <?php }?>
-                        </div>
-                    </div>
-                </div>
-                <div class="lmodal-column modalselect">
-                    <h4>Sequence</h4>
-                    <div class="scrollbar-jobselect" id="style-jobselect">
-                        <div class="force-overflow-jobselect">
-                            <div id="Seq-list" style="display: none">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="lmodal-column modalselect">
-                    <h4>Task</h4>
-                    <div class="scrollbar-jobselect" id="style-jobselect">
-                        <div class="force-overflow-jobselect">
-                            <div id="Task-list" style="display: none">
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -533,30 +513,51 @@ function submit_check() {
     var job_id = "<?php echo $_COOKIE['job_id'] ?? '' ?>"; 
     var job_name = "<?php echo $_COOKIE['job_name'] ?? '' ?>"; 
 
-    // 將作業 ID 和名稱設置到對應的 input 欄位中
-    document.getElementById("job-id").value = job_id;
-    document.getElementById("job-name").value = job_name;
 
-    if (job_id) {
-        $.ajax({
-            url: "?url=Calibrations/get_data",
-            method: "POST",
-            data: {
-                job_id: job_id 
-            },
-            success: function(response) {
-                document.getElementById("datainfo").innerHTML = response;
-                document.getElementById("get_joball").style.display = "none";
-                document.getElementById("chart_block").style.display = "block";
-                document.getElementById("item_data").style.display = "block";
-            },
-            error: function(xhr, status, error) {
-                //console.error("Ajax request error:", error); 
-            }
-        });
+
+    const selectedJob = document.querySelector('input[name="jobid"]:checked');
+
+    if (selectedJob) {
+        const jobId = selectedJob.value; 
+        const jobName = selectedJob.nextElementSibling.innerText; 
+
+        job_id = jobId;
+        job_name = jobName;
+
+
+        document.getElementById('job-id').value = job_id;
+        document.getElementById('job-name').value = job_name; 
+
+        updateCookie('job_id', job_id, 7); 
+        updateCookie('job_name', job_name, 7); 
+        
+    
+        if (job_id) {
+            $.ajax({
+                url: "?url=Calibrations/get_data",
+                method: "POST",
+                data: {
+                    job_id: job_id 
+                },
+                success: function(response) {
+                    document.getElementById("datainfo").innerHTML = response;
+                    document.getElementById("get_joball").style.display = "none";
+                    document.getElementById("chart_block").style.display = "block";
+                    document.getElementById("item_data").style.display = "block";
+                },
+                error: function(xhr, status, error) {
+                    //console.error("Ajax request error:", error); 
+                }
+            });
+        } else {
+            //console.warn("job_id is empty or undefined.");
+        }
+        
     } else {
-        //console.warn("job_id is empty or undefined.");
+        //console.log("没有选中的工作");
     }
+
+
 }
 
 
@@ -644,6 +645,28 @@ function closeModal_job() {
     document.getElementById("get_joball").style.display = "none";
 
 }
+
+
+function selectSingle(checkbox) {
+    const checkboxes = document.querySelectorAll('input[name="jobid"]');
+
+    checkboxes.forEach((item) => {
+        if (item !== checkbox) {
+            item.checked = false; // 取消其他复选框的选中状态
+        }
+    });
+}
+
+function updateCookie(name, value, days) {
+    let expires = "";
+    if (days) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "") + expires + "; path=/";
+}
+
 </script>
 
 
