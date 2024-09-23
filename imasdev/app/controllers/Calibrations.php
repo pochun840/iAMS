@@ -13,6 +13,7 @@ class Calibrations extends Controller
         $this->NavsController = $this->controller_new('Navs');
         $this->UserModel = $this->model('User');
         $this->CalibrationModel = $this->model('Calibration');
+        $this->EquipmentModel = $this->model('Equipment');
     }
 
     // 取得所有Jobs
@@ -420,6 +421,66 @@ class Calibrations extends Controller
             }
         }
     }
+
+    public function Call_Controller_Job()
+    {
+        //get controller ip
+        $controller_ip = $this->EquipmentModel->GetControllerIP(1);
+
+        $input_check = true;
+        $error_message = '';
+        if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
+            $job_id = $_POST['job_id'];
+        }else{ 
+            $input_check = false;
+            $error_message .= "job_id,";
+        }
+
+        if ($input_check) {
+            require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
+            $modbus = new ModbusMaster($controller_ip, "TCP");
+            try {
+                $modbus->port = 502;
+                $modbus->timeout_sec = 10;
+                $data = array($job_id);
+                $dataTypes = array("INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT");
+                
+                // FC 16
+                $test = array(0);
+                $test1 = array(1);
+                //$modbus->writeMultipleRegister(0, 461, $test, $dataTypes);//起子禁用
+                $modbus->writeMultipleRegister(0, 463, $data, $dataTypes);//切換job
+                //$modbus->writeMultipleRegister(0, 461, $test1, $dataTypes);//起子啟用
+                // $this->logMessage('modbus write 506 ,array = '.implode("','", $data));
+                // $this->logMessage('modbus status:'.$modbus->status);
+                // $this->logMessage('Import config end');
+                // echo json_encode(array('error' => ''));
+                echo $modbus->status;
+                exit();
+
+            } catch (Exception $e) {
+                // Print error information if any
+                // echo $modbus;
+                // echo '<br>123';
+                // echo $e;
+                // echo '<br>456';
+                // $this->logMessage('modbus write 506 fail');
+                // $this->logMessage('modbus status:'.$modbus->status);
+                // $this->logMessage('Import config end');
+                // echo json_encode(array('error' => 'modbus error'));
+                echo $modbus->status;
+                exit();
+            }
+        }else{
+            echo json_encode(array('error' => $error_message));
+            exit();
+        }
+
+        echo json_encode($job_detail);
+        exit();
+        
+    }
+
 
 
     private function standard_deviation($torque_array) {

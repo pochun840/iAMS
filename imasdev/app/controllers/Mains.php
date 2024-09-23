@@ -26,6 +26,7 @@ class Mains extends Controller
         $user_permissions =  $this->NavModel->GetPermissionsByUserId($uid);
         $rows = $this->NavModel->GetNav();
 
+        //把當前的語系 寫入db
         if(!empty($_SESSION['language'])){
             $language = $_SESSION['language'];
             $this->OperationModel->SetConfigValue('language_setting',$language);
