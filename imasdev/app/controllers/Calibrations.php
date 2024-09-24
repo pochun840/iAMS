@@ -161,7 +161,11 @@ class Calibrations extends Controller
             try {
                 $modbus->port = 502;
                 $modbus->timeout_sec = 10;
-                $data_targqt_q = array($data['target_q']);
+
+                $data['target_q'] = (int)((float)$data['target_q'] * 100);
+      
+
+                $data_targqt_q = array(0,$data['target_q']);
                 $data_rpm = array($data['rpm']);
                 $data_offset = array($data['joint_offset']);
                 $data_job = array(201);

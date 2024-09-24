@@ -163,7 +163,7 @@ class Calibration{
         if(isset($_COOKIE['job_id'])) {
             $job_id = $_COOKIE['job_id'];  
         }
-
+        $job_id = 201;
         #從資料庫找出最大 最小 平均 扭力 high_percent low_percent
         $sql =" SELECT  MAX(torque) AS max_torque, MIN(torque) AS min_torque,SUM(torque) AS total_torque,(SELECT id FROM calibrations ORDER BY id DESC LIMIT 1) AS latest_id    FROM  calibrations ORDER BY id DESC LIMIT 1 ";
         $statement = $this->db->prepare($sql);
