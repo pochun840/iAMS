@@ -33,10 +33,6 @@ class Calibrations extends Controller
             $echart_data = $this->CalibrationModel->datainfo_search($job_id);
             $meter = $this->val_traffic($job_id);
 
-            // echo "<pre>";
-            // print_r($meter);
-            // echo "</pre>";
-
             if(!empty($echart_data)){
                 #整理圖表所需要的資料
                 $tmp['x_val'] = json_encode(array_column($echart_data, 'id'));
@@ -91,7 +87,30 @@ class Calibrations extends Controller
         } else {
             $input_check = false;
         }
+
+        echo $job_id;
         //$job_id = 8;
+
+        //201 
+        $controller_ip = $this->EquipmentModel->GetControllerIP(1);
+        require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
+        $modbus = new ModbusMaster($controller_ip, "TCP");
+        try {
+            $modbus->port = 502;
+            $modbus->timeout_sec = 10;
+            $data = array($job_id);
+            $dataTypes = array("INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT");
+
+            $modbus->writeMultipleRegister(0, 463, $data, $dataTypes);
+            echo $modbus->status;
+            exit();
+
+        } catch (Exception $e) {
+            echo $modbus->status;
+            exit();
+        }
+
+
         if($input_check){
             $dataset = $this->CalibrationModel->datainfo_search($job_id);
             if(!empty($dataset)){
@@ -125,6 +144,54 @@ class Calibrations extends Controller
         }else {
             echo "Invalid job_id received.";
         }
+
+    }
+
+
+    public function current_save(){
+
+
+        $input = file_get_contents('php://input');
+        $data = json_decode($input, true);
+        if (isset($data['target_q'], $data['rpm'], $data['joint_offset'])) {
+
+            $controller_ip = $this->EquipmentModel->GetControllerIP(1);
+            require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
+            $modbus = new ModbusMaster($controller_ip, "TCP");
+            try {
+                $modbus->port = 502;
+                $modbus->timeout_sec = 10;
+                $data_targqt_q = array($data['target_q']);
+                $data_rpm = array($data['rpm']);
+                $data_offset = array($data['joint_offset']);
+                $data_job = array(201);
+
+                
+
+                $dataTypes = array("INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT");
+
+                $modbus->writeMultipleRegister(0, 890, $data_targqt_q, $dataTypes);
+                $modbus->writeMultipleRegister(0, 895, $data_offset, $dataTypes);
+                $modbus->writeMultipleRegister(0, 901, $data_rpm, $dataTypes);
+                $modbus->writeMultipleRegister(0, 463, $data_job, $dataTypes);
+
+
+
+                echo $modbus->status;
+                exit();
+
+            } catch (Exception $e) {
+                echo $modbus->status;
+                exit();
+            }
+            
+
+        } else {
+          
+        }
+
+
+
 
     }
 
@@ -196,34 +263,6 @@ class Calibrations extends Controller
          #檢查 $_POST['job_id'] 和 $_POST['seq_id'] 是否存在且不為空
          if(isset($_POST['job_id'][0]) && !empty($_POST['job_id'][0])) {
             $job_id = $_POST['job_id'][0];
-
-            #取得對應的seq_id
-            /*if(empty($_POST['seq_id'][0])) {
-                $info_seq = $this->CalibrationModel->get_seq_id($job_id);
-    
-                #組checkbox的seq的html
-                if(!empty($info_seq)){
-                    foreach($info_seq as $k_seq => $v_seq){
-                        echo $this->generatecheckboxhtml($v_seq['seq_id'], $v_seq['seq_name'], 'seqid', 'JobCheckbox_seq');
-                    }
-                }
-            }*/
-    
-            #透過job_id 及 seq_id 取得對應的task_id
-            /*if(isset($_POST['seq_id'][0]) && !empty($_POST['seq_id'][0])) {
-                $seq_id = $_POST['seq_id'][0];
-                $info_task = $this->CalibrationModel->get_task_id($job_id, $seq_id);
-
-                #組checkbox的task的html
-                if(!empty($info_task)){
-                    foreach($info_task as $k_task => $v_task){
-                        echo $this->generatecheckboxhtml($v_task['task_id'], $v_task['task_id'], 'taskid');
-                    }
-                }
-            }*/
-
-          
-             
 
             if(!empty($job_id)){
                 $tmp = $this->CalibrationModel->get_job_name($job_id);
@@ -391,8 +430,9 @@ class Calibrations extends Controller
 
         #echarts
         $echart_data = $this->CalibrationModel->echarts_data();
+        $job_id = 8;
 
-        $meter = $this->val_traffic();
+        $meter = $this->val_traffic($job_id);
 
         if(!empty($echart_data)){
             #整理圖表所需要的資料

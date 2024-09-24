@@ -231,9 +231,9 @@ function JobCheckbox_seq(){
 
 
 //test connect
-function Connect11111() {
+function Connect() {
     $.ajax({
-        url: 'http://192.168.0.161/imas_final/iAMS/iAMS/api/serial_api.php',
+        url: 'http://192.168.0.161/imasdev/api/serial_api.php',
         type: 'GET',
         dataType: 'json',
         success: function(response) {

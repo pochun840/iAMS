@@ -27,3 +27,6 @@ array (
 array (
   'data' => '    +  1.3 kgf*cm',
 )
+array (
+  'data' => '    +  4.5 kgf*cm',
+)

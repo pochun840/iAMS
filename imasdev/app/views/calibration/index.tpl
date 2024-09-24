@@ -224,15 +224,15 @@
                 <div id="column-right-header">
                     <div class="input-group input-group-sm">
                         <span class="input-group-text"><?php echo $text['Target_Q_text'];?>:</span>
-                        <input type="text" class="form-control" style="margin-right: 5px">
+                        <input type="text" id= 'current_tarque'  name='current_tarque' class="form-control" style="margin-right: 5px">
 
                         <span class="input-group-text"><?php echo $text['RPM_text'];?>:</span>
-                        <input type="text" class="form-control" style="margin-right: 5px">
+                        <input type="text" id= 'current_rpm'  name= 'current_rpm'  class="form-control" style="margin-right: 5px">
 
                         <span class="input-group-text"><?php echo $text['Joint_Offset_text'];?>:</span>
-                        <input type="text" class="form-control" style="margin-right: 5px">
+                        <input type="text" id= 'current_offset'  name= 'current_offset'  class="form-control" style="margin-right: 5px">
 
-                        <button id="Save-btn" type="button" class="btn-save-reset-undo" style="margin-right: 5%"><?php echo $text['Save_text'];?></button>
+                        <button id="Save-btn" type="button" class="btn-save-reset-undo" onclick='current_save()' style="margin-right: 5%"><?php echo $text['Save_text'];?></button>
                         <button id="Reset" type="button" class="btn-save-reset-undo" onclick="reset()"><?php echo $text['Reset_text'];?></button>
                         <button id="Undo" type="button" class="btn-save-reset-undo" onclick="undo()" ><?php echo $text['Undo_text'];?></button>
 
@@ -309,7 +309,7 @@
                                     <div class="row t1">
                                         <div class="col-5 t1" style=" padding-left: 5%; color: #000"><?php echo $text['Hi_Q_text'];?>:</div>
                                         <div class="col-5 t1">
-                                            <input id="high-limit-torque" type="text" class="t2 form-control" value="<?php echo $data['meter']['hi_limit_torque'];?>">
+                                            <input id="high-limit-torque" type="text" class="t2 form-control" value="<?php echo htmlspecialchars($data['meter']['hi_limit_torque'] ?? '', ENT_QUOTES); ?>">
                                         </div>
                                     </div>
                                     <div class="row t1">
@@ -440,11 +440,11 @@
         <div class="modal-lg" style="padding-left: 5%">
             <div class="lmodal-content" style="top: 140px; width: 670px;">
                 <span class="lclose-btn" onclick="closeModal_job()">&times;</span>
-                <div class="lmodal-column modalselect">
+                <div class="lmodal-column modalselect" style="display: flex; flex-direction: column; align-items: flex-start;">
                     <h4>Job</h4>
                     <div class="scrollbar-jobselect" id="style-jobselect">
                         <div class="force-overflow-jobselect">
-                             <?php foreach($data['job_arr'] as $k_job =>$v_job){?>
+                            <?php foreach($data['job_arr'] as $k_job =>$v_job){?>
                                 <div class="row t1" style="padding-left: 5%">
                                     <div class="col t2 form-check form-check-inline">
                                         <input class="form-check-input" type="checkbox" name="jobid" id="jobid_<?php echo $v_job['job_id'];?>" value="<?php echo $v_job['job_id'];?>" onclick="selectSingle(this)">
@@ -455,10 +455,11 @@
                         </div>
                     </div>
                 </div>
-                <button id='submit_check' onclick='submit_check()'><?php echo $text['Search_text'];?></button>
+                <button id='submit_check' onclick='submit_check()' class="btn btn-sm" style="margin-top: 20px;"><?php echo $text['Search_text'];?></button>
             </div>
         </div>
     </div>
+
 
 
 
@@ -667,6 +668,37 @@ function updateCookie(name, value, days) {
     document.cookie = name + "=" + (value || "") + expires + "; path=/";
 }
 
+
+function current_save() {
+ 
+    const targetQ = document.getElementById('current_tarque').value;
+    const rpm = document.getElementById('current_rpm').value;
+    const offset = document.getElementById('current_offset').value;
+
+ 
+    const data = {
+        target_q: targetQ,
+        rpm: rpm,
+        joint_offset: offset
+    };
+
+   $.ajax({
+        url: "?url=Calibrations/current_save", // 替換為你的 API 路徑
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: function(response) {
+            //alert('保存成功！');
+            console.log('Success:', response);
+        },
+        error: function(xhr, status, error) {
+            alert('保存失敗：' + error);
+            console.error('Error:', error);
+        }
+    });
+}
+
+
 </script>
 
 
@@ -680,8 +712,8 @@ function updateCookie(name, value, days) {
         //marginTop: 50 
     });
 
-    var x_val = <?php echo $data['echart']['x_val'];?>;
-    var y_val = <?php echo $data['echart']['y_val'];?>;
+var x_val = <?php echo isset($data['echart']['x_val']) ? json_encode($data['echart']['x_val']) : 'null'; ?>;
+var y_val = <?php echo isset($data['echart']['y_val']) ? json_encode($data['echart']['y_val']) : 'null'; ?>;
 
     var option = {
         title: {
@@ -729,3 +761,12 @@ function updateCookie(name, value, days) {
 
     myChart.setOption(option);
 </script>
+
+
+<style>
+.lmodal-column.modalselect {
+    display: flex;
+    flex-direction: column; /* 垂直排列 */
+    align-items: flex-start; /* 左對齊 */
+}
+</style>

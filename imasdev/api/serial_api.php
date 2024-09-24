@@ -42,7 +42,9 @@ function connectcomport($port, $baudRate, $dataBits, $stopBits, $parity, $forceC
                     $fileContent = var_export($dataArray, true);
                     $file_path = "../api/final_val.txt";
                     // 使用 FILE_APPEND 標誌附加數據
-                    file_put_contents($file_path, $fileContent . PHP_EOL, FILE_APPEND | LOCK_EX); 
+                    //file_put_contents($file_path, $fileContent . PHP_EOL, FILE_APPEND | LOCK_EX); 
+                    //抓最新的
+                    file_put_contents($file_path, $fileContent . PHP_EOL, LOCK_EX);
 
                     $response['success'] = true;
                     $response['message'] = "數據已接收並附加到文件";
