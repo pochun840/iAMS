@@ -815,9 +815,9 @@ class Operations extends Controller
             // FC 2
             $data = $modbus->readInputDiscretes(0, 0, 16);
 
-            $power0 = (int)$data[4]*1;
-            $power1 = (int)$data[5]*2;
-            $power2 = (int)$data[7]*4;
+            $power0 = (int)$data[0]*1;
+            $power1 = (int)$data[1]*2;
+            $power2 = (int)$data[2]*4;
 
             $sum = $power0 + $power1 + $power2;
 
