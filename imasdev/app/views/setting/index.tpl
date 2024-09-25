@@ -426,6 +426,12 @@ function handleButtonClick(button, content)
 
 <script type="text/javascript">
     function save_manager_verify(argument) {
+
+    
+
+        const selectedGender = document.querySelector('input[name="gender_switch"]:checked');
+        let gender_switch = selectedGender.value;
+
         let switch_next_seq = document.getElementById('switch_next_seq').checked;
         let switch_previous_seq = document.getElementById('switch_previous_seq').checked;
         let task_reset = document.getElementById('task_reset').checked;
@@ -433,7 +439,8 @@ function handleButtonClick(button, content)
         let switch_seq = document.getElementById('switch_seq').checked;
         let stop_on_ng = document.getElementById('stop_on_ng').checked;
         let auto_switch = document.getElementById('auto_switch').checked;
-        let gender_switch = document.getElementById('gender_switch').checked;
+        
+
         let tower_light_switch = document.getElementById('tower_light_switch').checked;
         let buzzer_switch = document.getElementById('buzzer_switch').checked;
 

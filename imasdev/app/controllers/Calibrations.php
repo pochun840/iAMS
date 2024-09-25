@@ -26,24 +26,20 @@ class Calibrations extends Controller
 
         $job_arr = $this->CalibrationModel->getjobid();
 
+        
+        $torque_type = $this->CalibrationModel->details('torque');
         #echarts
-        $job_id = $_COOKIE['job_id'] ?? null;
-        //$job_id = 8;
-        if(!empty($job_id)){
-            $echart_data = $this->CalibrationModel->datainfo_search($job_id);
-            $meter = $this->val_traffic($job_id);
+       
+        $job_id = 201;
 
-            if(!empty($echart_data)){
-                #整理圖表所需要的資料
-                $tmp['x_val'] = json_encode(array_column($echart_data, 'id'));
-                $tmp['y_val'] = json_encode(array_column($echart_data, 'torque'));
-    
-            }
-           
+        $echart_data = $this->CalibrationModel->datainfo_search($job_id);
+        $meter = $this->val_traffic();
+        if(!empty($echart_data)){
+            #整理圖表所需要的資料
+            $tmp['x_val'] = json_encode(array_column($echart_data, 'id'));
+            $tmp['y_val'] = json_encode(array_column($echart_data, 'torque'));
 
         }
-
-        
         if(empty($info)){
             $info = '';
         }
@@ -53,14 +49,19 @@ class Calibrations extends Controller
         if(empty($tmp)){
             $tmp = '';
         }
+        if(empty($info_res)){
+            $info_res = '';
+        }
 
         if(!empty($meter['res_total'])){
             $count = count($meter['res_total']);
         }else{
             $count = 0;
         }
+
+
         
-    
+
         $data = array(
             'isMobile' => $isMobile,
             'nav' => $this->NavsController->get_nav(),
@@ -72,6 +73,7 @@ class Calibrations extends Controller
             'job_arr' => $job_arr,
             'meter' =>$meter,
             'count' =>$count,
+            'torque_type ' => $torque_type
             
         );
 
@@ -82,35 +84,8 @@ class Calibrations extends Controller
     public function get_data(){
         
         $input_check = true;
-        if (!empty($_POST['job_id']) && isset($_POST['job_id'])) {
-            $job_id = $_POST['job_id'];
-        } else {
-            $input_check = false;
-        }
-
-        echo $job_id;
-        //$job_id = 8;
-
-        //201 
-        $controller_ip = $this->EquipmentModel->GetControllerIP(1);
-        require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
-        $modbus = new ModbusMaster($controller_ip, "TCP");
-        try {
-            $modbus->port = 502;
-            $modbus->timeout_sec = 10;
-            $data = array($job_id);
-            $dataTypes = array("INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT");
-
-            $modbus->writeMultipleRegister(0, 463, $data, $dataTypes);
-            echo $modbus->status;
-            exit();
-
-        } catch (Exception $e) {
-            echo $modbus->status;
-            exit();
-        }
-
-
+        $job_id = 201;
+     
         if($input_check){
             $dataset = $this->CalibrationModel->datainfo_search($job_id);
             if(!empty($dataset)){
@@ -135,67 +110,15 @@ class Calibrations extends Controller
                     $datalist .= "<td>".$val['low_percent']." % "."</td>";
                     $datalist .= "<td>".$val['customize']."</td>";
                     $datalist .= "</tr>";
-                    echo $datalist;
+                    //echo $datalist;
 
                 }
             }else {
-                echo "No data found for job_id: " . $job_id;
+                //echo "No data found for job_id: " . $job_id;
             }         
         }else {
-            echo "Invalid job_id received.";
+            //echo "Invalid job_id received.";
         }
-
-    }
-
-
-    public function current_save(){
-
-
-        $input = file_get_contents('php://input');
-        $data = json_decode($input, true);
-        if (isset($data['target_q'], $data['rpm'], $data['joint_offset'])) {
-
-            $controller_ip = $this->EquipmentModel->GetControllerIP(1);
-            require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
-            $modbus = new ModbusMaster($controller_ip, "TCP");
-            try {
-                $modbus->port = 502;
-                $modbus->timeout_sec = 10;
-
-                $data['target_q'] = (int)((float)$data['target_q'] * 100);
-      
-
-                $data_targqt_q = array(0,$data['target_q']);
-                $data_rpm = array($data['rpm']);
-                $data_offset = array($data['joint_offset']);
-                $data_job = array(201);
-
-                
-
-                $dataTypes = array("INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT");
-
-                $modbus->writeMultipleRegister(0, 890, $data_targqt_q, $dataTypes);
-                $modbus->writeMultipleRegister(0, 895, $data_offset, $dataTypes);
-                $modbus->writeMultipleRegister(0, 901, $data_rpm, $dataTypes);
-                $modbus->writeMultipleRegister(0, 463, $data_job, $dataTypes);
-
-
-
-                echo $modbus->status;
-                exit();
-
-            } catch (Exception $e) {
-                echo $modbus->status;
-                exit();
-            }
-            
-
-        } else {
-          
-        }
-
-
-
 
     }
 
@@ -226,39 +149,82 @@ class Calibrations extends Controller
 
     }
 
-    //取得KTM 回傳數值 寫入到DB
-    public function  tidy_data(){
+    public function tidy_data() {
         $file_path = "../api/final_val.txt";
-        $fileContent = file_get_contents($file_path);
-        eval("\$array = $fileContent;");
-        if(!empty($array)){
-            $cleanedDataArray = [];
-            foreach($array as $data) {
-                $cleanedDataArray[] = str_replace(['+ ', 'kgf*cm'], '', $data);
-            }
-          
-            #取最後一筆的資料 做型態改變
-            $cleanedDataArray = end($cleanedDataArray);
-            $cleanedDataArray = preg_replace('/[^0-9.]/', '', $cleanedDataArray); 
-            $final = (float)$cleanedDataArray;
-            
-            $res = $this->CalibrationModel->tidy_data($final);
+    
+        // 檢查文件是否存在
+        if (!file_exists($file_path)) {
+            echo json_encode([
+                'success' => false,
+                'message' => '文件不存在'
+            ]);
+            return;
+        }
+    
 
-            if($res == true){
-                $response = array(
-                    'success' => true,
-                    'message' => 'Data tidied successfully'
-                );
-            }else{
-                $response = array(
+        // 獲取文件的最後修改時間
+        $fileModificationTime = filemtime($file_path);
+        $currentTime = time();
+    
+        // 計算時間差（單位：秒）
+        $timeDifference = $currentTime - $fileModificationTime;
+    
+        // 如果時間差在 5 分鐘內（300 秒），則繼續執行
+        if ($timeDifference <= 600) {
+            $lines = file($file_path); // 读取文件的所有行
+    
+            if ($lines === false || empty($lines)) {
+                echo json_encode([
                     'success' => false,
-                    'message' => 'No data found'
-                );
+                    'message' => '文件內容為空'
+                ]);
+                return;
             }
-
-            echo json_encode($response);
+    
+            // 取最後一行的資料
+            $lastLine = trim(end($lines)); // 获取最后一行并去除空白
+    
+            // 解析数据（假设数据是以 JSON 格式存储的）
+            $array = json_decode($lastLine, true);
+    
+            if ($array !== null) {
+                // 进行数据清洗
+                $cleanedData = str_replace(['+ ', 'kgf*cm'], '', $array['data']);
+                $cleanedData = preg_replace('/[^0-9.]/', '', $cleanedData);
+                $final = (float)$cleanedData; // 转换为浮点型
+                var_dump($final);die();
+                $res = $this->CalibrationModel->tidy_data($final);
+    
+                if ($res == true) {
+                    $response = [
+                        'success' => true,
+                        'message' => '資料整理成功'
+                    ];
+                } else {
+                    $response = [
+                        'success' => false,
+                        'message' => '未找到資料'
+                    ];
+                }
+    
+                echo json_encode($response);
+            } else {
+                echo json_encode([
+                    'success' => false,
+                    'message' => ''
+                ]);
+            }
+        } else {
+            echo json_encode([
+                'success' => false,
+                'message' => '文件時間過舊'
+            ]);
         }
     }
+    
+    
+    
+
 
 
     public function get_correspond_val(){
@@ -267,6 +233,31 @@ class Calibrations extends Controller
          #檢查 $_POST['job_id'] 和 $_POST['seq_id'] 是否存在且不為空
          if(isset($_POST['job_id'][0]) && !empty($_POST['job_id'][0])) {
             $job_id = $_POST['job_id'][0];
+
+            #取得對應的seq_id
+            if(empty($_POST['seq_id'][0])) {
+                $info_seq = $this->CalibrationModel->get_seq_id($job_id);
+    
+                #組checkbox的seq的html
+                if(!empty($info_seq)){
+                    foreach($info_seq as $k_seq => $v_seq){
+                        echo $this->generatecheckboxhtml($v_seq['seq_id'], $v_seq['seq_name'], 'seqid', 'JobCheckbox_seq');
+                    }
+                }
+            }
+    
+            #透過job_id 及 seq_id 取得對應的task_id
+            if(isset($_POST['seq_id'][0]) && !empty($_POST['seq_id'][0])) {
+                $seq_id = $_POST['seq_id'][0];
+                $info_task = $this->CalibrationModel->get_task_id($job_id, $seq_id);
+
+                #組checkbox的task的html
+                if(!empty($info_task)){
+                    foreach($info_task as $k_task => $v_task){
+                        echo $this->generatecheckboxhtml($v_task['task_id'], $v_task['task_id'], 'taskid');
+                    }
+                }
+            }
 
             if(!empty($job_id)){
                 $tmp = $this->CalibrationModel->get_job_name($job_id);
@@ -328,7 +319,7 @@ class Calibrations extends Controller
     }
     
     
-    /*private function generatecheckboxhtml($value, $label, $name, $onClickFunction = '') {
+    private function generatecheckboxhtml($value, $label, $name, $onClickFunction = '') {
 
         $checkbox_html = '<div class="row t1">';
         $checkbox_html .= '<div class="col t5 form-check form-check-inline">';
@@ -344,18 +335,17 @@ class Calibrations extends Controller
         $checkbox_html .= '</div>';
         
         return $checkbox_html;
-    }*/
+    }
 
 
-    public function val_traffic($job_id){
+    public function val_traffic(){
         
         $a = 0.6;
         $b = 0.06;
 
         $temp = array();
-        $info = $this->CalibrationModel->meter_info($job_id);
+        $info = $this->CalibrationModel->meter_info();
 
-        
         foreach ($info as $sub_array) {
             if (array_key_exists('torque', $sub_array)) {
                 $torque_array[] = $sub_array['torque'];
@@ -365,56 +355,13 @@ class Calibrations extends Controller
         #依照KTM 文件裡的算式 
         $temp['hi_limit_torque'] = $a + $b;
         $temp['low_limit_torque'] = $a - $b;
-        if(!empty($info) && isset($info[0]['max_torque'])) {
-            $temp['max_torque'] = $info[0]['max_torque'];
-        } else {
-            $temp['max_torque'] = null; 
-        }
-
-        if(!empty($info) && isset($info[0]['min_torque'])) {
-            $temp['min_torque'] = $info[0]['min_torque'];
-        } else {
-            $temp['min_torque'] = null; 
-        }
-
-        if(!empty($info) && isset($info[0]['avg_torque'])) {
-            $temp['avg_torque'] = $info[0]['avg_torque'];
-        } else {
-            $temp['avg_torque'] = null; 
-        }
-
-      
-
-        if (isset($torque_array) && !empty($torque_array)) {
-            $temp['stddev1'] = number_format($this->standard_deviation($torque_array), 2);
-        } else {
-            $temp['stddev1'] = ''; 
-        }
-        
-        if (is_numeric($temp['stddev1']) && is_numeric($temp['avg_torque']) && $temp['avg_torque'] != 0) {
-            $temp['stddev2'] = number_format($temp['stddev1'] / $temp['avg_torque'], 2);
-        } else {
-            $temp['stddev2'] = ''; 
-        }
-
-        if (isset($temp['stddev2']) && is_numeric($temp['stddev2'])) {
-            $temp['stddev3'] = $temp['stddev2'] * 3;
-        } else {
-            $temp['stddev3'] = '';
-        }
-
-        if (
-            isset($temp['hi_limit_torque'], $temp['low_limit_torque'], $temp['stddev1']) &&
-            is_numeric($temp['hi_limit_torque']) &&
-            is_numeric($temp['low_limit_torque']) &&
-            is_numeric($temp['stddev1']) &&
-            $temp['stddev1'] != 0
-        ) {
-            $temp['cm'] = number_format(($temp['hi_limit_torque'] - $temp['low_limit_torque']) / (6 * $temp['stddev1']), 2);
-        } else {
-            $temp['cm'] = '';
-        }
-
+        $temp['max_torque'] = $info[0]['max_torque'];
+        $temp['min_torque'] = $info[0]['min_torque'];
+        $temp['avg_torque'] = $info[0]['avg_torque'];
+        $temp['stddev1'] = number_format($this->standard_deviation($torque_array),2);
+        $temp['stddev2'] = number_format($temp['stddev1'] / $temp['avg_torque'] ,2);
+        $temp['stddev3'] = $temp['stddev2'] * 3;
+        $temp['cm'] = number_format(( $temp['hi_limit_torque'] - $temp['low_limit_torque']) / ( 6 * $temp['stddev1'] ),2);
         $temp['cmk'] = number_format($this->calculatezscore($temp['hi_limit_torque'], $temp['low_limit_torque'],  $temp['stddev1']),2);
 
         $temp['res_total'] = $info;
@@ -434,9 +381,8 @@ class Calibrations extends Controller
 
         #echarts
         $echart_data = $this->CalibrationModel->echarts_data();
-        $job_id = 8;
 
-        $meter = $this->val_traffic($job_id);
+        $meter = $this->val_traffic();
 
         if(!empty($echart_data)){
             #整理圖表所需要的資料
@@ -483,7 +429,7 @@ class Calibrations extends Controller
         } else {
             $input_check = false;
         }
-
+        $job_id = 201;
         if($input_check){
             $dataset = $this->CalibrationModel->datainfo_search($job_id);
             if(!empty($dataset)){
@@ -518,66 +464,6 @@ class Calibrations extends Controller
         }
     }
 
-    public function Call_Controller_Job()
-    {
-        //get controller ip
-        $controller_ip = $this->EquipmentModel->GetControllerIP(1);
-
-        $input_check = true;
-        $error_message = '';
-        if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
-            $job_id = $_POST['job_id'];
-        }else{ 
-            $input_check = false;
-            $error_message .= "job_id,";
-        }
-
-        if ($input_check) {
-            require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
-            $modbus = new ModbusMaster($controller_ip, "TCP");
-            try {
-                $modbus->port = 502;
-                $modbus->timeout_sec = 10;
-                $data = array($job_id);
-                $dataTypes = array("INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT");
-                
-                // FC 16
-                $test = array(0);
-                $test1 = array(1);
-                //$modbus->writeMultipleRegister(0, 461, $test, $dataTypes);//起子禁用
-                $modbus->writeMultipleRegister(0, 463, $data, $dataTypes);//切換job
-                //$modbus->writeMultipleRegister(0, 461, $test1, $dataTypes);//起子啟用
-                // $this->logMessage('modbus write 506 ,array = '.implode("','", $data));
-                // $this->logMessage('modbus status:'.$modbus->status);
-                // $this->logMessage('Import config end');
-                // echo json_encode(array('error' => ''));
-                echo $modbus->status;
-                exit();
-
-            } catch (Exception $e) {
-                // Print error information if any
-                // echo $modbus;
-                // echo '<br>123';
-                // echo $e;
-                // echo '<br>456';
-                // $this->logMessage('modbus write 506 fail');
-                // $this->logMessage('modbus status:'.$modbus->status);
-                // $this->logMessage('Import config end');
-                // echo json_encode(array('error' => 'modbus error'));
-                echo $modbus->status;
-                exit();
-            }
-        }else{
-            echo json_encode(array('error' => $error_message));
-            exit();
-        }
-
-        echo json_encode($job_detail);
-        exit();
-        
-    }
-
-
 
     private function standard_deviation($torque_array) {
         $n = count($torque_array);
@@ -592,26 +478,63 @@ class Calibrations extends Controller
 
 
     private function calculatezscore($hi_limit_torque, $low_limit_torque, $stddev1) {
-
-        $hi_limit_torque = !empty($hi_limit_torque) ? $hi_limit_torque : 0;
-        $low_limit_torque = !empty($low_limit_torque) ? $low_limit_torque : 0;
-        $stddev1 = !empty($stddev1) ? $stddev1 : 0;
-    
-
-        if (!is_numeric($stddev1) || $stddev1 == 0) {
-            return null; 
-        }
-    
-
-        if (!is_numeric($hi_limit_torque) || !is_numeric($low_limit_torque)) {
-            return null; 
-        }
-    
         $part1 = (($this->mean - $hi_limit_torque) / (3 * $stddev1));
         $part2 = (($low_limit_torque - $this->mean) / (3 * $stddev1));
         
         return min($part1, $part2);
     }
-    
+
+    public function current_save(){
+
+
+        $input = file_get_contents('php://input');
+        $data = json_decode($input, true);
+        if (isset($data['target_q'], $data['rpm'], $data['joint_offset'])) {
+
+            $controller_ip = $this->EquipmentModel->GetControllerIP(1);
+            require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
+            $modbus = new ModbusMaster($controller_ip, "TCP");
+            try {
+                $modbus->port = 502;
+                $modbus->timeout_sec = 10;
+
+                $data['target_q'] = (int)((float)$data['target_q'] * 100);
+      
+
+                $data_targqt_q = array(0,$data['target_q']);
+                $data_rpm = array($data['rpm']);
+                $data_offset = array($data['joint_offset']);
+                $data_job = array(201);
+
+                
+
+                $dataTypes = array("INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT");
+
+                $modbus->writeMultipleRegister(0, 890, $data_targqt_q, $dataTypes);
+                $modbus->writeMultipleRegister(0, 895, $data_offset, $dataTypes);
+                $modbus->writeMultipleRegister(0, 901, $data_rpm, $dataTypes);
+                $modbus->writeMultipleRegister(0, 463, $data_job, $dataTypes);
+
+
+
+                echo $modbus->status;
+                exit();
+
+            } catch (Exception $e) {
+                echo $modbus->status;
+                exit();
+            }
+            
+
+        } else {
+          
+        }
+
+
+
+
+    }
+
+
     
 }

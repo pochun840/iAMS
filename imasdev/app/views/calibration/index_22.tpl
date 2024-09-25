@@ -135,9 +135,9 @@
         <div class="container-fluid" id="container-fluid" >
             <!-- Left -->
             <div class="column column-left">
-                <!--<div class="row t1" style=" padding-left: 45%">
+                <div class="row t1" style=" padding-left: 45%">
                     <button id="call-job" type="button" class="btn-calljob" style="font-size: 18px; color: #000;"  onclick="calljoball()" ><?php echo $text['Call_Job_text'];?></button>
-                </div>-->
+                </div>
                 <div class="border-bottom">
                     <div class="row t1">
                         <div class="col-5 t1" style=" padding-left: 2%; color: #000"><?php echo $text['Job_ID_text'];?>:</div>
@@ -295,14 +295,14 @@
 
                 <div id="chart-setting">
                     <div class="column column-chart">
-                        <div class="chart-container" id='chart_block' style="display:block;">
+                        <div class="chart-container" id='chart_block' style="display:none;">
                             <!---曲線圖---->
                             <div  id="mychart" width="500px" height="300px"></div>
                         </div>
                     </div>
 
                     <div class="column column-meter-model">
-                        <div class="meter-model" id='item_data' style="display:block;">
+                        <div class="meter-model" id='item_data' style="display:none;">
                             <div class="row t1 border-bottom">
                                 <div class="col-5" style=" padding-left: 5%; color: #000"><b><?php echo $text['Item_text'];?></b></div>
                                 <div class="col-5" style=" padding-left: 5%; color: #000"><b><?php echo $text['Meter_text'];?></b></div>
@@ -720,40 +720,7 @@ function current_save() {
     });
 }
 
-function Connect() {
-    $.ajax({
-        url: 'http://192.168.0.161/imasdev/api/serial_api.php',
-        type: 'GET',
-        dataType: 'json',
-        success: function(response) {
-            console.log('Response received:', response);
-        },
-        error: function(xhr, status, error) {
-            console.error('AJAX Error:', error);
-        }
-    })
-    .then(data => {
-        console.log('Data received:', data);
-        alert(JSON.stringify(data));
 
-        $.ajax({
-            url: '?url=Calibrations/tidy_data',
-            type: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                console.log('API response:', response);
-            },
-            error: function(xhr, status, error) {
-                console.error('AJAX Error:', error);
-                console.error('Response:', xhr.responseText);
-                console.error('Status:', status);
-            }
-        });
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-}
 </script>
 
 

@@ -335,7 +335,7 @@ class Operations extends Controller
                 $test1 = array(1);
                 $modbus->writeMultipleRegister(0, 461, $test, $dataTypes);//起子禁用
                 $modbus->writeMultipleRegister(0, 463, $data, $dataTypes);//切換job
-                //$modbus->writeMultipleRegister(0, 461, $test1, $dataTypes);//起子啟用
+                $modbus->writeMultipleRegister(0, 461, $test1, $dataTypes);//起子啟用
                 // $this->logMessage('modbus write 506 ,array = '.implode("','", $data));
                 // $this->logMessage('modbus status:'.$modbus->status);
                 // $this->logMessage('Import config end');

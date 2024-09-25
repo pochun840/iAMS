@@ -229,41 +229,6 @@ function JobCheckbox_seq(){
     }
 }
 
-
-//test connect
-function Connect() {
-    $.ajax({
-        url: 'http://192.168.0.161/imasdev/api/serial_api.php',
-        type: 'GET',
-        dataType: 'json',
-        success: function(response) {
-            console.log('Response received:', response);
-        },
-        error: function(xhr, status, error) {
-            console.error('AJAX Error:', error);
-        }
-    })
-    .then(data => {
-        console.log('Data received:', data);
-        alert(JSON.stringify(data));
-
-        $.ajax({
-            url: '?url=Calibrations/tidy_data',
-            type: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                console.log('API response:', response);
-            },
-            error: function(xhr, status, error) {
-                console.error('AJAX Error:', error);
-            }
-        });
-    })
-    .catch(error => {
-        //console.error('Error:', error);
-    });
-}
-
 function getCookie(cookieName) {
     var cookies = document.cookie.split(';');
     

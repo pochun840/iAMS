@@ -1146,7 +1146,7 @@ tt.set('start_time',new Date())
 
                                         document.getElementById('task_id').value = task_id;
                                         updateParameters(task_id)
-                                        call_job();
+                                        //call_job();
                                         // document.getElementById('modbus_switch').value = 1;
                                         let next_circle = document.querySelector("div[data-id='"+task_id+"']");
                                         // next_circle.classList.add('running')
@@ -1229,12 +1229,18 @@ tt.set('start_time',new Date())
                                             
                                             setTimeout(function() {
                                                 element.style.display = 'none';
-                                                force_switch_tool(1);    
+                                                //force_switch_tool(1);    
+                                                call_job();
                                             }, e_time1); 
 
                                         }else{
-                                            force_switch_tool(1); 
-                                            force_switch_tool(0); 
+                                            call_job();
+                                            //alert('eeeeeeeeeeeeewwwww');
+                                            //force_switch_tool(1); 
+                                            
+
+
+                                            //force_switch_tool(0); 
                                         }
                                                                                 
                                 }else{
