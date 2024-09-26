@@ -228,6 +228,14 @@ class Sequence{
         $stmt->bindValue(':seq_id', $seq_id);
         $results = $stmt->execute();
 
+
+        //刪除task_message
+        $stmt = $this->db->prepare('DELETE FROM task_message WHERE job_id = :job_id AND seq_id = :seq_id');
+        $stmt->bindValue(':job_id', $job_id);
+        $stmt->bindValue(':seq_id', $seq_id);
+        $results = $stmt->execute();
+
+
         //更新seq_id
         $sql2= "UPDATE sequence SET seq_id = seq_id - 1 WHERE job_id = :job_id AND seq_id > :seq_id";
         $stmt = $this->db->prepare($sql2);
@@ -381,18 +389,21 @@ class Sequence{
     }
 
 
-    public function check_task_message_by_id($from_job_id,$from_seq_id){
-
-        $sql= "SELECT * FROM `task_message` WHERE job_id = :job_id AND seq_id = :seq_id ";
+    public function check_task_message_by_id($from_job_id, $from_seq_id) {
+   
+        $sql = "SELECT * FROM `task_message` WHERE job_id = :job_id AND seq_id = :seq_id";
         $statement = $this->db->prepare($sql);
         $statement->bindValue(':job_id', $from_job_id);
-        $statement->bindValue(':seq_id',$from_seq_id);
-       
+        $statement->bindValue(':seq_id', $from_seq_id);
+        
         $statement->execute();
-        $rows = $statement->fetchAll(PDO::FETCH_ASSOC); 
-      
-        return $rows;
+        $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
+    
+    
+    
+        return $rows; 
     }
+    
 
 
     public function cover_data($new_temp_task_message) {
@@ -420,7 +431,9 @@ class Sequence{
 
         return $results;
     }
-    
+
+
+
 
 
 
