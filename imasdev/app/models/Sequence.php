@@ -381,6 +381,51 @@ class Sequence{
     }
 
 
+    public function check_task_message_by_id($from_job_id,$from_seq_id){
+
+        $sql= "SELECT * FROM `task_message` WHERE job_id = :job_id AND seq_id = :seq_id ";
+        $statement = $this->db->prepare($sql);
+        $statement->bindValue(':job_id', $from_job_id);
+        $statement->bindValue(':seq_id',$from_seq_id);
+       
+        $statement->execute();
+        $rows = $statement->fetchAll(PDO::FETCH_ASSOC); 
+      
+        return $rows;
+    }
+
+
+    public function cover_data($new_temp_task_message) {
+        $sql = "INSERT INTO `task_message` (job_id, seq_id, task_id, img, type, text, timeout)
+                VALUES (:job_id, :seq_id, :task_id, :img, :type, :message, :message_timeout)";
+        
+        $statement = $this->db->prepare($sql);
+
+        foreach ($new_temp_task_message as $task_message) {
+  
+            if (isset($task_message['job_id'], $task_message['seq_id'], $task_message['task_id'], $task_message['img'], $task_message['type'], $task_message['text'], $task_message['timeout'])) {
+              
+                $statement->bindValue(':job_id', $task_message['job_id']);
+                $statement->bindValue(':seq_id', $task_message['seq_id']);
+                $statement->bindValue(':task_id', $task_message['task_id']);
+                $statement->bindValue(':img', $task_message['img']);
+                $statement->bindValue(':message', $task_message['text']);
+                $statement->bindValue(':type', $task_message['type']);
+                $statement->bindValue(':message_timeout', $task_message['timeout']);
+
+                $results = $statement->execute();
+    
+            } 
+        }
+
+        return $results;
+    }
+    
+
+
+
+
+
     
     
 
