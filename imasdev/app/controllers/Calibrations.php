@@ -28,9 +28,12 @@ class Calibrations extends Controller
 
         
         $torque_type = $this->CalibrationModel->details('torque');
+        $tools = $this->CalibrationModel->get_tool_sn();
+        
+        $this->tidy_data();
         #echarts
        
-        $job_id = 201;
+        $job_id = 221;
 
         $echart_data = $this->CalibrationModel->datainfo_search($job_id);
         $meter = $this->val_traffic();
@@ -59,9 +62,6 @@ class Calibrations extends Controller
             $count = 0;
         }
 
-
-        
-
         $data = array(
             'isMobile' => $isMobile,
             'nav' => $this->NavsController->get_nav(),
@@ -73,9 +73,12 @@ class Calibrations extends Controller
             'job_arr' => $job_arr,
             'meter' =>$meter,
             'count' =>$count,
-            'torque_type ' => $torque_type
+            'torque_type ' => $torque_type,
+            'tools_sn' => !empty($tools) && isset($tools[0]['device_sn']) ? $tools[0]['device_sn'] : null
             
         );
+
+
 
         $this->view('calibration/index', $data);
 
@@ -84,7 +87,7 @@ class Calibrations extends Controller
     public function get_data(){
         
         $input_check = true;
-        $job_id = 201;
+        $job_id = 221;
      
         if($input_check){
             $dataset = $this->CalibrationModel->datainfo_search($job_id);
@@ -152,7 +155,7 @@ class Calibrations extends Controller
     public function tidy_data() {
         $file_path = "../api/final_val.txt";
     
-        // 檢查文件是否存在
+        // 检查文件是否存在
         if (!file_exists($file_path)) {
             echo json_encode([
                 'success' => false,
@@ -161,71 +164,67 @@ class Calibrations extends Controller
             return;
         }
     
-
-        // 獲取文件的最後修改時間
+        // 获取文件的最后修改时间
         $fileModificationTime = filemtime($file_path);
         $currentTime = time();
     
-        // 計算時間差（單位：秒）
+        // 计算时间差（单位：秒）
         $timeDifference = $currentTime - $fileModificationTime;
     
-        // 如果時間差在 5 分鐘內（300 秒），則繼續執行
-        if ($timeDifference <= 600) {
+        // 如果时间差在 30秒 内（30秒），则继续执行
+        if ($timeDifference <= 30) {
             $lines = file($file_path); // 读取文件的所有行
     
             if ($lines === false || empty($lines)) {
-                echo json_encode([
+                return; // 文件内容为空
+            }
+    
+            // 获取最后一行数据并进行清理
+            $lastLine = trim(end($lines)); // 获取最后一行并去掉空格
+            $cleanedData = str_replace(['+ ', 'kgf*cm'], '', $lastLine);
+            $cleanedData = preg_replace('/[^0-9.]/', '', $cleanedData);
+            $final = (float)$cleanedData; // 转换为浮点型
+    
+            // 检查是否已经存在相同的数据
+            $existingData = file_get_contents($file_path);
+            if (strpos($existingData, (string)$final) !== false) {
+                /*echo json_encode([
                     'success' => false,
-                    'message' => '文件內容為空'
-                ]);
+                    'message' => '数据已存在，避免重复写入'
+                ]);*/
                 return;
             }
     
-            // 取最後一行的資料
-            $lastLine = trim(end($lines)); // 获取最后一行并去除空白
+            // 如果数据不重复，执行写入和数据处理
+            $res = $this->CalibrationModel->tidy_data($final);
+            
+            if ($res == true) {
+                // 将新的数据写入文件
+                file_put_contents($file_path, var_export(['data' => $final], true) . PHP_EOL, FILE_APPEND | LOCK_EX);
     
-            // 解析数据（假设数据是以 JSON 格式存储的）
-            $array = json_decode($lastLine, true);
-    
-            if ($array !== null) {
-                // 进行数据清洗
-                $cleanedData = str_replace(['+ ', 'kgf*cm'], '', $array['data']);
-                $cleanedData = preg_replace('/[^0-9.]/', '', $cleanedData);
-                $final = (float)$cleanedData; // 转换为浮点型
-                var_dump($final);die();
-                $res = $this->CalibrationModel->tidy_data($final);
-    
-                if ($res == true) {
-                    $response = [
-                        'success' => true,
-                        'message' => '資料整理成功'
-                    ];
-                } else {
-                    $response = [
-                        'success' => false,
-                        'message' => '未找到資料'
-                    ];
-                }
-    
-                echo json_encode($response);
+                $response = [
+                    'success' => true,
+                    'message' => '资料整理成功'
+                ];
             } else {
-                echo json_encode([
+                $response = [
                     'success' => false,
-                    'message' => ''
-                ]);
+                    'message' => '未找到资料'
+                ];
             }
+    
+            //echo json_encode($response);
         } else {
-            echo json_encode([
+            /*echo json_encode([
                 'success' => false,
-                'message' => '文件時間過舊'
-            ]);
+                'message' => '文件时间过旧'
+            ]);*/
         }
     }
     
     
     
-
-
+    
 
     public function get_correspond_val(){
         $val  = array();
@@ -271,10 +270,9 @@ class Calibrations extends Controller
 
     
     #產生XML的API
-    public function get_xml($index){
+    public function get_xml(){
 
-        if(!empty($index)) {
-            $info = $this->CalibrationModel->datainfo($index);
+            $info = $this->CalibrationModel->datainfo();
             $torque_type = $this->CalibrationModel->details('torque');
             $controller_type = $this->CalibrationModel->details('controller');
             $ktm_type = $this->CalibrationModel->details('torquemeter');
@@ -314,7 +312,7 @@ class Calibrations extends Controller
             header('Content-type: text/xml; charset=utf-8');
             echo $xml->outputMemory();
 
-        }
+    
     
     }
     

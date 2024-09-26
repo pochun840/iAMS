@@ -141,13 +141,13 @@
                     <div class="row t1">
                         <div class="col-5 t1" style="padding-left: 2%; color: #000"><?php echo $text['Tool_SN_text'];?>:</div>
                         <div class="col-4 t1">
-                            <input id="tool-sn" type="text" class="t2 form-control" value="">
+                            <input id="tool_sn" type="text" class="t2 form-control" value="<?php echo $data['tools_sn'];?>">
                         </div>
                     </div>
                     <div class="row t1">
                        <div class="col-5 t1" style="padding-left: 2%; color: #000">Adapter Type:</div>
                         <div class="col-4 t1">
-                            <input id="adapter-type" type="text" class="t2 form-control" value="">
+                            <input id="adapter_type" type="text" class="t2 form-control" value="">
                         </div>
                     </div>
                 </div>

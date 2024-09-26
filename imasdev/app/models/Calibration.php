@@ -157,50 +157,52 @@ class Calibration{
 
     } 
 
-    public function tidy_data($final){
-
-
-       
-        $job_id = 201;
-        #從資料庫找出最大 最小 平均 扭力 high_percent low_percent
-        $sql =" SELECT  MAX(torque) AS max_torque, MIN(torque) AS min_torque,SUM(torque) AS total_torque,(SELECT id FROM calibrations ORDER BY id DESC LIMIT 1) AS latest_id    FROM  calibrations ORDER BY id DESC LIMIT 1 ";
+    
+    public function tidy_data($final) {
+        $job_id = 221;
+    
+        $sql = "SELECT MAX(torque) AS max_torque, MIN(torque) AS min_torque, SUM(torque) AS total_torque,
+                (SELECT id FROM calibrations ORDER BY id DESC LIMIT 1) AS latest_id
+                FROM calibrations";
         $statement = $this->db->prepare($sql);
         $statement->execute();
         $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-        $sql_total ="SELECT COUNT(*) AS total_records  FROM calibrations";
+    
+        // 获取记录总数
+        $sql_total = "SELECT COUNT(*) AS total_records FROM calibrations";
         $statement = $this->db->prepare($sql_total);
         $statement->execute();
         $result_total = $statement->fetchAll(PDO::FETCH_ASSOC);
-
+    
         $count = (int)$result[0]['latest_id'] + 1;
-        
-        if(isset($result[0])){
-
+    
+        if (isset($result[0])) {
             $max_torque = floatval($result[0]['max_torque']);
             $min_torque = floatval($result[0]['min_torque']);
-
             $total_torque = floatval($result[0]['total_torque']);
-           
-            if($final > $max_torque){
+    
+            if ($final > $max_torque) {
                 $max_torque = $final;
             }
-
-            if($final < $min_torque){
+            if ($final < $min_torque) {
                 $min_torque = $final;
             }
-
-            #平均值
+    
             $average_torque = round(($total_torque + $max_torque) / $count, 2);
             $high_percent = round((($max_torque - $average_torque) / $average_torque) * 100, 2);
-            $low_percent  = round((($min_torque - $average_torque) / $average_torque) * 100, 2);
+            $low_percent = round((($min_torque - $average_torque) / $average_torque) * 100, 2);
             $datatime = date("Ymd H:i:s");
-
-            $sql_in = "INSERT INTO `calibrations` ('id','job_id', 'controller_type','ktm_type','operator','toolsn','torque','unit','max_torque','min_torque','avg_torque','high_percent','low_percent','customize','datatime' )
-                    VALUES (:id,:job_id,:operator,:toolsn,:torque,:unit,:max_torque,:min_torque,:avg_torque,:high_percent,:low_percent,:customize,:datatime)";
-
+    
+            $sql_in = "INSERT INTO `calibrations` (`id`, `job_id`, `controller_type`, `ktm_type`, `operator`, `toolsn`, `torque`, `unit`, `max_torque`, `min_torque`, `avg_torque`, `high_percent`, `low_percent`, `customize`, `datatime`)
+                       VALUES (:id, :job_id, :controller_type, :ktm_type, :operator, :toolsn, :torque, :unit, :max_torque, :min_torque, :avg_torque, :high_percent, :low_percent, :customize, :datatime)";
+    
             $statement = $this->db->prepare($sql_in);
-
+            if (!$statement) {
+                echo "Prepare failed: " . implode(":", $this->db->errorInfo());
+                return false; 
+            }
+    
+            // 绑定参数
             $statement->bindValue(':id', $count);
             $statement->bindValue(':job_id', $job_id);
             $statement->bindValue(':controller_type', '0');
@@ -216,21 +218,20 @@ class Calibration{
             $statement->bindValue(':low_percent', $low_percent);
             $statement->bindValue(':customize', '');
             $statement->bindValue(':datatime', $datatime);
-
+    
+            // 执行
             $results = $statement->execute();
             if (!$results) {
-                $res = false;
-            }else{
-
-                $res = true;
+                echo "Execution failed: " . implode(":", $statement->errorInfo());
+                return false; // 处理错误
             }
-            echo $res;
-            return $res;
+    
+            return true; // 插入成功
         }
     
-
+        return false; // 无结果
     }
-
+    
 
     public function del_info($lastid){
 
@@ -266,4 +267,16 @@ class Calibration{
         return $result;
   
     }
+
+    
+    public function get_tool_sn(){
+
+        $sql = "SELECT * FROM fasten_data ORDER BY id DESC LIMIT 1 ";
+        $statement = $this->db->prepare($sql);
+        $statement->execute();
+        $result = $statement->fetchall(PDO::FETCH_ASSOC);
+        return $result;
+
+    }
+
 }
