@@ -62,6 +62,8 @@ class Calibrations extends Controller
             $count = 0;
         }
 
+
+
         $data = array(
             'isMobile' => $isMobile,
             'nav' => $this->NavsController->get_nav(),
@@ -502,15 +504,15 @@ class Calibrations extends Controller
                 $data_targqt_q = array(0,$data['target_q']);
                 $data_rpm = array($data['rpm']);
                 $data_offset = array($data['joint_offset']);
-                $data_job = array(201);
+                $data_job = array(221);
 
                 
 
                 $dataTypes = array("INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT");
 
-                $modbus->writeMultipleRegister(0, 890, $data_targqt_q, $dataTypes);
+                $modbus->writeMultipleRegister(0, 1147, $data_targqt_q, $dataTypes);
                 $modbus->writeMultipleRegister(0, 895, $data_offset, $dataTypes);
-                $modbus->writeMultipleRegister(0, 901, $data_rpm, $dataTypes);
+                $modbus->writeMultipleRegister(0, 1151, $data_rpm, $dataTypes);
                 $modbus->writeMultipleRegister(0, 463, $data_job, $dataTypes);
 
 
