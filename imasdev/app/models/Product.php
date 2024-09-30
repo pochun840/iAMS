@@ -178,6 +178,12 @@ class Product{
         $stmt->bindValue(':job_id', $job_id);
         $results = $stmt->execute();
 
+        //刪除 task_message 
+        $stmt = $this->db->prepare('DELETE FROM task_message WHERE job_id = :job_id');
+        $stmt->bindValue(':job_id', $job_id);
+        $results = $stmt->execute();
+
+
         //刪除其他關聯
         //刪除ccs_normalstep、ccs_advancedstep
         //delete ccs_normalstep

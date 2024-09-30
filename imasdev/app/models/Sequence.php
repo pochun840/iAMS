@@ -243,12 +243,22 @@ class Sequence{
         $stmt->bindValue(':job_id', $job_id);
         $stmt->bindValue(':seq_id', $seq_id);
         $results = $stmt->execute();
+
+        //刪除task_meaasge
+        $stmt = $this->db->prepare('DELETE FROM task_message WHERE job_id = :job_id AND seq_id = :seq_id');
+        $stmt->bindValue(':job_id', $job_id);
+        $stmt->bindValue(':seq_id', $seq_id);
+        $results = $stmt->execute();
+
+
         //更新task的seq_id
         $sql2= "UPDATE task SET seq_id = seq_id - 1 WHERE job_id = :job_id AND seq_id > :seq_id";
         $stmt = $this->db->prepare($sql2);
         $stmt->bindValue(':job_id', $job_id);
         $stmt->bindValue(':seq_id', $seq_id);
         $results2 = $stmt->execute();
+
+
 
         //刪除其他關聯
         //delete ccs_normalstep
