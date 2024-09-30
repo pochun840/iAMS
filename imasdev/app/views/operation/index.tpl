@@ -1223,6 +1223,8 @@ tt.set('start_time',new Date())
                                
                                            
                                             
+
+                                         
                                             element.style.display = 'block';
                                             
                                             setTimeout(function() {
@@ -1233,7 +1235,11 @@ tt.set('start_time',new Date())
 
                                         }else{
                                             call_job();
-                                        
+                                            //alert('eeeeeeeeeeeeewwwww');
+                                            //force_switch_tool(1); 
+                                            
+
+
                                             //force_switch_tool(0); 
                                         }
                                                                                 

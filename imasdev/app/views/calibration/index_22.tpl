@@ -135,9 +135,9 @@
         <div class="container-fluid" id="container-fluid" >
             <!-- Left -->
             <div class="column column-left">
-                <!--<div class="row t1" style=" padding-left: 45%">
+                <div class="row t1" style=" padding-left: 45%">
                     <button id="call-job" type="button" class="btn-calljob" style="font-size: 18px; color: #000;"  onclick="calljoball()" ><?php echo $text['Call_Job_text'];?></button>
-                </div>-->
+                </div>
                 <div class="border-bottom">
                     <div class="row t1">
                         <div class="col-5 t1" style=" padding-left: 2%; color: #000"><?php echo $text['Job_ID_text'];?>:</div>
@@ -214,7 +214,7 @@
 
                 <div class="row t1">
                    <br><br>
-                   <button  type="button" class="btn-calljob" style="font-size: 18px; color: #000;" onclick="connectComPort()"><?php echo $text['Test_text'];?></button>
+                   <button id="Connect" type="button" class="btn-calljob" style="font-size: 18px; color: #000;" onclick="Connect()"><?php echo $text['Test_text'];?></button>
                 </div>
             </div>
 
@@ -295,14 +295,14 @@
 
                 <div id="chart-setting">
                     <div class="column column-chart">
-                        <div class="chart-container" id='chart_block' style="display:block;">
+                        <div class="chart-container" id='chart_block' style="display:none;">
                             <!---曲線圖---->
                             <div  id="mychart" width="500px" height="300px"></div>
                         </div>
                     </div>
 
                     <div class="column column-meter-model">
-                        <div class="meter-model" id='item_data' style="display:block;">
+                        <div class="meter-model" id='item_data' style="display:none;">
                             <div class="row t1 border-bottom">
                                 <div class="col-5" style=" padding-left: 5%; color: #000"><b><?php echo $text['Item_text'];?></b></div>
                                 <div class="col-5" style=" padding-left: 5%; color: #000"><b><?php echo $text['Meter_text'];?></b></div>
@@ -719,23 +719,6 @@ function current_save() {
         }
     });
 }
-
-
-function connectComPort() {
-    fetch('http://192.168.0.161/imasdev/api/serial_api.php') // 替换为你的 PHP 文件路径
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('成功呼叫 API: ' + data.message);
-            } else {
-                alert('錯誤: ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('API 呼叫失敗');
-        });
-    }
 
 
 </script>

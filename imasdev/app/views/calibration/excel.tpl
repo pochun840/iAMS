@@ -5,8 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <link rel="shortcut icon" href="../public/img/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" sizes="60x60" href="../public/img/60.png">
-    <link rel="icon" sizes="192x192" href="../public/img/192.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="../public/img/icon.svg">
+    <link rel="icon" sizes="192x192" href="../public/img/icon.svg>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/print-styles.css">

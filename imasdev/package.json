@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "modbus-serial": "^8.0.17",
+    "sqlite3": "^5.1.7",
     "ws": "^8.18.0"
   }
 }

@@ -185,31 +185,6 @@ function JobCheckbox()
     checked_jobid.forEach(function(checkbox) {
         checkedjobidarr.push(checkbox.value);
     });
-
-    //checkedjobidarr 不等於空值 要取得對應的seq_id
-    if(checkedjobidarr != '' ) {
-        $.ajax({
-            type: "POST",
-            data: {job_id: checkedjobidarr},
-            url: '?url=Calibrations/get_correspond_val',
-            success: function(response) {
-                if (response.trim() === '') {
-                    alert('查無資料');
-                    window.location.href = '?url=Calibrations';
-
-                } else {
-                    var seqListElement = document.getElementById('Seq-list');
-                    seqListElement.style.display = 'block';
-                    document.getElementById("Seq-list").innerHTML = response;
-                }
-            },
-            error: function(error) {
-            }
-        }).fail(function () {
-        });
-
-    }
-
 }
 
 function JobCheckbox_seq(){
@@ -254,41 +229,6 @@ function JobCheckbox_seq(){
     }
 }
 
-
-//test connect
-function Connect() {
-    $.ajax({
-        url: 'http://192.168.0.152/imas/api/serial_api.php',
-        type: 'GET',
-        dataType: 'json',
-        success: function(response) {
-            console.log('Response received:', response);
-        },
-        error: function(xhr, status, error) {
-            console.error('AJAX Error:', error);
-        }
-    })
-    .then(data => {
-        console.log('Data received:', data);
-        alert(JSON.stringify(data));
-
-        $.ajax({
-            url: '?url=Calibrations/tidy_data',
-            type: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                console.log('API response:', response);
-            },
-            error: function(xhr, status, error) {
-                console.error('AJAX Error:', error);
-            }
-        });
-    })
-    .catch(error => {
-        //console.error('Error:', error);
-    });
-}
-
 function getCookie(cookieName) {
     var cookies = document.cookie.split(';');
     
@@ -301,17 +241,3 @@ function getCookie(cookieName) {
     return '';
 }
 
-/*function waitForECharts() {
-    return new Promise(function(resolve, reject) {
-  
-        if (typeof myChart !== 'undefined') {
-
-            myChart.on('finished', function() {
-                resolve();
-            });
-        } else {
-            // 如果 myChart 未定义，等待一段时间再尝试
-            setTimeout(waitForECharts, 1000); // 等待 1 秒钟再检查
-        }
-    });
-}*/

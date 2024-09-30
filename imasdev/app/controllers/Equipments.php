@@ -35,6 +35,7 @@ class Equipments extends Controller
         $div_recycle_box = 'equipment/div_recycle_box';
         $div_tower_light = 'equipment/div_tower_light';
         $div_socket_tray = 'equipment/div_socket_tray';
+        $div_ktm =  'equipment/div_ktm';
         $controller_ip = $this->EquipmentModel->GetControllerIP(1);
         $tower_light_switch = $this->OperationModel->GetConfigValue('tower_light_switch')['value'];
         $buzzer_switch = $this->OperationModel->GetConfigValue('buzzer_switch')['value'];
@@ -51,6 +52,7 @@ class Equipments extends Controller
             'div_recycle_box' => $div_recycle_box,
             'div_tower_light' => $div_tower_light,
             'div_socket_tray' => $div_socket_tray,
+            'div_ktm' => $div_ktm,
             'comPorts' => $comPorts,
             'controller_ip' => $controller_ip,
             'tower_light_switch' => $tower_light_switch,

@@ -1,6 +1,5 @@
 const { SerialPort } = require('serialport');
 const { ReadlineParser } = require('@serialport/parser-readline');
-const fs = require('fs');
 
 async function connectComPort(port, baudRate, dataBits, stopBits, parity, forceClose = false) {
     const response = {};
@@ -35,9 +34,7 @@ async function connectComPort(port, baudRate, dataBits, stopBits, parity, forceC
         parser.on('data', (data) => {
             console.log("接收到的數據:", data); // 顯示數據
             if (data) {
-                const filePath = '../api/final_val.txt';
-                fs.writeFileSync(filePath, JSON.stringify({ data }), { flag: 'w' });
-                dataReceived = true;
+                dataReceived = true; // 標記數據已接收
             }
         });
 
