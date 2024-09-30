@@ -1,9 +1,0 @@
-array (
-  'data' => '    +  2.5 kgf*cm
-',
-)array (
-   'data' => '    +  2.1 kgf*cm
-)
-array (
-  'data' => 0.0,
-)

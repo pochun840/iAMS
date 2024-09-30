@@ -21,6 +21,7 @@ class Calibration{
             $details = array(
                 0 => 'GTCS',
                 1 => 'TCG',
+                2 => '其他'
             );
         }
 
@@ -159,7 +160,7 @@ class Calibration{
 
     
     public function tidy_data($final) {
-        $job_id = 201;
+        $job_id = 221;
     
         $sql = "SELECT MAX(torque) AS max_torque, MIN(torque) AS min_torque, SUM(torque) AS total_torque,
                 (SELECT id FROM calibrations ORDER BY id DESC LIMIT 1) AS latest_id
@@ -207,7 +208,7 @@ class Calibration{
             $statement->bindValue(':job_id', $job_id);
             $statement->bindValue(':controller_type', '0');
             $statement->bindValue(':ktm_type', '0');
-            $statement->bindValue(':operator', 'User111');
+            $statement->bindValue(':operator', 'test');
             $statement->bindValue(':toolsn', '00000-00000');
             $statement->bindValue(':torque', $final);
             $statement->bindValue(':unit', '1');

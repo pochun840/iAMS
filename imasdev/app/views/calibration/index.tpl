@@ -139,18 +139,7 @@
                     <button id="call-job" type="button" class="btn-calljob" style="font-size: 18px; color: #000;"  onclick="calljoball()" ><?php echo $text['Call_Job_text'];?></button>
                 </div>-->
                 <div class="border-bottom">
-                    <div class="row t1">
-                        <div class="col-5 t1" style=" padding-left: 2%; color: #000"><?php echo $text['Job_ID_text'];?>:</div>
-                        <div class="col-4 t1">
-                            <input id="job-id" type="text" class="t2 form-control" value="">
-                        </div>
-                    </div>
-                    <div class="row t1">
-                        <div class="col-5 t1" style="padding-left: 2%; color: #000"><?php echo $text['Job_Name_text'];?>:</div>
-                        <div class="col-4 t1">
-                            <input id="job-name" type="text" class="t2 form-control" value="">
-                        </div>
-                    </div>
+                   
                     <div class="row t1">
                         <div class="col-5 t1" style="padding-left: 2%; color: #000"><?php echo $text['Tool_SN_text'];?>:</div>
                         <div class="col-4 t1">
@@ -188,20 +177,12 @@
                 </div>
 
                 <div class="w3-center" style="font-size: 18px; color: #000">CM/CMK Bar</div>
-                <div class="row t1" style="padding-left: 3%">
-                    <div class="col t1 form-check form-check-inline">
-                        <input class="t1 form-check-input" type="checkbox" name="auto-calculation" id="auto-calculation" value="1" style="zoom:1.0; vertical-align: middle;">&nbsp;&nbsp;
-                        <label class="t1 form-check-label" for="auto-calculation"><?php echo $text['Auto_Calculation_text'];?></label>
-                    </div>
-                    <div class="col t1">
-                        <button  style="float: right" id="calculate" type="button" class="btn-calculate"><?php echo $text['Calculation_text'];?></button>
-                    </div>
-                </div>
+             
 
                 <div class="row t1">
                     <div class="col-7 t1"><b><?php echo $text['Target_Torque_text'];?></b></div>
                     <div class="col-4 t1">
-                        <input id="standard-torque" type="text" class="t2 form-control" value="0.6">
+                        <input id="standard-torque" type="text" class="t2 form-control">
                     </div>
                 </div>
 
@@ -212,10 +193,7 @@
                     </div>
                 </div>
 
-                <div class="row t1">
-                   <br><br>
-                   <button  type="button" class="btn-calljob" style="font-size: 18px; color: #000;" onclick="connectComPort()"><?php echo $text['Test_text'];?></button>
-                </div>
+            
             </div>
 
 
@@ -693,11 +671,13 @@ function updateCookie(name, value, days) {
 
 function current_save() {
  
-    const targetQ = document.getElementById('current_tarque').value;
+    let targetQ = document.getElementById('current_tarque').value;
     const rpm = document.getElementById('current_rpm').value;
     const offset = document.getElementById('current_offset').value;
 
- 
+    //const standardTorque = document.getElementById('standard-torque').value;
+
+    //targetQ = standardTorque;
     const data = {
         target_q: targetQ,
         rpm: rpm,
@@ -712,6 +692,8 @@ function current_save() {
         success: function(response) {
             //alert('保存成功！');
             console.log('Success:', response);
+
+            document.getElementById('standard-torque').value = targetQ;
         },
         error: function(xhr, status, error) {
             alert('保存失敗：' + error);
@@ -719,25 +701,6 @@ function current_save() {
         }
     });
 }
-
-
-function connectComPort() {
-    fetch('http://192.168.0.161/imasdev/api/serial_api.php') // 替换为你的 PHP 文件路径
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('成功呼叫 API: ' + data.message);
-            } else {
-                alert('錯誤: ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('API 呼叫失敗');
-        });
-    }
-
-
 </script>
 
 
@@ -798,7 +761,6 @@ function connectComPort() {
 
     myChart.setOption(option);
  
-
 </script>
 
 

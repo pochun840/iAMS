@@ -309,6 +309,31 @@ class Product{
 
     }
 
+    
+    public function check_task_meaaage_by_job_id($from_job_id,$to_job_id){
+        #用$to_job_id 
+        #找出有為對應的資料 如果有的話就要刪除
+
+        $query = "SELECT  COUNT(*) AS count FROM  task_meaaage WHERE job_id = ?";
+        $statement_select = $this->db->prepare($query);
+        $statement_select->execute([$to_job_id]);
+        $row = $statement_select->fetch(PDO::FETCH_ASSOC);
+
+        if ($row['count'] > 0) {
+            $sql_delete = "DELETE FROM task_meaaage WHERE job_id = ?";
+            $statement_delete = $this->dbs->prepare($sql_delete);
+            $results = $statement_delete->execute([$from_job_id]);
+        }
+
+        #用from_job_id
+        #找出有為對應的資料 
+        $sql= " SELECT *  FROM task_meaaage WHERE job_id = ? ";
+        $statement = $this->db->prepare($sql);
+        $statement->execute([$from_job_id]);
+        return $statement->fetchall();
+
+    }
+
     public function Copy_seq_by_job_id($new_temp_seq) {
         $sql = "INSERT INTO `sequence` (sequence_enable, job_id, seq_id, seq_name, img, tightening_repeat, ng_stop, ok_sequence, ok_sequence_stop, sequence_mintime, sequence_maxtime, barcode_start)";
         $sql .= " VALUES (:sequence_enable, :job_id, :seq_id, :seq_name, :img, :tightening_repeat, :ng_stop, :ok_sequence, :ok_sequence_stop, :sequence_mintime, :sequence_maxtime, :barcode_start)";

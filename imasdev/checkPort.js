@@ -1,101 +1,44 @@
-const SerialPort = require('serialport');
-const Readline = require('@serialport/parser-readline');
+const { SerialPort } = require('serialport');
 const fs = require('fs');
-const axios = require('axios');
 
 async function connectComPort(port, baudRate, dataBits, stopBits, parity, forceClose = false) {
     const response = {};
+    const portInstance = new SerialPort({
+        path: port,
+        baudRate: baudRate,
+        dataBits: dataBits,
+        stopBits: stopBits,
+        parity: parity,
+        autoOpen: false,
+    });
 
     try {
-        const portInstance = new SerialPort({
-            path: port,
-            baudRate: baudRate,
-            dataBits: dataBits,
-            stopBits: stopBits,
-            parity: parity,
-            autoOpen: false,
-        });
-
-        // 檢查端口是否已被佔用
         await portInstance.open();
         response.success = true;
         response.message = "成功連接";
 
-        // 向 COM 端口寫入數據
-        const dataToWrite = Buffer.from('hello');
-        await portInstance.write(dataToWrite);
+        let dataBuffer = Buffer.alloc(0); // 初始化一個空的 Buffer
 
-        // 從 COM 端口讀取數據
-        let dataReceived = false;
-        let attempts = 0;
-        const maxAttempts = 21;
+        portInstance.on('data', (data) => {
+            // 將新數據附加到 dataBuffer
+            dataBuffer = Buffer.concat([dataBuffer, data]);
 
-        const startTime = Date.now();
-
-        while (!dataReceived && attempts < maxAttempts) {
-            await new Promise(resolve => setTimeout(resolve, 1000)); // 等待 1 秒
-
-            const data = await readFromPort(portInstance);
-            if (data) {
-                const filePath = '../api/final_val.txt';
-                fs.writeFileSync(filePath, JSON.stringify({ data }), { flag: 'w' });
-
-                dataReceived = true;
-            } else {
-                attempts++;
+            // 如果 dataBuffer 的長度大於等於 21，則進行處理
+            while (dataBuffer.length >= 21) {
+                const slicedData = dataBuffer.slice(0, 21); // 取前 21 字節
+                const hexData = slicedData.toString('hex'); // 轉換為十六進制
+                console.log("數據的十六進制表示:", hexData);
             }
-
-            if (Date.now() - startTime >= 100000) {
-                response.success = false;
-                response.message = "執行超過 100 秒，終止操作";
-                break;
-            }
-        }
-
-        if (!dataReceived) {
-            response.success = false;
-            response.message = "未能從 COM 端口接收到數據";
-        }
-
-        await portInstance.close();
-
-        if (forceClose) {
-            response.message += ` COM 端口 ${port} 已被強制關閉。`;
-        }
+        });
 
     } catch (error) {
         response.success = false;
         response.message = `無法打開 COM 端口 ${port}: ${error.message}`;
+        console.error(error);
     }
 
     return response;
 }
 
-async function readFromPort(portInstance) {
-            resolve(data);
-        });
-
-        setTimeout(() => {
-            resolve(null);
-        }, 2000);
-    });
-}
-
-async function callApi(url) {
-    try {
-        const response = await axios.get(url);
-        return {
-            success: true,
-            data: response.data,
-        };
-    } catch (error) {
-        return {
-            success: false,
-            message: 'API 調用失敗',
-        };
-    }
-}
-
 // 使用示例
-const url = "http://192.168.0.161/imasdev/public/index.php?url=Calibrations/tidy_data";
-connectComPort('COM4', 1200, 8, 2, 'none', true).then(console.log);
+connectComPort('COM4', 19200, 8, 2, 'none', false).then(console.log);
