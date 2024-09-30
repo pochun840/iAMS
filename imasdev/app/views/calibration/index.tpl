@@ -135,26 +135,44 @@
         <div class="container-fluid" id="container-fluid" >
             <!-- Left -->
             <div class="column column-left">
-             
+                <div class="row t1" style=" padding-left: 45%">
+                    <button id="call-job" type="button" class="btn-calljob" style="font-size: 18px; color: #000;"  onclick="calljoball()" ><?php echo $text['Call_Job_text'];?></button>
+                </div>
                 <div class="border-bottom">
-                   
+                    <div class="row t1">
+                        <div class="col-5 t1" style=" padding-left: 2%; color: #000"><?php echo $text['Job_ID_text'];?>:</div>
+                        <div class="col-4 t1">
+                            <input id="job-id" type="text" class="t2 form-control" value="">
+                        </div>
+                    </div>
+                    <div class="row t1">
+                        <div class="col-5 t1" style="padding-left: 2%; color: #000"><?php echo $text['Job_Name_text'];?>:</div>
+                        <div class="col-4 t1">
+                            <input id="job-name" type="text" class="t2 form-control" value="">
+                        </div>
+                    </div>
                     <div class="row t1">
                         <div class="col-5 t1" style="padding-left: 2%; color: #000"><?php echo $text['Tool_SN_text'];?>:</div>
                         <div class="col-4 t1">
-                            <input id="tool_sn" type="text" class="t2 form-control" value="<?php echo $data['tools_sn'];?>">
+                            <input id="tool-sn" type="text" class="t2 form-control" value="">
                         </div>
                     </div>
                     <div class="row t1">
                        <div class="col-5 t1" style="padding-left: 2%; color: #000">Adapter Type:</div>
                         <div class="col-4 t1">
-                            <input id="adapter_type" type="text" class="t2 form-control" value="">
+                            <input id="adapter-type" type="text" class="t2 form-control" value="">
                         </div>
                     </div>
                 </div>
 
                 <div class="w3-center" style="font-size: 18px; color: #000"><?php echo $text['Instant_data_setting_text'];?></div>
                 <div class="border-bottom">
-                   
+                    <div class="row t1" style="padding-left: 3%">
+                        <div class="col t1 form-check form-check-inline">
+                            <input class="t1 form-check-input" type="checkbox" checked="checked" name="auto-record" id="auto-record" value="1" style="zoom:1.0; vertical-align: middle;">&nbsp;&nbsp;
+                            <label class="t1 form-check-label" for="auto-record"><?php echo $text['Auto_Record_text'];?></label>
+                        </div>
+                    </div>
                     <div class="row t1" style="padding-left: 3%">
                         <div class="col t1 form-check form-check-inline">
                             <input class="t1 form-check-input" type="checkbox" checked="checked" name="skip-turn-rev" id="skip-turn-rev" value="1" style="zoom:1.0; vertical-align: middle;">&nbsp;&nbsp;
@@ -170,7 +188,15 @@
                 </div>
 
                 <div class="w3-center" style="font-size: 18px; color: #000">CM/CMK Bar</div>
-               
+                <div class="row t1" style="padding-left: 3%">
+                    <div class="col t1 form-check form-check-inline">
+                        <input class="t1 form-check-input" type="checkbox" name="auto-calculation" id="auto-calculation" value="1" style="zoom:1.0; vertical-align: middle;">&nbsp;&nbsp;
+                        <label class="t1 form-check-label" for="auto-calculation"><?php echo $text['Auto_Calculation_text'];?></label>
+                    </div>
+                    <div class="col t1">
+                        <button  style="float: right" id="calculate" type="button" class="btn-calculate"><?php echo $text['Calculation_text'];?></button>
+                    </div>
+                </div>
 
                 <div class="row t1">
                     <div class="col-7 t1"><b><?php echo $text['Target_Torque_text'];?></b></div>
@@ -188,7 +214,7 @@
 
                 <div class="row t1">
                    <br><br>
-                   <button  type="button" class="btn-calljob" style="font-size: 18px; color: #000;" onclick="connectComPort()"><?php echo $text['Test_text'];?></button>
+                   <button id="Connect" type="button" class="btn-calljob" style="font-size: 18px; color: #000;" onclick="Connect()"><?php echo $text['Test_text'];?></button>
                 </div>
             </div>
 
@@ -198,15 +224,15 @@
                 <div id="column-right-header">
                     <div class="input-group input-group-sm">
                         <span class="input-group-text"><?php echo $text['Target_Q_text'];?>:</span>
-                        <input type="text" id= 'current_tarque'  name='current_tarque' class="form-control" style="margin-right: 5px">
+                        <input type="text" class="form-control" style="margin-right: 5px">
 
                         <span class="input-group-text"><?php echo $text['RPM_text'];?>:</span>
-                        <input type="text" id= 'current_rpm'  name= 'current_rpm'  class="form-control" style="margin-right: 5px">
+                        <input type="text" class="form-control" style="margin-right: 5px">
 
                         <span class="input-group-text"><?php echo $text['Joint_Offset_text'];?>:</span>
-                        <input type="text" id= 'current_offset'  name= 'current_offset'  class="form-control" style="margin-right: 5px">
+                        <input type="text" class="form-control" style="margin-right: 5px">
 
-                        <button id="Save-btn" type="button" class="btn-save-reset-undo" onclick='current_save()' style="margin-right: 5%"><?php echo $text['Save_text'];?></button>
+                        <button id="Save-btn" type="button" class="btn-save-reset-undo" style="margin-right: 5%"><?php echo $text['Save_text'];?></button>
                         <button id="Reset" type="button" class="btn-save-reset-undo" onclick="reset()"><?php echo $text['Reset_text'];?></button>
                         <button id="Undo" type="button" class="btn-save-reset-undo" onclick="undo()" ><?php echo $text['Undo_text'];?></button>
 
@@ -238,29 +264,7 @@
                                     </tr>
                                 </thead>
 
-                                <tbody style="background-color:#F5F5F5;">
-                                <?php 
-                                    $datalist = '';
-                                    foreach($data['info'] as $key =>$val){
-                                        $datalist  = '<tr style="text-align: center; vertical-align: middle;"  data-id="' .$val['id'].'">';
-                                        $datalist .= "<td>".$val['id']."</td>";
-                                        $datalist .= "<td>".$val['datatime']."</td>";
-                                        $datalist .= "<td>".$val['operator']."</td>";
-                                        $datalist .= "<td>".$val['toolsn']."</td>";
-                                        $datalist .= "<td>".$val['torque']."</td>";
-                                        //$datalist .= "<td>".$data['torque_type'][$val['unit']]."</td>";
-                                        $datalist .= "<td>"."N".".m</td>";
-                                        $datalist .= "<td>".$val['max_torque']."</td>";
-                                        $datalist .= "<td>".$val['min_torque']."</td>";
-                                        $datalist .= "<td>".$val['avg_torque']."</td>";
-                                        $datalist .= "<td>".$val['high_percent']." % "."</td>";
-                                        $datalist .= "<td>".$val['low_percent']." % "."</td>";
-                                        $datalist .= "<td>".$val['customize']."</td>";
-                                        $datalist .= "</tr>";
-                                        echo $datalist;
-
-                                    }
-                                ?>
+                                <tbody style="background-color:#F5F5F5;" id="datainfo">
                                 </tbody>
                             </table>
                         </div>
@@ -269,14 +273,14 @@
 
                 <div id="chart-setting">
                     <div class="column column-chart">
-                        <div class="chart-container" id='chart_block' style="display:block;">
+                        <div class="chart-container" id='chart_block' style="display:none;">
                             <!---曲線圖---->
                             <div  id="mychart" width="500px" height="300px"></div>
                         </div>
                     </div>
 
                     <div class="column column-meter-model">
-                        <div class="meter-model" id='item_data' style="display:block;">
+                        <div class="meter-model" id='item_data' style="display:none;">
                             <div class="row t1 border-bottom">
                                 <div class="col-5" style=" padding-left: 5%; color: #000"><b><?php echo $text['Item_text'];?></b></div>
                                 <div class="col-5" style=" padding-left: 5%; color: #000"><b><?php echo $text['Meter_text'];?></b></div>
@@ -305,7 +309,7 @@
                                     <div class="row t1">
                                         <div class="col-5 t1" style=" padding-left: 5%; color: #000"><?php echo $text['Hi_Q_text'];?>:</div>
                                         <div class="col-5 t1">
-                                            <input id="high-limit-torque" type="text" class="t2 form-control" value="<?php echo htmlspecialchars($data['meter']['hi_limit_torque'] ?? '', ENT_QUOTES); ?>">
+                                            <input id="high-limit-torque" type="text" class="t2 form-control" value="<?php echo $data['meter']['hi_limit_torque'];?>">
                                         </div>
                                     </div>
                                     <div class="row t1">
@@ -436,26 +440,45 @@
         <div class="modal-lg" style="padding-left: 5%">
             <div class="lmodal-content" style="top: 140px; width: 670px;">
                 <span class="lclose-btn" onclick="closeModal_job()">&times;</span>
-                <div class="lmodal-column modalselect" style="display: flex; flex-direction: column; align-items: flex-start;">
+                <span class="lclose-btn" onclick="closeModal_job()">&times;</span>
+                <span class="lclose-btn" onclick="closeModal_job()">&times;</span>
+                <div class="lmodal-column modalselect">
                     <h4>Job</h4>
                     <div class="scrollbar-jobselect" id="style-jobselect">
                         <div class="force-overflow-jobselect">
-                            <?php foreach($data['job_arr'] as $k_job =>$v_job){?>
-                                <div class="row t1" style="padding-left: 5%">
-                                    <div class="col t2 form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" name="jobid" id="jobid_<?php echo $v_job['job_id'];?>" value="<?php echo $v_job['job_id'];?>" onclick="selectSingle(this)">
-                                        <label class="form-check-label" for="jobid_<?php echo $v_job['job_id'];?>"><?php echo $v_job['job_name'];?></label>
-                                    </div>
+                             <?php foreach($data['job_arr'] as $k_job =>$v_job){?>
+                            <div class="row t1"  style="padding-left: 5%">
+                                <div class="col t2 form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="jobid" id="jobid" value="<?php echo $v_job['job_id'];?>" onclick="JobCheckbox()" style="zoom:1.0; vertical-align: middle;">&nbsp;
+                                    <label class="form-check-label" for="jobid"><?php echo $v_job['job_name'];?></label>
                                 </div>
+                            </div>
                             <?php }?>
                         </div>
                     </div>
                 </div>
-                <button id='submit_check' onclick='submit_check()' class="btn btn-sm" style="margin-top: 20px;"><?php echo $text['Search_text'];?></button>
+                <div class="lmodal-column modalselect">
+                    <h4>Sequence</h4>
+                    <div class="scrollbar-jobselect" id="style-jobselect">
+                        <div class="force-overflow-jobselect">
+                            <div id="Seq-list" style="display: none">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lmodal-column modalselect">
+                    <h4>Task</h4>
+                    <div class="scrollbar-jobselect" id="style-jobselect">
+                        <div class="force-overflow-jobselect">
+                            <div id="Task-list" style="display: none">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button id='submit_check' onclick='submit_check()'><?php echo $text['Search_text'];?></button>
             </div>
         </div>
     </div>
-
 
 
 
@@ -510,51 +533,30 @@ function submit_check() {
     var job_id = "<?php echo $_COOKIE['job_id'] ?? '' ?>"; 
     var job_name = "<?php echo $_COOKIE['job_name'] ?? '' ?>"; 
 
+    // 將作業 ID 和名稱設置到對應的 input 欄位中
+    document.getElementById("job-id").value = job_id;
+    document.getElementById("job-name").value = job_name;
 
-
-    const selectedJob = document.querySelector('input[name="jobid"]:checked');
-
-    if (selectedJob) {
-        const jobId = selectedJob.value; 
-        const jobName = selectedJob.nextElementSibling.innerText; 
-
-        job_id = jobId;
-        job_name = jobName;
-
-
-        document.getElementById('job-id').value = job_id;
-        document.getElementById('job-name').value = job_name; 
-
-        updateCookie('job_id', job_id, 7); 
-        updateCookie('job_name', job_name, 7); 
-        
-    
-        if (job_id) {
-            $.ajax({
-                url: "?url=Calibrations/get_data",
-                method: "POST",
-                data: {
-                    job_id: job_id 
-                },
-                success: function(response) {
-                    document.getElementById("datainfo").innerHTML = response;
-                    document.getElementById("get_joball").style.display = "none";
-                    document.getElementById("chart_block").style.display = "block";
-                    document.getElementById("item_data").style.display = "block";
-                },
-                error: function(xhr, status, error) {
-                    //console.error("Ajax request error:", error); 
-                }
-            });
-        } else {
-            //console.warn("job_id is empty or undefined.");
-        }
-        
+    if (job_id) {
+        $.ajax({
+            url: "?url=Calibrations/get_data",
+            method: "POST",
+            data: {
+                job_id: job_id 
+            },
+            success: function(response) {
+                document.getElementById("datainfo").innerHTML = response;
+                document.getElementById("get_joball").style.display = "none";
+                document.getElementById("chart_block").style.display = "block";
+                document.getElementById("item_data").style.display = "block";
+            },
+            error: function(xhr, status, error) {
+                //console.error("Ajax request error:", error); 
+            }
+        });
     } else {
-        //console.log("没有选中的工作");
+        //console.warn("job_id is empty or undefined.");
     }
-
-
 }
 
 
@@ -642,86 +644,21 @@ function closeModal_job() {
     document.getElementById("get_joball").style.display = "none";
 
 }
-
-
-function selectSingle(checkbox) {
-    const checkboxes = document.querySelectorAll('input[name="jobid"]');
-
-    checkboxes.forEach((item) => {
-        if (item !== checkbox) {
-            item.checked = false; // 取消其他复选框的选中状态
-        }
-    });
-}
-
-function updateCookie(name, value, days) {
-    let expires = "";
-    if (days) {
-        const date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        expires = "; expires=" + date.toUTCString();
-    }
-    document.cookie = name + "=" + (value || "") + expires + "; path=/";
-}
-
-
-function current_save() {
- 
-    const targetQ = document.getElementById('current_tarque').value;
-    const rpm = document.getElementById('current_rpm').value;
-    const offset = document.getElementById('current_offset').value;
-
- 
-    const data = {
-        target_q: targetQ,
-        rpm: rpm,
-        joint_offset: offset
-    };
-
-   $.ajax({
-        url: "?url=Calibrations/current_save", // 替換為你的 API 路徑
-        method: "POST",
-        contentType: "application/json",
-        data: JSON.stringify(data),
-        success: function(response) {
-            //alert('保存成功！');
-            console.log('Success:', response);
-        },
-        error: function(xhr, status, error) {
-            alert('保存失敗：' + error);
-            console.error('Error:', error);
-        }
-    });
-}
-
-
-function connectComPort() {
-    fetch('http://192.168.0.161/imasdev/api/serial_api.php') // 替换为你的 PHP 文件路径
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('成功呼叫 API: ' + data.message);
-            } else {
-                alert('錯誤: ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('API 呼叫失敗');
-        });
-    }
-
-
 </script>
 
 
 <?php require APPROOT . 'views/inc/footer.tpl'; ?>
 
 <script>
-  var myChart = echarts.init(document.getElementById('mychart'));
 
-    var x_val = <?php echo $data['echart']['x_val']; ?>;
-    var y_val = <?php echo $data['echart']['y_val']; ?>;
+    var myChart = echarts.init(document.getElementById('mychart'), null, {
+        width: '500px',
+        height: '300px',
+        //marginTop: 50 
+    });
+
+    var x_val = <?php echo $data['echart']['x_val'];?>;
+    var y_val = <?php echo $data['echart']['y_val'];?>;
 
     var option = {
         title: {
@@ -732,22 +669,20 @@ function connectComPort() {
         },
         xAxis: {
             type: 'category',
-            name: 'Count',
+            name :'Count',
             data: x_val,
         },
         yAxis: {
             type: 'value',
-            name: 'Torque',
+             name :'Torque',
         },
-        //dataZoom: generateDataZoom(),
+   
         series: [{
             name: 'Torque',
-            type: 'line',
+            type:'line',
             symbol: 'none',
             sampling: 'average',
-            lineStyle: {
-                width: 0.75
-            },
+            lineStyle: {width: 0.75},
             itemStyle: {
                 normal: {
                     color: 'rgb(255,0,0)'
@@ -765,21 +700,9 @@ function connectComPort() {
                 }
             },
 
-
             data: y_val,
         }]
     };
 
     myChart.setOption(option);
- 
-
 </script>
-
-
-<style>
-.lmodal-column.modalselect {
-    display: flex;
-    flex-direction: column; /* 垂直排列 */
-    align-items: flex-start; /* 左對齊 */
-}
-</style>

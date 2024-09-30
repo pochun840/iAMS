@@ -13,7 +13,6 @@ class Calibrations extends Controller
         $this->NavsController = $this->controller_new('Navs');
         $this->UserModel = $this->model('User');
         $this->CalibrationModel = $this->model('Calibration');
-        $this->EquipmentModel = $this->model('Equipment');
     }
 
     // 取得所有Jobs
@@ -26,23 +25,23 @@ class Calibrations extends Controller
 
         $job_arr = $this->CalibrationModel->getjobid();
 
-        
-        $torque_type = $this->CalibrationModel->details('torque');
-        $tools = $this->CalibrationModel->get_tool_sn();
-        
-        $this->tidy_data();
         #echarts
-       
-        $job_id = 221;
-
-        $echart_data = $this->CalibrationModel->datainfo_search($job_id);
-        $meter = $this->val_traffic();
-        if(!empty($echart_data)){
-            #整理圖表所需要的資料
-            $tmp['x_val'] = json_encode(array_column($echart_data, 'id'));
-            $tmp['y_val'] = json_encode(array_column($echart_data, 'torque'));
+        $job_id = $_COOKIE['job_id'] ?? null;
+        $job_id = 8;
+        if(!empty($job_id)){
+            $echart_data = $this->CalibrationModel->datainfo_search($job_id);
+            $meter = $this->val_traffic();
+            if(!empty($echart_data)){
+                #整理圖表所需要的資料
+                $tmp['x_val'] = json_encode(array_column($echart_data, 'id'));
+                $tmp['y_val'] = json_encode(array_column($echart_data, 'torque'));
+    
+            }
+           
 
         }
+
+        
         if(empty($info)){
             $info = '';
         }
@@ -52,18 +51,14 @@ class Calibrations extends Controller
         if(empty($tmp)){
             $tmp = '';
         }
-        if(empty($info_res)){
-            $info_res = '';
-        }
 
         if(!empty($meter['res_total'])){
             $count = count($meter['res_total']);
         }else{
             $count = 0;
         }
-
-
-
+        
+    
         $data = array(
             'isMobile' => $isMobile,
             'nav' => $this->NavsController->get_nav(),
@@ -75,12 +70,8 @@ class Calibrations extends Controller
             'job_arr' => $job_arr,
             'meter' =>$meter,
             'count' =>$count,
-            'torque_type ' => $torque_type,
-            'tools_sn' => !empty($tools) && isset($tools[0]['device_sn']) ? $tools[0]['device_sn'] : null
             
         );
-
-
 
         $this->view('calibration/index', $data);
 
@@ -89,8 +80,12 @@ class Calibrations extends Controller
     public function get_data(){
         
         $input_check = true;
-        $job_id = 221;
-     
+        if (!empty($_POST['job_id']) && isset($_POST['job_id'])) {
+            $job_id = $_POST['job_id'];
+        } else {
+            $input_check = false;
+        }
+        $job_id = 8;
         if($input_check){
             $dataset = $this->CalibrationModel->datainfo_search($job_id);
             if(!empty($dataset)){
@@ -115,14 +110,14 @@ class Calibrations extends Controller
                     $datalist .= "<td>".$val['low_percent']." % "."</td>";
                     $datalist .= "<td>".$val['customize']."</td>";
                     $datalist .= "</tr>";
-                    //echo $datalist;
+                    echo $datalist;
 
                 }
             }else {
-                //echo "No data found for job_id: " . $job_id;
+                echo "No data found for job_id: " . $job_id;
             }         
         }else {
-            //echo "Invalid job_id received.";
+            echo "Invalid job_id received.";
         }
 
     }
@@ -154,79 +149,40 @@ class Calibrations extends Controller
 
     }
 
-    public function tidy_data() {
+    //取得KTM 回傳數值 寫入到DB
+    public function  tidy_data(){
         $file_path = "../api/final_val.txt";
-    
-        // 检查文件是否存在
-        if (!file_exists($file_path)) {
-            echo json_encode([
-                'success' => false,
-                'message' => '文件不存在'
-            ]);
-            return;
-        }
-    
-        // 获取文件的最后修改时间
-        $fileModificationTime = filemtime($file_path);
-        $currentTime = time();
-    
-        // 计算时间差（单位：秒）
-        $timeDifference = $currentTime - $fileModificationTime;
-    
-        // 如果时间差在 30秒 内（30秒），则继续执行
-        if ($timeDifference <= 30) {
-            $lines = file($file_path); // 读取文件的所有行
-    
-            if ($lines === false || empty($lines)) {
-                return; // 文件内容为空
+        $fileContent = file_get_contents($file_path);
+        eval("\$array = $fileContent;");
+        if(!empty($array)){
+            $cleanedDataArray = [];
+            foreach($array as $data) {
+                $cleanedDataArray[] = str_replace(['+ ', 'kgf*cm'], '', $data);
             }
-    
-            // 获取最后一行数据并进行清理
-            $lastLine = trim(end($lines)); // 获取最后一行并去掉空格
-            $cleanedData = str_replace(['+ ', 'kgf*cm'], '', $lastLine);
-            $cleanedData = preg_replace('/[^0-9.]/', '', $cleanedData);
-            $final = (float)$cleanedData; // 转换为浮点型
-    
-            // 检查是否已经存在相同的数据
-            $existingData = file_get_contents($file_path);
-            if (strpos($existingData, (string)$final) !== false) {
-                /*echo json_encode([
-                    'success' => false,
-                    'message' => '数据已存在，避免重复写入'
-                ]);*/
-                return;
-            }
-    
-            // 如果数据不重复，执行写入和数据处理
-            $res = $this->CalibrationModel->tidy_data($final);
+          
+            #取最後一筆的資料 做型態改變
+            $cleanedDataArray = end($cleanedDataArray);
+            $cleanedDataArray = preg_replace('/[^0-9.]/', '', $cleanedDataArray); 
+            $final = (float)$cleanedDataArray;
             
-            if ($res == true) {
-                // 将新的数据写入文件
-                file_put_contents($file_path, var_export(['data' => $final], true) . PHP_EOL, FILE_APPEND | LOCK_EX);
-    
-                $response = [
+            $res = $this->CalibrationModel->tidy_data($final);
+
+            if($res == true){
+                $response = array(
                     'success' => true,
-                    'message' => '资料整理成功'
-                ];
-            } else {
-                $response = [
+                    'message' => 'Data tidied successfully'
+                );
+            }else{
+                $response = array(
                     'success' => false,
-                    'message' => '未找到资料'
-                ];
+                    'message' => 'No data found'
+                );
             }
-    
-            //echo json_encode($response);
-        } else {
-            /*echo json_encode([
-                'success' => false,
-                'message' => '文件时间过旧'
-            ]);*/
+
+            echo json_encode($response);
         }
     }
-    
-    
-    
-    
+
 
     public function get_correspond_val(){
         $val  = array();
@@ -272,9 +228,10 @@ class Calibrations extends Controller
 
     
     #產生XML的API
-    public function get_xml(){
+    public function get_xml($index){
 
-            $info = $this->CalibrationModel->datainfo();
+        if(!empty($index)) {
+            $info = $this->CalibrationModel->datainfo($index);
             $torque_type = $this->CalibrationModel->details('torque');
             $controller_type = $this->CalibrationModel->details('controller');
             $ktm_type = $this->CalibrationModel->details('torquemeter');
@@ -314,7 +271,7 @@ class Calibrations extends Controller
             header('Content-type: text/xml; charset=utf-8');
             echo $xml->outputMemory();
 
-    
+        }
     
     }
     
@@ -429,7 +386,7 @@ class Calibrations extends Controller
         } else {
             $input_check = false;
         }
-        $job_id = 201;
+
         if($input_check){
             $dataset = $this->CalibrationModel->datainfo_search($job_id);
             if(!empty($dataset)){
@@ -482,57 +439,6 @@ class Calibrations extends Controller
         $part2 = (($low_limit_torque - $this->mean) / (3 * $stddev1));
         
         return min($part1, $part2);
-    }
-
-    public function current_save(){
-
-
-        $input = file_get_contents('php://input');
-        $data = json_decode($input, true);
-        if (isset($data['target_q'], $data['rpm'], $data['joint_offset'])) {
-
-            $controller_ip = $this->EquipmentModel->GetControllerIP(1);
-            require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
-            $modbus = new ModbusMaster($controller_ip, "TCP");
-            try {
-                $modbus->port = 502;
-                $modbus->timeout_sec = 10;
-
-                $data['target_q'] = (int)((float)$data['target_q'] * 100);
-      
-
-                $data_targqt_q = array(0,$data['target_q']);
-                $data_rpm = array($data['rpm']);
-                $data_offset = array($data['joint_offset']);
-                $data_job = array(221);
-
-                
-
-                $dataTypes = array("INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT");
-
-                $modbus->writeMultipleRegister(0, 1147, $data_targqt_q, $dataTypes);
-                $modbus->writeMultipleRegister(0, 895, $data_offset, $dataTypes);
-                $modbus->writeMultipleRegister(0, 1151, $data_rpm, $dataTypes);
-                $modbus->writeMultipleRegister(0, 463, $data_job, $dataTypes);
-
-
-
-                echo $modbus->status;
-                exit();
-
-            } catch (Exception $e) {
-                echo $modbus->status;
-                exit();
-            }
-            
-
-        } else {
-          
-        }
-
-
-
-
     }
 
 
