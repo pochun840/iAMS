@@ -25,13 +25,9 @@ class Calibrations extends Controller
         $info = $this->CalibrationModel->datainfo();
 
         $job_arr = $this->CalibrationModel->getjobid();
-
-        
         $torque_type = $this->CalibrationModel->details('torque');
+        $tools_sn = $this->CalibrationModel->get_tools_sn();
 
-        $this->tidy_data();
-        #echarts
-       
         $job_id = 221;
 
         $echart_data = $this->CalibrationModel->datainfo_search($job_id);
@@ -75,53 +71,118 @@ class Calibrations extends Controller
             'job_arr' => $job_arr,
             'meter' =>$meter,
             'count' =>$count,
-            'torque_type ' => $torque_type
+            'torque_type ' => $torque_type,
+            'tools_sn' => $tools_sn['device_sn'],
             
         );
 
+
+        
         $this->view('calibration/index', $data);
+
 
     }
 
-    public function get_data(){
+    public function get_latest_info() {
+        $info = $this->CalibrationModel->datainfo();
+
         
-        $input_check = true;
-        $job_id = 201;
+        $job_id = 221;
+        $echart_data = $this->CalibrationModel->datainfo_search($job_id);
+
+        echo json_encode($info);
+    }
+
+    public function get_latest_echart_data() {
+        $job_id = 221;
+        $echart_data = $this->CalibrationModel->datainfo_search($job_id);
+        echo json_encode($echart_data);
+    }
+
+    public function get_latest_torque_data(){
+        $info = $this->CalibrationModel->datainfo();
+        echo json_encode($info);
+    }
+
+
+
+    public function get_val(){
      
-        if($input_check){
-            $dataset = $this->CalibrationModel->datainfo_search($job_id);
-            if(!empty($dataset)){
+        $file_path = "C:/web/mywebsite.com/imasdev/api/final_val.txt";
+        if (!file_exists($file_path)) {
+            echo json_encode(array('success' => false, 'message' => 'File not found'));
+            return;
+        }
+    
+        $fileContent = file($file_path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES); 
+        $cleanedDataArray = [];
+    
 
-                $torque_type = $this->CalibrationModel->details('torque');
-                $controller = $this->CalibrationModel->details('controller');
-                $ktm = $this->CalibrationModel->details('torquemeter');
+        foreach ($fileContent as $data) {
+            $cleanedData = trim($data); 
+    
+            if (is_numeric($cleanedData)) { 
+                $cleanedDataArray[] = $cleanedData;
+            }
+        }
+        
+        $tools_sn = $this->CalibrationModel->get_tools_sn();
+       
+        if (!empty($cleanedDataArray)) {
+            $lastValue = end($cleanedDataArray); 
+            $final = (float)$lastValue; 
+          
+            $res = $this->CalibrationModel->tidy_data($final,$tools_sn);
+    
+            if ($res == true) {
+                $response = array(
+                    'success' => true,
+                    'message' => 'Data tidied successfully'
+                );
+            } else {
+                $response = array(
+                    'success' => false,
+                    'message' => 'No data found'
+                );
+            }
+            unlink($file_path);
 
-                $datalist = '';
-                foreach($dataset as $key =>$val){
-                    $datalist  = '<tr style="text-align: center; vertical-align: middle;"  data-id="' .$val['id'].'">';
-                    $datalist .= "<td>".$val['id']."</td>";
-                    $datalist .= "<td>".$val['datatime']."</td>";
-                    $datalist .= "<td>".$val['operator']."</td>";
-                    $datalist .= "<td>".$val['toolsn']."</td>";
-                    $datalist .= "<td>".$val['torque']."</td>";
-                    $datalist .= "<td>".$torque_type[$val['unit']]."</td>";
-                    $datalist .= "<td>".$val['max_torque']."</td>";
-                    $datalist .= "<td>".$val['min_torque']."</td>";
-                    $datalist .= "<td>".$val['avg_torque']."</td>";
-                    $datalist .= "<td>".$val['high_percent']." % "."</td>";
-                    $datalist .= "<td>".$val['low_percent']." % "."</td>";
-                    $datalist .= "<td>".$val['customize']."</td>";
-                    $datalist .= "</tr>";
-                    //echo $datalist;
-
-                }
-            }else {
-                //echo "No data found for job_id: " . $job_id;
-            }         
-        }else {
-            //echo "Invalid job_id received.";
+            echo json_encode($response);
+        } else {
+            echo json_encode(array('success' => false, 'message' => 'No valid data found'));
         }
 
+    }
+
+    
+
+
+    public function get_data() {
+        $job_id = 221;
+        if ($job_id) {
+            $dataset = $this->CalibrationModel->datainfo_search($job_id);
+            $torque_type = $this->CalibrationModel->details('torque');
+            
+            $datalist = [];
+            foreach ($dataset as $val) {
+                $row = '<tr style="text-align: center; vertical-align: middle;" data-id="' . $val['id'] . '">';
+                $row .= "<td>" . $val['id'] . "</td>";
+                $row .= "<td>" . $val['datatime'] . "</td>";
+                $row .= "<td>" . $val['operator'] . "</td>";
+                $row .= "<td>" . $val['toolsn'] . "</td>";
+                $row .= "<td>" . $val['torque'] . "</td>";
+                $row .= "<td>" . $torque_type[$val['unit']] . "</td>";
+                $row .= "<td>" . $val['max_torque'] . "</td>";
+                $row .= "<td>" . $val['min_torque'] . "</td>";
+                $row .= "<td>" . $val['avg_torque'] . "</td>";
+                $row .= "<td>" . $val['high_percent'] . " % " . "</td>";
+                $row .= "<td>" . $val['low_percent'] . " % " . "</td>";
+                $row .= "<td>" . $val['customize'] . "</td>";
+                $row .= "</tr>";
+                $datalist[] = $row;
+            }
+            echo json_encode($datalist); // 返回 JSON 数据
+        }
     }
 
     public function del_info(){
@@ -151,105 +212,11 @@ class Calibrations extends Controller
 
     }
 
-    public function tidy_data() {
-        $file_path = "../api/final_val.txt";
-        
-        // 检查文件是否存在
-        if (!file_exists($file_path)) {
-            echo json_encode(array('success' => false, 'message' => 'File not found'));
-            return;
-        }else{
-            echo "ewwe";die();
-        }
-    
-        $fileContent = file($file_path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES); // 读取文件内容为数组
-        $cleanedDataArray = [];
-    
-        // 清理数据
-        foreach ($fileContent as $data) {
-            $cleanedData = trim($data); // 去除前后空格
-    
-            if (is_numeric($cleanedData)) { // 仅保留数字
-                $cleanedDataArray[] = $cleanedData;
-            }
-        }
-        
-
-        var_dump($fileContent);die();
-
-        // 取最后一笔的有效数据
-        if (!empty($cleanedDataArray)) {
-            $lastValue = end($cleanedDataArray); // 获取最后一笔数据
-            $final = (float)$lastValue; // 转换为浮点数
-    
-            $res = $this->CalibrationModel->tidy_data($final);
-    
-            if ($res == true) {
-                $response = array(
-                    'success' => true,
-                    'message' => 'Data tidied successfully'
-                );
-            } else {
-                $response = array(
-                    'success' => false,
-                    'message' => 'No data found'
-                );
-            }
-    
-            echo json_encode($response);
-        } else {
-            echo json_encode(array('success' => false, 'message' => 'No valid data found'));
-        }
+    public function del_all(){
+        //echo "eewer";die();
+        $result = $this->CalibrationModel->del_all();
     }
-    
-
-    
-    
-    
-
-    public function get_correspond_val(){
-        $val  = array();
-    
-         #檢查 $_POST['job_id'] 和 $_POST['seq_id'] 是否存在且不為空
-         if(isset($_POST['job_id'][0]) && !empty($_POST['job_id'][0])) {
-            $job_id = $_POST['job_id'][0];
-
-            #取得對應的seq_id
-            if(empty($_POST['seq_id'][0])) {
-                $info_seq = $this->CalibrationModel->get_seq_id($job_id);
-    
-                #組checkbox的seq的html
-                if(!empty($info_seq)){
-                    foreach($info_seq as $k_seq => $v_seq){
-                        echo $this->generatecheckboxhtml($v_seq['seq_id'], $v_seq['seq_name'], 'seqid', 'JobCheckbox_seq');
-                    }
-                }
-            }
-    
-            #透過job_id 及 seq_id 取得對應的task_id
-            if(isset($_POST['seq_id'][0]) && !empty($_POST['seq_id'][0])) {
-                $seq_id = $_POST['seq_id'][0];
-                $info_task = $this->CalibrationModel->get_task_id($job_id, $seq_id);
-
-                #組checkbox的task的html
-                if(!empty($info_task)){
-                    foreach($info_task as $k_task => $v_task){
-                        echo $this->generatecheckboxhtml($v_task['task_id'], $v_task['task_id'], 'taskid');
-                    }
-                }
-            }
-
-            if(!empty($job_id)){
-                $tmp = $this->CalibrationModel->get_job_name($job_id);
-                setcookie("job_id", $job_id, time() + 3600, "/"); 
-                setcookie("job_name", $tmp[0]['job_name'], time() + 3600, "/"); 
-
-            }
-        }
-
-    }
-
-    
+ 
     #產生XML的API
     public function get_xml(){
 
@@ -298,57 +265,44 @@ class Calibrations extends Controller
     }
     
     
-    private function generatecheckboxhtml($value, $label, $name, $onClickFunction = '') {
-
-        $checkbox_html = '<div class="row t1">';
-        $checkbox_html .= '<div class="col t5 form-check form-check-inline">';
-        $checkbox_html .= '<input class="form-check-input" type="checkbox" name="' .$name. '" id="' .$name. '" value="' .$value. '"';
-        
-        if (!empty($onClickFunction)) {
-            $checkbox_html .= ' onclick="' . $onClickFunction . '()"';
-        }
-        
-        $checkbox_html .= ' style="zoom:1.0; vertical-align: middle;">&nbsp;';
-        $checkbox_html .= '<label class="form-check-label" for="">' . $label . '</label>';
-        $checkbox_html .= '</div>';
-        $checkbox_html .= '</div>';
-        
-        return $checkbox_html;
-    }
 
 
-    public function val_traffic(){
-        
+    public function val_traffic() {
         $a = 0.6;
         $b = 0.06;
-
+    
         $temp = array();
         $info = $this->CalibrationModel->meter_info();
-
-        foreach ($info as $sub_array) {
-            if (array_key_exists('torque', $sub_array)) {
-                $torque_array[] = $sub_array['torque'];
+    
+        // 检查 info 是否有数据
+        if (!empty($info)) {
+            foreach ($info as $sub_array) {
+                if (array_key_exists('torque', $sub_array)) {
+                    $torque_array[] = $sub_array['torque'];
+                }
             }
+        
+            // 依照KTM 文件裡的算式 
+            $temp['hi_limit_torque'] = $a + $b;
+            $temp['low_limit_torque'] = $a - $b;
+            $temp['max_torque'] = $info[0]['max_torque'];
+            $temp['min_torque'] = $info[0]['min_torque'];
+            $temp['avg_torque'] = $info[0]['avg_torque'];
+            $temp['stddev1'] = number_format($this->standard_deviation($torque_array), 2);
+            $temp['stddev2'] = number_format($temp['stddev1'] / $temp['avg_torque'], 2);
+            $temp['stddev3'] = $temp['stddev2'] * 3;
+            $temp['cm'] = number_format(($temp['hi_limit_torque'] - $temp['low_limit_torque']) / (6 * $temp['stddev1']), 2);
+            $temp['cmk'] = number_format($this->calculatezscore($temp['hi_limit_torque'], $temp['low_limit_torque'], $temp['stddev1']), 2);
+    
+            $temp['res_total'] = $info;
+        } else {
+            // 如果没有数据，可以选择返回一个特定的消息或空数组
+            return array('error' => 'No data available.');
         }
     
-        #依照KTM 文件裡的算式 
-        $temp['hi_limit_torque'] = $a + $b;
-        $temp['low_limit_torque'] = $a - $b;
-        $temp['max_torque'] = $info[0]['max_torque'];
-        $temp['min_torque'] = $info[0]['min_torque'];
-        $temp['avg_torque'] = $info[0]['avg_torque'];
-        $temp['stddev1'] = number_format($this->standard_deviation($torque_array),2);
-        $temp['stddev2'] = number_format($temp['stddev1'] / $temp['avg_torque'] ,2);
-        $temp['stddev3'] = $temp['stddev2'] * 3;
-        $temp['cm'] = number_format(( $temp['hi_limit_torque'] - $temp['low_limit_torque']) / ( 6 * $temp['stddev1'] ),2);
-        $temp['cmk'] = number_format($this->calculatezscore($temp['hi_limit_torque'], $temp['low_limit_torque'],  $temp['stddev1']),2);
-
-        $temp['res_total'] = $info;
-
         return $temp;
-
-
     }
+    
 
     public function export_excel(){
         $isMobile = $this->isMobileCheck();

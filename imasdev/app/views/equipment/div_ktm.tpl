@@ -604,4 +604,10 @@ function Connect_ktm() {
     });
 }
 
+
+function connect_ktm(){
+
+    
+}
+
 </script>

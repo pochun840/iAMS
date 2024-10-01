@@ -1,38 +1,4 @@
 
-
-function undo(){
-    var chicked_id = localStorage.getItem('chicked_id');
-    console.log(chicked_id);
-    if(chicked_id){
-        $.ajax({
-            url: "?url=Calibrations/del_info",
-            method: "POST",
-            data:{ 
-                chicked_id: chicked_id
-
-            },
-            success: function(response) {
-                console.log( response);
-                alert(response);
-            },
-            error: function(xhr, status, error) {
-                
-            }
-        });    
-    }
-
-}
-
-
-function reset(){
-    //搜尋區塊
-    document.getElementById('datainfo').style.display = 'none';
-    
-    //曲線圖區塊
-    document.getElementById('chart_block').style.display = 'none';
-    
-}
-
 function html_download() {
     var fileName3 = document.getElementById('fileName3').value;
     var save_type3 = document.getElementById('Save-as3').value;
@@ -172,62 +138,62 @@ function dataURLToBlob(dataURL) {
     return new Blob([u8arr], { type: mime });
 }
 
-function calljoball(){
-    document.getElementById("get_joball").style.display = "block";
-}
+// function calljoball(){
+//     document.getElementById("get_joball").style.display = "block";
+// }
 
 
-function JobCheckbox()
-{
-    //取得 job被checked的值
-    var checked_jobid = document.querySelectorAll('input[type="checkbox"][name="jobid"]:checked');
-    var checkedjobidarr = [];
-    checked_jobid.forEach(function(checkbox) {
-        checkedjobidarr.push(checkbox.value);
-    });
-}
+// function JobCheckbox()
+// {
+//     //取得 job被checked的值
+//     var checked_jobid = document.querySelectorAll('input[type="checkbox"][name="jobid"]:checked');
+//     var checkedjobidarr = [];
+//     checked_jobid.forEach(function(checkbox) {
+//         checkedjobidarr.push(checkbox.value);
+//     });
+// }
 
-function JobCheckbox_seq(){
+// function JobCheckbox_seq(){
 
-    //取得 job被checked的值
-    var checked_jobid = document.querySelectorAll('input[type="checkbox"][name="jobid"]:checked');
-    var checkedjobidarr = [];
-    checked_jobid.forEach(function(checkbox) {
-        checkedjobidarr.push(checkbox.value);
-    });
+//     //取得 job被checked的值
+//     var checked_jobid = document.querySelectorAll('input[type="checkbox"][name="jobid"]:checked');
+//     var checkedjobidarr = [];
+//     checked_jobid.forEach(function(checkbox) {
+//         checkedjobidarr.push(checkbox.value);
+//     });
 
-    //取得 seq被checked的值
-    var checked_seqid = document.querySelectorAll('input[type="checkbox"][name="seqid"]:checked');
-    var checkedseqidarr = [];
-    checked_seqid.forEach(function(checkbox) {
-        checkedseqidarr.push(checkbox.value);
-    });
+//     //取得 seq被checked的值
+//     var checked_seqid = document.querySelectorAll('input[type="checkbox"][name="seqid"]:checked');
+//     var checkedseqidarr = [];
+//     checked_seqid.forEach(function(checkbox) {
+//         checkedseqidarr.push(checkbox.value);
+//     });
 
-    //checkedjobidarr &&  checkedseqidarr  不等於空值 要取得對應的task_id
-    if(checkedjobidarr != '' && checkedseqidarr  != ''){
-         $.ajax({
-            type: "POST",
-            data: {job_id: checkedjobidarr,seq_id: checkedseqidarr},
-            url: '?url=Calibrations/get_correspond_val',
-            success: function(response) {
-                if (response.trim() === '') {
-                    alert('查無資料');
-                    window.location.href = '?url=Calibrations';
+//     //checkedjobidarr &&  checkedseqidarr  不等於空值 要取得對應的task_id
+//     if(checkedjobidarr != '' && checkedseqidarr  != ''){
+//          $.ajax({
+//             type: "POST",
+//             data: {job_id: checkedjobidarr,seq_id: checkedseqidarr},
+//             url: '?url=Calibrations/get_correspond_val',
+//             success: function(response) {
+//                 if (response.trim() === '') {
+//                     alert('查無資料');
+//                     window.location.href = '?url=Calibrations';
 
-                } else {
-                    var taskListElement = document.getElementById('Task-list');
-                    taskListElement.style.display = 'block';
-                    document.getElementById("Task-list").innerHTML = response;
-                }
-            },
-            error: function(error) {
-            }
-        }).fail(function () {
-        });
+//                 } else {
+//                     var taskListElement = document.getElementById('Task-list');
+//                     taskListElement.style.display = 'block';
+//                     document.getElementById("Task-list").innerHTML = response;
+//                 }
+//             },
+//             error: function(error) {
+//             }
+//         }).fail(function () {
+//         });
 
 
-    }
-}
+//     }
+// }
 
 function getCookie(cookieName) {
     var cookies = document.cookie.split(';');

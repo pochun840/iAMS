@@ -143,13 +143,13 @@
                     <div class="row t1">
                         <div class="col-5 t1" style="padding-left: 2%; color: #000"><?php echo $text['Tool_SN_text'];?>:</div>
                         <div class="col-4 t1">
-                            <input id="tool-sn" type="text" class="t2 form-control" value="">
+                            <input id="tool-sn" type="text" class="t2 form-control" value="<?php echo $data['tools_sn'];?>">
                         </div>
                     </div>
                     <div class="row t1">
                        <div class="col-5 t1" style="padding-left: 2%; color: #000">Adapter Type:</div>
                         <div class="col-4 t1">
-                            <input id="adapter-type" type="text" class="t2 form-control" value="">
+                            <input id="adapter_type" type="text" class="t2 form-control" value="">
                         </div>
                     </div>
                 </div>
@@ -211,7 +211,7 @@
                         <input type="text" id= 'current_offset'  name= 'current_offset'  class="form-control" style="margin-right: 5px">
 
                         <button id="Save-btn" type="button" class="btn-save-reset-undo" onclick='current_save()' style="margin-right: 5%"><?php echo $text['Save_text'];?></button>
-                        <button id="Reset" type="button" class="btn-save-reset-undo" onclick="reset()"><?php echo $text['Reset_text'];?></button>
+                        <button id="Reset" type="button" class="btn-save-reset-undo" onclick="reset()"><?php echo $text['Reset_text']."_1";?></button>
                         <button id="Undo" type="button" class="btn-save-reset-undo" onclick="undo()" ><?php echo $text['Undo_text'];?></button>
 
                         <span class="input-group-text"><?php echo $text['Time_text'];?>:</span>
@@ -242,30 +242,27 @@
                                     </tr>
                                 </thead>
 
-                                <tbody style="background-color:#F5F5F5;">
-                                <?php 
-                                    $datalist = '';
-                                    foreach($data['info'] as $key =>$val){
-                                        $datalist  = '<tr style="text-align: center; vertical-align: middle;"  data-id="' .$val['id'].'">';
-                                        $datalist .= "<td>".$val['id']."</td>";
-                                        $datalist .= "<td>".$val['datatime']."</td>";
-                                        $datalist .= "<td>".$val['operator']."</td>";
-                                        $datalist .= "<td>".$val['toolsn']."</td>";
-                                        $datalist .= "<td>".$val['torque']."</td>";
-                                        //$datalist .= "<td>".$data['torque_type'][$val['unit']]."</td>";
-                                        $datalist .= "<td>"."N".".m</td>";
-                                        $datalist .= "<td>".$val['max_torque']."</td>";
-                                        $datalist .= "<td>".$val['min_torque']."</td>";
-                                        $datalist .= "<td>".$val['avg_torque']."</td>";
-                                        $datalist .= "<td>".$val['high_percent']." % "."</td>";
-                                        $datalist .= "<td>".$val['low_percent']." % "."</td>";
-                                        $datalist .= "<td>".$val['customize']."</td>";
-                                        $datalist .= "</tr>";
-                                        echo $datalist;
-
-                                    }
-                                ?>
+                                <tbody style="background-color:#F5F5F5;" id="info_toal">
+                                    <?php if (!empty($data['info'])){?>
+                                        <?php foreach($data['info'] as $key => $val){?>
+                                            <tr>
+                                                <td><?php echo $val['id']; ?></td>
+                                                <td><?php echo $val['datatime']; ?></td>
+                                                <td><?php echo $val['operator']; ?></td>
+                                                <td><?php echo $val['toolsn']; ?></td>
+                                                <td><?php echo $val['torque']; ?></td>
+                                                <td><?php echo "N.m"; ?></td>
+                                                <td><?php echo $val['max_torque']; ?></td>
+                                                <td><?php echo $val['min_torque']; ?></td>
+                                                <td><?php echo $val['avg_torque']; ?></td>
+                                                <td><?php echo $val['high_percent'] . " % "; ?></td>
+                                                <td><?php echo $val['low_percent'] . " % "; ?></td>
+                                                <td><?php echo $val['customize']; ?></td>
+                                            </tr>
+                                        <?php } ?>
+                                   <?php } ?> 
                                 </tbody>
+
                             </table>
                         </div>
                     </div>
@@ -315,37 +312,37 @@
                                     <div class="row t1">
                                         <div class="col-5 t1" style=" padding-left: 5%; color: #000"><?php echo $text['Lo_Q_text'];?>:</div>
                                         <div class="col-5 t1">
-                                            <input id="low-limit-torque" type="text" class="t2 form-control" value="<?php echo $data['meter']['low_limit_torque'];?>">
+                                            <input id="low-limit-torque" type="text" class="t2 form-control" value="<?php echo !empty($data['meter']['low_limit_torque']) ? $data['meter']['low_limit_torque'] : ''; ?>">
                                         </div>
                                     </div>
                                     <div class="row t1">
                                         <div class="col-5 t1" style=" padding-left: 5%; color: #000"><?php echo $text['Max_Torque_text'];?>:</div>
                                         <div class="col-5 t1">
-                                            <input id="max-torque" type="text" class="t2 form-control" value="<?php echo $data['meter']['max_torque'];?>">
+                                            <input id="max-torquee" type="text" class="t2 form-control" value="<?php echo !empty($data['meter']['max-torque']) ? $data['meter']['max-torque'] : ''; ?>">
                                         </div>
                                     </div>
                                     <div class="row t1">
                                         <div class="col-5 t1" style=" padding-left: 5%; color: #000"><?php echo $text['Min_Torque_text'];?>:</div>
                                         <div class="col-5 t1">
-                                            <input id="min-torque" type="text" class="t2 form-control" value="<?php echo $data['meter']['min_torque'];?>">
+                                            <input id="min-torque" type="text" class="t2 form-control" value="<?php echo !empty($data['meter']['min-torque']) ? $data['meter']['min-torque'] : ''; ?>">
                                         </div>
                                     </div>
                                     <div class="row t1">
                                         <div class="col-5 t1" style=" padding-left: 5%; color: #000"><?php echo $text['Avg_Torque_text'];?></div>
                                         <div class="col-5 t1">
-                                            <input id="ave-torque" type="text" class="t2 form-control" value="<?php echo $data['meter']['avg_torque'];?>">
+                                            <input id="avg_torque" type="text" class="t2 form-control" value="<?php echo !empty($data['meter']['avg_torque']) ? $data['meter']['avg_torque'] : ''; ?>">
                                         </div>
                                     </div>
                                     <div class="row t1">
                                         <div class="col-5 t1" style=" padding-left: 5%; color: #000"><?php echo $text['Standard_Deviation_text'];?>:</div>
                                         <div class="col-5 t1">
-                                            <input id="standard-deviation" type="text" class="t2 form-control" value="<?php  echo $data['meter']['stddev1'];?>">
+                                            <input id="standard-deviation" type="text" class="t2 form-control" value="<?php echo !empty($data['meter']['stddev1']) ? $data['meter']['stddev1'] : ''; ?>">
                                         </div>
                                     </div>
                                     <div class="row t1">
                                         <div class="col-5 t1" style=" padding-left: 5%; color: #000">CM:</div>
                                         <div class="col-5 t1">
-                                            <input id="cm" type="text" class="t2 form-control" value="<?php  echo $data['meter']['cm'];?>">
+                                             <input id="cm" type="text" class="t2 form-control" value="<?php echo !empty($data['meter']['cm']) ? $data['meter']['cm'] : ''; ?>">
                                         </div>
                                     </div>
                                     <div class="row t1">
@@ -435,33 +432,7 @@
     </div>
 
        
-    <!-- Modal Call Job Select -->
-    <div id="get_joball" class="lmodal" style="display: none">
-        <div class="modal-lg" style="padding-left: 5%">
-            <div class="lmodal-content" style="top: 140px; width: 670px;">
-                <span class="lclose-btn" onclick="closeModal_job()">&times;</span>
-                <div class="lmodal-column modalselect" style="display: flex; flex-direction: column; align-items: flex-start;">
-                    <h4>Job</h4>
-                    <div class="scrollbar-jobselect" id="style-jobselect">
-                        <div class="force-overflow-jobselect">
-                            <?php foreach($data['job_arr'] as $k_job =>$v_job){?>
-                                <div class="row t1" style="padding-left: 5%">
-                                    <div class="col t2 form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" name="jobid" id="jobid_<?php echo $v_job['job_id'];?>" value="<?php echo $v_job['job_id'];?>" onclick="selectSingle(this)">
-                                        <label class="form-check-label" for="jobid_<?php echo $v_job['job_id'];?>"><?php echo $v_job['job_name'];?></label>
-                                    </div>
-                                </div>
-                            <?php }?>
-                        </div>
-                    </div>
-                </div>
-                <button id='submit_check' onclick='submit_check()' class="btn btn-sm" style="margin-top: 20px;"><?php echo $text['Search_text'];?></button>
-            </div>
-        </div>
-    </div>
-
-
-
+  
 
 <script>
 
@@ -500,8 +471,6 @@ function NextToAnalysisSystemKTM()
     document.cookie = "meter=" + meter + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
     document.cookie = "controller_type =" + controller_type  + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
 
-      
-
     // Show analysis-system-KTM
     document.getElementById('analysis-system-KTM').style.display = 'block';
 
@@ -510,56 +479,7 @@ function NextToAnalysisSystemKTM()
 }
 
 
-function submit_check() {
-    var job_id = "<?php echo $_COOKIE['job_id'] ?? '' ?>"; 
-    var job_name = "<?php echo $_COOKIE['job_name'] ?? '' ?>"; 
 
-
-
-    const selectedJob = document.querySelector('input[name="jobid"]:checked');
-
-    if (selectedJob) {
-        const jobId = selectedJob.value; 
-        const jobName = selectedJob.nextElementSibling.innerText; 
-
-        job_id = jobId;
-        job_name = jobName;
-
-
-        document.getElementById('job-id').value = job_id;
-        document.getElementById('job-name').value = job_name; 
-
-        updateCookie('job_id', job_id, 7); 
-        updateCookie('job_name', job_name, 7); 
-        
-    
-        if (job_id) {
-            $.ajax({
-                url: "?url=Calibrations/get_data",
-                method: "POST",
-                data: {
-                    job_id: job_id 
-                },
-                success: function(response) {
-                    document.getElementById("datainfo").innerHTML = response;
-                    document.getElementById("get_joball").style.display = "none";
-                    document.getElementById("chart_block").style.display = "block";
-                    document.getElementById("item_data").style.display = "block";
-                },
-                error: function(xhr, status, error) {
-                    //console.error("Ajax request error:", error); 
-                }
-            });
-        } else {
-            //console.warn("job_id is empty or undefined.");
-        }
-        
-    } else {
-        //console.log("没有选中的工作");
-    }
-
-
-}
 
 
 
@@ -701,6 +621,114 @@ function current_save() {
         }
     });
 }
+
+function undo() {
+    var status_val= '0';
+    $.ajax({
+        type: "POST",
+        data: {
+              status_val: status_val
+              },
+        url: '?url=Calibrations/del_all',
+        success: function(response) {
+            history.go(0);
+        },
+        error: function(error) {
+        
+        }
+    }).fail(function () {
+
+    });
+    history.go(0); 
+}
+
+async function fetchData() {
+        const url1 = 'http://192.168.0.161/imasdev/public/index.php?url=Calibrations/get_val';
+        //const url2 = 'http://192.168.0.161/imasdev/public/index.php?url=Calibrations/get_data';
+
+        try {
+            
+            const response1 = await fetch(url1, {
+                method: 'GET', 
+            });
+
+            if (response1.ok) {
+                const data = await response1.json(); 
+                console.log('API 返回:', data);
+                //document.getElementById('result').innerText = JSON.stringify(data, null, 2); 
+            } else {
+                console.error('请求失败，状态码:', response1.status);
+                //document.getElementById('result').innerText = '请求失败，状态码: ' + response1.status;
+            }
+
+        
+        } catch (error) {
+            console.error('发生错误:', error);
+            //document.getElementById('result').innerText = '发生错误: ' + error.message;
+            //document.getElementById('datainfo').innerHTML = '发生错误: ' + error.message;
+        }
+    }
+
+// 每 5 秒调用一次 fetchData
+
+setInterval(fetchData, 5000);
+fetchData();
+
+function fetchLatestInfo() {
+    $.ajax({
+        url: '?url=Calibrations/get_latest_info', 
+        method: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            updateTable(data);
+            history.go(0);
+            NextToAnalysisSystemKTM();
+        },
+        error: function() {
+            console.log('Error loading data');
+        }
+    });
+
+    
+}
+
+function updateTable(data) {
+    let tbody = $('#info_toal'); 
+    tbody.empty(); 
+
+    if (data.length > 0) {
+        data.forEach(function(val) {
+            tbody.append(`<tr>
+                <td>${val.id}</td>
+                <td>${val.datatime}</td>
+                <td>${val.operator}</td>
+                <td>${val.toolsn}</td>
+                <td>${val.torque}</td>
+                <td>N.m</td>
+                <td>${val.max_torque}</td>
+                <td>${val.min_torque}</td>
+                <td>${val.avg_torque}</td>
+                <td>${val.high_percent} %</td>
+                <td>${val.low_percent} %</td>
+                <td>${val.customize}</td>
+            </tr>`);
+        });
+    } else {
+        tbody.append('<tr><td colspan="12" style="text-align: center;">No data available.</td></tr>');
+    }
+}
+
+
+
+
+
+
+$(document).ready(function() {
+    fetchLatestInfo();
+    fetchLatestTorqueData();
+    setInterval(fetchLatestInfo, 10000); // 每 10 秒更新数据
+});
+
 </script>
 
 
@@ -762,12 +790,3 @@ function current_save() {
     myChart.setOption(option);
  
 </script>
-
-
-<style>
-.lmodal-column.modalselect {
-    display: flex;
-    flex-direction: column; /* 垂直排列 */
-    align-items: flex-start; /* 左對齊 */
-}
-</style>
