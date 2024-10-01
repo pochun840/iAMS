@@ -59,7 +59,6 @@ class Calibrations extends Controller
 
 
         
-
         $data = array(
             'isMobile' => $isMobile,
             'nav' => $this->NavsController->get_nav(),
@@ -75,7 +74,7 @@ class Calibrations extends Controller
             'tools_sn' => $tools_sn['device_sn'],
             
         );
-
+     
 
         
         $this->view('calibration/index', $data);
@@ -84,27 +83,12 @@ class Calibrations extends Controller
     }
 
     public function get_latest_info() {
-        $info = $this->CalibrationModel->datainfo();
-
-        
+        $info = $this->CalibrationModel->datainfo();        
         $job_id = 221;
         $echart_data = $this->CalibrationModel->datainfo_search($job_id);
 
         echo json_encode($info);
     }
-
-    public function get_latest_echart_data() {
-        $job_id = 221;
-        $echart_data = $this->CalibrationModel->datainfo_search($job_id);
-        echo json_encode($echart_data);
-    }
-
-    public function get_latest_torque_data(){
-        $info = $this->CalibrationModel->datainfo();
-        echo json_encode($info);
-    }
-
-
 
     public function get_val(){
      

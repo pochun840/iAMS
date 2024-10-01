@@ -605,7 +605,7 @@ function current_save() {
     };
 
    $.ajax({
-        url: "?url=Calibrations/current_save", // 替換為你的 API 路徑
+        url: "?url=Calibrations/current_save", 
         method: "POST",
         contentType: "application/json",
         data: JSON.stringify(data),
@@ -669,9 +669,9 @@ async function fetchData() {
         }
     }
 
-// 每 5 秒调用一次 fetchData
+// 每 3 秒调用一次 fetchData
 
-setInterval(fetchData, 5000);
+setInterval(fetchData, 3000);
 fetchData();
 
 function fetchLatestInfo() {
@@ -681,8 +681,6 @@ function fetchLatestInfo() {
         dataType: 'json',
         success: function(data) {
             updateTable(data);
-            history.go(0);
-            NextToAnalysisSystemKTM();
         },
         error: function() {
             console.log('Error loading data');
@@ -691,6 +689,27 @@ function fetchLatestInfo() {
 
     
 }
+
+
+function fetchLatestInfo_change() {
+    fetch("http://192.168.0.161/imasdev/public/index.php?url=Calibrations/index")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('网络响应失败');
+            }
+            return response.json(); // 假设返回的是 JSON 数据
+        })
+        .then(data => {
+            updatePageContent(data);
+        })
+        .catch(error => {
+            console.error('获取数据时出错:', error);
+        });
+
+
+}
+
+
 
 function updateTable(data) {
     let tbody = $('#info_toal'); 
@@ -717,16 +736,10 @@ function updateTable(data) {
         tbody.append('<tr><td colspan="12" style="text-align: center;">No data available.</td></tr>');
     }
 }
-
-
-
-
-
-
 $(document).ready(function() {
     fetchLatestInfo();
-    fetchLatestTorqueData();
-    setInterval(fetchLatestInfo, 10000); // 每 10 秒更新数据
+    setInterval(fetchLatestInfo, 10000); // 每 10 秒更新
+    setInterval(fetchLatestInfo_change, 11000); // 每 11 秒更新
 });
 
 </script>
@@ -735,10 +748,8 @@ $(document).ready(function() {
 <?php require APPROOT . 'views/inc/footer.tpl'; ?>
 
 <script>
-  var myChart = echarts.init(document.getElementById('mychart'));
-
-    var x_val = <?php echo $data['echart']['x_val']; ?>;
-    var y_val = <?php echo $data['echart']['y_val']; ?>;
+function renderChart(x_val, y_val) {
+    var myChart = echarts.init(document.getElementById('mychart'));
 
     var option = {
         title: {
@@ -756,7 +767,6 @@ $(document).ready(function() {
             type: 'value',
             name: 'Torque',
         },
-        //dataZoom: generateDataZoom(),
         series: [{
             name: 'Torque',
             type: 'line',
@@ -776,17 +786,21 @@ $(document).ready(function() {
                         offset: 0,
                         color: 'rgb(255,255,255)'
                     }, {
-                        offset: 0,
+                        offset: 1, // 使用 1 以显示渐变效果
                         color: 'rgb(255,255,255)'
                     }])
                 }
             },
-
-
             data: y_val,
         }]
     };
 
     myChart.setOption(option);
- 
+}
+
+// 从 PHP 获取数据并转化为数组
+var x_val = <?php echo $data['echart']['x_val']; ?>; 
+var y_val = <?php echo $data['echart']['y_val']; ?>; 
+
+renderChart(x_val, y_val);
 </script>
