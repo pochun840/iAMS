@@ -177,7 +177,7 @@ class Calibration{
     }
 
     
-    public function tidy_data($final,$tools_sn) {
+    public function tidy_data($final, $tools_sn) {
         $job_id = 221;
     
         $sql = "SELECT MAX(torque) AS max_torque, MIN(torque) AS min_torque, SUM(torque) AS total_torque,
@@ -212,7 +212,7 @@ class Calibration{
             $datatime = date("Ymd H:i:s");
     
             $sql_in = "INSERT INTO `calibrations` (`id`, `job_id`, `controller_type`, `ktm_type`, `adapter_type`, `operator`, `toolsn`, `torque`, `unit`, `max_torque`, `min_torque`, `avg_torque`, `high_percent`, `low_percent`, `customize`, `datatime`)
-                       VALUES (:id, :job_id, :controller_type, :ktm_type, :adapter_type,:operator, :toolsn, :torque, :unit, :max_torque, :min_torque, :avg_torque, :high_percent, :low_percent, :customize, :datatime)";
+                       VALUES (:id, :job_id, :controller_type, :ktm_type, :adapter_type, :operator, :toolsn, :torque, :unit, :max_torque, :min_torque, :avg_torque, :high_percent, :low_percent, :customize, :datatime)";
     
             $statement = $this->db->prepare($sql_in);
             if (!$statement) {
@@ -238,19 +238,42 @@ class Calibration{
             $statement->bindValue(':customize', '');
             $statement->bindValue(':datatime', $datatime);
     
-            // 执行
+            // 执行插入
             $results = $statement->execute();
             if (!$results) {
                 echo "Execution failed: " . implode(":", $statement->errorInfo());
                 return false; // 处理错误
             }
     
+            // 更新第一笔的 min_torque 为当前插入的 min_torque
+            $sql_update_min = "UPDATE calibrations SET min_torque = :new_min_torque WHERE id = 1";
+            $stmt_update_min = $this->db->prepare($sql_update_min);
+            $stmt_update_min->bindValue(':new_min_torque', $min_torque);
+            $stmt_update_min->execute();
+
+
+             // 检查表中的最大 torque，并更新所有记录的 max_torque
+            $sql_max_check = "SELECT MAX(torque) AS max_torque FROM calibrations";
+            $stmt_max_check = $this->db->prepare($sql_max_check);
+            $stmt_max_check->execute();
+            $max_torque_value = $stmt_max_check->fetchColumn();
+
+            // 更新所有记录的 max_torque
+            $sql_update_max = "UPDATE calibrations SET max_torque = :new_max_torque";
+            $stmt_update_max = $this->db->prepare($sql_update_max);
+            $stmt_update_max->bindValue(':new_max_torque', $max_torque_value);
+            $stmt_update_max->execute();
+            
+
+
+            //檢查  table calibrations -max_toque  取最大值後 並且更新  table calibrations -max_toque
+    
             return true; // 插入成功
         }
     
         return false; // 无结果
     }
-
+    
     public function del_all() {
         try {
             $sql_delete = "DELETE FROM `calibrations`"; 
@@ -270,29 +293,30 @@ class Calibration{
     
 
     public function del_info($lastid) {
-        # Step 1: 使用指定的 id 刪除 calibrations 表中的記錄
+
+        # 第一步：使用指定的 id 刪除 calibrations 表中的記錄
         $sql_delete = "DELETE FROM `calibrations` WHERE id = :id";
         $statement_delete = $this->db->prepare($sql_delete);
         $statement_delete->bindValue(':id', $lastid);
         $statement_delete->execute();
     
-        # Step 2: 更新所有大於被刪除 id 的記錄的 id
+        # 第二步：更新所有大於被刪除 id 的記錄的 id
         $sql_update_ids = "UPDATE `calibrations` SET id = id - 1 WHERE id > :lastid";
         $statement_update_ids = $this->db->prepare($sql_update_ids);
         $statement_update_ids->bindValue(':lastid', $lastid);
         $statement_update_ids->execute();
     
-        # Step 3: 計算 max_torque, min_torque, average_torque, high_percent 和 low_percent
+        # 第三步：計算 max_torque、min_torque、average_torque、high_percent 和 low_percent
         $sql_select = "SELECT MAX(torque) AS max_torque, MIN(torque) AS min_torque, AVG(torque) AS average_torque, COUNT(*) AS count FROM calibrations";
         $stmt_select = $this->db->query($sql_select);
         $result = $stmt_select->fetch(PDO::FETCH_ASSOC);
     
         $max_torque = $result['max_torque'];
         $min_torque = $result['min_torque'];
-        $total_torque = $result['average_torque'] * $result['count']; // 计算总扭矩
+        $total_torque = $result['average_torque'] * $result['count']; // 計算總扭力
         $count = $result['count'];
     
-        # Step 4: 计算新的 average_torque, high_percent 和 low_percent
+        # 第四步：計算新的 average_torque、high_percent 和 low_percent
         if ($count > 0) {
             $average_torque = round(($total_torque + $max_torque) / ($count + 1), 2);
             $high_percent = round((($max_torque - $average_torque) / $average_torque) * 100, 2);
@@ -303,11 +327,17 @@ class Calibration{
             $low_percent = 0;
         }
     
-        # Step 5: 更新 max_torque, min_torque, average_torque, high_percent 和 low_percent
+        # 第五步：更新 max_torque、min_torque、average_torque、high_percent 和 low_percent
         $sql_update = "UPDATE calibrations SET max_torque = :new_max_torque, min_torque = :new_min_torque, avg_torque = :new_avg_torque, high_percent = :new_high_percent, low_percent = :new_low_percent";
         $stmt_update = $this->db->prepare($sql_update);
         $stmt_update->bindParam(':new_max_torque', $max_torque, PDO::PARAM_STR);
         $stmt_update->bindParam(':new_min_torque', $min_torque, PDO::PARAM_STR);
+        
+        // 如果當前表中沒有數據，則將 min_torque 設置為 0
+        if ($count === 0) {
+            $min_torque = 0;
+        }
+    
         $stmt_update->bindParam(':new_avg_torque', $average_torque, PDO::PARAM_STR);
         $stmt_update->bindParam(':new_high_percent', $high_percent, PDO::PARAM_STR);
         $stmt_update->bindParam(':new_low_percent', $low_percent, PDO::PARAM_STR);
@@ -315,6 +345,8 @@ class Calibration{
     
         return $result;
     }
+    
+    
     
     
 }

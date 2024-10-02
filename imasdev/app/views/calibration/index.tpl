@@ -519,38 +519,37 @@ function toggleMenu()
 
 
 // Change the color of a row in a table
-    $(document).ready(function () {
-        highlight_row('table');
-        //highlight_row('barcode-table');
-    });
+
 
 function highlight_row(tableId) {
     var table = document.getElementById(tableId);
-    var cells = table.getElementsByTagName('td');
+    var rows = table.getElementsByTagName('tr');
 
-    for (var i = 0; i < cells.length; i++) {
-        // 遍历每个单元格
-        var cell = cells[i];
-        
-        cell.onclick = function () {
-            // 获取点击单元格所在的行
-            var row = this.parentNode;
-
-            var rows = table.getElementsByTagName('tr');
-
-            for (var rowIndex = 0; rowIndex < rows.length; rowIndex++) {
-                rows[rowIndex].classList.remove('selected');
-                rows[rowIndex].style.backgroundColor = "";
+    for (var i = 0; i < rows.length; i++) {
+        // 为每一行添加点击事件
+        rows[i].onclick = function () {
+            // 清除所有行的选中状态
+            for (var j = 0; j < rows.length; j++) {
+                rows[j].classList.remove('selected');
             }
 
-            row.classList.add('selected');
-            // row.style.backgroundColor = "red";
+            // 为当前行添加选中状态
+            this.classList.add('selected');
 
-            // document.getElementById('yourDivId').style.display = 'none';
+            // 获取当前行的 data-id 属性
+            var selectedId = this.getAttribute('data-id');
+
+            // 调试输出
+            console.log('Selected ID:', selectedId); // 打印到控制台
+            alert('Selected ID: ' + selectedId);
         }
     }
 }
 
+$(document).ready(function () {
+        alert('eewwe');
+        highlight_row('info_toal');
+});
 
 // Notification ....................
 let messageCount = 0;
@@ -847,6 +846,6 @@ function renderChart(x_val, y_val) {
 
 <style>
 .selected {
-    background-color: #D3D3D3;
+    background-color: #FFCCCB; /* 高亮的背景色 */
 }
 </style>

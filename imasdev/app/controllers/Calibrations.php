@@ -89,7 +89,6 @@ class Calibrations extends Controller
 
         $temp = $info;
 
-        //只要保留 torque 其他的都不要 
         $temp = array_map(function($item) {
             return ['torque' => $item['torque']];
         }, $temp);
