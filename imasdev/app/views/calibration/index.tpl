@@ -211,7 +211,7 @@
                         <input type="text" id= 'current_offset'  name= 'current_offset'  class="form-control" style="margin-right: 5px">
 
                         <button id="Save-btn" type="button" class="btn-save-reset-undo" onclick='current_save()' style="margin-right: 5%"><?php echo $text['Save_text'];?></button>
-                        <button id="Reset" type="button" class="btn-save-reset-undo" onclick="reset()"><?php echo $text['Reset_text']."_1";?></button>
+                        <button id="Reset" type="button" class="btn-save-reset-undo"><?php echo $text['Reset_text']."_1";?></button>
                         <button id="Undo" type="button" class="btn-save-reset-undo" onclick="undo()" ><?php echo $text['Undo_text'];?></button>
 
                         <span class="input-group-text"><?php echo $text['Time_text'];?>:</span>
@@ -245,7 +245,7 @@
                                 <tbody style="background-color:#F5F5F5;" id="info_toal">
                                     <?php if (!empty($data['info'])){?>
                                         <?php foreach($data['info'] as $key => $val){?>
-                                            <tr>
+                                            <tr data-id="<?php echo $val['id']; ?>" >
                                                 <td><?php echo $val['id']; ?></td>
                                                 <td><?php echo $val['datatime']; ?></td>
                                                 <td><?php echo $val['operator']; ?></td>
@@ -351,14 +351,16 @@
                                             <input id="cmk" type="text" class="t2 form-control" value="<?php  echo $data['meter']['cmk'];?>">
                                         </div>
                                     </div>
+                                    <div id="input-container">
                                     <?php for($i=1; $i<= $data['count']; $i++){?>
                                         <div class="row t1">
                                             <div class="col-5 t1" style=" padding-left: 5%; color: #000"><?php echo $i;?>:</div>
                                             <div class="col-5 t1">
-                                                <input id="1" type="text" class="t2 form-control" value="<?php echo $data['meter']['res_total'][$i-1]['torque'];?>">
+                                                <input data-id="<?php echo $i;?>" type="text" class="t2 form-control" value="<?php echo $data['meter']['res_total'][$i-1]['torque'];?>">
                                             </div>
                                         </div>
                                     <?php } ?>
+                                    </div>
                                    
                                 </div>
                             </div>
@@ -435,6 +437,15 @@
   
 
 <script>
+let lastData = null; 
+var myChart; 
+
+$(document).ready(function() {
+    fetchLatestInfo();
+    setInterval(fetchLatestInfo, 10000); // 每 10 秒更新
+   
+});
+
 
 // Open modal
 function openModal(modalId)
@@ -527,19 +538,14 @@ function highlight_row(tableId) {
 
             var rows = table.getElementsByTagName('tr');
 
-            // 从所有行中移除 'selected' 类
             for (var rowIndex = 0; rowIndex < rows.length; rowIndex++) {
                 rows[rowIndex].classList.remove('selected');
-                // 可选：如果需要，也可以清除背景颜色
                 rows[rowIndex].style.backgroundColor = "";
             }
 
-            // 为点击的行添加 'selected' 类
             row.classList.add('selected');
-            // 可选：如果需要，也可以设置背景颜色
             // row.style.backgroundColor = "red";
 
-            // 如果需要隐藏某个 div（需要指定要隐藏的 div 和隐藏的方式）
             // document.getElementById('yourDivId').style.display = 'none';
         }
     }
@@ -642,6 +648,9 @@ function undo() {
     history.go(0); 
 }
 
+
+
+
 async function fetchData() {
         const url1 = 'http://192.168.0.161/imasdev/public/index.php?url=Calibrations/get_val';
         //const url2 = 'http://192.168.0.161/imasdev/public/index.php?url=Calibrations/get_data';
@@ -680,35 +689,25 @@ function fetchLatestInfo() {
         method: 'GET',
         dataType: 'json',
         success: function(data) {
-            updateTable(data);
+            // 更新表格
+            updateTable(data.info);
+            
+            // 更新曲線圖
+            if (data.echart_data && data.echart_data.x_val && data.echart_data.y_val) {
+                renderChart(data.echart_data.x_val, data.echart_data.y_val);
+            } else {
+                console.log('No echart data available.');
+            }
+
+
+            //更新右邊的扭力值(total)
+            updateInputs(data.meter); 
         },
         error: function() {
             console.log('Error loading data');
         }
     });
-
-    
 }
-
-
-function fetchLatestInfo_change() {
-    fetch("http://192.168.0.161/imasdev/public/index.php?url=Calibrations/index")
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('网络响应失败');
-            }
-            return response.json(); // 假设返回的是 JSON 数据
-        })
-        .then(data => {
-            updatePageContent(data);
-        })
-        .catch(error => {
-            console.error('获取数据时出错:', error);
-        });
-
-
-}
-
 
 
 function updateTable(data) {
@@ -717,7 +716,7 @@ function updateTable(data) {
 
     if (data.length > 0) {
         data.forEach(function(val) {
-            tbody.append(`<tr>
+            tbody.append(`<tr data-id="${val.id}">
                 <td>${val.id}</td>
                 <td>${val.datatime}</td>
                 <td>${val.operator}</td>
@@ -736,20 +735,65 @@ function updateTable(data) {
         tbody.append('<tr><td colspan="12" style="text-align: center;">No data available.</td></tr>');
     }
 }
-$(document).ready(function() {
-    fetchLatestInfo();
-    setInterval(fetchLatestInfo, 10000); // 每 10 秒更新
-    setInterval(fetchLatestInfo_change, 11000); // 每 11 秒更新
+
+
+function updateInputs(meterData) {
+    const container = document.getElementById('input-container'); 
+    container.innerHTML = ''; 
+
+    for (let i = 0; i < meterData.length; i++) {
+        const torqueValue = meterData[i].torque; 
+        const inputHTML = `
+            <div class="row t1">
+                <div class="col-5 t1" style="padding-left: 5%; color: #000">${i + 1}:</div>
+                <div class="col-5 t1">
+                    <input data-id="${i + 1}" type="text" class="t2 form-control" value="${torqueValue}">
+                </div>
+            </div>`;
+        container.insertAdjacentHTML('beforeend', inputHTML); 
+    }
+}
+
+
+
+
+
+let selectedId = null;
+
+document.querySelectorAll('#info_toal tr').forEach(row => {
+    row.addEventListener('click', function() {
+        selectedId = this.getAttribute('data-id');
+
+        const rows = document.querySelectorAll('#info_toal tr');
+        rows.forEach(r => r.classList.remove('selected'));
+        this.classList.add('selected');
+    });
 });
 
+document.getElementById('Reset').addEventListener('click', function() {
+    if (selectedId) {
+        alert('Selected ID: ' + selectedId);
+    } else {
+        alert('No row selected.');
+    }
+});
 </script>
 
 
 <?php require APPROOT . 'views/inc/footer.tpl'; ?>
 
 <script>
+
+var x_val = <?php echo $data['echart']['x_val']; ?>; 
+var y_val = <?php echo $data['echart']['y_val']; ?>; 
+
+renderChart(x_val, y_val);
+
 function renderChart(x_val, y_val) {
-    var myChart = echarts.init(document.getElementById('mychart'));
+
+    if (!myChart) {
+        myChart = echarts.init(document.getElementById('mychart'));
+    }
 
     var option = {
         title: {
@@ -786,7 +830,7 @@ function renderChart(x_val, y_val) {
                         offset: 0,
                         color: 'rgb(255,255,255)'
                     }, {
-                        offset: 1, // 使用 1 以显示渐变效果
+                        offset: 1,
                         color: 'rgb(255,255,255)'
                     }])
                 }
@@ -795,12 +839,14 @@ function renderChart(x_val, y_val) {
         }]
     };
 
-    myChart.setOption(option);
+    myChart.setOption(option, true); 
 }
 
-// 从 PHP 获取数据并转化为数组
-var x_val = <?php echo $data['echart']['x_val']; ?>; 
-var y_val = <?php echo $data['echart']['y_val']; ?>; 
-
-renderChart(x_val, y_val);
 </script>
+
+
+<style>
+.selected {
+    background-color: #D3D3D3;
+}
+</style>

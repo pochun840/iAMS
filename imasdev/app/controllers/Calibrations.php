@@ -87,7 +87,32 @@ class Calibrations extends Controller
         $job_id = 221;
         $echart_data = $this->CalibrationModel->datainfo_search($job_id);
 
-        echo json_encode($info);
+        $temp = $info;
+
+        //只要保留 torque 其他的都不要 
+        $temp = array_map(function($item) {
+            return ['torque' => $item['torque']];
+        }, $temp);
+
+        
+        $tmp = [
+            'x_val' => [],
+            'y_val' => []
+        ];
+    
+        if (!empty($echart_data)) {
+            $tmp['x_val'] = array_column($echart_data, 'id');
+            $tmp['y_val'] = array_column($echart_data, 'torque');
+        }
+    
+      
+        $combinedData = array(
+            'info' => $info,
+            'echart_data' => $tmp,
+            'meter' =>$temp
+        );
+    
+        echo json_encode($combinedData);
     }
 
     public function get_val(){
@@ -165,7 +190,7 @@ class Calibrations extends Controller
                 $row .= "</tr>";
                 $datalist[] = $row;
             }
-            echo json_encode($datalist); // 返回 JSON 数据
+            echo json_encode($datalist); 
         }
     }
 
@@ -275,7 +300,12 @@ class Calibrations extends Controller
             $temp['stddev1'] = number_format($this->standard_deviation($torque_array), 2);
             $temp['stddev2'] = number_format($temp['stddev1'] / $temp['avg_torque'], 2);
             $temp['stddev3'] = $temp['stddev2'] * 3;
-            $temp['cm'] = number_format(($temp['hi_limit_torque'] - $temp['low_limit_torque']) / (6 * $temp['stddev1']), 2);
+           
+            $temp['cm'] = isset($temp['stddev1']) && $temp['stddev1'] != 0 
+            ? number_format(($temp['hi_limit_torque'] - $temp['low_limit_torque']) / (6 * $temp['stddev1']), 2) 
+            : 0; 
+
+
             $temp['cmk'] = number_format($this->calculatezscore($temp['hi_limit_torque'], $temp['low_limit_torque'], $temp['stddev1']), 2);
     
             $temp['res_total'] = $info;
@@ -395,8 +425,14 @@ class Calibrations extends Controller
 
 
     private function calculatezscore($hi_limit_torque, $low_limit_torque, $stddev1) {
-        $part1 = (($this->mean - $hi_limit_torque) / (3 * $stddev1));
-        $part2 = (($low_limit_torque - $this->mean) / (3 * $stddev1));
+        if ($stddev1 != 0) {
+            $part1 = (($this->mean - $hi_limit_torque) / (3 * $stddev1));
+            $part2 = (($low_limit_torque - $this->mean) / (3 * $stddev1));
+        } else {
+         
+            $part1 = 0; 
+            $part2 = 0; 
+        }
         
         return min($part1, $part2);
     }
@@ -431,7 +467,6 @@ class Calibrations extends Controller
                 $modbus->writeMultipleRegister(0, 1152, $data_offset, $dataTypes);
                 $modbus->writeMultipleRegister(0, 1151, $data_rpm, $dataTypes);
                 $modbus->writeMultipleRegister(0, 463, $data_job, $dataTypes);
-
 
 
                 echo $modbus->status;
