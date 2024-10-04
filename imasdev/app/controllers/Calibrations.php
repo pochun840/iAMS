@@ -74,6 +74,9 @@ class Calibrations extends Controller
             'tools_sn' => $tools_sn['device_sn'],
             
         );
+
+
+       
      
 
         
@@ -123,56 +126,96 @@ class Calibrations extends Controller
         echo json_encode($combinedData);
     }
 
-    public function get_val(){
-     
+    
+    public function get_val() {
+
+        
+        // 檢查會話是否已經啟動，若未啟動則啟動會話
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start(); 
+        }
+    
+        // 計算當前 table-calibrations 有幾筆資料 
+        $meter = $this->val_traffic();
+        if (!empty($meter['res_total'])) {
+            $count = count($meter['res_total']);
+        } else {
+            $count = 0;
+        }
+    
+        // 獲取 cookie 中的 implement_count 的值
+        $implement_count = isset($_COOKIE['implement_count']) ? intval($_COOKIE['implement_count']) : 0;
+    
+        // 計算總數
+        $total_count = intval($count) + intval($implement_count);
+    
+        // 檢查總數是否超過或等於當前計數
+       /* if ($total_count >= $count) {
+            // 如果未顯示過消息，則顯示並設置標誌
+            if (!isset($_SESSION['count_limit_reached'])) {
+                echo json_encode(array('success' => false, 'message' => '總計數超過或等於當前計數。操作無法繼續。'));
+                $_SESSION['count_limit_reached'] = true; // 設置標誌
+                return;
+            }
+        }*/
+
+        
+    
+        // 文件路徑
         $file_path = "C:/web/mywebsite.com/imasdev/api/final_val.txt";
+    
+        // 檢查文件是否存在
         if (!file_exists($file_path)) {
-            echo json_encode(array('success' => false, 'message' => 'File not found'));
+            // 如果未顯示過文件未找到的消息，則顯示並設置標誌
+            if (!isset($_SESSION['file_not_found'])) {
+                echo json_encode(array('success' => false, 'message' => '文件未找到'));
+                $_SESSION['file_not_found'] = true; // 設置標誌
+            }
             return;
         }
     
+        // 讀取文件內容
         $fileContent = file($file_path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES); 
         $cleanedDataArray = [];
     
-
+        // 清理文件內容
         foreach ($fileContent as $data) {
             $cleanedData = trim($data); 
-    
             if (is_numeric($cleanedData)) { 
                 $cleanedDataArray[] = $cleanedData;
             }
         }
-        
+    
+        // 獲取工具序列號
         $tools_sn = $this->CalibrationModel->get_tools_sn();
-       
+        
+        // 如果清理後的數據數組不為空
         if (!empty($cleanedDataArray)) {
             $lastValue = end($cleanedDataArray); 
             $final = (float)$lastValue; 
-          
-            $res = $this->CalibrationModel->tidy_data($final,$tools_sn);
+            
+            // 整理數據
+            $res = $this->CalibrationModel->tidy_data($final, $tools_sn);
     
+            // 返回整理結果
             if ($res == true) {
                 $response = array(
                     'success' => true,
-                    'message' => 'Data tidied successfully'
+                    'message' => '數據整理成功'
                 );
             } else {
                 $response = array(
                     'success' => false,
-                    'message' => 'No data found'
+                    'message' => '未找到數據'
                 );
             }
+            // 刪除文件
             unlink($file_path);
-
             echo json_encode($response);
         } else {
-            echo json_encode(array('success' => false, 'message' => 'No valid data found'));
+            echo json_encode(array('success' => false, 'message' => '未找到有效數據'));
         }
-
     }
-
-    
-
 
     public function get_data() {
         $job_id = 221;
@@ -496,7 +539,10 @@ class Calibrations extends Controller
     }
 
     public function saveAdapterType() {
-        session_start(); 
+
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start(); 
+        }
     
         if (isset($_POST['adapter_type'])) {
             $_SESSION['adapter_type'] = $_POST['adapter_type'];
@@ -509,7 +555,10 @@ class Calibrations extends Controller
 
 
     public function saveSessionData() {
-        session_start(); 
+
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start(); 
+        }
     
         if (isset($_POST['torqueMeter']) && isset($_POST['controller'])) {
             $_SESSION['torqueMeter'] = $_POST['torqueMeter'];
@@ -518,6 +567,17 @@ class Calibrations extends Controller
             echo json_encode(['success' => true, 'message' => 'Session data saved.']);
         } else {
             echo json_encode(['success' => false, 'message' => 'Invalid data.']);
+        }
+    }
+
+
+    public function stopNodeApp() {
+        $output = shell_exec("pkill -f 'node app.js'");
+    
+        if ($output === null) {
+            echo json_encode(['success' => true, 'message' => 'Node.js application stopped successfully.']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Failed to stop Node.js application.']);
         }
     }
 

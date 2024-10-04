@@ -207,6 +207,7 @@ class Calibration{
             $average_torque = round(($total_torque + $final) / $count, 2);
             $high_percent = round((($max_torque - $average_torque) / $average_torque) * 100, 2);
             $low_percent = round((($min_torque - $average_torque) / $average_torque) * 100, 2);
+
             $datatime = date("Ymd H:i:s");
     
             // 插入新記錄
@@ -280,6 +281,9 @@ class Calibration{
         $stmt_update_min = $this->db->prepare($sql_update_min);
         $stmt_update_min->execute();
 
+        
+
+
     }
     
     
@@ -303,19 +307,19 @@ class Calibration{
 
     public function del_info($lastid) {
 
-        # 第一步：使用指定的 id 刪除 calibrations 表中的記錄
+        # STEP1：使用指定的 id 刪除 calibrations 表中的記錄
         $sql_delete = "DELETE FROM `calibrations` WHERE id = :id";
         $statement_delete = $this->db->prepare($sql_delete);
         $statement_delete->bindValue(':id', $lastid);
         $statement_delete->execute();
     
-        # 第二步：更新所有大於被刪除 id 的記錄的 id
+        # STEP2：更新所有大於被刪除 id 的記錄的 id
         $sql_update_ids = "UPDATE `calibrations` SET id = id - 1 WHERE id > :lastid";
         $statement_update_ids = $this->db->prepare($sql_update_ids);
         $statement_update_ids->bindValue(':lastid', $lastid);
         $statement_update_ids->execute();
     
-        # 第三步：計算 max_torque、min_torque、average_torque、high_percent 和 low_percent
+        # STEP3：計算 max_torque、min_torque、average_torque、high_percent 和 low_percent
         $sql_select = "SELECT MAX(torque) AS max_torque, MIN(torque) AS min_torque, AVG(torque) AS average_torque, COUNT(*) AS count FROM calibrations";
         $stmt_select = $this->db->query($sql_select);
         $result = $stmt_select->fetch(PDO::FETCH_ASSOC);
@@ -325,7 +329,7 @@ class Calibration{
         $total_torque = $result['average_torque'] * $result['count']; // 計算總扭力
         $count = $result['count'];
     
-        # 第四步：計算新的 average_torque、high_percent 和 low_percent
+        # STEP4：計算新的 average_torque、high_percent 和 low_percent
         if ($count > 0) {
             $average_torque = round(($total_torque + $max_torque) / ($count + 1), 2);
             $high_percent = round((($max_torque - $average_torque) / $average_torque) * 100, 2);
@@ -336,7 +340,7 @@ class Calibration{
             $low_percent = 0;
         }
     
-        # 第五步：更新 max_torque、min_torque、average_torque、high_percent 和 low_percent
+        # STEP5：更新 max_torque、min_torque、average_torque、high_percent 和 low_percent
         $sql_update = "UPDATE calibrations SET max_torque = :new_max_torque, min_torque = :new_min_torque, avg_torque = :new_avg_torque, high_percent = :new_high_percent, low_percent = :new_low_percent";
         $stmt_update = $this->db->prepare($sql_update);
         $stmt_update->bindParam(':new_max_torque', $max_torque, PDO::PARAM_STR);
@@ -346,14 +350,49 @@ class Calibration{
         if ($count === 0) {
             $min_torque = 0;
         }
+
+
+
+        # high_percent 的計算方式 : round((($max_torque - $average_torque) / $average_torque) * 100, 2);
+        # low_percent  的計算方式 : round((($min_torque - $average_torque) / $average_torque) * 100, 2);
+
+
+        # STEP6：逐一更新每一筆的 high_percent 和 low_percent
+        $sql_select_all = "SELECT id, max_torque, min_torque, avg_torque FROM calibrations";
+        $stmt_select_all = $this->db->query($sql_select_all);
+        $records = $stmt_select_all->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($records as $record) {
+            $high_percent = round(($record['max_torque'] - $record['avg_torque']) / $record['avg_torque'] * 100, 2);
+            $low_percent  = round(($record['min_torque'] - $record['avg_torque']) / $record['avg_torque'] * 100, 2);
+            
+            $sql_update_single = "UPDATE calibrations SET high_percent = :high_percent, low_percent = :low_percent WHERE id = :id";
+            $stmt_update_single = $this->db->prepare($sql_update_single);
+            $stmt_update_single->bindParam(':high_percent', $high_percent);
+            $stmt_update_single->bindParam(':low_percent', $low_percent);
+            $stmt_update_single->bindParam(':id', $record['id']);
+            $stmt_update_single->execute();
+        }
+
     
-        $stmt_update->bindParam(':new_avg_torque', $average_torque, PDO::PARAM_STR);
-        $stmt_update->bindParam(':new_high_percent', $high_percent, PDO::PARAM_STR);
-        $stmt_update->bindParam(':new_low_percent', $low_percent, PDO::PARAM_STR);
-        $stmt_update->execute();
-    
+      
         return $result;
     }
+
+    /*public function get_count(){
+
+        $sql_count     = "SELECT COUNT(*) AS total_records FROM calibrations";
+        $stmt_count    = $this->db->query($sql_count);
+        $result_count  = $stmt_count->fetch(PDO::FETCH_ASSOC);
+        $total_records = $result_count['total_records'];    
+
+        $implement_count = isset($_COOKIE['implement_count']) ? intval($_COOKIE['implement_count']) : 0;
+
+        return [
+            'total_records' => $total_records,
+            'implement_count' => $implement_count,
+        ];
+    }*/
     
     
     
