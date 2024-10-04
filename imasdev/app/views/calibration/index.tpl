@@ -836,6 +836,32 @@ function updateInputs(meterData) {
         container.insertAdjacentHTML('beforeend', inputHTML); 
     }
 }
+
+
+
+document.getElementById('implement_count').addEventListener('keydown', function(event) {
+    // 檢查是否按下 Enter 鍵
+    if (event.key === 'Enter') {
+        // 獲取輸入的值
+        const value = this.value;
+
+        // 存入 cookie
+        document.cookie = `implement_count=${value}; path=/; max-age=3600`; // 1小時後過期
+
+        // 發送請求以讀取 cookie
+        fetch('http://localhost:3000/read-cookie', {
+            method: 'GET',
+            credentials: 'include' // 確保 cookie 被包含在請求中
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        });
+        
+    }
+});
+
+
 </script>
 
 
