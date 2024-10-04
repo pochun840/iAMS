@@ -211,7 +211,7 @@
                         <input type="text" id= 'current_offset'  name= 'current_offset'  class="form-control" style="margin-right: 5px">
 
                         <button id="Save-btn" type="button" class="btn-save-reset-undo" onclick='current_save()' style="margin-right: 5%"><?php echo $text['Save_text'];?></button>
-                        <button id="Reset" type="button" class="btn-save-reset-undo"><?php echo $text['Reset_text']."_1";?></button>
+                        <!--<button id="Reset" type="button" class="btn-save-reset-undo"><?php echo $text['Reset_text']."_1";?></button>-->
                         <button id="Undo" type="button" class="btn-save-reset-undo" onclick="undo()" ><?php echo $text['Undo_text'];?></button>
 
                         <span class="input-group-text"><?php echo $text['Time_text'];?>:</span>
@@ -521,34 +521,77 @@ function toggleMenu()
 // Change the color of a row in a table
 
 
-function highlight_row(tableId) {
-    var table = document.getElementById(tableId);
-    var rows = table.getElementsByTagName('tr');
 
-    for (var i = 0; i < rows.length; i++) {
-        // 为每一行添加点击事件
-        rows[i].onclick = function () {
-            // 清除所有行的选中状态
-            for (var j = 0; j < rows.length; j++) {
-                rows[j].classList.remove('selected');
-            }
-
-            // 为当前行添加选中状态
-            this.classList.add('selected');
-
-            // 获取当前行的 data-id 属性
-            var selectedId = this.getAttribute('data-id');
-
-            // 调试输出
-            console.log('Selected ID:', selectedId); // 打印到控制台
-            alert('Selected ID: ' + selectedId);
-        }
-    }
-}
 
 $(document).ready(function () {
         highlight_row('info_toal');
 });
+
+
+function highlight_row(tableId) {
+    var table = document.getElementById(tableId);
+    
+    table.onclick = function (event) {
+        var target = event.target.closest('tr'); 
+
+        if (target) {
+
+            // 清除所有tr 的狀態
+            var rows = table.getElementsByTagName('tr');
+            Array.from(rows).forEach(function(row) {
+                row.classList.remove('selected');
+            });
+
+            // 當前被選取的tr 增加狀態 
+            target.classList.add('selected');
+
+            //取得當前被選取的data-id
+            var selectedId = target.getAttribute('data-id');
+
+
+            console.log('Selected ID:', selectedId);
+
+            // 弹出确认对话框
+            if (confirm('Are you sure you want to delete the item with ID: ' + selectedId + '?')) {
+                console.log('Deleting item with ID:', selectedId);
+
+                deleteRow(selectedId); 
+
+                // 从表格中删除当前行
+                //target.parentNode.removeChild(target);
+            } else {
+                console.log('Deletion canceled.');
+            }
+        }
+    }
+}
+
+function deleteRow(selectedId) {
+    $.ajax({
+        url: '?url=Calibrations/del_info', 
+        method: 'POST',
+        data: { chicked_id: selectedId }, 
+        success: function(response) {
+            // 处理成功响应
+            console.log('Row with ID ' + selectedId + ' has been deleted.');
+            console.log('Server response:', response);
+            if (response.success) {
+                alert(response.message); 
+                window.location.reload();
+
+            } else {
+                alert(response.message); 
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error deleting row:', error);
+        }
+    });
+}
+
+//修改 如果 function deleteRow() 有刪除資料成功需要回傳讓  function highlight_row(tableId)知道
+//並且 要重整當前的頁面
+
 
 // Notification ....................
 let messageCount = 0;
@@ -757,30 +800,6 @@ function updateInputs(meterData) {
         container.insertAdjacentHTML('beforeend', inputHTML); 
     }
 }
-
-
-
-
-
-let selectedId = null;
-
-document.querySelectorAll('#info_toal tr').forEach(row => {
-    row.addEventListener('click', function() {
-        selectedId = this.getAttribute('data-id');
-
-        const rows = document.querySelectorAll('#info_toal tr');
-        rows.forEach(r => r.classList.remove('selected'));
-        this.classList.add('selected');
-    });
-});
-
-document.getElementById('Reset').addEventListener('click', function() {
-    if (selectedId) {
-        alert('Selected ID: ' + selectedId);
-    } else {
-        alert('No row selected.');
-    }
-});
 </script>
 
 
