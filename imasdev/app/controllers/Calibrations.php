@@ -209,6 +209,7 @@ class Calibrations extends Controller
         }else{
             $input_check = false;
         }
+
         if($input_check){
             $res = $this->CalibrationModel->del_info($click_id);
             if($res == true){
@@ -230,7 +231,6 @@ class Calibrations extends Controller
     }
 
     public function del_all(){
-        //echo "eewer";die();
         $result = $this->CalibrationModel->del_all();
     }
  
@@ -494,6 +494,33 @@ class Calibrations extends Controller
 
 
     }
+
+    public function saveAdapterType() {
+        session_start(); 
+    
+        if (isset($_POST['adapter_type'])) {
+            $_SESSION['adapter_type'] = $_POST['adapter_type'];
+    
+            echo json_encode(['success' => true, 'message' => 'Adapter type saved.']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Invalid data.']);
+        }
+    }
+
+
+    public function saveSessionData() {
+        session_start(); 
+    
+        if (isset($_POST['torqueMeter']) && isset($_POST['controller'])) {
+            $_SESSION['torqueMeter'] = $_POST['torqueMeter'];
+            $_SESSION['controller'] = $_POST['controller'];
+
+            echo json_encode(['success' => true, 'message' => 'Session data saved.']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Invalid data.']);
+        }
+    }
+
 
 
     

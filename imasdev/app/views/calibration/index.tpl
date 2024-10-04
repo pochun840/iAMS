@@ -149,7 +149,7 @@
                     <div class="row t1">
                        <div class="col-5 t1" style="padding-left: 2%; color: #000">Adapter Type:</div>
                         <div class="col-4 t1">
-                            <input id="adapter_type" type="text" class="t2 form-control" value="">
+                            <input id="adapter_type" type="text" class="t2 form-control" value="" oninput="saveAdapterType()" >
                         </div>
                     </div>
                 </div>
@@ -171,7 +171,7 @@
                     <div class="row t1" style="padding-left: 1%">
                        <div class="col-5 t1"><?php echo $text['Count_text'];?>:</div>
                         <div class="col-4 t1">
-                            <input id="count" type="text" class="t2 form-control" value="0">
+                            <input id="implement_count" type="text" class="t2 form-control" value="0">
                         </div>
                     </div>
                 </div>
@@ -475,12 +475,27 @@ function NextToAnalysisSystemKTM()
 
     //紀錄ktm  及 controller 型號
 
-    var meter = document.getElementById("TorqueMeter").value;
-    var controller_type = document.getElementById("controller_info").value;
+    var torqueMeterValue = document.getElementById('TorqueMeter').value;
+    var controllerInfoValue = document.getElementById('controller_info').value;
 
+    console.log('Selected Torque Meter ID:', torqueMeterValue);
+    console.log('Selected Controller ID:', controllerInfoValue);
 
-    document.cookie = "meter=" + meter + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
-    document.cookie = "controller_type =" + controller_type  + "; expires=" + new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+    $.ajax({
+        url: '?url=Calibrations/saveSessionData', 
+        method: 'POST',
+        data: {
+            torqueMeter: torqueMeterValue,
+            controller: controllerInfoValue
+        },
+        success: function(response) {
+            console.log('Session data saved successfully:', response);
+            
+        },
+        error: function(xhr, status, error) {
+            console.error('Error saving session data:', error);
+        }
+    });
 
     // Show analysis-system-KTM
     document.getElementById('analysis-system-KTM').style.display = 'block';
@@ -531,40 +546,46 @@ $(document).ready(function () {
 function highlight_row(tableId) {
     var table = document.getElementById(tableId);
     
+    //定義語言訊息
+    var messages = {
+        'zh-tw': '您確定要刪除 ID 為: ',
+        'zh-cn': '您确定要删除 ID 为: ',
+        'en-us': 'Are you sure you want to delete the item with ID: '
+    };
+
+    var userLanguage = '<?php echo $_SESSION["language"]; ?>'; 
+    var confirmMessagePrefix = messages[userLanguage] || messages['en-us']; 
+
     table.onclick = function (event) {
         var target = event.target.closest('tr'); 
 
         if (target) {
-
-            // 清除所有tr 的狀態
+            // 清除所有tr的狀態
             var rows = table.getElementsByTagName('tr');
             Array.from(rows).forEach(function(row) {
                 row.classList.remove('selected');
             });
 
-            // 當前被選取的tr 增加狀態 
+            //當前被選取 tr 增加狀態
             target.classList.add('selected');
 
-            //取得當前被選取的data-id
+            //當前被選取的data-id
             var selectedId = target.getAttribute('data-id');
-
 
             console.log('Selected ID:', selectedId);
 
-            // 弹出确认对话框
-            if (confirm('Are you sure you want to delete the item with ID: ' + selectedId + '?')) {
+            //出現彈跳視窗
+            if (confirm(confirmMessagePrefix + selectedId + '?')) {
                 console.log('Deleting item with ID:', selectedId);
 
                 deleteRow(selectedId); 
-
-                // 从表格中删除当前行
-                //target.parentNode.removeChild(target);
             } else {
                 console.log('Deletion canceled.');
             }
         }
     }
 }
+
 
 function deleteRow(selectedId) {
     $.ajax({
@@ -576,11 +597,11 @@ function deleteRow(selectedId) {
             console.log('Row with ID ' + selectedId + ' has been deleted.');
             console.log('Server response:', response);
             if (response.success) {
-                alert(response.message); 
+                //alert(response.message); 
                 window.location.reload();
 
             } else {
-                alert(response.message); 
+                //alert(response.message); 
             }
         },
         error: function(xhr, status, error) {
@@ -589,8 +610,23 @@ function deleteRow(selectedId) {
     });
 }
 
-//修改 如果 function deleteRow() 有刪除資料成功需要回傳讓  function highlight_row(tableId)知道
-//並且 要重整當前的頁面
+
+function saveAdapterType() {
+    var adapterTypeValue = document.getElementById('adapter_type').value;
+
+    $.ajax({
+        url: '?url=Calibrations/saveAdapterType',
+        method: 'POST',
+        data: { adapter_type: adapterTypeValue },
+        success: function(response) {
+            console.log('Adapter type saved successfully:', response);
+        },
+        error: function(xhr, status, error) {
+            
+            console.error('Error saving adapter type:', error);
+        }
+    });
+}
 
 
 // Notification ....................
