@@ -88,10 +88,15 @@ class Calibrations extends Controller
         $echart_data = $this->CalibrationModel->datainfo_search($job_id);
 
         $temp = $info;
+      
 
         $temp = array_map(function($item) {
             return ['torque' => $item['torque']];
         }, $temp);
+
+
+        $max_torque = !empty($temp) ? max($temp) : null;
+        $min_torque = !empty($temp) ? min($temp) : null;
 
         
         $tmp = [
@@ -108,7 +113,11 @@ class Calibrations extends Controller
         $combinedData = array(
             'info' => $info,
             'echart_data' => $tmp,
-            'meter' =>$temp
+            'meter' => [
+                'torque' => $temp,
+                'max-torque' => $max_torque,
+                'min-torque' => $min_torque
+            ]
         );
     
         echo json_encode($combinedData);

@@ -318,7 +318,7 @@
                                     <div class="row t1">
                                         <div class="col-5 t1" style=" padding-left: 5%; color: #000"><?php echo $text['Max_Torque_text'];?>:</div>
                                         <div class="col-5 t1">
-                                            <input id="max-torquee" type="text" class="t2 form-control" value="<?php echo !empty($data['meter']['max-torque']) ? $data['meter']['max-torque'] : ''; ?>">
+                                            <input id="max-torque" type="text" class="t2 form-control" value="<?php echo !empty($data['meter']['max-torque']) ? $data['meter']['max-torque'] : ''; ?>">
                                         </div>
                                     </div>
                                     <div class="row t1">
@@ -547,7 +547,6 @@ function highlight_row(tableId) {
 }
 
 $(document).ready(function () {
-        alert('eewwe');
         highlight_row('info_toal');
 });
 
@@ -701,6 +700,11 @@ function fetchLatestInfo() {
 
             //更新右邊的扭力值(total)
             updateInputs(data.meter); 
+            //console.log(data.meter);
+
+            //更新最大和最小扭力值
+            $('#max-torque').val(data.meter['max-torque'].torque); // 获取 max-torque 的值
+            $('#min-torque').val(data.meter['min-torque'].torque); // 获取 min-torque 的值
         },
         error: function() {
             console.log('Error loading data');
@@ -740,8 +744,9 @@ function updateInputs(meterData) {
     const container = document.getElementById('input-container'); 
     container.innerHTML = ''; 
 
-    for (let i = 0; i < meterData.length; i++) {
-        const torqueValue = meterData[i].torque; 
+
+    for (let i = 0; i < meterData.torque.length; i++) {
+        const torqueValue = meterData.torque[i].torque; 
         const inputHTML = `
             <div class="row t1">
                 <div class="col-5 t1" style="padding-left: 5%; color: #000">${i + 1}:</div>
