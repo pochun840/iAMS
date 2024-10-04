@@ -39,7 +39,7 @@
         <div style="font-size: 14px; padding-bottom: 10px; padding-top: 10px">
             <label for="Tool-SN" style="width: 24%">Tool model : SKT-CS30</label>
             <label for="Serial-Number" style="width: 24%">Serial Number : TPS192865</label>
-            <label for="Target-Torque" style="width: 27%">Target Torque : 0.6 (N.m)</label>
+            <label for="Target-Torque" style="width: 27%">Target Torque : <?php echo $data['meter']['avg_torque'];?> (N.m)</label>
             <label for="RPM" style="width: 11%">RPM : 100</label>
         </div>
 

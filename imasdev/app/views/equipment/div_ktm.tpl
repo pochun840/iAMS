@@ -40,7 +40,9 @@
                                         <label style="color: red; padding-left: 3%"> </label>
                                     </div>
                                     <div class="col-3 t1">
-                                        <button type="button" class="btn btn-Reconnect" onclick="connect_ktm()"><?php echo $text['TEST_text']; ?></button>
+                                    <form method="post" action="?url=Equipments/ktm_connect" >
+                                        <button  type="submit" name="run_node"  class="btn btn-Reconnect" ><?php echo $text['TEST_text']; ?></button>
+                                    </form>
                                     </div>
                                 </div>
                                 <div class="row t4">
@@ -569,45 +571,3 @@
 
 
 </style>
-
-<script>
-function Connect_ktm() {
-    $.ajax({
-        url: '../imas_final/iAMS/iAMS/api/serial_api.php',
-        type: 'GET',
-        dataType: 'json',
-        success: function(response) {
-            console.log('Response received:', response);
-        },
-        error: function(xhr, status, error) {
-            console.error('AJAX Error:', error);
-        }
-    })
-    .then(data => {
-        console.log('Data received:', data);
-        alert(JSON.stringify(data));
-
-        $.ajax({
-            url: '?url=Calibrations/tidy_data',
-            type: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                console.log('API response:', response);
-            },
-            error: function(xhr, status, error) {
-                console.error('AJAX Error:', error);
-            }
-        });
-    })
-    .catch(error => {
-        //console.error('Error:', error);
-    });
-}
-
-
-function connect_ktm(){
-
-    
-}
-
-</script>

@@ -1,3 +1,7 @@
+
+//需要執行這段指令
+//npm install express cookie-parser serialport fs
+
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const { SerialPort } = require('serialport');

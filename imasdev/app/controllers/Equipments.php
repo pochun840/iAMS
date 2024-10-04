@@ -40,6 +40,10 @@ class Equipments extends Controller
         $tower_light_switch = $this->OperationModel->GetConfigValue('tower_light_switch')['value'];
         $buzzer_switch = $this->OperationModel->GetConfigValue('buzzer_switch')['value'];
 
+
+
+        
+
         $data = [
             'isMobile' => $isMobile,
             'nav' => $nav,
@@ -506,6 +510,17 @@ class Equipments extends Controller
             echo json_encode(array('result' => $modbus->status, 'service_status' => 'no'));
             exit();
         }   
+    }
+
+
+    public function ktm_connect(){
+     
+        $output = shell_exec('node ../app.js 2>&1');
+        echo "<pre>$output</pre>"; // 顯示輸出
+
+
+        var_dump($output);
+        
     }
 
     
